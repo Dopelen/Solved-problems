@@ -13,7 +13,7 @@ class Solution:
         return complited_answer
 
 
-# O(n^2) time, O(n) space. Same but List Comrehantion
+# O(n^2) time, O(n) space. Same but List Comprehantion
 class Solution:
     def runningSum(self, nums):
         return [sum(list(nums)[:i]) for i in range(1, len(list(nums)) + 1)]
