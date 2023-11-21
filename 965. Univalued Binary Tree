@@ -1,0 +1,15 @@
+"Checking the tree for equivalence of all nodes"
+
+
+class Solution:
+    def isUnivalTree(self, root: Optional[TreeNode]) -> bool:
+        value = root.val
+        def check(root):
+            if root != None:
+                if root.val == value:
+                    return check(root.left) and check(root.right)
+                else: 
+                    return False
+            else:
+                return True
+        return check(root)
