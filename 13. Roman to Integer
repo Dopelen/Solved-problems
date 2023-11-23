@@ -1,0 +1,29 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time
+
+This is a suboptimal Roman to integer converter, which is useful if you think about Rome often.
+The best way to do this is to check only the next character, and then if the first one is smaller, reduce the second one and add the result to the answer.
+My code does the same thing, but it's larger and contains some extra steps, for example: it takes number fragments if the characters are the same
+and cutting up the input data, it takes time and space, but I did it myself!"""
+
+class Solution:
+    def romanToInt(self, roman_integer):
+        number_size = len(roman_integer)
+        victory, n = [], 0
+        roman_keys = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000}
+        while number_size > n+1:
+            if roman_keys[roman_integer[n]] >= roman_keys[roman_integer[n + 1]]:
+                victory.append(roman_keys[roman_integer[n]])
+                roman_integer = roman_integer[1:]
+                number_size -= 1
+            else:
+                while number_size > n+1 and (roman_keys[roman_integer[n]] < roman_keys[roman_integer[n + 1]]):
+                    part_of_answer = roman_keys[roman_integer[n + 1]] - roman_keys[roman_integer[n]]
+                    n += 1
+                victory.append(part_of_answer)
+                roman_integer = roman_integer[n+1:]
+                number_size -= n+1
+                n = 0
+        if number_size > 0:
+            victory.append(roman_keys[roman_integer[n]])
+        return sum(victory)
