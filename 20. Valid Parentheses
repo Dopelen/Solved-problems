@@ -1,0 +1,16 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time.
+
+The idea is simple: if you have open parentheses, you can add more open ones or remove the last one 
+if you receive closing ones of the desired type. Otherwise we must return False."""
+
+class Solution:
+    def isValid(self, s):
+        dict_of_rules = {"(":")", "{":"}","[":"]"}
+        stack = []
+        for elem in s:
+            if elem in "({[": 
+                stack.append(elem)
+            elif not len(stack) or elem != dict_of_rules[stack.pop()]:
+                return False
+        return not len(stack)
