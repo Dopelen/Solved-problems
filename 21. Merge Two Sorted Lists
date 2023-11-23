@@ -1,0 +1,59 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time and require n additional memory
+
+Unfortunately, I couldn't find an easy way to combine the elements into an adjusted list, so I pulled the values ​​into a separate list and then recreated the adjusted list.
+The right way was close, but he eluded me.
+"""
+# First way
+class Solution:
+    def constract(self, list_of_v):
+        size = len(list_of_v)
+        if size == 1:
+            return ListNode(*list_of_v)
+        list_of_v.reverse()
+        answer, next_answer = ListNode(list_of_v[0]), None
+        for index in range(1, size):
+            next_answer = ListNode(list_of_v[index], answer)
+            answer = next_answer
+        return next_answer
+
+    
+    def mergeTwoLists(self, list1, list2):
+        list_of_values = []
+        while list1 != None and list2 != None:
+            if list1.val <= list2.val:
+                list_of_values.append(list1.val)
+                list1 = list1.next
+            else:
+                list_of_values.append(list2.val)
+                list2 = list2.next
+        if list1: 
+            leftovers = list1
+        elif list2:
+            leftovers = list2
+        else:
+            if list_of_values == []:
+                return list1
+            return self.constract(list_of_values)
+        while leftovers != None:
+            list_of_values.append(leftovers.val)
+            leftovers = leftovers.next
+        return self.constract(list_of_values)
+
+
+# Second way
+class Solution:
+    def mergeTwoLists(self, list1, list2):
+        now = answer = ListNode()
+        while list1 and list2:               
+            if list1.val < list2.val:
+                now.next = list1
+                list1 = list1.next
+                now = list1
+            else:
+                now.next = list2
+                list2 = list2.next
+                now = list2        
+        if list1 or list2:
+            now.next = list1 if list1 else list2  
+        return answer.next
