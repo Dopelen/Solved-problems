@@ -1,0 +1,17 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time and O(1) space
+
+This problem is very similar to 26, just practicing changing list in place. 
+The code is even better without "else" just need to change answer from "size" to "place" """
+
+class Solution:
+    def removeElement(self, nums, val):
+        size, place = len(nums), 0
+        for elem in range(size):
+            if nums[elem] != val:
+                nums[place] = nums[elem]
+                place += 1
+            else:
+                nums[elem] = "_"
+                size -= 1
+        return size
