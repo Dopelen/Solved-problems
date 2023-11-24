@@ -1,0 +1,21 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time and O(1) space
+
+This could be simpler, but the goal is to change the list in place. 
+To do this, I find the first position of the repeating number(sweetspot) and put all the founded unic numbers starting from here."""
+
+class Solution:
+    def removeDuplicates(self, nums):
+        n, origin, pin, size, sweetspot, sweetcheck = 0, 1, 0, len(nums), 1, True
+        while n < size-1:
+            if nums[pin] == nums[n+1]:
+                if sweetcheck:
+                    sweetspot, sweetcheck = n+1, False
+                n += 1
+            else:
+                nums[sweetspot] = nums[n+1]
+                origin += 1
+                n += 1
+                pin = n
+                sweetspot += 1
+        return origin
