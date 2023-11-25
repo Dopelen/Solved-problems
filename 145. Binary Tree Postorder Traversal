@@ -1,0 +1,20 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time and I belive uses extra space when passing a list between functions.
+I tried to solve this problem by save list for answer into the class,
+which could have saved me from endlessly passing the list inside recursive functions, 
+but for some reason in this case the leetcode validating system retained the value from the previous check between test cases
+
+In general, this task is about traversing a tree, you just need to remember the order of the reverse traversal: left-right-root"""
+
+class Solution:
+    def postorderTraversal(self, root):
+        ans = []
+        def bypass(root, ans):
+            if root == None:
+                return
+            ans.append(root.val)
+            bypass(root.right, ans)
+            bypass(root.left, ans)
+        bypass(root, ans)
+        ans.reverse()
+        return ans
