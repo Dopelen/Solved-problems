@@ -1,0 +1,17 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time and I belive uses extra space when passing a list between functions.
+
+Task 145 is almost the same.
+This task is about traversing a tree, you just need to remember the order of the traversal. In this case - preorder: root -> left -> right"""
+
+class Solution:
+    def preorderTraversal(self, root):
+        ans = []
+        def bypass(root, ans):
+            if root == None:
+                return
+            ans.append(root.val)
+            bypass(root.left, ans)
+            bypass(root.right, ans)
+        bypass(root, ans)
+        return ans
