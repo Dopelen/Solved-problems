@@ -1,7 +1,9 @@
 """You can see the description of the task using the code specified in the title on letcode.
 This program have O(n) complexity by time
 
-Another simple task to remember knowledge about basic methods and what they return """
+Another simple task to remember knowledge about basic methods and what they return 
+
+*But If you want to become hokage or impres the boys you can solve this by using KMP alghoritm"""
 
 class Solution:
     def strStr(self, haystack, needle):
