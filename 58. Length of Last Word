@@ -1,0 +1,10 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n)? complexity. I dont know alghoritm behinde split() method, but you have to check at least every element anyway!
+*as long as math magik staying away
+
+This type of task helping to remember basics function, differnces between s.split() and re.split("s+", s) and what they return!
+"""
+
+class Solution:
+    def lengthOfLastWord(self, s):
+        return len(s.split()[-1])
