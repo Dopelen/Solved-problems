@@ -1,4 +1,9 @@
-# You can see the description of the task using the code specified in the title on letcode. This program have O(n^2) complexity by time
+"""You can see the description of the task using the code specified in the title on letcode. 
+This program have O(n^2) complexity by time
+
+It was hard one, but I beat it!"""
+
+
 class Solution:
     def minCostConnectPoints(self, points):
         constant = 0
@@ -9,10 +14,13 @@ class Solution:
         sorted_by_value_distance = []
         if points_amount == 1:
             return 0
+        
         """ Check strings of input for finding manhattan distance between every couple of dots
-            we write the resulting distances into the matrix, filling only half, because it will be mirrored relative to the diagonal 
+            we write the resulting distances into the matrix, filling only half, 
+            because it will be mirrored relative to the diagonal 
             (the distance between x and y is equal to the distance between y and x),
             we also do not calculate points where the point intersects itself """
+        
         for first_dot in range(points_amount):
             for second_dot in range(constant, points_amount):
                 if first_dot == second_dot:
@@ -21,20 +29,25 @@ class Solution:
                     points[constant][1] - points[second_dot][1])
                 sorted_by_value_distance.append([first_dot, second_dot, value])
             constant += 1
+        
         # sort distances by value
         sorted_by_value_distance.sort(key=lambda x: x[2])
         edges = len(sorted_by_value_distance)
+        
         # now we have sorted weights of every edge and their parents
         for bound in range(edges):
+            
             """we need to find the minimum cost of connecting all points. 
             To achieve this I introduce clusters of points. 
             Earlier we sorted our weights, so now we need to go one by one from easiest edge to heaviest and connect them into clusters. 
             If 2 closest dots will be connected into cluster if they haven't clusters already, 
             if some of them already in cluster, other will be connected to it. 
             As a result, we will have one cluster, at this point we need to finish """
+            
             # we do not forget to check edge cases
             if bound != 0 and len(set(parents_list.values())) == 1:
                 break
+            
             # if both dots without cluster
             if parents_list[sorted_by_value_distance[bound][0]] == -1 and parents_list[
                 sorted_by_value_distance[bound][1]] == -1:
@@ -42,25 +55,31 @@ class Solution:
                 parents_list[sorted_by_value_distance[bound][0]] = parents_list[
                     sorted_by_value_distance[bound][1]] = bound
                 answer += sorted_by_value_distance[bound][2]
+            
             # if they already in one cluster (merged through another dot earlier)
             elif parents_list[sorted_by_value_distance[bound][0]] == parents_list[sorted_by_value_distance[bound][1]]:
                 continue
+            
             # only 2 possibilities left: one without cluster, or both in clusters
             else:
                 small_part = parents_list[sorted_by_value_distance[bound][0]]
                 small_value = sorted_by_value_distance[bound][0]
                 big_part = parents_list[sorted_by_value_distance[bound][1]]
+                
                 # if one without cluster
                 if small_part < 0 or big_part < 0:
+                    
                     # finding which one
                     if small_part >= 0:
                         small_part, big_part = big_part, small_part
                         small_value = sorted_by_value_distance[bound][1]
+                    
                     # appending
                     clasters[big_part].append(small_value)
                     parents_list[small_value] = big_part
                     answer += sorted_by_value_distance[bound][2]
                     continue
+                
                 # if both with cluster we change the smallest one to avoid unnecessary changing
                 if len(clasters[small_part]) > len(clasters[big_part]):
                     small_part, big_part = big_part, small_part
