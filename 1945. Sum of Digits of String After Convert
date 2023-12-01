@@ -1,0 +1,23 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+We need O(alphabet) time for creating dict, then O(input_str) time for converting string and then convert it again k times.
+Each time input decrease from input_symbols to sum(input_symbols) which is significant, so overall I think it is O(alphabet * input_str) which is like O(n) small alphabets!
+
+P.S: I use here some magick below: 
+symbols = {chr(i): str(i-96) for i in range(97, 123)}
+
+chr(i) returns the symbol in ASCII, for English alphabet: symbol "a" == chr(97), "b" == chr(98), c...
+Then str(i-96) helping me creating their index on place without additional lists and operations.
+In result dict looks like {"a":"1", "b":"2", "c':...}
+Proud of this solution! 
+"""
+
+class Solution:
+    def getLucky(self, s, k):
+        symbols = {chr(i): str(i-96) for i in range(97, 123)}
+        convert = ""
+        for elem in s:
+            convert = convert + str(symbols[elem])
+        while k != 0:
+            convert = str(sum([int(v) for v in convert]))
+            k -= 1
+        return int(convert)
