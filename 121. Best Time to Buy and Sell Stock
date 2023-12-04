@@ -1,0 +1,16 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time.
+
+That's good when its good
+I just reduce the solution to a problem that I have already solved!
+*Its just problem 2016."""
+
+class Solution:
+    def maxProfit(self, prices):
+        current_min, max_distance = math.inf, 0
+        for elem in prices:
+            if elem < current_min:
+                current_min = elem
+            if elem > current_min and elem - current_min > max_distance:
+                max_distance = elem - current_min
+        return max_distance
