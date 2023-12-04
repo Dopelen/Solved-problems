@@ -1,0 +1,15 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(sorting algorithm speed (O(n*log(n))probably)) complexity by time.
+
+I wanted to add binary insertion here, but that would only work in the case of unique characters 
+(because duplicate elements would prevent the element's insertion zone from being properly determined), but then using set would make more sense
+Anyway, there is "just check every elem" alghoritm """
+
+class Solution:
+    def findTheDifference(self, s, t):
+        s_mod, t_mod, iterations = sorted(s), sorted(t), len(s)
+        answer = None
+        for step in range(iterations):
+            if s_mod[step] != t_mod[step]:
+                return t_mod[step]
+        return t_mod[-1]
