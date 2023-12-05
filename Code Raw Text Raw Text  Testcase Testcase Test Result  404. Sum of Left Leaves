@@ -1,0 +1,17 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time and I belive uses extra space when passing a list between functions.
+
+Reminds me that there is a difference between a node and a leaf and that some objects you can modify and some you cannot"""
+
+class Solution:
+    def sumOfLeftLeaves(self, root):
+        ans_sum = []
+        def bypass(root, ans_sum, left=0):
+            if root == None:
+                return
+            if left and root.left is None and root.right is None:
+                ans_sum.append(root.val)
+            bypass(root.left, ans_sum, 1)
+            bypass(root.right, ans_sum)
+        bypass(root, ans_sum)
+        return sum(ans_sum)
