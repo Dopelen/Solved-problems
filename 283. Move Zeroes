@@ -1,0 +1,16 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time and O(1) by space
+
+I tryed add some heuristics to speed up the work with some special input data, but this made the code overcomplicated, 
+so I settled on such a simple implementation with the movement of two pointers"""
+
+
+class Solution:
+    def moveZeroes(self, nums):
+        zero_position, amount = 0, len(nums)
+        for elem in range(amount):
+            if nums[elem] != 0:
+                nums[zero_position] = nums[elem]
+                zero_position += 1
+        for zeroes in range(zero_position, amount):
+            nums[zeroes] = 0

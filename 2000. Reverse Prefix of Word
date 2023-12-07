@@ -1,0 +1,10 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time
+
+I revers part of the string and concatinuate it with the rest. I could be done in one string, but in this case it is become unreadble.
+The reversed() function return us iterator, so we cant just return it like the answer and have to add aditional step with join"""
+
+class Solution:
+    def reversePrefix(self, word, ch):
+        half_answer = "".join(reversed(word[0:word.find(ch)+1]))
+        return half_answer + word[word.find(ch)+1:]

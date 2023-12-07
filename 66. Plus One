@@ -1,0 +1,23 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time.
+
+I like this task, quiet simple and have a lot of different solutions. You can use recursion or convertion. 
+I did a simple search from the end"""
+
+class Solution:
+    def plusOne(self, digits):
+        overflow = True
+        lenght = len(digits)
+        step = -1
+        while overflow:
+            if digits[step] != 9:
+                digits[step] = digits[step] + 1
+                overflow = False
+            elif -step == lenght:
+                digits.insert(0,1)
+                digits[step] = 0
+                overflow = False
+            else:
+                digits[step] = 0
+                step -= 1 
+        return digits

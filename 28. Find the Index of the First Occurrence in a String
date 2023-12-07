@@ -1,0 +1,45 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time
+
+Another simple task to remember knowledge about basic methods and what they return 
+
+*But If you want to become hokage or impres the boys you can solve this by using KMP alghoritm
+**It is also incresing difficulty from "easy peasy lemon squeezy" level to "difficult difficult orange difficult"
+"""
+
+class Solution:
+    def strStr(self, haystack, needle):
+        return haystack.find(needle)
+
+# KMP
+# The main reason why we dont prefer straight forward alghoritm (which is checking every elem in main str with every 
+# elem of prefics str) because he is have to check symbols again, even if alghorim pass them in last iteration. 
+# Problem is: in "checked" str can be start of the new str, which we trying to find. 
+# The KMP is just method to speed up alghoritm by passing already checked elems.
+# To reach this, we use prefixes and suffixes in other words, 
+# remembering the parts which can be start of the one str you we are looking for. 
+# It is hard to understand and implement, but main idea - is add longest possible prefix (lps) for every element. 
+# By do this we can, add point where we need to back when check was failed.
+# P.S: Python using modificated version of Boyer–Moore alghoritm which is near O(n) complexity if you belive people in internet.  
+
+class Solution:
+    def strStr(self, haystack, needle):
+        text_size = len(haystack)
+        needle_size = len(needle)
+        lps = [0] * needle_size
+        prefix = 0
+        for step in range(1, needle_size):
+            while (prefix > 0 and needle[step] != needle[prefix]):
+                prefix = lps[prefix - 1]
+            if needle[prefix] == needle[step]:
+                prefix += 1
+                lps[step] = prefix
+        needle_index = 0
+        for s in range(text_size):
+            while (needle_index > 0 and needle[needle_index] != haystack[s]):
+                needle_index = lps[needle_index-1]
+            if needle[needle_index] == haystack[s]:
+                needle_index += 1
+            if needle_index == needle_size:
+                return s - needle_index + 1
+        return -1

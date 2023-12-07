@@ -1,0 +1,26 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n(log(n))) complexity by time
+
+This is symple problem if you okey with O(n^2) time, but I'm here to create future somewhere between "very good" and "very bad"
+My solution better then just "check sum of every 2 possible numbers"(what is O(n^2)) but still worse than 
+"add every symbol in dict and than check every symbol with the help of this (what is O(n))
+My way is create sorted list and than check with help of this every possible number.
+Bisect give me possibility to finde number with log(n) time, but I still need to check n numbers.
+"""
+
+class Solution:
+    def twoSum(self, nums, target):
+        finder, steps, checked = sorted(nums), len(nums), []
+        for elem in range(steps):
+            if nums[elem] in checked:
+                continue
+            goal_value = target - nums[elem]
+            if goal_value == nums[elem]:
+                duplicate_check = bisect.bisect_left(finder, goal_value)
+                if duplicate_check+1 < steps and finder[duplicate_check] == finder[duplicate_check+1]:
+                    return [elem, nums.index(goal_value, elem+1)]
+                continue
+            index_of_goal_value = bisect.bisect_left(finder, goal_value)
+            if index_of_goal_value != steps and goal_value == finder[index_of_goal_value]:
+                return [elem, nums.index(goal_value)]
+            checked.append(nums[elem])

@@ -1,0 +1,13 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time
+
+This is modification on my solution problem 2103
+I finding digits, delite duplicates with help of "set" structure and then just take what I need"""
+
+class Solution:
+    def secondHighest(self, s):
+        digits = [i for i in set(re.findall(r'\d', s))]
+        if len(digits) in [0, 1]:
+            return -1
+        return int(sorted(digits)[-2])
+

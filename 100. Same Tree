@@ -1,0 +1,25 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time and some depth of the recursion
+
+We walk along the tree, checking the notes. Here the first and second version, they are doing the same but looks different"""
+
+#1
+class Solution:
+    def isSameTree(self, p, q):
+        if q and p:
+            if q.val == p.val:
+                return Solution.isSameTree(self, p.left, q.left) and Solution.isSameTree(self, p.right, q.right)
+            return False
+        elif (q and not p) or (not q and p):
+            return False
+        return True  
+
+#2
+class Solution:
+    def isSameTree(self, p, q):
+        if not q and not p:
+            return True
+        elif not p or not q:
+            return False
+        else:        
+            return q.val == p.val and self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)

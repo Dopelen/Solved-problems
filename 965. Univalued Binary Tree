@@ -1,0 +1,17 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time (we have to check every node)
+
+Checking the tree for equivalence of all nodes"""
+
+
+class Solution:
+    def isUnivalTree(self, root):
+        value = root.val
+        def check(root):
+            if root != None:
+                if root.val == value:
+                    return check(root.left) and check(root.right)
+                else: 
+                    return False
+            return True
+        return check(root)

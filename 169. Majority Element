@@ -1,0 +1,8 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(sorting algorithm speed (O(n*log(n))probably)) complexity by time.
+
+Fast and beauty one line! If you know there are n/2 elems - just sort it!"""
+
+class Solution:
+    def majorityElement(self, nums):
+        return sorted(nums)[len(nums)//2]

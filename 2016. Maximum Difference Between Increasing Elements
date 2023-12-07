@@ -1,0 +1,27 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time.
+
+For sure we can just check every elem with double "for" loop and "go next", trying to forget this O(n^2) time compexity, but we are here not for this, right?
+While I was trying to figure out how best to do this task, Professor Kulikov whispered in my head “greedy algorithms”, “safe step” and I listened to him.
+If you look carefully, you can see that we do not need to maintain distances at each of the steps,
+it is enough to know the maximum at the moment. But a difficulty arises if we have a maximum distance but a new element appears, smaller than the previous ones, 
+which could potentially become a new maximum distance, how do we understand when to take the previous one and when the current one? 
+The answer is "safe step!" 
+When a new minimum appears, this guarantees us that the distance between it and the elements will be greater than between the previous minimum, which was larger. 
+So we just have to continue calculating using the new smallest element as a starting point until the maximum distance exceeds the previous one, 
+and if this does not happen, return the previous one.
+
+With this trick we turn an O(n^2) algorithm into an O(n)
+"""
+
+class Solution:
+    def maximumDifference(self, nums):
+        current_min, max_distance = math.inf, 0
+        for elem in nums:
+            if elem < current_min:
+                current_min = elem
+            if elem > current_min and elem - current_min > max_distance:
+                max_distance = elem - current_min
+        if max_distance == 0:
+            max_distance -= 1 
+        return max_distance

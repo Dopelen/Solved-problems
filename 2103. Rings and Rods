@@ -1,0 +1,13 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+
+This program have O(n)? complexity by time? and requires additional space of string size
+I have not big knowledge about RegEx complexity, but I believe it is like O(n) when pattern is small"""
+
+class Solution:
+    def countPoints(self, rings):
+        lenght = len(rings)
+        digits = {i:"" for i in set(re.findall(r'\d+', rings))}
+        for i in range(1, lenght, 2):
+            digits[rings[i]] += rings[i-1]
+        answer = [a for a in digits.values() if len(set(a)) == 3]
+        return len(answer)
