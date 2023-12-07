@@ -1,0 +1,20 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time
+
+At first I started 2 dictionaries, but then I realized that this was unnecessary. 
+If the set of all values is not equal to 0, then the two given lines are not an anogram
+
+I use trick with generate alphabet from char in range(97, 123) again, but idk how good and fast it is"""
+
+class Solution:
+    def isAnagram(self, s, t):
+        symbols = len(s)
+        if symbols != len(t):
+            return False
+        common_dict = {chr(k): 0 for k in range(97, 123)}
+        for elem in range(symbols):
+            common_dict[s[elem]] += 1
+            common_dict[t[elem]] -= 1 
+        if set(common_dict.values()) != {0}:
+            return False
+        return True
