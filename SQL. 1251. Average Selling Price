@@ -1,0 +1,7 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+SQL again! Not the prettiest solution, because I didn't know about the "ISNULL" function, but that is what it is!"""
+
+SELECT product_id, IF(product_id NOT IN(SELECT product_id FROM UnitsSold), 0, ROUND(SUM(price*units)/SUM(units), 2)) AS average_price
+FROM Prices LEFT JOIN UnitsSold USING(product_id)
+WHERE purchase_date BETWEEN start_date AND end_date OR product_id NOT IN(SELECT product_id FROM UnitsSold)
+GROUP BY product_id
