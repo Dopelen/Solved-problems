@@ -1,0 +1,20 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time
+
+In this task, we don't have to check every possible combination because we have a foolproof step! 
+The number for the smallest amount will always start with the smallest digit, once we understand this there is practically nothing else to do
+Sooo... My solution is simple, just convert object, and then convert it again...and...you get the point.
+But I also found a more elegant option that omits unnecessary conversions by representing the number in the string as “ten” by multiplying the digit by 10"""
+
+# My solution
+class Solution:
+    def minimumSum(self, num):
+        num = sorted(str(num))
+        return int(str(num[0])+str(num[2])) + int(str(num[1])+str(num[3]))
+
+# A bit trickier solution
+class Solution:
+    def minimumSum(self, num):
+        num = sorted(str(num), reverse=True)
+        return int(num[0]) + int(num[1]) + int(num[2])*10 + int(num[3])*10
+
