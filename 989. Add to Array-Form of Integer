@@ -1,0 +1,21 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+
+If you want one line, you can write it, but its not clear what is happening here.
+ALSO for this problem you can write str - int - str calculator, but I'm fine with usual functions
+"""
+
+#1
+class Solution:
+    def addToArrayForm(self, num, k):
+        sys.set_int_max_str_digits(10001)
+        return list(map(int, list(str(int(''.join(list(map(str, num)))) + k))))
+
+#2 Human form
+class Solution:
+    def addToArrayForm(self, num, k):
+        sys.set_int_max_str_digits(10001)
+        num = list(map(str, num))
+        num = ''.join(num)
+        num = int(num) + k
+        num = list(map(int, list(str(num))))
+        return num
