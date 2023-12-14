@@ -1,0 +1,34 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+Cant tell about program complexity by time because ыomething tells me that REGEX don't work the same way as simply going through a string multiple times
+and check each character.
+But if we assume that the check is:
+1. Take a symbol
+2. Check if it falls within certain ASCII ranges
+3. If it doesn't fit, throw it away
+Steps 1 and 2 require constant time, so it all comes down to the speed of removing an element from the string, if we need n time to do this(constract new str without symbol),
+the time complexity will be O(n^2).
+But you can find a faster solution, which will be below
+
+I feel like polyndrome problem is kinda classic.
+This problem was solvet with REGEX, but my first solution used function str.isalpha,
+Unfotunatly for me there was digits in input, so I have to change first solution"""
+
+
+#1 REGEX
+class Solution:
+    def isPalindrome(self, s):
+        str_origin = re.sub("[^a-zA-Z0-9]", "", s).lower()
+        str_rev = "".join(reversed(str_origin))
+        return str_origin == str_rev
+
+
+#2 isalnum()
+class Solution:
+    def isPalindrome(self, s):
+    	s = [i for i in s.lower() if i.isalnum()]
+    	return s == s[::-1]
+
+
+#3 2 pointers
+# I haven't written the code, but the idea is to sequentially check only letters and numbers, 
+# skipping everything else by moving the pointers front and back
