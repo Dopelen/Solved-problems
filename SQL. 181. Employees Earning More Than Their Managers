@@ -1,0 +1,9 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+
+I thought I would find a simpler solution and the one I got now would be slow, but Lythcott says it's in the 95th percentile, so I'm happy with the result.
+Essentially, I simply duplicate the table, artificially creating a “managers table” and compare the fields I need."""
+
+SELECT Employee.name AS Employee
+FROM Employee INNER JOIN (SELECT id, name, salary
+                          FROM Employee
+                          WHERE id IN(SELECT managerId FROM Employee))s ON Employee.managerId = s.id and Employee.salary > s.salary;
