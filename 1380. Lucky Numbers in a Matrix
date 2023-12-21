@@ -1,0 +1,25 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+If n is number of columns and m is number of rows I need O(n*m) for every compare, and O(min(n,m)) for compilation the answer. 
+But it will be O(n*m) anyway
+
+Task by itself not really difficult, but I suffuring all the time when I hiding one coordinate in dict under another - from other dict
+thats the moment where pain begins.
+But after all I kinda "Ok" with this solution, its not terrible in my eyes.
+
+class Solution:
+    def luckyNumbers (self, matrix):
+        rows, columns  = len(matrix), len(matrix[-1])
+        answer = []
+        min_hor, max_vert = {k:[0] for k in range(rows)}, {k:[0] for k in range(columns)}
+        for horizon in range(rows):
+            for vertical in range(columns):
+                current_number = matrix[horizon][vertical]
+                if current_number < min_hor[horizon][-1] or min_hor[horizon][-1] == 0 :
+                    min_hor[horizon] = [vertical, current_number]
+                if current_number > max_vert[vertical][-1] or max_vert[vertical][-1] == 0:
+                    max_vert[vertical] = [horizon, current_number]                    
+        for key in min_hor.keys():
+            current_check = min_hor[key]
+            if current_check[-1] == max_vert[current_check[0]][-1]:
+                answer.append(current_check[-1])
+        return answer
