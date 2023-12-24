@@ -1,7 +1,10 @@
 """You can see the description of the task using the code specified in the title on letcode.
 This program have O(n) complexity by time. (If pop() and push() workong in O(1))
 
-Happy and satisfied with the implementation of the stack!"""
+Happy and satisfied with the implementation of the stack!
+Insted of manualy check the lower/upper case  in line 14, you can use *str.swapcase*
+if stack and stack[-1] == s[i].swapcase()
+Live and learn."""
 
 class Solution:
     def makeGood(self, s):
