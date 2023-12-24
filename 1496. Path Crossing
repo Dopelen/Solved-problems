@@ -1,5 +1,5 @@
 """You can see the description of the task using the code specified in the title on letcode.
-This program have O(n) complexity by time.
+This program have O(n) complexity by time and O(n) complexity by space for every unique pair of coordinates which we store.
 
 I thought hard about the problem and came up with a cool solution using tuples as keys in a dictionary!
 It turned out very quickly. It is good when it's good"""
