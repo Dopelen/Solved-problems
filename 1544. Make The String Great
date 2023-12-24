@@ -1,0 +1,17 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time. (If pop() and push() workong in O(1))
+
+Happy and satisfied with the implementation of the stack!"""
+
+class Solution:
+    def makeGood(self, s):
+        size, stack, flag = len(s), [], 0
+        s = [elem for elem in s]
+        for step in range(size):
+            if flag and ((stack[-1].lower() == s[step].lower()) and (stack[-1] != s[step])):
+                stack.pop()
+                flag -= 1
+            else:    
+                stack.append(s[step])
+                flag += 1
+        return "".join(stack)
