@@ -1,0 +1,31 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(???) complexity by time
+Program at the bottom of the page O(1)
+
+At the beginning I thought "let's just take slices of original date str and then convert it into date type".
+A simple idea led me to new knowledge!
+Because the module I need is called "datetype"
+And the class is also called "datetype"
+So I need "datetime.datetime.strptime()" instead of "datetime.strptime()"
+Life and learn!
+
+ALSO This code is extremely slow compared to the row calculation the length of months and leap years of the specified time period
+So I adding "fast solution" from site"""
+
+
+# Mine
+class Solution:
+    def dayOfYear(self, date):
+        import datetime
+        starting_point = datetime.datetime(int(date[0:4]), 1, 1)        
+        date = datetime.datetime.strptime(date, "%Y-%m-%d")
+        return (date-starting_point).days + 1
+
+
+#respectable member of community: Er1k
+class Solution:
+    def dayOfYear(self, date: str) -> int:
+        year, month, day = [int(i) for i in date.split('-')]     
+        balance = 1 if (not year%4 and year%100 or not year%400) and month>2 else 0
+        day_accumu = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]         
+        return  day_accumu[month-1] + day + balance
