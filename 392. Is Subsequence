@@ -1,0 +1,18 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(s+t) complexity by time.
+
+Just checking is A is subsequence of B?"""
+
+class Solution:
+    def isSubsequence(self, s, t):
+        lenght_s, lenght_t, possition = len(s), len(t), 0
+        for step in range(lenght_s):
+            if lenght_s > lenght_t - possition:
+                return False 
+            try:
+                possition = t.index(s[step])
+                t = t[possition+1:]
+                lenght_s -= 1
+            except ValueError:
+                return False
+        return True
