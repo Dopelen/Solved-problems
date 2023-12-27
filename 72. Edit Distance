@@ -1,0 +1,42 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(m*n) complexity by time, where m is lenght of the first string and n is the lenght of the second.
+ALSO you can construct all steps from matrix with O(n+m) time and even solve original task without matrix(with only 2 string), its save memory for more important stuf!
+
+This is my 6 month old solution of Edit Distance task.
+I just wrote it according to the theoretical lectures about Levenshtein distance.
+Today I translate it into a solution through classes, for the litcode verification system."""
+
+
+
+class Solution:
+    first, second, D = "", "", []
+    def minDistance(self, word1, word2):
+        self.first, self.second = word1, word2
+        lenght, hight = len(self.first), len(self.second)
+        self.D = [[math.inf] * (lenght+1) for g in range(hight+1)]
+        return self.EditDisTD(hight, lenght)
+    
+    def EditDisTD(self, i, j):               
+        if self.D[i][j] == math.inf:
+            if i == 0:
+                self.D[i][j] = j
+            elif j == 0:
+                self.D[i][j] = i
+            else:
+                insert = self.EditDisTD(i, j - 1) + 1
+                delite = self.EditDisTD(i - 1, j) + 1
+                sub = self.EditDisTD(i - 1, j - 1) + self.diff(self.first[j-1], self.second[i-1])
+                self.D[i][j] = min(insert, delite, sub)
+        return self.D[i][j]
+
+    def diff(self, a, b):
+        if a == b:
+            return 0
+        else:
+            return 1
+        
+        return self.EditDisTD(self, lenght, hight)                  
+
+
+
+ 
