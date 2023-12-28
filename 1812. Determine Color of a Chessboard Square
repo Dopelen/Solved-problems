@@ -1,0 +1,18 @@
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(1) complexity by time.
+
+He-he. Goal is simple - find the color of a chessboard square, if it is white - return the truth.
+I came up with a cool solution without the sad process of writing down each letter in the dictionary, 
+but I couldn’t achieve complete beauty in the implementation! So I'll leave my code here and some cooler code that does the same thing"""
+
+# My code
+class Solution:
+    def squareIsWhite(self, coordinates):
+        if (ord(coordinates[0])%2 == 0 and int(coordinates[1])%2 != 0) or (ord(coordinates[0])%2 != 0 and int(coordinates[1])%2 == 0):
+            return True
+        return False
+
+# Code on steroids
+class Solution:
+    def squareIsWhite(self, c: str) -> bool:
+        return (ord(c[0])+int(c[1]))%2
