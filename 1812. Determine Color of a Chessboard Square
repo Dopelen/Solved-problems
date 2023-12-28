@@ -1,7 +1,7 @@
 """You can see the description of the task using the code specified in the title on letcode.
 This program have O(1) complexity by time.
 
-He-he. Goal is simple - find the color of a chessboard square, if it is white - return the truth.
+He-he. Goal is simple - find the color of a chessboard square, if it is white - return true.
 I came up with a cool solution without the sad process of writing down each letter in the dictionary, 
 but I couldn’t achieve complete beauty in the implementation! So I'll leave my code here and some cooler code that does the same thing"""
 
