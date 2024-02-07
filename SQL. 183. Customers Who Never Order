@@ -1,0 +1,10 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+There are several solutions here, but it is not possible to understand which one is faster due to the litcode checking system
+The join seems the simplest to me, it is also easy to select data that are not included in the second table (using WHERE NOT IN)
+
+"""
+
+SELECT name AS Customers
+FROM Customers LEFT JOIN Orders ON Customers.id = Orders.customerId
+WHERE Orders.customerId IS NULL
