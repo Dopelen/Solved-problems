@@ -5,7 +5,10 @@ in this scenario we will have to check all the elements, then subtract 1 and go 
 In the end we will make n passes, each of which will be by 1 shorter than the previous one.
 It seems to me that the time complexity in this case will be equal to the sum of the arithmetic progression: n*n/2
 which is O(n^2).
-Also this program have O(n) complexity by space"""
+Also, this program have O(n) complexity by space
+
+P.S: If you smart you can solve this problem with O(n) by time! (not my case this time >_>)
+"""
 
 
 class Solution:
