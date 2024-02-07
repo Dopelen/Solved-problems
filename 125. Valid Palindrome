@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """You can see the description of the task using the code specified in the title on letcode.
 Cant tell about program complexity by time because ыomething tells me that REGEX don't work the same way as simply going through a string multiple times
 and check each character.

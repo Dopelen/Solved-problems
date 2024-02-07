@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """You can see the description of the task using the code specified in the title on letcode.
 
 I thought I would find a simpler solution and the one I got now would be slow, but Lythcott says it's in the 95th percentile, so I'm happy with the result.

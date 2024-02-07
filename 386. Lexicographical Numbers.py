@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """You can see the description of the task using the code specified in the title on letcode.
 This program have O(n) complexity by time
 The tricky part of this problem is "lexicographical order" in answer

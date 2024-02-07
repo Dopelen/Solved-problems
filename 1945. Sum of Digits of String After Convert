@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """You can see the description of the task using the code specified in the title on letcode.
 We need O(alphabet) time for creating dict, then O(input_str) time for converting string and then convert it again k times.
 Each time input decrease from input_symbols to sum(input_symbols) which is significant, so overall I think it is O(alphabet * input_str) which is like O(n) small alphabets!

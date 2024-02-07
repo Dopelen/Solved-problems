@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """You can see the description of the task using the code specified in the title on letcode.
 This program have O(s) complexity by time (+time for constructing new string?) and O(s) by space, where s - lenght of the string.
 

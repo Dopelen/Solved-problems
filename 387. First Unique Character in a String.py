@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """You can see the description of the task using the code specified in the title on letcode.
  This program have O(n) complexity by time
  The idea of solution is symple. We're just adding every character into hash-table with value : position,

@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """You can see the description of the task using the code specified in the title on letcode.
 This program have O(n) complexity by time and I belive uses extra space when passing a list between functions.
 I tried to solve this problem by save list for answer into the class,

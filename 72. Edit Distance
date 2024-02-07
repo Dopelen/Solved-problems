@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """You can see the description of the task using the code specified in the title on letcode.
 This program have O(m*n) complexity by time, where m is lenght of the first string and n is the lenght of the second.
 ALSO you can construct all steps from matrix with O(n+m) time and even solve original task without matrix(with only 2 string), its save memory for more important stuf!

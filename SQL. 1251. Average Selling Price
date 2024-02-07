@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """You can see the description of the task using the code specified in the title on letcode.
 SQL again! Not the prettiest solution, because I didn't know about the "ISNULL" function, but that is what it is!"""
 

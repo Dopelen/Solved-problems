@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """You can see the description of the task using the code specified in the title on letcode.
 This program have O(log(n)) complexity by time as long as you use binary search
 
