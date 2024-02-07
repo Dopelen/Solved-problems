@@ -7,7 +7,7 @@ It seems to me that the time complexity in this case will be equal to the sum of
 which is O(n^2).
 Also, this program have O(n) complexity by space
 
-P.S: If you smart you can solve this problem with O(n) by time! (not my case this time >_>)
+P.S: If you smart you can solve this problem with O(nlog(n)) by time! (not my case this time >_>)
 """
 
 
