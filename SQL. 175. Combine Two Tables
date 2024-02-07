@@ -1,0 +1,7 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+Difficulty level: "Hello World" :)
+"""
+
+SELECT firstName, lastName, city, state
+FROM Person LEFT JOIN Address USING(personId)
