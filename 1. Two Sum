@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 """You can see the description of the task using the code specified in the title on letcode.
 This program have O(n(log(n))) complexity by time
 
@@ -7,6 +8,7 @@ My solution better then just "check sum of every 2 possible numbers"(what is O(n
 "add every symbol in dict and than check every symbol with the help of this (what is O(n))
 My way is create sorted list and than check with help of this every possible number.
 Bisect give me possibility to finde number with log(n) time, but I still need to check n numbers.
+
 """
 
 class Solution:
