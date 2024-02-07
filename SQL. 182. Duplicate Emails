@@ -1,0 +1,10 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+Well, some of this problem is indecently simple
+"""
+
+SELECT email AS Email
+FROM Person
+GROUP BY email
+HAVING COUNT(email) != 1
