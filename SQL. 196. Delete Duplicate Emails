@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+I realized that out of hundreds of my student assignments, only 2 were for deletion
+I had to think a little, remember what aliases are
+
+"""
+
+DELETE t1
+FROM Person t1
+JOIN Person t2 ON t1.email = t2.email
+WHERE t1.id > t2.id;
