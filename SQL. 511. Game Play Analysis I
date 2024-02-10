@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+I tried several solutions and this turned out to be the most normal and working - I thought being 20 hours without sleep:
+
+SELECT ac1.player_id, ac1.event_date AS first_login
+FROM Activity ac1 JOIN (SELECT player_id, MIN(event_date) AS first FROM Activity GROUP BY player_id) ac2 ON ac1.player_id = ac2.player_id
+WHERE ac1.event_date=ac2.first
+
+But then I realized that I had done something crazy, because the human decision looks something like this.
+
+"""
+
+select player_id,min(event_date) as first_login
+from Activity
+group by player_id
+
+
+№ Don't forget to pay attention to your sleep
+
+
+
+
