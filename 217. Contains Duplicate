@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+ This program have O(n) complexity by time (check all list when counting elements), and O(n) complexity by space (creating set of nums)
+
+Check duplicates with "set" it's just a classic
+
+"""
+
+class Solution:
+    def containsDuplicate(self, nums):
+        return len(nums) != len(set(nums))
