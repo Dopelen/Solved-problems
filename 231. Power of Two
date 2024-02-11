@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(1) complexity by time.
+
+Repetition is the mother of learning. Just using a bit shift to check if a number is a power of two
+
+"""
+
+class Solution:
+    def isPowerOfTwo(self, n):       
+        if n != 0:
+            n != 1
+            return not(n & (n - 1))
