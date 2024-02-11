@@ -1,0 +1,9 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+These are just the basics
+
+"""
+
+UPDATE Salary
+SET sex = IF(sex = "m", "f", "m")
+
