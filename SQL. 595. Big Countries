@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+It’s a very strange feeling when some problems are solved in minutes, while others leave you stunned.
+This is what happens when you take training courses from different countries
+
+"""
+
+SELECT name, population, area
+FROM World
+WHERE area >= 3000000 or population >= 25000000
