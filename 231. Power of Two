@@ -8,6 +8,4 @@ Repetition is the mother of learning. Just using a bit shift to check if a numbe
 
 class Solution:
     def isPowerOfTwo(self, n):       
-        if n != 0:
-            n != 1
-            return not(n & (n - 1))
+        return n>0 and not(n & (n - 1))
