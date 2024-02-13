@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+Another "HAVING" task
+
+"""
+
+SELECT name AS NAME, SUM(amount) AS BALANCE
+FROM Users LEFT JOIN Transactions USING(account)
+GROUP BY account
+HAVING SUM(amount) > 10000
