@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(log(n)) complexity by time. I would like to say that the time complexity is constant, but multiplication and exponentiation are not so fast depending on the length of the number and require O(log(n)).
+
+This problem is trickier than I thought. I suspected that there was an optimal solution like a shift, as in the power of two problems, but you can’t just convert a number to the tertiary system 
+and find the only one in the bit string, because the translation of the string into the tertiary system itself is a series of divisions, which has no advantage over the division sequence you do 
+to figure out whether a number is a power of three directly. 
+The "format" method could come to the rescue, but it only outputs as a binary string, so the resulting tertiary string will be converted to binary when output, which defeats the whole purpose. 
+Then I tried JUST taking the root, but it turned out that in this case 0 gives a false positive result and that some numbers, when raised to the root, will become complex... 
+In addition to this, due to the peculiarities of floating point calculations, problems may arise with a false result, to avoid which a check for the maximum degree of three is introduced. 
+But in the end, it is much faster than dividing in a loop
+
+"""
+
+class Solution:
+    def isPowerOfThree(self, n):
+        max_power_of_three = 3 ** 19
+        if n == 0:
+            return False
+        return n>0 and max_power_of_three % n == 0
