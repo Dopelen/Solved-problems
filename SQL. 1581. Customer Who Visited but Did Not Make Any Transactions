@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+At first I tried to solve the problem through JOIN, but then I realized that I had not slept for a long time and in the morning I found a more pleasant solution
+
+"""
+
+
+SELECT customer_id, COUNT(customer_id) AS count_no_trans
+FROM Visits
+WHERE visit_id NOT IN(SELECT visit_id FROM Transactions)
+GROUP BY customer_id
