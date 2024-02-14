@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode. 
+This program has O(n) complexity by time
+
+I found it a little cumbersome for such a simple task, but overall I'm happy with it. 
+I used a dictionary generator and calculated the length of a palindrome as the size of the sum of letters that represent an even number of times,  + 1 if there is an odd number somewhere.
+
+"""
+
+import string
+
+class Solution:
+    def longestPalindrome(self, s):
+        if len(s) == 1:
+            return 1
+        palind, adit_pal = 0, False
+        alphabet_str = string.ascii_letters
+        alphabet = {letter:0 for letter in alphabet_str}
+        for lett in s:
+            alphabet[lett] += 1
+        for k, v in alphabet.items():
+            if v == 1 or v%2 != 0:
+                adit_pal = True 
+            if v%2 != 0:
+                palind += v-1
+            else:
+                palind += v 
+        return palind + adit_pal
