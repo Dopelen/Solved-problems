@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode. 
+This program has O(n) complexity by time
+
+Fast and clear replacement in a bit string
+
+P.S: There is also a solution through bit operations using XOR, but for me it is not so clear, although it should be faster(O(log(n)))
+"""
+
+class Solution:
+    def findComplement(self, num):
+        check = bin(num)[2:]
+        answer = ""
+        for digit in check:
+            if digit == "0":
+                answer += "1"
+            else:
+                answer += "0"
+        return int(answer, 2)
