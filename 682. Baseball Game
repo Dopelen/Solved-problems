@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+It seems to me that the asymptotic complexity of the program in this case is determined by the slowest operation.
+Access an element by index in a list O(1).
+Addition and multiplication of non-huge numbers O(1).
+Removing the last element from list O(1).
+Adding an element to a list is also O(1).
+In total, the time complexity of the algorithm will be linear O(n)
+
+just a nice little task with a little opportunity to think
+
+"""
+
+class Solution:
+    def calPoints(self, operations):
+        answer = []
+        for elem in operations:
+            if elem == '+':
+                new_score = answer[-1] + answer[-2]
+            elif elem == 'D':
+                new_score = answer[-1] * 2
+            elif elem == "C":
+                answer.pop()
+                continue
+            else:
+                new_score = int(elem)
+            answer.append(new_score)
+        return sum(answer)
