@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+For some reason, problems with CROSS always put me in a small dead end at the moment when all this needs to be connected further.
+
+"""
+
+SELECT  Students.student_id, Students.student_name, Subjects.subject_name, COUNT(Examinations.subject_name) as attended_exams
+FROM Students CROSS JOIN Subjects
+LEFT JOIN Examinations     ON Students.student_id = Examinations.student_id
+                            AND Subjects.subject_name = Examinations.subject_name
+GROUP BY student_id, student_name, subject_name
+ORDER BY student_id, subject_name
