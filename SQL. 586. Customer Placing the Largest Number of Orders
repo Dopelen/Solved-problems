@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+We find the most frequent buyer through ORDER BY and LIMIT
+
+"""
+
+SELECT customer_number FROM (
+SELECT customer_number, COUNT(customer_number) as count
+FROM Orders
+GROUP BY customer_number
+ORDER BY count DESC) t2
+LIMIT 1
