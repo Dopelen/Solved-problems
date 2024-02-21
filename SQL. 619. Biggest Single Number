@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+I had to think a little, the answer turned out to be to call if null on the entire table
+
+"""
+
+SELECT IFNULL((SELECT num
+               FROM MyNumbers
+               GROUP BY num
+               HAVING COUNT(num) = 1
+               ORDER BY num DESC
+                LIMIT 1), NULL) AS num
