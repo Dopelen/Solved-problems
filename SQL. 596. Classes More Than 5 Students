@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+Just a solution GROUP + HAVING
+
+"""
+
+SELECT class
+FROM Courses
+GROUP BY class
+HAVING COUNT(class) >= 5
