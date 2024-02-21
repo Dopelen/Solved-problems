@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+I'm ashamed to admit, but I forgot the criteria for the possibility of assembling a triangle from fragments
+
+"""
+
+SELECT x, y, z, IF( x + y > z ,
+                    IF( x + z > y ,
+                        IF( z + y > x , "Yes", "No"), "No"),"No") AS triangle
+FROM Triangle
