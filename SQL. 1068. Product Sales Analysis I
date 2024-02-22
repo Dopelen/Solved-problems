@@ -1,0 +1,9 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+A task in case you forgot how to join tables
+
+"""
+
+SELECT product_name, year, price
+FROM Sales INNER JOIN Product USING(product_id)
