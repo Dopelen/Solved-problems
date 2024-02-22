@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+Different percentages
+I tried to enter a variable several times, but it seems that in this task it is not allowed during verification
+
+"""
+
+SELECT contest_id, ROUND((COUNT(user_id)/(SELECT COUNT(user_id) FROM Users)) * 100, 2) AS percentage 
+FROM Register
+GROUP BY contest_id
+ORDER BY percentage DESC, contest_id ASC
+
