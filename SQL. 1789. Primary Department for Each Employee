@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+I thought to myself that this was an extremely simple task, but then I stared at the condition for five minutes
+
+"""
+
+SELECT employee_id, department_id
+FROM Employee
+WHERE primary_flag = "Y" OR  primary_flag = "N" and employee_id IN(
+    SELECT employee_id 
+    FROM Employee 
+    GROUP BY employee_id 
+    HAVING COUNT(employee_id) = 1)
