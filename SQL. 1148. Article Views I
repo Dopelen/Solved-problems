@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+Found people who like their own posts, why only two out of all..?
+
+"""
+
+SELECT DISTINCT author_id AS id
+FROM Views
+WHERE viewer_id = author_id
+ORDER BY id ASC
