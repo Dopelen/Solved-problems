@@ -1,0 +1,10 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+I remember the operator LIKE!
+
+"""
+
+SELECT patient_id, patient_name, conditions
+FROM Patients
+WHERE conditions LIKE '% DIAB1%' OR conditions LIKE 'DIAB1%'
