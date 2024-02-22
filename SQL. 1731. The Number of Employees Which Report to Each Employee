@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+Here I had to think, but I quickly managed to move the group functions to another table
+
+"""
+
+SELECT employee_id, name, e2.count_reports as reports_count, e2._age AS average_age
+FROM Employees e1 INNER JOIN (SELECT reports_to, COUNT(reports_to) as count_reports, ROUND(AVG(age), 0) AS _age 
+                              FROM Employees 
+                              GROUP BY reports_to) e2 ON e1.employee_id = e2.reports_to
+ORDER BY employee_id
