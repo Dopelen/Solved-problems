@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+I wouldn't say that the task is difficult, but it clearly stands out from the rest
+
+"""
+
+SELECT machine_id, ROUND(SUM(t_for_proc)/COUNT(machine_id), 3) AS processing_time
+FROM (SELECT machine_id, MAX(CASE WHEN activity_type = 'end' THEN timestamp END) - 
+                         MAX(CASE WHEN activity_type = 'start' THEN timestamp END) AS t_for_proc
+                         FROM Activity
+                         GROUP BY machine_id, process_id) t1
+GROUP BY machine_id
