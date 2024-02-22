@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+This assignment stumped me because it requires using the group concatenation function, which I didn't know about, but now I know.
+Unfortunately, it doesn’t occur to me how you can solve the task without it.
+
+"""
+
+SELECT sell_date, COUNT(DISTINCT product) as num_sold,
+GROUP_CONCAT(DISTINCT product ORDER BY product) AS products
+FROM Activities
+GROUP BY sell_date
+ORDER BY sell_date
