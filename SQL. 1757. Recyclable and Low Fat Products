@@ -1,0 +1,10 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+Found products that are not worth buying.
+
+"""
+
+SELECT product_id
+FROM Products
+WHERE low_fats = "Y" AND recyclable = "Y"
