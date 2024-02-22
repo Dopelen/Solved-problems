@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+For some reason, I was sure that I needed to write a solution for an arbitrary number of stores, 
+which would change from test to test, so I thought for a long time, but in fact the task is quite simple.
+
+"""
+
+SELECT product_id, 'store1' as store, store1 AS price FROM products
+WHERE store1 IS NOT NULL
+UNION
+SELECT product_id, 'store2' as store, store2 AS price FROM products
+WHERE store2 IS NOT NULL
+UNION
+SELECT product_id, 'store3' as store, store3 AS price FROM products
+WHERE store3 IS NOT NULL
+
+
