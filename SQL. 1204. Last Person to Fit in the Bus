@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+Medium level baby! 8)
+
+This is not the most optimal solution, but the first thing I thought of was to simply calculate the increasing severity of the bus with each passenger, 
+then sort the resulting solutions, and pull out the results below or equal to the threshold value, since the results are sorted, when using the LIMIT, 
+the first result that comes will be maximum
+
+"""
+
+SELECT person_name
+FROM (
+    SELECT person_name, SUM(weight) OVER (ORDER BY turn ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cumulative_weight 
+    FROM Queue 
+    ORDER BY cumulative_weight DESC
+) calculating
+WHERE cumulative_weight <= 1000
+LIMIT 1
