@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+You just need to get used to the fact that the value in such a calculation changes with each next line
+
+"""
+
+SELECT stock_name,  SUM(IF(operation="Buy", - price, price)) AS capital_gain_loss
+FROM Stocks
+GROUP BY stock_name
+
