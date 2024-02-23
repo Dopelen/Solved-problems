@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+I had to figure out how to get up the stairs from the tables.
+
+"""
+
+SELECT employee_id 
+FROM Employees
+WHERE manager_id IN(SELECT manager_id 
+                    FROM Employees 
+                    WHERE manager_id NOT IN (
+                        SELECT employee_id FROM Employees)) AND salary < 30000
+ORDER BY employee_id ASC
