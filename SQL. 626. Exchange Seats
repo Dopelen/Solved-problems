@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+The basic tasks are over.
+Let's move on to medium.
+But for now they are more interested in knowing a little ornate methods than in thinking
+
+"""
+
+SELECT id, IFNULL(IF(id%2=1, LEAD(student) OVER (ORDER BY id), 
+                              LAG(student) OVER (ORDER BY id)), student)  AS student
+FROM
+    Seat
