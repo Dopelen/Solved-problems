@@ -1,0 +1,10 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+Testing window functions. I received an error because I declared the name without quotes. 
+Apparently SQL perceived without them as a reserved word
+
+"""
+
+SELECT score, DENSE_RANK() OVER (ORDER BY score DESC) as "rank"
+FROM Scores
