@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+Initially, I missed that I could calculate the amount of time simply through grouping, and used the third case, but in time I realized what was happening and corrected it. 
+Now everything is in good shape
+Difficulty increases!
+
+My solution with step-by-step explanation can be found here:
+https://leetcode.com/problems/snaps-analysis/solutions/4784817/simple-solution-explained-step-by-step-with/
+
+"""
+
+WITH calculating_table AS(
+    SELECT age_bucket, 
+            SUM(CASE WHEN activity_type="open" THEN time_spent ELSE 0 END) AS send_time,
+            SUM(CASE WHEN activity_type="send" THEN time_spent ELSE 0 END) AS open_time,
+            SUM(time_spent) AS sum_time
+    FROM Age LEFT JOIN Activities USING(user_id)
+    GROUP BY age_bucket
+)
+SELECT age_bucket, 
+       ROUND(open_time / sum_time * 100, 2) AS send_perc, 
+       ROUND(send_time / sum_time * 100, 2) AS open_perc
+FROM calculating_table
+ORDER BY age_bucket DESC;
