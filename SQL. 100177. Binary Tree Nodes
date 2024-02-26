@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+We simply put the criteria for binary tree nodes into the CASE
+
+"""
+
+SELECT N, CASE WHEN P IS NULL THEN "Root"
+               WHEN N IN (SELECT P FROM Tree) THEN "Inner"
+               ELSE "Leaf"
+          END AS Type
+FROM Tree
+ORDER BY N
