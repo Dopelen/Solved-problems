@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time and O(n) by space.
+
+Well, it was fast.
+
+P.S: It seems that multiplying by 2 will be more efficient than concatenation, because it does not require copying the original list.
+"""
+
+class Solution:
+    def getConcatenation(self, nums: List[int]) -> List[int]:
+        return nums*2
