@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode. 
+I can’t say about time complexity, because I don’t know how Pandas works with tables
+
+Also, I don't have much experience with pandas, but it's never too late to gain some.
+
+"""
+
+import pandas as pd
+
+def selectFirstRows(employees: pd.DataFrame) -> pd.DataFrame:
+    return employees.head(3)
