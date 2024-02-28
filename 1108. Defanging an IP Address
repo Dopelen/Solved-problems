@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time, because at a minimum we need to go through the entire line,  
+and O(n) spaceб because when replacing elements we create a new string.
+
+I decided to complete all possible simple tasks before completely switching to the medium.
+
+"""
+
+class Solution:
+    def defangIPaddr(self, address: str) -> str:
+        return  address.replace(".", "[.]")
