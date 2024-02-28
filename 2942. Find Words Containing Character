@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time and by space, because List Comprehension is essentially the same as a loop "for".
+
+I decided to make one line and practice constructing lists.
+I like how it turned out!
+
+"""
+
+class Solution:
+    def findWordsContaining(self, words: List[str], x: str) -> List[int]:
+        return [w for w in range(len(words)) if x in words[w]]
