@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time, because we need to go through the list several times, first constructing the original one, 
+then for the divisibles, and then for the indivisibles, the longest time among those presented will be O(n).
+Also, do not forget that we will need to calculate the amounts, but these are constant operations.
+Spaсe complexity is O(n) because we are creating additional data structures(original list, divisibles, indivisibles) worst of them is O(n).
+
+I continue to play around with list comprehension!
+
+"""
+
+class Solution:
+    def differenceOfSums(self, n: int, m: int) -> int:
+        base_list = [n for n in range(1, n+1)]
+        return sum([num1 for num1 in base_list if num1%m!=0]) - sum([num2 for num2 in base_list if num2%m==0])
