@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+This program has O(n) complexity by time, because we do a constant check with a dictionary for each element of the list.
+Space complexity is O(1) because we are not creating additional data structures (not counting a dictionary with 4 elements).
+
+At first I decided to use regular expressions, but then I thought that it was somehow wrong to endlessly read lines when we know all the patterns.
+
+"""
+
+class Solution:
+    def finalValueAfterOperations(self, operations: List[str]) -> int:
+        ans_d = {"--X" : -1, "X--" : -1, "++X" : 1, "X++" : 1}
+        return sum(ans_d[operat] for operat in operations)
+
