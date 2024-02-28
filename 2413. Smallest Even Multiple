@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+This program has O(log(min(a,b))) complexity by time (time complexity of the Euclidean algorithm) and O(1) by space.
+
+Found the greatest common divisor and with its help the least common multiple
+
+"""
+
+class Solution:
+    def smallestEvenMultiple(self, n: int) -> int:
+        def gcd(a, b):
+            while b:
+                a, b = b, a % b
+            return a
+
+        def lcm(a, b):
+            return abs(a * b) // gcd(a, b)
+        
+        return lcm(n, 2)
+
+
+# But this is also possible!
+class Solution:
+    def smallestEvenMultiple(self, n: int) -> int:
+        if n % 2 == 0:
+            return n
+        else:
+            return n*2
