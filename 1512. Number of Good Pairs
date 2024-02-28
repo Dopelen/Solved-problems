@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+This program has O(n^2) complexity by time, because for each element we go through the entire list.
+Spatial complexity seems to be O(1) because we are not creating additional data structures, we are simply iterating over the list.
+
+I'm sure there is a faster solution, through sorting for example with calculating the inversion of the list, which would be done in O(log(n))
+But I’m not ready to write it for a simple task :)
+
+"""
+
+class Solution:
+    def numIdenticalPairs(self, nums: List[int]) -> int:
+        lenght = len(nums)
+        current = 0
+        answer = 0
+        for element in nums:
+            current += 1
+            for elem in range(current, lenght):
+                if element == nums[elem]:
+                    answer += 1
+        return answer
