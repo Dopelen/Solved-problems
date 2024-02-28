@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+I'm creating a list with an answer, so in space it's at least O(n). I'll need to iterate over the original list and make n constant O(1) calls, so in time it's also O(n).
+
+I did an almost identical task, and this time it was easier. But she still broke my brain again.
+The hardest thing is to simplify the task. 
+"Place in this position an element with the index that is currently in this position."
+
+"""
+
+class Solution:
+    def buildArray(self, nums: List[int]) -> List[int]:
+        number_of_elements = len(nums)
+        answer = [0 for elem in range(number_of_elements)]
+        for element in range(number_of_elements):
+            answer[element] = nums[nums[element]]
+        return answer
