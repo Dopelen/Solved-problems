@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n(log(n))) time complexity (of sorting) and O(n) by space, because we are creating an additional list.
+
+"""
+
+# Without max method:
+class Solution:
+    def maxWidthOfVerticalArea(self, points: List[List[int]]) -> int:        
+        maximum = 0
+        updated_points = sorted(points)
+        prev_val = updated_points[0][0]
+        for elem in updated_points[1:]:
+            if elem[0] - prev_val > maximum:
+                maximum = elem[0] - prev_val
+            prev_val = elem[0]
+        return maximum
+
+# With max:
+class Solution:
+    def maxWidthOfVerticalArea(self, points: List[List[int]]) -> int:
+        points.sort()
+        n=len(points)
+        ans=0
+        for i in range(1,n):
+            ans=max(ans,(points[i][0]-points[i-1][0]))
+        return ans    
