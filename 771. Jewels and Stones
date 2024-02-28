@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n * m) complexity by time because for each piece of jewelry we go through the entire list.
+And O(1) by space.
+
+It seemed to me that one line would not be very readable, so I painted it in detail
+
+"""
+
+class Solution:
+    def numJewelsInStones(self, jewels: str, stones: str) -> int:
+        ans = 0
+        for elem in jewels:
+            ans += stones.count(elem)
+        return ans
