@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(1) complexity by time and same by space.
+
+This could be my first python task...
+
+"""
+
+class Solution:
+    def convertTemperature(self, celsius: float) -> List[float]:
+        return [round(celsius + 273.15, 5), round(celsius * 1.8 + 32, 5)]
