@@ -7,6 +7,13 @@ Spatial complexity seems to be O(1) because we are not creating additional data 
 I'm sure there is a faster solution, through sorting for example with calculating the inversion of the list, which would be done in O(log(n))
 But I’m not ready to write it for a simple task :)
 
+NOTE:
+There is an even simpler and faster way that came to my mind, but for some reason I was sure that by condition we need not only == but also <=. 
+If we enter each element into the dictionary and count its number of occurrences, then the answer will simply be the sum of the sums of arithmetic progressions for each element.
+smth like this:
+ans += hashMap[number]
+It's O(n) solution
+
 """
 
 class Solution:
