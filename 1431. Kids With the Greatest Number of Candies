@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time (we have to go through the list several times). O(1) by space (To do this I go through the indexes and modify the original list rather than creating a new one).
+
+"""
+
+class Solution:
+    def kidsWithCandies(self, candies: List[int], extraCandies: int) -> List[bool]:
+        diabetis = max(candies)
+        childrens = len(candies) 
+        for elem in range(childrens):
+            if candies[elem] + extraCandies < diabetis:
+                candies[elem] = False
+            else:
+                candies[elem] = True
+        return candies
+
