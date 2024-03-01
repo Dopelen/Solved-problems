@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It's nice when you can cram a lot of logic into one line and everything remains relatively easy to understand
+
+"""
+
+class Solution:
+    def mostWordsFound(self, sentences: List[str]) -> int:
+        return max([len(x.split(" ")) for x in sentences])
