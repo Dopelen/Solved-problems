@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+"""
+
+class Solution:
+    def findWords(self, words: List[str]) -> List[str]:
+        answer = []
+        keyboard_line = {"1": "qwertyuiop", "2": "asdfghjkl", "3": "zxcvbnm"}
+        for word in words:
+            x = word[0].lower()
+            pivot = None
+            if x in keyboard_line["1"]:
+                pivot = "1"
+            elif x in keyboard_line["2"]:
+                pivot = "2"
+            elif x in keyboard_line["3"]:
+                pivot = "3"
+            if pivot is not None: 
+                valid = True
+                for symbol in word:
+                    if symbol.lower() not in keyboard_line[pivot]:
+                        valid = False
+                        break
+                if valid:
+                    answer.append(word)   
+        return answer
