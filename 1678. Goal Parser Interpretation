@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(n) by space.
+
+"""
+
+class Solution:
+    def interpret(self, command: str) -> str:
+        command = command.replace("()", "o")
+        command = command.replace("(al)", "al")
+        return command
