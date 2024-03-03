@@ -1,5 +1,7 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on letcode.
+In the worst case, we iterate over all characters of each word, so the time complexity is equal to the number of elements in the list times the longest word O(n*m)
+ALSO Its has O(n) complexity by space (we creating the answer list)
 
 """
 
