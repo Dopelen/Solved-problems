@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+First code has O(n^2) complexity by time and O(n) by space.
+Second code has O(n*log(n)) complexity by time and O(1) by space.
+
+I wrote the solution using brute force and then thought a bit and google a bit.
+
+"""
+
+#Brute_force
+class Solution:
+    def countPairs(self, nums: List[int], target: int) -> int:
+        answer = 0
+        start = 1
+        elements = len(nums)
+        for elem in range(elements):
+            pivot = nums[elem]
+            for elem_shift in nums[start:]:
+                print(pivot, elem_shift)
+                if pivot + elem_shift < target:
+                    answer += 1
+            start += 1
+        return answer
+
+
+#Two_pointers_human
+class Solution:
+    def countPairs(self, nums: List[int], target: int) -> int:
+        counter = 0
+        left, right = 0, len(nums) - 1
+        nums.sort()
+        while left < right:
+            if nums[left] + nums[right] < target:
+                counter += right - left
+                left += 1
+            else:
+                right -= 1
+        return counter
