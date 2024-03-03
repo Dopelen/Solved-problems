@@ -1,0 +1,9 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This cod has O(n) complixity by time (bc of len function) and O(n) by space (bc sorted creating new list).
+
+"""
+
+class Solution:
+    def numberOfEmployeesWhoMetTarget(self, hours: List[int], target: int) -> int:
+        return len(hours) - bisect.bisect_left(sorted(hours), target)
