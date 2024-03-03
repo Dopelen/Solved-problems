@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This cod has O(1) complixity by time and O(1) by space.
+
+Very complicated description, very simple solution.
+
+"""
+
+class Solution:
+    def theMaximumAchievableX(self, num: int, t: int) -> int:
+        return num + 2 * t
