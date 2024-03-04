@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(lenght_of_digit * n) complexity by time (because of multiplication) and O(1) by space.
+The complexity is tied to the most difficult operation, and here it is multiplication
+
+The solution is straightforward.
+
+"""
+
+class Solution:
+    def subtractProductAndSum(self, n: int) -> int:
+        n = str(n)
+        product = int(n[0])
+        summ = int(n[0])
+        for elem in n[1:]:
+            product = product * int(elem)
+            summ += int(elem)
+        return product - summ
