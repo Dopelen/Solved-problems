@@ -18,3 +18,48 @@ class Solution:
                 n = (n-1)//2 + 1
                 answer += n - 1
         return answer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#hidden masterpiece solution:
+class Solution:
+    def numberOfMatches(self, n: int) -> int:
+        return n - 1
