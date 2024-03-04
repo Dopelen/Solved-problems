@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Today I found out that there is XOR!
+I solved this problem just in case.
+
+"""
+
+class Solution:
+    def xorOperation(self, n: int, start: int) -> int:
+        nums = [start + 2 * i for i in range(n)]
+        result = 0
+        for num in nums:
+            result ^= num
+        return result
