@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(n) by space
+
+I thought for some time and was in a hurry to make a couple of passages, but I like the solution better, through a single passage it saves space
+
+"""
+
+# Multiple iteration
+
+class Solution:
+    def leftRightDifference(self, nums: List[int]) -> List[int]:
+        previous_left, previous_right, size = 0, 0, len(nums)
+        left_sum, right_sum=[], []
+        for elem in range(size):
+            left_sum.append(previous_left)
+            previous_left += nums[elem]
+            right_sum.append(previous_right)
+            previous_right += nums[size - 1 - elem]
+        return [abs(a - b) for a, b in zip(left_sum, reversed(right_sum))]
+
+# One iteration
+
+class Solution:
+    def leftRightDifference(self, nums: List[int]) -> List[int]:
+        previous_left = 0 
+        previous_right = sum(nums)
+        size = len(nums)
+        answer = []
+        for elem in range(size):
+            previous_right -= nums[elem]
+            answer.append(abs(previous_left - previous_right))
+            previous_left += nums[elem]
+        return answer
