@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n^2)(bc of insert) complexity by time and O(n) by space.
+
+As usual, I tried to outwit everyone, but in the end I only outwitted myself.
+
+"""
+
+class Solution:
+    def createTargetArray(self, nums: List[int], index: List[int]) -> List[int]:
+        answer = [None for elem in nums]
+        for num, ind in zip(nums, index):
+            if answer[ind] == None:
+                answer[ind] = num
+            else:
+                answer.insert(ind, num)
+        answer = [elem for elem in answer if elem != None]
+        return answer
+
+
+# Its also can be solved like this
+class Solution:
+    def createTargetArray(self, nums: List[int], index: List[int]) -> List[int]:
+        result = []
+        for i in range(len(nums)):
+            result.insert(index[i], nums[i])
+        return result
