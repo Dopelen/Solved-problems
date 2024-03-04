@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time and O(1) by space.
+
+Use cuts carefully
+
+"""
+
+
+class Solution:
+    def truncateSentence(self, s: str, k: int) -> str:
+        index = 0
+        for elem in s:
+            if elem == " ":
+                k -= 1
+            if k != 0:
+                index += 1
+            else:
+                break
+        return s[0:index]
+
+
+# There is also one line, but I didnt like it bc here you have to split whole string even if you need 1 word
+class Solution:
+    def truncateSentence(self, s: str, k: int) -> str:
+      return ' '.join(s.split()[:k])
