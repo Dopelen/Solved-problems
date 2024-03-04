@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+This program has O(n(log(n))) by time because of sorting and O(n) by space because of creating dict, new list of nums, and answer list.
+We can get rid of some lists, but this will not change the asymptotic complexity bc we need at least one of them, and this is still O(n)
+
+For some reason, this task took me 5 times longer than it deserved. 
+Maybe it's time to stop trying to solve every problem through enumerate and list comprehension.
+
+"""
+
+class Solution:
+    def smallerNumbersThanCurrent(self, nums: List[int]) -> List[int]:
+        original_n = nums
+        nums = sorted(nums)
+        current = 0
+        previous = nums[0]
+        helper = {nums[0]:0}
+        for elem in nums[1:]:
+            current += 1
+            if elem == previous:
+                continue
+            helper[elem] = current
+            previous = elem
+        return [helper[n] for n in original_n]
