@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time and O(n) by space.
+
+Trying to remember how to get around trees.
+
+"""
+
+class Solution:
+    def getTargetCopy(self, original: TreeNode, cloned: TreeNode, target: TreeNode) -> TreeNode:
+        def find_t(tree, target):
+            if tree:
+                if tree.val == target.val:
+                    return tree
+                tree_left = find_t(tree.left, target)
+                if tree_left:
+                    return tree_left
+                tree_right = find_t(tree.right, target)
+                if tree_right:
+                    return tree_right
+            return None
+        return find_t(cloned, target)
