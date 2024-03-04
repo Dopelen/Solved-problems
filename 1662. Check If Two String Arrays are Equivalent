@@ -1,0 +1,10 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode. 
+This programm has O(n*n' + m*m') complexity by time where n is number of elements in the word1 and n' longest str in n, m the same for word2. 
+There is also O(n*n' + m*m') by space.
+
+"""
+
+class Solution:
+    def arrayStringsAreEqual(self, word1: List[str], word2: List[str]) -> bool:
+        return "".join(word1)==''.join(word2)
