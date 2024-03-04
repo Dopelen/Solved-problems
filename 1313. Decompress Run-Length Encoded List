@@ -11,3 +11,11 @@ class Solution:
             for numbers in range(nums[elem-1]):
                 answer.append(nums[elem])
         return answer
+
+#I feel like it is possible to reduce the number of inserts that are provided, but I don't know how exactly "extend" operation performs in terms of runtime compared to the "append"
+class Solution:
+    def decompressRLElist(self, nums: List[int]) -> List[int]:
+        size, answer = len(nums), []
+        for elem in range(0,size,2):
+            answer.extend(nums[elem]*[nums[elem+1]])
+        return answer
