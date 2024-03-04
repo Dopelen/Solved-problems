@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n*m)(n - elements, m - highest amount of repeat symbol) complexity by time and O(n) by space.
+
+"""
+
+class Solution:
+    def decompressRLElist(self, nums: List[int]) -> List[int]:
+        answer = []
+        for elem in range(1, len(nums), 2):
+            for numbers in range(nums[elem-1]):
+                answer.append(nums[elem])
+        return answer
