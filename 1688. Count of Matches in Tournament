@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(log(n)) complexity by time where and O(1) by space.
+
+I tried to use integer division, because it is faster than usual and we know that we won’t need regular division.
+May be its reason why its beat 99% speed and 99% space
+
+"""
+
+class Solution:
+    def numberOfMatches(self, n: int) -> int:
+        answer = 0
+        while n != 1:
+            if n%2 == 0:
+                n = n//2
+                answer += n
+            else:
+                n = (n-1)//2 + 1
+                answer += n - 1
+        return answer
