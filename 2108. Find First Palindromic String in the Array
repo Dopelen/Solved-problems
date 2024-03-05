@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n*m) complexity by time and O(1) by space.
+
+You can use generators, you can have two pointers, you can join or reverse, there are many solutions here.
+
+"""
+
+class Solution:
+    def firstPalindrome(self, words: List[str]) -> str:
+        for elem in words:
+            if elem == elem[::-1]:
+                return elem
+        return ""
