@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(size_of_albhabet * highest_number) complexity by time and the same space complexity.
+
+The war against unknown conditions continues
+
+"""
+
+class Solution:
+    def cellsInRange(self, s: str) -> List[str]:
+        answer = []
+        alphabet = string.ascii_uppercase
+        col_row = [s[0:2], s[3:]]
+        start_col = int(alphabet.find(col_row[0][0]))
+        end_col = int(alphabet.find(col_row[1][0]))
+        start_digit = int(col_row[0][1])
+        end_digit = int(col_row[1][1])
+        current_digit = start_digit
+        
+        for elem in alphabet[start_col: end_col+1]:
+            answer.append(elem + str(current_digit))
+            while current_digit != end_digit:
+                current_digit += 1
+                answer.append(elem + str(current_digit))
+            current_digit = start_digit
+            
+        return answer
