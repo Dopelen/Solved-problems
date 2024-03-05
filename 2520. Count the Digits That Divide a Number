@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode. 
+This program has O(len(number)) complexity by time and O(n) space complexity.
+
+There is a solution using mathematical magic, but this time I prefer to avoid it
+
+"""
+
+class Solution:
+    def countDigits(self, num: int) -> int:
+        divisors = [int(elem) for elem in str(num)]
+        answer = 0
+        for divisor in divisors:
+            if num % divisor == 0:
+                answer += 1
+        return answer
