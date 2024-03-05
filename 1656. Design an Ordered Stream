@@ -1,6 +1,8 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on letcode.
-This program have O(n) complexity by time and O(n) by space.
+This program has O(n) complexity by time(the worst case is when you have to go through the entire list) and O(n) by space.
+
+How many higher educations are needed to understand the conditions of the problem..?
 
 """
 
