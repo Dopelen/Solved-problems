@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time.  O(n) by space.
+
+I made codes like this when I was a kid
+
+"""
+
+class Solution:
+    def decodeMessage(self, key: str, message: str) -> str:
+        dict_code = {" ": " "}
+        asci_n = 97
+        answer = ""
+        for symbol in key:
+            if asci_n == 123:
+                break
+            if dict_code.get(symbol) == None and symbol != " ":
+                dict_code[symbol] = chr(asci_n)
+                asci_n += 1
+        for elem in message:
+            answer += dict_code[elem]
+        return answer
