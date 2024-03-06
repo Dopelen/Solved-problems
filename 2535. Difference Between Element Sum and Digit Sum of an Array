@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+This program has O(n) complexity by time (we have to go through the list several times).  O(n*m) by space, where n is lenght of nums and m - biggest number.
+
+It's great that you can write it in one line, but it's not at all necessary!
+
+"""
+
+class Solution:
+    def differenceOfSum(self, nums: List[int]) -> int:
+        return sum(nums) - sum([int(symbol) for symbol in ("".join([str(elem) for elem in nums]))])
+
+
+# If I were more experienced, I could write a beautiful solution like this.
+class Solution:
+    def differenceOfSum(self, nums: List[int]) -> int:
+      return sum(nums) - sum(int(d) for num in nums for d in str(num))
+
+
+
+
