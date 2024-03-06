@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+Intuition: "sort and find the insertion point", but simply iterating through all the elements is actually faster.
+
+"""
+
+#  This program has O(n(log(n))) complexity by time, O(1) by space
+class Solution:
+    def minOperations(self, nums: List[int], k: int) -> int:
+        return bisect.bisect_left(sorted(nums), k)
+
+#  This program has O(n) complexity by time, O(1) by space
+class Solution:
+    def minOperations(self, nums: List[int], k: int) -> int:
+        answer = 0
+        for elem in nums:
+            if elem < k:
+                answer += 1
+        return answer
