@@ -1,0 +1,70 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+
+I wrote code with quaratic complexity in tears.
+BUT THEN I THINKED HARD!
+I tried it through enumerate, then switched to a dictionary, and then it worked! 
+I am glad :)
+
+"""
+
+# This program has O(n^2) complexity by time, O(n) by space.
+class Solution:
+    def countKDifference(self, nums: List[int], k: int) -> int:
+        answer = 0
+        current_ind = -1
+        for elem in nums:
+            current_ind += 1
+            for right_side in nums[current_ind:]:
+                if abs(elem - right_side) == k:
+                    answer += 1
+        return answer
+
+
+# This program has O(n*l) complexity by time, where n - number of elements and l - the largest number of elements that "fits k"  , O(n) by space.
+# This is a solution I came up with myself, it is a bit cumbersome and has several steps that can be omitted, I realized this when looking at other users' solutions.
+# Here I create a dictionary with indexes, and compare each number in place.
+
+class Solution:
+    def countKDifference(self, nums: List[int], k: int) -> int:
+        unic_numbers = set(nums)
+        size = len(nums)
+        current_index = 0
+        answer = 0
+        hint_dict = {num : [] for num in unic_numbers}
+        for elem in range(size):
+            hint_dict[nums[elem]].append(elem)
+        for elem_ in nums:
+            goal = abs(-elem_ - k)
+            goal_2 = elem_ - k
+            if hint_dict.get(goal):
+                for ind in hint_dict.get(goal):
+                    if ind > current_index:
+                        answer += 1
+            if hint_dict.get(goal_2):
+                for ind in hint_dict.get(goal_2):
+                    if ind > current_index:
+                        answer += 1
+            current_index += 1
+        return answer
+
+# However, it is not necessary to immediately look at all the indices that match the number; we can do this as we go. 
+# Because if our pair is i[1] and i[5], we don’t have to immediately include i[1] in the answer.
+# We don’t have to go through the entire list, find a pair and add it to the answer. 
+# We can simply enter 1 into the items viewed and += the answer by comparing the i[5] to elements which already viewed. 
+# This will speed up our code and eliminate the need for preliminary passes through the array in search of indices of all the quantities we need.
+# O(n) time, O(n) space
+
+class Solution:
+    def countKDifference(self, nums: List[int], k: int) -> int:
+        answer = 0
+        hint_dict = defaultdict(int)
+        for elem_ in nums:
+            goal = elem_ - k
+            goal_2 = elem_ + k
+            if goal in hint_dict:
+                answer += hint_dict[goal]
+            if goal_2 in hint_dict:
+                answer += hint_dict[goal_2]
+            hint_dict[elem_] += 1
+        return answer
