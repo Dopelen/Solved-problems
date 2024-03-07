@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+For this problem I have published a solution: https://leetcode.com/problems/find-center-of-star-graph/solutions/4837922/fake-and-true-ending-of-this-task-with-explanations-o-n-o-1
+
+First I wrote through set operations, then I used list joins and value counting, and then I just thought about the structure itself that we are dealing with. 
+It is enough for me to look at 2 vertices to know which vertex the graph has. That's it. It is worth thinking about what data structure you are dealing with before writing a solution. 
+What a news.
+
+"""
+
+# O(n), O(n)
+class Solution:
+    def findCenter(self, edges: List[List[int]]) -> int:
+        pivot = set(edges[0])
+        for elem in edges[1:]:
+            pivot.intersection_update(elem)
+        return pivot.pop()
+
+# O(1), O(1) but not optimal
+class Solution:
+    def findCenter(self, edges: List[List[int]]) -> int:
+        center = set(edges[0])
+        center.intersection_update(edges[1])
+        return center.pop()
+
+# O(1), O(1) perfect
+class Solution:
+    def findCenter(self, edges: List[List[int]]) -> int:
+        answer = edges[0][0]
+        if answer == edges[1][0] or answer == edges[1][1]:
+            return answer
+        return edges[0][1]
