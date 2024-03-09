@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+It was a difficult and interesting task because I decided to solve it with unknown formula.
+It is very difficult to escape from a task when you feel in your gut that there is a solution through the formula.
+"""
+
+# This is one of the solutions that count the elements in a subarray. There is O(n^2) here and it is too complicated.
+class Solution:
+    def sumOddLengthSubarrays(self, arr: List[int]) -> int:
+        size = len(arr)
+        answer = 0
+        for start in range(size):
+            for length in range(1, size - start + 1, 2):
+                end = start + length
+                answer += sum(arr[start:end])
+        return answer   
+
+
+# I like this much better, but it was very difficult to come to it. I myself was not able to form the final formula using indices.
+class Solution:
+    def sumOddLengthSubarrays(self, arr: List[int]) -> int:
+        n = len(arr)
+        total_sum = 0
+        for i in range(n):
+            total_sum += (((n - i) * (i + 1) + 1) // 2) * arr[i]
+        return total_sum
