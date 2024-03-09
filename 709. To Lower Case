@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I think it's bad form, use built-in libraries for such tasks instead of iterating over ASCI characters. But I'll do anyway!
+
+"""
+
+class Solution:
+    def toLowerCase(self, s: str) -> str:
+        return s.lower()
