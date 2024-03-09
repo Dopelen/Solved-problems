@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Something inside tells me there is a faster solution!
+And there it is!
+
+return bin(start^goal)[2:].count('1')
+
+But if you are not very familiar with bitwise operations, use mine!
+
+"""
+
+class Solution:
+    def minBitFlips(self, start: int, goal: int) -> int:
+        answer = 0
+        b_start = bin(start)[2:]
+        b_goal = bin(goal)[2:]
+        max_ = max(len(b_start), len(b_goal))
+        for digit_1, digit_2 in zip(b_start.zfill(max_), b_goal.zfill(max_)):
+            print(digit_1, digit_2)
+            if digit_1 != digit_2:
+                answer += 1
+        return answer
