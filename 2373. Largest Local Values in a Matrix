@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by speed, where n is the number of digits in the matrix. And O(n) by space.
+Although there are nested loops here, they reflect the need to go through all the elements of the matrix. 
+I make a lot of calls for each element, but they are still limited by a constant, not by the size of the matrix.
+
+Every time I see matrices, I know that I won’t get away with a little blood.
+At first I misunderstood the condition and spent an hour solving the wrong problem that was given to me, then I went crazy because of the indices.
+I remembered the KISS principle, and decided to implement it with only one "S".
+Having written the solution as straight as possible, I got the result in 96% are faster than the rest.
+
+Humiliated, insulted and confused, I move on to the next task.
+
+"""
+
+class Solution:
+    def largestLocal(self, grid: List[List[int]]) -> List[List[int]]:
+        edge = len(grid) - 2
+        answer = []
+        line = []
+        for horizontal in range(edge):
+            for vertical in range(edge):
+                line.append(max(grid[horizontal][vertical], grid[horizontal][vertical + 1], grid[horizontal][vertical + 2], grid[horizontal + 1][vertical], grid[horizontal + 1][vertical + 1], grid[horizontal + 1][vertical + 2], grid[horizontal + 2][vertical], grid[horizontal + 2][vertical + 1], grid[horizontal +2][vertical + 2]))
+            answer.append(line)
+            line = []
+        return answer
