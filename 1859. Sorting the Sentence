@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time O(n) by space.
+
+Something is difficult with the index. Maybe because I was looking at the matrices...
+
+"""
+
+class Solution:
+    def sortSentence(self, s: str) -> str:
+        s = s.split(" ")
+        size = len(s)
+        answer = [""] * size
+        for elem in s:
+            index = int(elem[-1]) - 1
+            word = elem[:-1]
+            answer[index] = word
+        return " ".join(answer)
