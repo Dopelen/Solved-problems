@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I don’t know what’s better: checking the lengths at the very beginning or handling the iteration stop error when the lengths of the arrays differ.
+
+"""
+
+class Solution:
+    def isAcronym(self, words: List[str], s: str) -> bool:
+        if len(words) != len(s):
+            return False
+        for letter_w, letter_s in zip(words, s):
+            if letter_w[0] != letter_s:
+                return False
+        return True
