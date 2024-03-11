@@ -1,0 +1,35 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This programm has O(n * m) (n = number of words, m = lenght of the longest word) complexity by time and O(n*m) by space.
+
+It was the first time I used replacement tables, it was quite convenient.
+it’s strange that I had never encountered this method before
+
+"""
+
+# without translation_table
+class Solution:
+    def uniqueMorseRepresentations(self, words: List[str]) -> int:
+        answer = []
+        all_code_m = [".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]
+        decod = {key: value for key, value in zip(string.ascii_lowercase, all_code_m)}
+        for word in words:
+            coded = ""
+            for symbol in word:
+                coded += decod[symbol]
+            answer.append(coded)
+        answer = set(answer)
+        return len(answer)
+
+
+# with translation_table
+class Solution:
+    def uniqueMorseRepresentations(self, words: List[str]) -> int:
+        answer = []
+        all_code_m = [".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]
+        decod = {key: value for key, value in zip(string.ascii_lowercase, all_code_m)}
+        translation_table = str.maketrans(decod)
+        for word in words:
+            answer.append(word.translate(translation_table))
+        answer = set(answer)
+        return len(answer)
