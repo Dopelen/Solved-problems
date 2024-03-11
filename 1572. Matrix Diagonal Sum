@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This programm has O(n) time complexity and O(1).
+
+A problem with matrices that did not deprive me of the desire to live, what a miracle.
+
+"""
+
+class Solution:
+    def diagonalSum(self, mat: List[List[int]]) -> int:
+        sum = 0
+        size = len(mat)
+        pointer_1, pointer_2 = 0, size-1
+        for dig in range(size):
+            sum += mat[dig][pointer_1]
+            if pointer_1 != pointer_2:
+                sum += mat[dig][pointer_2]
+            pointer_1 += 1
+            pointer_2 -= 1
+        return sum
