@@ -1,0 +1,64 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(1) by space.
+I posted the solution: https://leetcode.com/problems/minimum-time-visiting-all-points/solutions/4860737/pure-evil-solution-hard-to-unsee-beats-100-other-pain-solutions
+
+Jokes aside, I actually wrote this solution before thinking for 5 minutes and writing a second one
+
+"""
+
+# Masterpiece
+class Solution:
+    def minTimeToVisitAllPoints(self, points: List[List[int]]) -> int:
+        seconds = 0
+        start = points[0]
+        for elem in points[1:]:
+            while start != elem:
+                if start[0] > elem[0] and start[1] > elem[1]:
+                    dif = min(start[0] - elem[0], start[1] - elem[1])
+                    start[0] -= dif
+                    start[1] -= dif
+                    seconds += dif
+                elif start[0] < elem[0] and start[1] < elem[1]:
+                    dif = min(elem[0] - start[0], elem[1] - start[1])
+                    start[0] += dif
+                    start[1] += dif
+                    seconds += dif
+                elif start[0] > elem[0] and start[1] < elem[1]:
+                    dif = min(start[0] - elem[0], elem[1] - start[1])
+                    start[0] -= dif
+                    start[1] += dif
+                    seconds += dif
+                elif start[0] < elem[0] and start[1] > elem[1]:
+                    dif = min(elem[0] - start[0], start[1] - elem[1])
+                    start[0] += dif
+                    start[1] -= dif
+                    seconds += dif
+                if start[0] == elem[0] and start[1] < elem[1]:
+                    dif = elem[1] - start[1]
+                    start[1] += dif
+                    seconds += dif
+                elif start[0] == elem[0] and start[1] > elem[1]:
+                    dif = start[1] - elem[1] 
+                    start[1] -= dif
+                    seconds += dif
+                elif start[0] < elem[0] and start[1] == elem[1]:
+                    dif = elem[0] - start[0] 
+                    start[0] += dif
+                    seconds += dif
+                elif start[0] > elem[0] and start[1] == elem[1]:
+                    dif =  start[0] - elem[0]
+                    start[0] -= dif
+                    seconds += dif
+        return seconds
+
+# Pathetic Fake
+class Solution:
+    def minTimeToVisitAllPoints(self, points: List[List[int]]) -> int:
+        seconds = 0
+        size = len(points)
+        for elem in range(size - 1):
+            dot = points[elem]
+            next_dot = points[elem + 1]
+            seconds += max(abs(next_dot[0] - dot[0]), abs(next_dot[1] - dot[1]))
+        return seconds
