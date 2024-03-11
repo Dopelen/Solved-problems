@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This programm has O(n(log(k))) complexity by speed where k is anumber of maximums you need and O(1) by space.
+As I understand it, the library works based on sorting and uses a heap, hence the complexity.
+
+So a simple iteration with support for 2 maxima would be faster.
+
+"""
+
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        maxi = heapq.nlargest(2, nums)
+        return (maxi[0] - 1) * (maxi[1] - 1)
