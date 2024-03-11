@@ -1,0 +1,43 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I remembered the solutions through the stack, it turned out a little untidy, but overall I’m happy that I remembered.
+
+"""
+
+# I tried
+class Solution:
+    def removeOuterParentheses(self, s: str) -> str:
+        stack_outside, stack_inside, answer = [], [], ""
+        opened = 0
+        for elem in s:
+            if not stack_outside:
+                stack_outside.append(elem)
+            elif not opened:
+                if elem == "(":
+                    stack_inside.append(elem)
+                    opened += 1
+                else:
+                    stack_outside.pop()
+            elif opened:
+                if stack_inside:
+                    answer += stack_inside.pop()
+                if elem == ")":
+                    answer += elem
+                    opened -= 1
+                else:
+                    stack_inside.append(elem)
+                    opened += 1
+        return answer 
+
+# Human one
+class Solution:
+    def removeOuterParentheses(self, S: str) -> str:
+        res, opened = [], 0
+        for c in S:
+            if c == '(' and opened > 0: res.append(c)
+            if c == ')' and opened > 1: res.append(c)
+            opened += 1 if c == '(' else -1
+        
+        return "".join(res)
