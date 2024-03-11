@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A little cumbersome, but it seems understandable. 
+I just take the intersection, and then the number of occurrences of elements.
+
+
+But then I thought about it and tried to merge dictionaries.
+
+"""
+
+# Without thinking
+class Solution:
+    def findIntersectionValues(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        cou_1 = collections.Counter(nums1)
+        cou_2 = collections.Counter(nums2)
+        return [sum(cou_1[elem] for elem in set(nums1) & set(nums2)), sum(cou_2[elem_2] for elem_2 in set(nums2) & set(nums1))]
+
+# With thinnking
+class Solution:
+    def findIntersectionValues(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        cou_1 = collections.Counter(nums1)
+        cou_2 = collections.Counter(nums2)
+        answer_1, answer_2 = 0, 0
+        for key in set(cou_1) & set(cou_2):
+            answer_1 += cou_1[key]
+        for key in set(cou_2) & set(cou_1):
+            answer_2 += cou_2[key]
+        return [answer_1, answer_2]
