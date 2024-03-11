@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(max_len_of_word_in_words) by space.
+
+"""
+
+class Solution:
+    def countConsistentStrings(self, allowed: str, words: List[str]) -> int:
+        size = len(words)
+        reference = set(allowed)
+        answer = 0
+        for elem in range(size):
+            if set(words[elem]) <= reference:
+                answer += 1
+        return answer
+
+# One line with generator expression
+class Solution:
+    def countConsistentStrings(self, allowed: str, words: List[str]) -> int:
+        return sum(1 for elem in range(len(words)) if set(words[elem]) <= set(allowed))
