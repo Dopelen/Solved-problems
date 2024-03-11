@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I prefer not to write such large constructs on one line
+
+"""
+
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        splited_list = s.split(" ")
+        reversed_list = [elem[::-1] for elem in splited_list]
+        answer = " ".join(reversed_list)
+        return answer
+
+# One line
+class Solution:
+    def reverseWords(self, s: str) -> str:
+      return " ".join([elem[::-1] for elem in s.split(" ")])
