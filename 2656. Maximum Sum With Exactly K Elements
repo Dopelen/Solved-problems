@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(1) by space.
+
+If you look closely, you can see that this is just an orithmetic progression and we need to calculate the sum of them.
+Just remember to compensate for the extra unit in the formula
+
+"""
+
+class Solution:
+    def maximizeSum(self, nums: List[int], k: int) -> int:
+        bigest_num = max(nums)
+        return (bigest_num - 1 + (bigest_num + k)) * k // 2
