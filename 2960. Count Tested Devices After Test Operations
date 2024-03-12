@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+They are trying to lead me away from the righteous path of calculating constants, but I am not fooled.
+
+"""
+
+class Solution:
+    def countTestedDevices(self, batteryPercentages: List[int]) -> int:
+        current_decrease = 0
+        for elem in batteryPercentages:
+            if elem - current_decrease > 0:
+                current_decrease += 1
+        return current_decrease
