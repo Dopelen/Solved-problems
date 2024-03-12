@@ -1,0 +1,36 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Beating singly-linked list.
+
+"""
+
+# Iterative one
+class Solution:
+    def getDecimalValue(self, head: ListNode) -> int:
+        self.bin_num = ""
+        while head:
+            self.bin_num += str(head.val)
+            head = head.next
+        return int(self.bin_num, 2)
+
+# Recursive_one:
+class Solution:
+    def __init__(self):
+        self.bin_num = ""
+    def getDecimalValue(self, head: ListNode) -> int:
+        if head:
+            self.bin_num += str(head.val)
+            head = head.next
+            self.getDecimalValue(head)
+        return int(self.bin_num, 2)
+
+# Cool solution with bit understanding:
+class Solution:
+    def getDecimalValue(self, head: ListNode) -> int:
+        answer = 0
+        while head:
+            answer = 2 * answer + head.val
+            head = head.next
+        return answer
