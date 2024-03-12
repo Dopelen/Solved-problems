@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+It's not a very elegant solution, but it's clear what happens at each step.
+The solution itself can be written in a couple of lines, simply iterate over two sorted lists and sum the difference between them. 
+I added a small heuristic with counting the initial elements and removing intersections to make sorting and iteration faster.
+
+But if you follow the KISS principle, it would certainly be worth writing like this:
+class Solution:
+    def minMovesToSeat(self, seats: List[int], students: List[int]) -> int:
+        return sum(abs(x-y) for x, y in zip(sorted(seats), sorted(students)))
+
+"""
+
+class Solution:
+    def minMovesToSeat(self, seats: List[int], students: List[int]) -> int:
+        eampty_seats = collections.Counter(seats)
+        without_seat = []
+        answer = 0
+        for elem in students:
+            if eampty_seats.get(elem) == None:
+                without_seat.append(elem)
+            else:
+                eampty_seats[elem] -= 1
+                if eampty_seats[elem] == 0:
+                    del eampty_seats[elem]
+        sorted_eampty_seats = sorted(eampty_seats, reverse = True)
+        sorted_without_seat = sorted(without_seat)
+        sor_index = -1
+        for elem in sorted_without_seat:
+            answer += abs(elem - sorted_eampty_seats[sor_index])
+            eampty_seats[sorted_eampty_seats[sor_index]] -= 1
+            if eampty_seats[sorted_eampty_seats[sor_index]] == 0:
+                del eampty_seats[elem]
+                sor_index -= 1
+        return answer
