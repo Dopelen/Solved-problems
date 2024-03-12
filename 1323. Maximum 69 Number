@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+ This program have O(1) complexity by time and O(1).
+
+You can iterate and replace the first occurrence if you don’t like methods.
+
+"""
+
+class Solution:
+    def maximum69Number (self, num: int) -> int:
+        return int(str(num).replace("6", "9", 1))
