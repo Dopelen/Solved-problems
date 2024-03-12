@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(n) by space.
+
+There was a cool solution in my head using sums of asci codes, but I fooled myself and in the end it led to the same thing that exists now.
+
+"""
+
+class Solution:
+    def maximumNumberOfStringPairs(self, words: List[str]) -> int:
+        ans_dict = {}
+        answer = 0
+        for elem in words:
+            if elem[0] == elem[1]:
+                continue
+            if ans_dict.get(elem[::-1]) == None:
+                ans_dict[elem] = 1
+            else:
+                answer += 1
+        return answer
