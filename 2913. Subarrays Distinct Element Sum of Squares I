@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n ^ 2) complexity by time and O(n) by space.
+
+I don't like problems that are solved in a square.
+
+"""
+
+class Solution:
+    def sumCounts(self, nums: List[int]) -> int:
+        answer = 0
+        size = len(nums)
+        for i in range(size):
+            distinct = set()
+            for j in range(i,size):
+                distinct.add(nums[j])
+                answer += len(distinct) ** 2       
+        return answer
