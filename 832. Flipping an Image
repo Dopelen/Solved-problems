@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I was thinking of some clever solution to avoid doing flip + inversion, but we need to flip the image anyway, and for this we need to know what is on the opposite side.
+
+"""
+
+class Solution:
+    def flipAndInvertImage(self, image: List[List[int]]) -> List[List[int]]:
+        answer = []
+        for row in image:
+            part_answer = []
+            for column in reversed(row):
+                if column:
+                    part_answer.append(0)
+                else:
+                    part_answer.append(1)
+            answer.append(part_answer)
+        return answer
+
+
+# There is cool solution with bitwise operation, but complexity is the same:
+class Solution:
+    def flipAndInvertImage(self, image: List[List[int]]) -> List[List[int]]:
+        res = []
+        for i in image:
+            res.append([x ^ 1 for x in i[::-1]])
+        return res
