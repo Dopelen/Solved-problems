@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I was so tired yesterday with brackets that today I got an insight and solved it in 30 seconds.
+
+"""
+
+class Solution:
+    def maxDepth(self, s: str) -> int:
+        max_dep, current = 0, 0
+        for elem in s:
+            if elem == "(":
+                current += 1
+                max_dep = max(current, max_dep)
+            elif elem == ")":
+                current -= 1
+        return max_dep
