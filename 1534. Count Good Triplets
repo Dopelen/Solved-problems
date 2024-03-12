@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ^ 3) complexity by time because we have to check all elements for every element three time, and O(1) by space.
+
+A brute force solution that is, for strange reasons, faster than others
+
+"""
+
+class Solution:
+    def countGoodTriplets(self, arr: List[int], a: int, b: int, c: int) -> int:
+        answer = 0
+        size = len(arr)
+        for elem_1 in range(size):
+            first = arr[elem_1]
+            for elem_2 in range(elem_1 + 1, size):
+                second = arr[elem_2]
+                if abs(first - second) > a:
+                    continue
+                for elem_3 in range(elem_2 + 1, size):
+                    third = arr[elem_3]
+                    if abs(second - third) > b or abs(first - third) > c:
+                        continue
+                    answer += 1
+        return answer
