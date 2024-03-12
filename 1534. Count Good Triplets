@@ -4,6 +4,8 @@ This program has O(n ^ 3) complexity by time because we have to check all elemen
 
 A brute force solution that is, for strange reasons, faster than others
 
+P.S: There is also O(n(log(n))) solution with Fenwick Tree.
+
 """
 
 class Solution:
