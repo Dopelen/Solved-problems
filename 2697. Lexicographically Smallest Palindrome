@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I'm happy with this implementation, I'm only going through half of the list.
+It turns out that there is a symbol for getting the reflected index for example: i and ~i will be reflected relative to the center of the list.
+Wow.
+
+"""
+
+class Solution:
+    def makeSmallestPalindrome(self, s: str) -> str:
+        answer = "" 
+        size = len(s)
+        odd = size%2==1
+        limit = size//2
+        for elem_1, elem_2 in zip(s, reversed(s)):
+            if limit == 0:
+                if odd:
+                    return answer + min(elem_1, elem_2) + answer[::-1]
+                break
+            if elem_1 == elem_2:
+                answer += elem_1
+            else:
+                answer += min(elem_1, elem_2)
+            limit -= 1
+        return answer + answer[::-1]
+
+
