@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O( 2 ^ n )  complexity by time and O( 2 ^ n ) by space, because the number of subset variations grows exponentially.
+
+Bitwise operations are not something I do every day
+
+"""
+
+from itertools import combinations
+class Solution:
+    def subsetXORSum(self, nums: List[int]) -> int:
+        size = len(nums) + 1
+        xor_sum = 0
+        for elem in range(size):
+            for sub_elem in combinations(nums, elem):
+                xor_total = 0
+                for num in sub_elem:
+                    xor_total ^= num
+                xor_sum += xor_total
+        return xor_sum     
+
+
+# Cool solution which I hardly understand. (Its also O(n))
+def subsetXORSum(self, nums: List[int]) -> int:
+      all_or = 0
+      for n in nums: all_or |= n
+      return all_or << len(nums)-1
