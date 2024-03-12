@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It’s a very pleasant feeling when you’ve mastered a lot of things and understand everything you’re doing.
+
+"""
+
+class Solution:
+    def replaceDigits(self, s: str) -> str:
+        index = 1
+        convert = list(s)
+        for elem_1, elem_2 in zip(convert[0::2], convert[1::2]):
+            convert[index] = chr(ord(elem_1)+int(elem_2))
+            index += 2
+        return "".join(convert)
