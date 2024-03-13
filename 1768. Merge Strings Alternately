@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I thought about it a little and it turned out neat
+
+"""
+
+class Solution:
+    def mergeAlternately(self, word1: str, word2: str) -> str:
+        size_dif = min(len(word1), len(word2))
+        answer = ""
+        for first, second in zip(word1, word2):
+            answer += first
+            answer += second
+        return answer + word2[size_dif:] + word1[size_dif:]
+
+
+# or without min
+class Solution:
+    def mergeAlternately(self, word1: str, word2: str) -> str:
+        answer = ""
+        for first, second in zip(word1, word2):
+            answer += first
+            answer += second
+        return answer + word2[len(word1):] + word1[len(word2):]
