@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I prefer many lines!
+
+"""
+
+class Solution:
+    def countKeyChanges(self, s: str) -> int:
+        s = s.lower()
+        start, answer = s[0], 0
+        for symbol in s:
+            if symbol != start:
+                start = symbol
+                answer += 1
+        return answer
+
+
+# One line
+class Solution:
+    def countKeyChanges(self, s: str) -> int:
+        return sum(1 for elem in range(1, len(s)) if s[elem].lower() != s[elem-1].lower())
