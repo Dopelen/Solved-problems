@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time because "in" is O(n) and O(1) by space.
+
+"in" is faster then re like 3 times!
+
+P.S: I always forget that the pattern comes first and then the string or vice versa.
+An easy way to remember: Pattern, String. P.S.
+"""
+
+# Slow regex
+class Solution:
+    def numOfStrings(self, patterns: List[str], word: str) -> int:
+        answer = 0
+        for elem in patterns:
+            if re.search(f"{elem}", word):
+                answer += 1
+        return answer
+
+# Fast In
+class Solution:
+    def numOfStrings(self, patterns: List[str], word: str) -> int:
+        answer = 0
+        for elem in patterns:
+            if elem in word:
+                answer += 1
+        return answer
