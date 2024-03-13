@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space (O(n) with list).
+
+Im not really use to it, I mean using generator comprechantion? instead of a list.
+
+"""
+
+class Solution:
+    def sumOfSquares(self, nums: List[int]) -> int:
+        size = len(nums)
+        return sum(nums[i]**2 for i in range(size) if size%(i+1) == 0)
