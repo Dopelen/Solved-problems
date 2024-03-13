@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A little more complicated than it seems. Overall I liked it.
+
+"""
+
+class Solution:
+    def freqAlphabets(self, s: str) -> str:
+        size, double, skip, answer  = len(s), '', False, ""
+        decod_1 = {str(k): string.ascii_lowercase[k-1] for k in range(1,10)}
+        decod_1.update({str(k)+"#" : string.ascii_lowercase[k-1] for k in range(10,27)})
+        for elem in range(size - 1, -1, -1):
+            if skip:
+                if not double:
+                    double += s[elem]
+                else:
+                    double += s[elem]
+                    answer += decod_1[double[::-1] + "#"]
+                    double = ""
+                    skip = False
+            elif s[elem] == "#":
+                skip = True
+            else:
+                answer += decod_1[s[elem]]   
+        return answer[::-1]
