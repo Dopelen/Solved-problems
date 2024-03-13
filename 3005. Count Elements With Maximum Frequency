@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time(there is sorting inside Counter you can check it in source code (https://github.com/python/cpython/blob/a8e814db96ebfeb1f58bc471edffde2176c0ae05/Lib/collections/__init__.py#L571)) and O(n) by space.
+
+Not very convenient syntax, I'm trying to master collections.
+
+"""
+
+class Solution:
+    def maxFrequencyElements(self, nums: List[int]) -> int:
+        answer = 0
+        check_freq = collections.Counter(nums)
+        max_f = check_freq.most_common(1)[0][1]
+        for key, value in check_freq.most_common():
+            if value == max_f:
+                answer += value
+        return answer
