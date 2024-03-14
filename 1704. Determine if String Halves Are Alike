@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leеtcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I figured it out something like this
+
+"""
+
+class Solution:
+    def halvesAreAlike(self, s: str) -> bool:
+        size = len(s)
+        vowels = {key: 1 for key in "aeiouAEIOU"}
+        s_1, s_2 = s[0:size//2], s[size//2:]
+        sum_s_1, sum_s_2 = 0 , 0
+        for symbol_1, symbol_2 in zip(s_1, s_2):
+            if vowels.get(symbol_1) != None:
+                sum_s_1 += 1
+            if  vowels.get(symbol_2) != None:
+                sum_s_2 += 1
+        return sum_s_1 == sum_s_2
