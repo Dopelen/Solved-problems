@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(1) complexity by time and O(len(number)) by space.
+
+I would rather die than not try to solve a problem using indirect evidence
+
+"""
+
+class Solution:
+    def isSameAfterReversals(self, num: int) -> bool:
+        return not ("0" in str(num)[-1]) or num == 0
+
+# But for now there are cooler guys here than me
+class Solution:
+    def isSameAfterReversals(self, num: int) -> bool:
+        return not num or num % 10
