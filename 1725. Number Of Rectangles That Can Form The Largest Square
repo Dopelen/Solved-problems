@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leеtcode.
+This program has O(n) complexity by time.
+
+Fighting for extra space!
+
+"""
+
+# Fancy but O(n) space
+class Solution:
+    def countGoodRectangles(self, rectangles: List[List[int]]) -> int:
+        volume = [min(elem) for elem in rectangles]
+        max_rect = max(volume)
+        return sum(1 for max_r in volume if max_r == max_rect)
+
+# Big but O(1)
+class Solution:
+    def countGoodRectangles(self, rectangles: List[List[int]]) -> int:
+        max_vol = 0
+        answer = 0
+        size = len(rectangles)
+        for elem in range(size):
+            rectangles[elem] = min(rectangles[elem])
+            if rectangles[elem] > max_vol:
+                max_vol = rectangles[elem]
+        for elem in rectangles:
+            if elem == max_vol:
+                answer += 1
+        return answer
