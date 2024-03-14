@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leеtcode.
+This program has O(1) complexity by time and O(1) by space.
+
+smart one is smart
+
+"""
+
+# standart way
+class Solution:
+    def findDelayedArrivalTime(self, arrivalTime: int, delayedTime: int) -> int:
+        if (arrivalTime + delayedTime) >= 24:
+            return arrivalTime + delayedTime - 24
+        return arrivalTime + delayedTime
+
+
+# smart way!
+class Solution:
+    def findDelayedArrivalTime(self, arrivalTime: int, delayedTime: int) -> int:
+        return (arrivalTime + delayedTime) % 24
