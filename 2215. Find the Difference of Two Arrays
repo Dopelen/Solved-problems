@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) complexity by space.
+
+For some reason I always have some kind of confusion with set operations.
+
+"""
+
+class Solution:
+    def findDifference(self, nums1: List[int], nums2: List[int]) -> List[List[int]]:
+        return [set(nums1) - set(nums2), set(nums2) - set(nums1)]
