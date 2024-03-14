@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n ** 2) complexity by time and O(1) by space.
+
+Classic index juggling.
+
+P.S: P.S: There is an O(n(log(n))) solution, but I tried for a couple of hours and was confused by the indexes, now I can't spend more time on it
+
+"""
+
+class Solution:
+    def countPairs(self, nums: List[int], k: int) -> int:
+        size = len(nums)
+        answer = 0
+        for elem_1 in range(size):
+            for elem_2 in range(elem_1+1, size):
+                if nums[elem_1] == nums[elem_2] and (elem_1 * elem_2) % k == 0:
+                    answer += 1
+        return answer 
