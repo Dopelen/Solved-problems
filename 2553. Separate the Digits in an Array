@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leеtcode.
+This program has O(n * m) complexity by time and O(n * m) by space (max lenght of number).
+
+You can also do it in one line.
+Now I know about yield from!
+
+"""
+
+class Solution:
+    def separateDigits(self, nums: List[int]) -> List[int]:
+        answer = map(str, nums)
+        answer = "".join(answer)
+        answer = [int(elem) for elem in answer]
+        return answer
+
+
+# You can also do it in one line, butits just...comone...
+class Solution:
+    def separateDigits(self, nums: List[int]) -> List[int]:
+        return [int(elem) for elem in "".join(map(str, nums))]
+
+
+# But there is smart one line!
+class Solution:
+    def separateDigits(self, nums: List[int]) -> List[int]:
+        return [int(digit) for num in nums for digit in str(num)]
+
+
+# Or even this:
+class Solution:
+    def separateDigits(self, nums: List[int]) -> List[int]:
+         for num in nums:
+             yield from map(int, str(num))
