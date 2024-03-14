@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Simple and clear solution in one pass.
+
+"""
+
+class Solution:
+    def minOperations(self, nums: List[int]) -> int:
+        answer = 0
+        size = len(nums)
+        if size != 1:
+            qore = nums[0]
+            for elem in range(1, size):
+                if nums[elem] <= qore:
+                    dif = qore - nums[elem] + 1
+                    nums[elem] += dif
+                    answer += dif
+                qore = nums[elem]
+        return answer
