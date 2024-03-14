@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+For each element I have to change the entire row of the matrix and the entire column of the matrix, 
+then it turns out that the complexity is tied not only to the number of elements, but also to the size of the matrix.
+So this program has O(number of elements * columns * rows) complexity by time and O(columns * rows) by space.
+
+When I see the matrix, I don't waste a second and immediately start crying.
+
+This time I read the task incorrectly and solved the problem more difficult than the one given, but I figured it out pretty quickly and solved it in 2 minutes.
+
+"""
+
+# My initial solution
+class Solution:
+    def oddCells(self, m, n, indices):
+        matrix = [[0] * n for elem in range(m)]
+        for elem in indices:
+            for row in range(n):
+                matrix[elem[0]][row] += 1
+            for column in range(m):
+                matrix[column][elem[1]] += 1
+        answer = 0
+        for line in matrix:
+            for elem in line:
+                if elem % 2 == 1:
+                    answer += 1
+        return answer
+
+# The same thing but with parallel iteration of elements and an iterator at the end
+class Solution:
+    def oddCells(self, m, n, indices):
+        matrix = [[0] * n for _ in range(m)]
+        for i, j in indices:
+            for row in range(n):
+                matrix[i][row] += 1
+            for col in range(m):
+                matrix[col][j] += 1
+        return sum(1 for row in matrix for val in row if val % 2 == 1)
+
