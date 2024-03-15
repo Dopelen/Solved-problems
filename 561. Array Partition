@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(1) complexity by space (because the generator does not store all the elements, but sums them up one by one).
+
+For some reason I always have some kind of confusion with set operations.
+
+"""
+
+# My son!
+class Solution:
+    def arrayPairSum(self, nums: List[int]) -> int:
+        nums = sorted(nums)
+        size = len(nums)
+        return sum(min(nums[elem], nums[elem + 1]) for elem in range(0 , size, 2))
+
+# Beautiful one
+class Solution:
+    def arrayPairSum(self, nums: List[int]) -> int:
+        return sum(sorted(nums)[::2])
