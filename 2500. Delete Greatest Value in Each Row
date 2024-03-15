@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))*m) complexity by time (n - hight, m lenght) and O(n*m) by space.
+
+I used sorting to reduce the number of subsequent iterations so that I didn't have to search for the maximum in a substring each time.
+
+"""
+
+class Solution:
+    def deleteGreatestValue(self, grid: List[List[int]]) -> int:
+        size, answer, max_val, lenght = len(grid), 0, -math.inf, len(grid[0])
+        for line in range(size):
+            grid[line] = sorted(grid[line])
+        while lenght:
+            for line_so in grid:
+                max_val = max(line_so.pop(), max_val)
+            answer += max_val
+            max_val = -math.inf
+            lenght -= 1
+        return answer    
+
+
+# Cool solution, not mine!
+class Solution:
+    def deleteGreatestValue(self, grid: List[List[int]]) -> int:
+        for i in range(len(grid)): grid[i].sort()   # <-- sort each row
+        grid = list(zip(*grid))                     # <-- transpose grid; rows become
+                                                    #     cols and cols become rows
+        return sum(max(row) for row in grid)
