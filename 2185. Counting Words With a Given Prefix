@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * lenght_of_prefix) complexity by time and O(1) by space.
+
+The match function is like “Hurray, I came in handy!”
+
+"""
+
+class Solution:
+    def prefixCount(self, words: List[str], pref: str) -> int:
+        return sum(1 if re.match(f"{pref}", elem) else 0 for elem in words)
+
+# you can also use startwith method
+if s.startswith(pref):
+    cnt += 1
