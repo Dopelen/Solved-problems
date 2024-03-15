@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) complexity by space.
+
+Weekly challenge assignment or something like that.
+No more difficult than the average problem, just a terrible description
+
+"""
+
+class Solution:
+    def lastVisitedIntegers(self, nums):
+        stack = []
+        stack_height = 0
+        ans = []
+        k = 0
+        for elem in nums:
+            if elem != -1:
+                stack.append(elem)
+                stack_height += 1
+                k = 0
+            else:
+                k += 1
+                if k <= stack_height:
+                    ans.append(stack[stack_height - k])
+                else:
+                    ans.append(elem)
+        return ans
