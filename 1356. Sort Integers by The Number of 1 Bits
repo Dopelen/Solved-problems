@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n * max_bit_lenght) by space.
+
+I constantly forget how to convert a number into bits, but this is just a bin ._.
+
+"""
+
+
+class Solution:
+    def sortByBits(self, arr: List[int]) -> List[int]:
+        bit_rep = [(elem, bin(elem)[2:]) for elem in arr]
+        bit_rep = sorted(bit_rep, key = lambda x: (x[1].count("1"), x[0]))
+        return [elem[0] for elem in bit_rep]
+
+
