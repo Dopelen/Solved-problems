@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n?) complexity by time and O(n?) by space.
+
+Some pandas!
+
+"""
+
+import pandas as pd
+
+def selectData(students: pd.DataFrame) -> pd.DataFrame:
+    result = students[students['student_id'] == 101]
+    result = result[['name', 'age']]
+    return result
+
+
+# ALso way 
+def selectData(students: pd.DataFrame) -> pd.DataFrame:
+    return students.loc[students["student_id"] == 101, ["name", "age"]]
+    # OR
+    return students.loc[students["student_id"] == 101, "name" :]
+    # OR
+    return students[students['student_id'] == 101][['name', 'age']]
