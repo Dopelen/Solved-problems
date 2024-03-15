@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+On the one hand, trees are quite tricky, but on the other hand, if you understand the logic of the traversal, you can get the necessary values without much difficulty
+
+"""
+
+class Solution:
+    def __init__(self):
+        self.answer = []
+
+    def postorder(self, root: 'Node') -> List[int]:
+        if root is None:
+            return []
+        for child in root.children:
+            self.postorder(child)
+        self.answer.append(root.val)
+        return self.answer
