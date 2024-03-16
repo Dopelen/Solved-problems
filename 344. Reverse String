@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I like "change on the spot" challenges!
+
+"""
+
+class Solution:
+    def reverseString(self, s: List[str]) -> None:
+        size = len(s)
+        for ind in range(size//2):
+            s[ind], s[size - 1] = s[size - 1], s[ind]
+            size -= 1  
+
+
+# Secret solution! On place!
+class Solution:
+    def reverseString(self, s: List[str]) -> None:
+        s[:] = s[::-1]
