@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(1) by space.
+
+A simple and calm task.
+
+"""
+
+class Solution:
+    def findNumbers(self, nums: List[int]) -> int:
+        return sum(1 for elem in nums if len(str(elem))%2 == 0)
