@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time, has O(1) complexity by space.
+
+Reworking the number system
+
+"""
+
+class Solution:
+    def sumBase(self, n: int, k: int) -> int:
+        answer = 0
+        while n:
+            answer += n % k
+            n //= k
+        return answer
