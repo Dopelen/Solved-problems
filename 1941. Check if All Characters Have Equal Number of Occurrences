@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+We continue to comprehend the collections!
+But every time it’s a counter for some reason
+
+"""
+
+class Solution:
+    def areOccurrencesEqual(self, s: str) -> bool:
+        return len(set(collections.Counter(s).values())) == 1
