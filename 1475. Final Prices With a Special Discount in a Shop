@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n**2) complexity by time and O(n) by space.
+
+A typical task for implementing an algorithm in polynomial time. Usually you can solve it faster by sorting.
+In this case, there is a beautiful solution here via a monotonic stack
+
+"""
+
+class Solution:
+    def finalPrices(self, prices):
+        size = len(prices)
+        answer = [0] * size
+        for elem in range(size):
+            if elem + 1 == size:
+                answer[elem] =  prices[elem]
+                break
+            for dis in range(elem + 1, size):
+                if prices[elem] >= prices[dis]:
+                    answer[elem] =  prices[elem] - prices[dis]
+                    break
+                elif dis + 1 == size:
+                    answer[elem] =  prices[elem]
+        return answer 
+
+# O(n)
+class Solution:
+    def finalPrices(self, prices: List[int]) -> List[int]:
+        stack = []
+        for i in range(len(prices)):
+            while stack and (prices[stack[-1]] >= prices[i]):
+                prices[stack.pop()] -= prices[i]
+            stack.append(i)
+        return prices
