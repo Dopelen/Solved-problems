@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Counting unique elements with collections!
+
+"""
+
+class Solution:
+    def sumOfUnique(self, nums: List[int]) -> int:
+        unic = collections.Counter(nums)
+        return sum(elem for elem,val in unic.items() if val == 1)
