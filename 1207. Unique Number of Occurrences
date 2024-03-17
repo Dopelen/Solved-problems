@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program have O(n) complexity by time and O(n) by space.
+
+I'm as cunning as I can!
+
+"""
+
+class Solution:
+    def uniqueOccurrences(self, arr: List[int]) -> bool:
+        cou = collections.Counter(arr)
+        return len(set(arr)) == len(set(cou.values()))
+
