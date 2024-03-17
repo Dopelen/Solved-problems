@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Today I have some kind of shortage of good solutions.
+
+"""
+
+class Solution:
+    def repeatedNTimes(self, nums: List[int]) -> int:
+        check = defaultdict(int)
+        for elem in nums:
+            if check[elem] == 0:
+                check[elem] += 1
+            else:
+                return elem
+
+# Cool one
+class Solution:
+    def repeatedNTimes(self, A: List[int]) -> int:
+        return mode(A)
