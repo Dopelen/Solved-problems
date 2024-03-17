@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+Today I have some kind of shortage of good solutions.
+
+"""
+
+# One line here is okey
+class Solution:
+    def heightChecker(self, heights: List[int]) -> int:
+        answer = 0
+        expected = sorted(heights)
+        for elem_1, elem_2 in zip(heights, expected):
+          if elem_1 != elem_2:
+            answer += 1
+        return answer
+
+# One line
+class Solution:
+    def heightChecker(self, heights: List[int]) -> int:
+        return sum(1 for elem_1, elem_2 in zip(heights, sorted(heights)) if elem_1 != elem_2 )
