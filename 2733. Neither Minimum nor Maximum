@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Today I have some kind of shortage of good solutions.
+
+"""
+
+class Solution:
+    def findNonMinOrMax(self, nums: List[int]) -> int:
+        max_ = 0
+        min_ = 101
+        for elem in nums:
+            if elem > max_:
+                max_ = elem
+            if elem < min_:
+                min_ = elem
+        for elem_2 in nums:
+            if elem_2 < max_ and elem_2 > min_:
+                return elem_2
+        return -1
+
+
