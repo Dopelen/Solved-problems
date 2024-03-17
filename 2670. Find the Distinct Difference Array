@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Sometimes it seems to me that there is a main competition to see who comes up with the most ornate task.
+
+"""
+
+class Solution:
+    def distinctDifferenceArray(self, nums: List[int]) -> List[int]:
+        suf = Counter(nums)
+        pref = set(nums[:1])
+        size_pref, size_suf = 1, len(suf)
+        answer = []
+        for elem in nums:
+            suf[elem] -= 1
+            if suf[elem] == 0:
+                size_suf -= 1
+            if elem not in pref:
+                pref.add(elem)
+                size_pref += 1
+            answer.append(size_pref - size_suf)
+        return answer
