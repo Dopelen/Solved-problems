@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+You can even write with constant memory, replacing elements in place.
+
+"""
+
+# One line, but two passes
+class Solution:
+    def sortArrayByParity(self, nums: List[int]) -> List[int]:
+        return [elem for elem in nums if elem % 2 == 0] + [elem_ for elem_ in nums if elem_ % 2 == 1]
+
+# One pass
+class Solution:
+    def sortArrayByParity(self, nums: List[int]) -> List[int]:
+        f_half, s_half = [], []
+        for elem in nums:
+            if elem % 2 == 0:
+                f_half.append(elem)
+            else:
+                s_half.append(elem)
+        return f_half + s_half
