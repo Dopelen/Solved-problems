@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I used the sum of progression formula, but it seems there is an easier way, but in any case this is a normal solution.
+
+"""
+
+# Mine one
+class Solution:
+    def sumZero(self, n: int) -> List[int]:
+        if n == 1:
+            return [0]
+        elif n == 2:
+            return [1,-1]
+        else:
+            return [elem for elem in range(0, n - 1)] + [-((n - 2)*(n-1)//2)]
+
+
+# Cool solution
+    def sumZero(self, n):
+        return range(1 - n, n, 2)
