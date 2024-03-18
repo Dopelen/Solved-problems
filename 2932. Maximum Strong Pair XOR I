@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n**2) complexity by time and O(n) by space.
+
+The maximum(straightforward solution), I just rewrote the condition.
+
+"""
+
+class Solution:
+    def maximumStrongPairXor(self, nums: List[int]) -> int:
+        answer = 0
+        for elem in nums:
+            for elem_ in nums:
+                if abs(elem - elem_) <= min(elem, elem_):
+                    answer = max(answer, elem ^ elem_)
+        return answer
+
+
+# One_line possible
+class Solution:
+    def maximumStrongPairXor(self, nums: List[int]) -> int:
+        return max(x ^ y for x in nums for y in nums if abs(x - y) <= min(x, y))
