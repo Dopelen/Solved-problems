@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It doesn't seem like much, but I like the heuristic that shifts the index if a peak is found, because the next element cannot possibly be a peak.
+
+"""
+
+class Solution:
+    def findPeaks(self, mountain: List[int]) -> List[int]:
+        size = len(mountain)
+        answer = []
+        elem = 1
+        while elem < size - 1:  
+            if mountain[elem - 1] < mountain[elem] > mountain[elem + 1]:  
+                answer.append(elem)
+                elem += 2  
+            else:
+                elem += 1
+        return answer
