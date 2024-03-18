@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A task that seems incredibly difficult but, due to the nature of the input, turns out to be incredibly easy.
+
+"""
+
+class Solution:
+    def removePalindromeSub(self, s: str) -> int:
+       return 1 if s == s[::-1] else 2
