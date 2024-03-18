@@ -1,0 +1,88 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+Perhaps this is overkill for such a task, but I needed to get it in my head properly.
+
+"""
+
+class Solution:
+    def sortString(self, s: str) -> str:
+        
+        self.all_el = collections.Counter(s)
+        self.all_el = dict(sorted(self.all_el.items()))
+        self.answer = []        
+        
+        def max_iter(self):
+            for key in self.all_el.keys():
+                self.answer.append(key)
+                self.all_el[key] -= 1     
+
+        def min_iter(self):
+            for key in reversed(list(self.all_el.keys())):
+                self.answer.append(key)
+                self.all_el[key] -= 1              
+
+        def check_dict(self):
+            value_to_del = []
+            for elem in self.all_el.keys():      # We cant delite key trought iteration, so we creating list for delite all we need after!
+                if self.all_el[elem] == 0:
+                    value_to_del.append(elem)
+            for elem_ in value_to_del:
+                del self.all_el[elem_]
+
+        while len(self.all_el) != 0:
+            max_iter(self)
+            check_dict(self)
+            if len(self.all_el) == 0:
+                break
+            min_iter(self)
+            check_dict(self)
+        return "".join(self.answer)
+
+
+# Updated from ChatGPT:
+import collections
+
+class Solution:
+    def sortString(self, s: str) -> str:
+        all_el = collections.Counter(s)
+        answer = []
+
+        def max_iter():
+            for key in sorted(all_el.keys()):
+                answer.append(key)
+                all_el[key] -= 1
+                if all_el[key] == 0:
+                    del all_el[key]
+
+        def min_iter():
+            for key in sorted(all_el.keys(), reverse=True):
+                answer.append(key)
+                all_el[key] -= 1
+                if all_el[key] == 0:
+                    del all_el[key]
+
+        while all_el:
+            max_iter()
+            if not all_el:
+                break
+            min_iter()
+
+        return ''.join(answer)
+
+
+# Clean and slow!:
+
+class Solution:
+    def sortString(self, s: str) -> str:
+        s = list(s)
+        result = ''
+        while s:
+            for letter in sorted(set(s)):
+                s.remove(letter)
+                result += letter
+            for letter in sorted(set(s), reverse=True):
+                s.remove(letter)
+                result += letter
+        return result
