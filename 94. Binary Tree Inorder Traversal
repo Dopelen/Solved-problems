@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It's not so difficult when you remember what it is inorder traversal.
+
+"""
+
+class Solution:
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        if not root:
+            return []
+        stack = []
+        result = []
+        current = root
+        while current or stack:
+            while current:
+                stack.append(current)
+                current = current.left
+            current = stack.pop()
+            result.append(current.val)
+            current = current.right
+        return result
