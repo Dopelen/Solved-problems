@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1)(bc we use generator) by space.
+
+I feel some SQL atmosphere and one line here is enoght.
+
+"""
+
+class Solution:
+    def countSeniors(self, details: List[str]) -> int:
+        return sum(1 if int(pas[11:13]) > 60 else 0 for pas in details)
+
