@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+Linear time has not come in my head.
+
+"""
+
+class Solution:
+    def targetIndices(self, nums: List[int], target: int) -> List[int]:
+        size = len(nums)
+        nums = sorted(nums)
+        found = False
+        answer = []
+        for elem in range(size):
+            if nums[elem] == target:
+                answer.append(elem)
+                found = True
+            elif found:
+                return answer
+        return answer
+
+# But O(n) exist!
+class Solution:
+    def targetIndices(self, nums: List[int], target: int) -> List[int]:
+        lessThanEqual = 0
+        onlyLess = 0
+        for i in nums:
+            if i <= target:
+                lessThanEqual += 1
+            if i < target:
+                onlyLess += 1
+        return list(range(onlyLess, lessThanEqual))
