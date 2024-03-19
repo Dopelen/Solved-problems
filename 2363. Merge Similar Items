@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+Most of the time I was just thinking about how to convert everything from a list to a dictionary and back.
+
+"""
+
+class Solution:
+    def mergeSimilarItems(self, items1: List[List[int]], items2: List[List[int]]) -> List[List[int]]:
+        combined_dict = Counter(dict(items1)) + Counter(dict(items2))
+        answer = sorted(combined_dict.items())
+        return answer
