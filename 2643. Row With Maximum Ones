@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program has O(n * m) complexity by time and O(n) (we are creating only one line at the time) by space.
+
+I like THESE matrices
+
+"""
+
+class Solution:
+    def rowAndMaximumOnes(self, mat: List[List[int]]) -> List[int]:
+        answer = [0, 0]
+        index = 0
+        for elem in mat:
+            ones = sum(step for step in elem if step == 1)
+            if ones > answer[1]:
+                answer = [index, ones]
+            index += 1
+        return answer 
