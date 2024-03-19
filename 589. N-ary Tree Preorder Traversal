@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I remember the trees.
+
+"""
+
+class Solution:
+    def preorder(self, root: 'Node') -> List[int]:
+        result = []
+        if root is None:
+            return result
+        result.append(root.val)
+        for child in root.children:
+            result.extend(self.preorder(child))
+        return result
+
