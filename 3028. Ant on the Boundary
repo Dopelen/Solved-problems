@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Cant stop helping ants.
+
+"""
+
+class Solution:
+    def returnToBoundaryCount(self, nums: List[int]) -> int:
+        status = 0
+        answer = 0
+        for elem in nums:
+            status += elem
+            if status == 0:
+                answer += 1
+        return answer
+
+
+# With accumulate
+class Solution:
+    def returnToBoundaryCount(self, nums: List[int]) -> int:
+        return sum(n == 0 for n in accumulate(nums))
