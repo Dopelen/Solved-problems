@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and the same by space.
+
+"""
+
+# Too many lines for such simple logic.
+class Solution:
+    def numberOfPairs(self, nums: List[int]) -> List[int]:
+        check = Counter(nums)
+        ind_1, ind_2 = 0, 0
+        for elem in check.values():
+            if elem % 2 == 0:
+                ind_1 += elem // 2
+            else:
+                if elem > 2:
+                    ind_1 += (elem - 1) // 2
+                    ind_2 += 1
+                else:
+                    ind_2 += 1
+        return [ind_1, ind_2]
+
+# Thats better
+	def numberOfPairs(self, nums: List[int]) -> List[int]:
+		pairs = sum(cnt // 2 for cnt in Counter(nums).values())
+		return [pairs, len(nums) - 2 * pairs]
