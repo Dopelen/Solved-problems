@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program have O(max(len(bin(x)), len(bin(y)))) complexity by time and the same by space.
+
+I'm sure there is an easier method.
+
+"""
+
+class Solution:
+    def hammingDistance(self, x: int, y: int) -> int:
+        answer = 0
+        a, b = bin(x)[2:], bin(y)[2:]
+        leading = max(len(a), len(b))
+        for i, k in zip(a.zfill(leading), b.zfill(leading)):
+            if i != k:
+                answer += 1
+        return answer
+
+# And there he is
+def hammingDistance(self, x, y):
+        return bin(x^y).count('1')
