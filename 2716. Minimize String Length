@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n)  complexity by time and O(n) by space.
+
+I racked my brain for forty minutes and was already starting to write line 50 of code, but then it dawned on me.
+Need more sleep.
+
+"""
+
+class Solution:
+    def minimizedStringLength(self, s: str) -> int:
+        return len(set(s))
+
