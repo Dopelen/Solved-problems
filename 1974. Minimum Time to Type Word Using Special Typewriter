@@ -1,0 +1,36 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+An interesting problem that for some reason broke my brain. 
+It looks like the same part of the brain is responsible for the matrices and these transitions with limiters.
+
+"""
+
+# Mine
+from string import ascii_lowercase
+
+class Solution:
+    def minTimeToType(self, word: str) -> int:
+        alpha = {k: v for v, k in enumerate(ascii_lowercase, start=1)}
+        answer = 0
+        current = 1
+        for elem in word:
+            forward = alpha[elem] - current if alpha[elem] > current else 26 - current + alpha[elem]
+            backward = current + 26 - alpha[elem] if alpha[elem] > current else current - alpha[elem]
+            answer += min(forward, backward) + 1
+            current = alpha[elem]
+        return answer
+
+
+
+# Beautiful one
+class Solution:
+    def minTimeToType(self, word: str) -> int:
+        ans = len(word)
+        prev = "a"
+        for ch in word: 
+            val = (ord(ch) - ord(prev)) % 26 
+            ans += min(val, 26 - val)
+            prev = ch
+        return ans 
