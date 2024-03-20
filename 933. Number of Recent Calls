@@ -1,0 +1,52 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time.
+
+To begin with, I solved it as a human, but then I thought that this was a great opportunity to use a queue, and I solved it with a queue!
+Same speed but finite space, unlike the first implementation :)
+
+"""
+
+# Human solution O(n) space
+class RecentCounter:
+    def __init__(self):
+        self.requests = []
+
+    def ping(self, t: int) -> int:
+        self.requests.append(t)
+        returned_value = 0
+        for elem in self.requests[::-1]:
+            if t - elem <= 3000:
+                returned_value += 1
+            else:
+                break
+        return returned_value
+
+# FILO O(n) but faster in avg
+import queue
+
+class RecentCounter:
+    def __init__(self):
+        self.requests_queue = queue.Queue()
+        self.last_one = 0
+
+    def ping(self, t: int) -> int:
+        if self.requests_queue.empty():
+            self.last_one = t
+        self.requests_queue.put(t)
+        while self.last_one < t - 3000:
+            self.requests_queue.get()
+            self.last_one = self.requests_queue.queue[0]
+        return self.requests_queue.qsize()
+
+# If attention and care
+class RecentCounter:
+    def __init__(self):
+        self.queue = deque() 
+    def ping(self, t: int) -> int:
+        self.queue.append(t) 
+        while self.queue[0] < t - 3000: 
+            self.queue.popleft() 
+        return len(self.queue)  
+
+
