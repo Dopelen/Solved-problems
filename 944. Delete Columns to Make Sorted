@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n*m) complexity by time and same by space.
+
+I slowed down a lot, but I recovered.
+Even matrices can't break me today!
+
+"""
+
+class Solution:
+    def minDeletionSize(self, strs: List[str]) -> int:
+        matrix = []
+        garbage = []
+        rows = len(strs)
+        colomns = len(strs[0])
+        for elem in strs:
+            matrix.append(list(elem))
+        for row in range(rows - 1):
+            prev = row
+            for col in range(colomns):
+                if matrix[prev][col] > matrix[prev + 1][col]:
+                    if col in garbage:
+                        continue
+                    garbage.append(col)
+        return len(garbage)
+
+
+# Without matrix
+	def minDeletionSize(self, strs: List[str]) -> int:
+        m, n = len(strs), len(strs[0])
+        count = 0
+        for i in range(n):
+            for j in range(1,m):
+                if strs[j][i] < strs[j-1][i]:
+                    count += 1
+                    break
+        return count
+
+# A solution that I guessed about, but couldn’t write because I’m not confident in using the package
+class Solution:
+    def minDeletionSize(self, strs: List[str]) -> int:
+        return sum(col != sorted(col) for col in map(list, zip(*strs)))
