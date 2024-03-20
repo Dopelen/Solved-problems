@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+"""
+
+# Strange decision, but the first thing that came to mind.
+# This program has O(max(elem) - min(elem)) complexity by time and same by space.
+
+class Solution:
+    def numberOfPoints(self, nums: List[List[int]]) -> int:
+        answer = set()
+        for elem in nums:
+            for ind in range(elem[0], elem[1] + 1):
+                answer.add(ind)
+        return len(answer)
+
+
+# 2 min of thinking. Still kinda strange.
+# # This program has O(max(elem) - min(elem)) complexity by time and O(1) by space(but huge constant).
+class Solution:
+    def numberOfPoints(self, nums: List[List[int]]) -> int:
+        answer = [0] * 101
+        for elem in nums:
+            for place in range(elem[0], elem[1] + 1):
+                answer[place] = 1
+        return sum(elem for elem in answer)
