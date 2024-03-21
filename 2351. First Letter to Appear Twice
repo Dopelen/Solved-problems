@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I always forget that inside you need to specify a specific type for the dictionary
+
+"""
+
+class Solution:
+    def repeatedCharacter(self, s: str) -> str:
+        checker = defaultdict(int)
+        for elem in s:
+            if checker[elem] == 1:
+                return elem
+            checker[elem] += 1
