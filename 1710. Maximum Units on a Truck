@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(1) by space.
+
+The speed of solution in our case depends on the speed of sorting
+
+"""
+
+class Solution:
+    def maximumUnits(self, boxTypes: List[List[int]], truckSize: int) -> int:
+        boxTypes = sorted(boxTypes, key = lambda x: x[1], reverse = True)
+        answer = 0
+        for elem in boxTypes:
+            if elem[0] <= truckSize:
+                answer += elem[1] * elem[0]
+                truckSize -= elem[0]
+                if not truckSize:
+                    break
+            else:
+                answer += elem[1] * truckSize
+                break
+        return answer
