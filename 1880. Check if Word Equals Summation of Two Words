@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The task is simple, but I'm still glad that everything worked the first time.
+
+"""
+
+class Solution:
+    def isSumEqual(self, firstWord: str, secondWord: str, targetWord: str) -> bool:
+        alp = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4, 'f': 5, 'g': 6, 'h': 7, 'i': 8, 'j': 9}
+        lists_ = [firstWord, secondWord, targetWord]
+        for word in range(3):
+            answer = ""
+            for symbol in lists_[word]:
+                answer += str(alp[symbol])
+            lists_[word] = int(answer)
+        return lists_[0] + lists_[1] == lists_[2]
