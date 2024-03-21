@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n**2) complexity by time and O(n**2) by space.
+
+I was sure that I would go crazy with all sorts of basic cases, so I just wrote them separately in the code.
+
+"""
+
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        if numRows == 1:
+            return [[1]]
+        if numRows == 2:
+            return [[1],[1,1]]
+        else:
+            answer = [[1],[1,1]]
+            prev = [1, 1]
+            for line in range(2, numRows):
+                add = []
+                for step in range(line - 1):
+                    add.append(prev[step] + prev[step + 1])
+                prev = [1] + add + [1]
+                answer.append(prev)
+        return answer
