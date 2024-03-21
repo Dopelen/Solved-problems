@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and the same by space.
+
+I'm not very familiar with bitwise operations, so the result is like this.
+
+"""
+
+class Solution:
+    def findKOr(self, nums: List[int], k: int) -> int:
+        answer = [0] * 32
+        for num in nums:
+            num = bin(num)[2:]
+            index = 0
+            for bit_ in num[::-1]:
+                if bit_ == "1":
+                    answer[index] += 1
+                index += 1
+        answer = ["1" if elem >= k else "0" for elem in answer]
+        answer.reverse()
+        answer = ''.join(answer)
+        return int(answer, 2)
+
+# Canon solution
+class Solution:
+    def findKOr(self, nums: List[int], k: int) -> int:
+        dp = [0]*31
+        for num in nums:
+            i = 0    
+            while num > 0:
+                if num & 1 == 1:
+                    dp[i] += 1
+                i += 1
+                num = num >> 1
+        ans = 0
+        for i,count in enumerate(dp):
+            if count >= k:
+                ans += 2**i    
+        return ans
