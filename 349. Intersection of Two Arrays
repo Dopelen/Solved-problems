@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space, where n is max(num1, num2).
+
+First time when I used task name like method!
+
+"""
+
+class Solution:
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        return set(nums1).intersection(set(nums2))
