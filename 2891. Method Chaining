@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(?) complexity by time and O(?) by space.
+
+Some pandas.
+
+"""
+
+import pandas as pd
+
+def findHeavyAnimals(animals: pd.DataFrame) -> pd.DataFrame:
+    names_sorted_descending = animals[animals['weight'] > 100].sort_values(by='weight', ascending=False)[['name']]
+    return names_sorted_descending
+    
