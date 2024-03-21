@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O((high - low) * max(len(str(high))) complexity by time and O(1) by space.
+
+A simple and understandable solution, but when debugging I noticed a pattern...
+
+"""
+
+class Solution:
+    def countSymmetricIntegers(self, low: int, high: int) -> int:
+        counter = 0
+        for elem in range(low, high+1):
+            elem = str(elem)
+            size = len(elem)
+            if size % 2 == 1:
+                continue
+            first_half = sum(int(digit) for digit in elem[:size//2])
+            second_half = sum(int(digit) for digit in elem[size//2:])
+            if first_half == second_half:
+                counter += 1
+        return counter
+
