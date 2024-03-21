@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The Сounter is by far the most popular collection method for leetcode tasks.
+
+"""
+
+class Solution:
+    def percentageLetter(self, s: str, letter: str) -> int:
+        s_co = Counter(s)
+        return int(s_co[letter]/s_co.total() * 100)
+
+
+# but you can do it with really basics
+class Solution:
+    def percentageLetter(self, s: str, letter: str) -> int:
+        return int((s.count(letter) / len(s)) * 100)
