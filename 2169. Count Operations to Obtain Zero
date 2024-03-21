@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(dif between num1 and num2) complexity by time and O(1) by space.
+If feels like its faster then n, but also not constant.
+
+Brute force!
+
+"""
+
+class Solution:
+    def countOperations(self, num1: int, num2: int) -> int:
+        oper = 0
+        while num1 and num2:
+            if num1 >= num2:
+                num1 -= num2
+            else:
+                num2 -= num1
+            oper += 1
+        return oper
