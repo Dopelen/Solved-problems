@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Bin tree strikes again.
+
+"""
+
+class Solution:
+    def sumRootToLeaf(self, root: TreeNode) -> int:
+        self.answer = 0
+        
+        def Check(root, nums):
+            if not root.left and not root.right:
+                nums += str(root.val)
+                self.answer += int(nums, 2)
+                return
+
+            nums += str(root.val)
+            if root.left:
+                Check(root.left, nums)
+            if root.right:
+                Check(root.right, nums)
+
+        Check(root, "")
+        return self.answer
