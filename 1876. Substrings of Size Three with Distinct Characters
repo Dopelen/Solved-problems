@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Set looks cuter.
+
+"""
+
+# Implementation with a queue
+class Solution:
+    def countGoodSubstrings(self, s: str) -> int:
+        import queue
+        kinda_q = queue.Queue()
+        size = len(s)
+        answer = 0
+        if len(s) < 3:
+            return answer
+        for elem in range(2):
+            kinda_q.put(s[elem])
+        for elem_ in range(2, size):
+            kinda_q.put(s[elem_])
+            if len(set(kinda_q.queue)) == 3:
+                answer += 1
+            kinda_q.get()
+        return answer
+
+# set
+class Solution:
+    def countGoodSubstrings(self, s: str) -> int:
+        ans=0
+        for i in range(len(s)-2):
+            if len(set(s[i:i+3]))==3:
+                ans+=1
+        return ans
