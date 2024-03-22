@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Here you need only count of every element.
+
+"""
+
+class Solution:
+    def divideArray(self, nums: List[int]) -> bool:
+        counter = Counter(nums)
+        for elem in counter.items():
+            if elem[1] % 2 != 0:
+                return False
+        return True
