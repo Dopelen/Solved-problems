@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time where n is (high - low) and m is len(m). Also O(m) by space.
+
+Merging looks optimal. But I didn't think about it initially.
+
+"""
+
+
+# This is my first idea, but then I feel the formula!
+# But it looks like it’s not as simple as I thought, so I settled on this solution
+class Solution:
+    def countBalls(self, lowLimit: int, highLimit: int) -> int:
+        answer = defaultdict(int)
+        for elem in range(lowLimit, highLimit + 1):
+            answer[sum(int(digit) for digit in str(elem))] += 1
+        return max(answer.values())
