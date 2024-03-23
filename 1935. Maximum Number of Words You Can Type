@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n*m)(n - number of words and m - max(len(of broken sybols)) complexity by time and O(n) by space.
+
+Head-to-head solution with polynomial complexity.
+
+"""
+
+class Solution:
+    def canBeTypedWords(self, text: str, brokenLetters: str) -> int:
+        answer = 0
+        for word in text.split():
+            error = False
+            for elem_ in brokenLetters:
+                if elem_ in word:
+                    error = True
+                    break
+            if not error:
+                answer += 1              
+        return answer
