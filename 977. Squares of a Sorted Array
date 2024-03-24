@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and same by spacee.
+
+I’m very proud of myself that I almost immediately came to a decision over the line.
+Two pointers!
+
+"""
+
+# With list
+class Solution:
+    def sortedSquares(self, nums: List[int]) -> List[int]:
+        answer = []
+        size = len(nums)
+        first_p = 0
+        second_p = size-1
+        while first_p <= second_p:
+            if abs(nums[first_p]) >= abs(nums[second_p]):
+                answer.append(nums[first_p]**2)
+                first_p += 1
+            else:
+                answer.append(nums[second_p]**2)
+                second_p -= 1
+        return reversed(answer)
+
+# With dequeue
+class Solution:
+    def sortedSquares(self, nums: List[int]) -> List[int]:
+        answer = collections.deque()
+        size = len(nums)
+        first_p = 0
+        second_p = size-1
+        while first_p <= second_p:
+            if abs(nums[first_p]) >= abs(nums[second_p]):
+                answer.appendleft(nums[first_p]**2)
+                first_p += 1
+            else:
+                answer.appendleft(nums[second_p]**2)
+                second_p -= 1
+        return list(answer)
+
+
