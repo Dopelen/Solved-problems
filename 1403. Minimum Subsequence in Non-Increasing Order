@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+It can be simplified, but I don't like to calculate the entire length of the array, and the sum of the numbers in each iteration of the loop.
+
+"""
+
+class Solution:
+    def minSubsequence(self, nums: List[int]) -> List[int]:
+        nums = sorted(nums)
+        sum_ = sum(nums)
+        comulative_sum = 0
+        answer = []
+        while sum_ >= comulative_sum:
+            value = nums.pop()
+            answer.append(value)
+            comulative_sum += value
+            sum_ -= value
+        return answer
