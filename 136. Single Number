@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time O(n).
+
+Unfortunately, I couldn’t come to a solution for O(n) and O(1), but after looking at how it works, I realized that I wouldn’t have come to it anyway. 
+This makes me happy.
+
+"""
+
+# My solution
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        s_nums = Counter(nums)
+        for _, val in s_nums.items():
+            if val == 1:
+                return _
+
+# True solution
+class Solution:
+  def singleNumber(self, nums: List[int]) -> int:
+    return functools.reduce(lambda x, y: x ^ y, nums, 0)
