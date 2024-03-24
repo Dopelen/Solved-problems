@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Seems like a fine solution.
+
+"""
+
+class Solution:
+    def smallestEqual(self, nums: List[int]) -> int:
+        size = len(nums)
+        for step in range(size):
+            if step%10 == nums[step]:
+                return step
+        return -1
+
+
+# One line
+class Solution:
+    def smallestEqual(self, nums: List[int]) -> int:
+        return next((i for i, x in enumerate(nums) if i%10 == x), -1)
