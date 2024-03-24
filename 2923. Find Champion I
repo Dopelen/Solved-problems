@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * n) (columns, rows) complexity by time and O(1) by space.
+
+The winner is simply stronger than everyone except himself, but in fact the real winner is first and foremost stronger than himself...
+
+"""
+
+class Solution:
+    def findChampion(self, grid: List[List[int]]) -> int:
+        size = len(grid)
+        for team in range(size):
+            if grid[team].count(1) == size - 1:
+                return team
