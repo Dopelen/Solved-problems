@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * n) time complexity and O(n) by space.
+
+I really wanted to do everything concisely, but 
+I messed up on the last generator, in the end everything worked out, 
+I cried again because of the matrices.
+
+"""
+
+class Solution:
+    def projectionArea(self, grid: List[List[int]]) -> int:
+        size = len(grid)
+        if size == 1:
+            return 1 + grid[0][0] * 2
+        top = sum(1 if elem != 0 else 0 for rows in grid for elem in rows)
+        front = sum(max(elem) for elem in grid)           
+        side_sum = sum(max(row[_] for row in grid) for _ in range(size))
+        return top + front + side_sum
