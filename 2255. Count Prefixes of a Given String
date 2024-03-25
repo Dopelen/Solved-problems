@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) time complexity where n is number of words and m - size of prefix, and O(m) by space
+
+Prefixes strike again.
+
+"""
+
+class Solution:
+    def countPrefixes(self, words: List[str], s: str) -> int:
+        answer = 0
+        for word in words:
+            if s.startswith(word):
+                answer += 1
+        return answer
