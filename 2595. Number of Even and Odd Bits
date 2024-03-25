@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(len(bin(n))) time complexity and same by space.
+
+Fine one.
+
+"""
+
+# Mine
+class Solution:
+    def evenOddBit(self, n: int) -> List[int]:
+        n = reversed(bin(n)[2:])
+        even, odd = True, False
+        eve_c, odd_c = 0, 0
+        for elem in n:
+            if even and elem == "1":
+                eve_c += 1
+            elif odd and elem == "1":
+                odd_c += 1
+            even, odd =  odd, even
+        return [eve_c, odd_c]
+
+
+# not mine
+class Solution:
+    def evenOddBit(self, n: int) -> List[int]:                 
+        evens, odds = int('0101010101',2), int('1010101010',2)
+        return [(evens&n).bit_count(),(odds&n).bit_count()]
