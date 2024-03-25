@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) time complexity where n is number of Nodes and, and O(n) by space.
+
+It seems to me that I need another yearly course, because all these walks around the street constantly cause some kind of problems.
+
+"""
+
+# Understandable solution
+def averageOfLevels(self, root: Optional[TreeNode]) -> List[float]:
+    q=deque([root])
+    ans =[]
+    while q:
+        qlen=len(q)
+        row =0
+        for i in range(qlen):
+            node = q.popleft()
+            row += node.val
+            if node.left: q.append(node.left)
+            if node.right: q.append(node.right)
+        ans.append(row/qlen)
+    return ans
+
+
+# Cool solution
+def averageOfLevels(self, root: TreeNode) -> List[float]:
+	lvlcnt = defaultdict(int)
+	lvlsum = defaultdict(int)
+
+	def dfs(node=root, level=0):
+		if not node: return
+		lvlcnt[level] += 1
+		lvlsum[level] += node.val
+		dfs(node.left, level+1)
+		dfs(node.right, level+1)
+		
+	dfs()
+	return [lvlsum[i] / lvlcnt[i] for i in range(len(lvlcnt))]
