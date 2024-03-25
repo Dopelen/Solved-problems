@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) time complexity and O(m) by space
+
+Simple and clear conversions.
+
+"""
+
+# Normal version
+class Solution:
+    def sumOfEncryptedInt(self, nums: List[int]) -> int:
+        size = len(nums)
+        for elem in range(size):
+            current = str(nums[elem])
+            nums[elem] = int(max(current)*len(current))
+        return sum(nums)
+
+# One-line (looks fine)
+class Solution:
+    def sumOfEncryptedInt(self, nums: List[int]) -> int:
+        return sum(int(max(n)*len(n)) for n in map(str,nums)) 
