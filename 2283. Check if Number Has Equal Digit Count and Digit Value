@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) time complexity and O(1)(bc there is only 10 digits) by space.
+
+I prefer default dict istead of Counter so I can avoid problems with KeyErrors.
+
+"""
+
+class Solution:
+    def digitCount(self, num: str) -> bool:
+        count_d = collections.defaultdict(int)
+        for digit in num:
+            count_d[int(digit)] += 1
+        size = len(num)
+        for ind in range(size):
+            if int(num[ind]) != count_d[ind]:
+                return False
+        return True
