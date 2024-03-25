@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) time complexity and O(n) by space.
+
+The original version was scarier, but I figured out how to decorate sets.
+
+"""
+
+class Solution:
+    def minimumOperations(self, nums: List[int]) -> int:
+        nums = set(nums) - {0}  
+        answer = 0
+        while nums:
+            cur_min = min(nums)  
+            nums = {elem - cur_min for elem in nums} - {0}
+            answer += 1
+        return answer
+
+# Genius solution
+class Solution:
+    def minimumOperations(self, nums: List[int]) -> int:
+        return len(set(nums) - {0})
