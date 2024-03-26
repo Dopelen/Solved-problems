@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n**2) complexity by time and O(n) by space.
+
+I tried to implement binary search to speed up the code, but got confused in the tuples and decided I'll leave that for another time.
+As a result, I simply wrote a brute force solution and accelerated it with a dictionary of indexes, so as not to search every iteration.
+
+"""
+
+class Solution:
+    def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        answer = []
+        index = 0
+        index_d = {}
+        for elem in nums2:
+            index_d[elem] = index
+            index += 1
+        for elem in nums1:
+            founded = False
+            for elem_ in nums2[index_d[elem]:]:
+                if elem_ > elem:
+                    founded = True
+                    answer.append(elem_)
+                    break
+            if not founded:
+                answer.append(-1)
+        return answer
+
+
+# Genius solutin! (not mine)
+class Solution:
+    def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]: 
+        stack = []
+        d = {}
+        for e in nums2:
+            while(stack and e > stack[-1]):
+                c = stack.pop()
+                d[c] = e
+            stack.append(e)
+        return [d.get(e, -1) for e in nums1]
