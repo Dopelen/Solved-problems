@@ -1,0 +1,35 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I’m having trouble thinking straight today, and then there are the trees!
+
+"""
+
+# First recursive idea
+class Solution:
+    def findD(self, root, depth):
+        depth += 1
+        if root.children == []:
+            self.depth.append(depth)
+            return
+        for chil in root.children:
+            self.findD(chil, depth)
+        return
+
+    def maxDepth(self, root: 'Node'):
+        self.depth = [0]
+        if root:
+            self.findD(root, 0)
+        return max(self.depth)
+
+
+# Human solution
+class Solution:
+    def maxDepth(self, root: 'Node') -> int:
+        if not root:
+            return 0
+        depth = 1
+        if root.children:
+            depth += max(self.maxDepth(child) for child in root.children)
+        return depth
