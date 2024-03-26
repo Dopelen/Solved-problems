@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I think One-line is understandable here.
+
+"""
+
+# O(n), O(1)
+class Solution:
+    def maximumValue(self, strs: List[str]) -> int:
+        size = len(strs)
+        for ind in range(size):
+            if strs[ind].isdigit():
+                strs[ind] = int(strs[ind])
+            else:
+                strs[ind] = len(strs[ind])
+        return max(strs)
+
+
+# # O(n), O(n)
+class Solution:
+    def maximumValue(self, strs: List[str]) -> int:
+        size = len(strs)
+        return max([int(strs[ind]) if strs[ind].isdigit() else len(strs[ind]) for ind in range(size)])
