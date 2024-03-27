@@ -1,0 +1,36 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+"""
+
+# The first solution is straightforward O(n * m) where n - number of elements in nums and m - in queries.
+class Solution:
+    def answerQueries(self, nums: List[int], queries: List[int]) -> List[int]:
+        size_ans = len(queries)
+        size_n = len(nums)
+        answer = [0] * size_ans
+        nums = sorted(nums)
+        for elem in range(size_ans):
+            local_ind = 0
+            local_ans = 0
+            while local_ind < size_n and local_ans < queries[elem]:
+                local_ans += nums[local_ind]
+                if local_ans > queries[elem]:
+                    break
+                local_ind += 1
+            answer[elem] = local_ind
+        return answer
+
+# Prefix sum. O(n(log(n))), O(n)
+class Solution:
+    def answerQueries(self, nums: List[int], queries: List[int]) -> List[int]:
+        nums.sort()
+        answer = []
+        prefix, prefix_sum = [nums[0]], nums[0]
+        for elem in nums[1:]:
+            prefix_sum += elem
+            prefix.append(prefix_sum)
+        for query in queries:
+            index = bisect.bisect_right(prefix, query)
+            answer.append(index)
+        return answer
