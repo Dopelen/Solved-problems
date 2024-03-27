@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n) complexity by time and O(1) by space.
+
+It's fun when you can abstract the problem into simple mathematical operations
+
+"""
+
+class Solution:
+    def minCostToMoveChips(self, position: List[int]) -> int:
+        odd = sum(1 for elem in position if elem % 2 != 0)
+        even = len(position) - odd
+        return min(odd, even)
+
+
