@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and same be space.
+
+I should definitely go deeper into the trees.
+We simply construct a tree around the root, and the root is the median value for each subtree. 
+Since we have a sorted list, we can simply take the middle of the length of the passed list.
+
+"""
+
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]):
+        if not nums:
+            return None
+        mid = len(nums) // 2
+        root = TreeNode(nums[mid])
+        root.left = self.sortedArrayToBST(nums[:mid])
+        root.right = self.sortedArrayToBST(nums[mid + 1:])
+        return root
