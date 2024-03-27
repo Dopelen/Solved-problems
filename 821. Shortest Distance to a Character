@@ -1,0 +1,54 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and same be space.
+
+The code turned out to be complicated, but it’s just a couple of passes, you can simplify it, but essentially it will be the same.
+
+"""
+
+# Back to frond and then fron to back. 
+class Solution:
+    def shortestToChar(self, s: str, c: str) -> List[int]:
+        answer = [0 if elem == c else 1 for elem in s]
+        size = len(answer) - 1
+        started = False
+        for elem in range(size, 0, -1):
+            if not started:
+                if answer[elem] != 0:
+                    answer[elem] = 10 ** 4 + 1
+                else:
+                    started = True
+            else:
+                if answer[elem] > 0 and answer[elem-1] > 0:
+                    answer[elem-1] = answer[elem] + 1
+        ind = 0
+        while ind != size:
+            if answer[ind] == 0 and answer[ind + 1] != 0:
+                while ind != size and answer[ind + 1] != 0 and answer[ind] < answer[ind + 1]:
+                    answer[ind + 1] = answer[ind] + 1
+                    ind += 1
+            else:
+                ind += 1
+        return answer 
+
+# Simpler version
+class Solution:
+    def shortestToChar(self, s: str, c: str) -> List[int]:
+        n = len(s)
+        left_distances = [float('inf')] * n
+        right_distances = [float('inf')] * n
+        closest = float('inf')
+        for i in range(n):
+            if s[i] == c:
+                closest = 0
+            left_distances[i] = closest
+            if closest != float('inf'):
+                closest += 1
+        closest = float('inf')
+        for i in range(n - 1, -1, -1):
+            if s[i] == c:
+                closest = 0
+            right_distances[i] = closest
+            if closest != float('inf'):
+                closest += 1
+        return [min(left_distances[i], right_distances[i]) for i in range(n)]
