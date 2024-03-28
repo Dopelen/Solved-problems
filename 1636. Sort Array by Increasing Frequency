@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n).
+
+I was extremely surprised that when using multiple sorting, you can specify ascending order for one element and descending order for another using the "-" sign.
+Perhaps this can be solved per line, but sorting seems to be optimal
+
+"""
+
+class Solution:
+    def frequencySort(self, nums: List[int]) -> List[int]:
+        nums = Counter(nums)
+        a = sorted([(key, value) for key, value in nums.items()], key=lambda x: (x[1], -x[0]))
+        answer = []
+        for elem in a:
+            for freq in range(elem[1]):
+                answer.append(elem[0])
+        return answer
+
+
+# fun one
+class Solution:
+    def frequencySort(self, nums: List[int]) -> List[int]:
+        return sorted(sorted(nums,reverse=1),key=nums.count)
