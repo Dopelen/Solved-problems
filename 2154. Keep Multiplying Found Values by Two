@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+I don't like the simple implementation because it can result in polynomial runtime.
+
+"""
+
+# O(n**2), O(1)
+class Solution:
+    def findFinalValue(self, nums: List[int], original: int) -> int:
+        while True:
+            if original in nums:
+                original = original * 2
+            else:
+                return original
+
+# O(n), O(n) Thats better!
+class Solution:
+    def findFinalValue(self, nums: List[int], original: int) -> int:
+        d_n = defaultdict(int)
+        for elem in nums:
+            d_n[elem] += 1
+        while d_n[original] != 0:
+            original = original * 2
+        return original
+
+# Even better (but not mine :()
+class Solution:
+    def findFinalValue(self, nums: List[int], original: int) -> int:
+        nums = set(nums)
+        while original in nums:
+            original *= 2
+        return original
