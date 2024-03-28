@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(?) complexity by time and O(?) by space.
+
+A little pandas to keep yourself in shape.
+Accessing only one column.
+
+"""
+
+def fillMissingValues(products: pd.DataFrame) -> pd.DataFrame:
+    products['quantity'] = products['quantity'].fillna(0)
+    return products
+
