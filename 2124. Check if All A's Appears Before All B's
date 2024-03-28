@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1).
+
+I was able to solve it without additional memory.
+
+"""
+
+class Solution:
+    def checkString(self, s: str) -> bool:
+        changed = False
+        key_item = s[0]
+        for elem in s:
+            if changed and elem != key_item:
+                return False
+            if elem != key_item:
+                if key_item == "b":
+                    return False
+                changed = True
+                key_item = elem  
+        return True
+
+# There are beautiful solution (not mine)
+class Solution:
+    def checkString(self, s: str) -> bool:
+        return 'ba' not in s 
