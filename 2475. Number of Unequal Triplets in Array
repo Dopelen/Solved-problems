@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The task is more difficult than it seems.
+Especially if you don't want O(n ** 3) time.
+
+"""
+
+class Solution:
+    def unequalTriplets(self, nums: List[int]) -> int:
+        c = Counter(nums)
+        res = 0
+        left = 0
+        right = len(nums)
+        for _, freq in c.items():
+            right -= freq
+            res += left * freq * right
+            left += freq
+        return res
