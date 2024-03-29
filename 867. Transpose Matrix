@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n*m) complexity by time and O(n*m) by space, where n - colomns and m - rows.
+
+FEELS GOOD!
+I saw a cool way to iterate and want to try it!
+
+"""
+
+class Solution:
+    def transpose(self, matrix: List[List[int]]) -> List[List[int]]:
+        answer = []
+        for x in zip(*matrix):
+            answer.append(list(x))
+        return answer      
