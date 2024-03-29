@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I started solving a polynomial, but ran into a strange error, and it dawned on me how to solve for a line using a back-to-front pass!
+I was very confused about what order to do the checks in, but I got it in the end!
+
+"""
+
+class Solution:
+    def replaceElements(self, arr: List[int]) -> List[int]:
+        size = len(arr) - 1
+        tample = arr[-1]
+        for elem in range(size, -1, -1):
+            cur = arr[elem]
+            arr[elem] = tample
+            if cur > tample:
+                tample = cur
+        arr[-1] = -1
+        return arr
