@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+At first I giggled, but then I liked the problem
+
+"""
+
+# O(n) Solution
+class Solution:
+    def maximumCount(self, nums: List[int]) -> int:
+        pos, neg = 0, 0
+        for elem in nums:
+            if elem > 0:
+                pos += 1
+            elif elem < 0:
+                neg += 1
+        return max(pos, neg)
+
+# O(log(n)) Solution
+class Solution:
+    def maximumCount(self, nums: List[int]) -> int:
+        neg = bisect.bisect_left(nums, 0)
+        pos = bisect.bisect_right(nums, 2001) - bisect.bisect_right(nums, 0)
+        return max(neg, pos)
