@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space, where n in number of words and m max lenght of the word.
+
+A little crooked, but that's the first thing that came to mind. 
+Although I don't like creating a dictionary for every word.
+
+"""
+
+class Solution:
+    def countCharacters(self, words: List[str], chars: str) -> int:
+        char_c = Counter(chars)
+        answer = 0
+        for word in words:
+            breaked = False
+            cur = Counter(word)
+            for elem in word:
+                if cur.get(elem) is None or char_c.get(elem) is None or cur.get(elem) > char_c.get(elem):
+                    breaked = True
+                    break
+            if not breaked:
+                answer += len(word)
+        return answer
+
+# Optimized version
+class Solution:
+    def countCharacters(self, words: List[str], chars: str) -> int:
+        result = 0
+        tamp = Counter(chars)
+        for word in words:
+            char_count = tamp.copy()
+            breaked = False
+            for char in word:
+                if char_count[char] <= 0:
+                    breaked = True
+                    break
+                char_count[char] -= 1
+            if not breaked:
+                result += len(word)
+        return result
