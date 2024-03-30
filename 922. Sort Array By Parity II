@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+ This program have O(n) complexity by time and O(n) by space.
+
+I love this problem because of the infinite number of ways it can be solved.
+
+"""
+
+class Solution:
+    def sortArrayByParityII(self, nums: List[int]) -> List[int]:
+        size = len(nums)
+        answer = [0] * size
+        even, odd = 0, 1
+        for elem in nums:
+            if elem % 2 == 0:
+                answer[even] = elem
+                even += 2
+            else:
+                answer[odd] = elem
+                odd += 2
+        return answer
