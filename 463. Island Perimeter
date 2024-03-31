@@ -1,0 +1,71 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(rows * colomns) complexity by time and O(1) by space.
+
+I’m sure that this could have been done simpler, otherwise I even needed to sleep to get the whole hierarchy of conditions in my head.
+
+P.S: I hope this solution is not a crime!
+
+"""
+
+class Solution:
+    def islandPerimeter(self, grid: List[List[int]]) -> int:
+        row_l = len(grid)
+        col_l = len(grid[0])
+        answer = 0
+        for row in range(row_l):
+            for col in range(col_l):
+                if grid[row][col] == 1:
+                    if row == 0:
+                        answer += 1
+                        if row_l != 1:
+                            if grid[row + 1][col] == 0:
+                                answer += 1
+
+                    if row == row_l - 1:
+                        answer += 1
+                        if row_l != 1:
+                            if grid[row - 1][col] == 0:
+                                answer += 1
+
+                    if row != 0 and row != row_l - 1:
+                        if grid[row - 1][col] == 0:
+                            answer += 1
+                        if grid[row + 1][col] == 0:
+                            answer += 1
+
+                    if col == 0:
+                        answer += 1
+                        if col_l != 1:
+                            if grid[row][col + 1] == 0:
+                                answer += 1
+
+                    if col == col_l - 1:
+                        answer += 1
+                        if col_l != 1:
+                            if grid[row][col - 1] == 0:
+                                answer += 1
+
+                    if col != 0 and col != col_l - 1:
+                        if grid[row][col + 1] == 0:
+                            answer += 1
+                        if grid[row][col - 1] == 0:
+                            answer += 1
+        return answer
+
+# Beautiful one
+class Solution:
+    def islandPerimeter(self, grid: List[List[int]]) -> int: 
+    	M, N, p = len(grid), len(grid[0]), 0
+    	for m in range(M):
+    		for n in range(N):
+    			if grid[m][n] == 1:
+    				if m == 0   or grid[m-1][n] == 0: p += 1
+    				if n == 0   or grid[m][n-1] == 0: p += 1
+    				if n == N-1 or grid[m][n+1] == 0: p += 1
+    				if m == M-1 or grid[m+1][n] == 0: p += 1
+    	return p
+
+#- Junaid Mansuri
+#- Chicago, IL
+
