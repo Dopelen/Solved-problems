@@ -1,0 +1,35 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I rustled my brains and solved the problem like this:
+
+"""
+
+class Solution:
+    def __init__(self):
+        self.root_1 = []
+        self.root_2 = []
+    def leafSimilar(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> bool:
+        def recur(self, root_, leafs):
+            if root_ is None:
+                return
+            if root_.left is None and root_.right is None:
+                leafs.append(root_.val)
+                return
+            recur(self, root_.left, leafs)
+            recur(self, root_.right, leafs)
+        recur(self, root1, self.root_1)
+        recur(self, root2, self.root_2)
+        return self.root_1 == self.root_2
+
+# Beautiful!
+class Solution:
+    def leafSimilar(self, root1: TreeNode, root2: TreeNode) -> bool:
+        def dfs(root):                              
+            if not root: 
+              return []
+            if not root.left and not root.right:
+                return [root.val]
+            return dfs(root.left) + dfs(root.right)
+        return dfs(root1) == dfs(root2) 
