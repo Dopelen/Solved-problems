@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(alphabet) complexity by time and O(alphabet) by space.
+(In this task its like 26 so O(1))
+
+Nice feeling! I started doing the solution in two passes and realized that I could do it in one!
+
+"""
+
+class Solution:
+    def checkDistances(self, s: str, distance: List[int]) -> bool:
+        dist = {}
+        size = len(s)
+        for elem in range(size):
+            if dist.get(s[elem]) is None:
+                dist[s[elem]] = elem
+            else:
+                dist[s[elem]] = elem - dist[s[elem]] - 1
+                if distance[ord(s[elem]) - 97] != dist[s[elem]]:
+                    return False
+        return True
