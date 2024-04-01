@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This programm has O(n + m) complexity by speed and O(n + m) by space. Where n is are number of word in words1 and m in words2.
+
+After thinking a little, I came to this, but it seems to me that I’m spreading things unnecessarily.
+
+"""
+
+class Solution:
+    def countWords(self, words1: List[str], words2: List[str]) -> int:
+        answer = 0
+        d_w1, d_w2 = Counter(words1), Counter(words2)
+        for elem in set(d_w1 + d_w2):
+            if d_w1[elem] == 1 and d_w2[elem] == 1:
+                answer += 1
+        return answer
+
+
+# Cool one, sameidea
+class Solution:
+    def countWords(self, words1: List[str], words2: List[str]) -> int:        
+        counts1 = Counter(words1)
+        counts2 = Counter(words2)
+        return sum( counts1[key] == counts2[key] == 1 for key in counts1 )
