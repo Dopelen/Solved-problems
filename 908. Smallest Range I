@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This programm has O(n) complexity by speed and O(1) by space.
+
+While I was thinking about this problem, I was swinging on a chair, fell out of it and bent the chair. Maybe that's why the decision turned out so good.
+
+"""
+
+class Solution:
+    def smallestRangeI(self, nums: List[int], k: int) -> int:
+        mi, ma = min(nums), max(nums)
+        if ma - mi < k * 2 or ma == mi:
+            return 0
+        return (ma - k) - (mi + k) 
+
