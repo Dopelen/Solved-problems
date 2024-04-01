@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This programm has O(n) complexity by speed and O(1) by space.
+
+When I was renaming the variable "chok" into "chock", I accidentally put additional "c" in Russian. Madness was near.
+
+"""
+
+class Solution:
+    def buyChoco(self, prices: List[int], money: int) -> int:
+        chock_1, chock_2 = prices[0], prices[1]
+        for ch in prices[2:]:
+            if ch < chock_1 or ch < chock_2:
+                chock_2 = min(chock_1, chock_2)
+                chock_1 = ch
+        return money - (chock_1 + chock_2) if chock_1 + chock_2 <= money else money
