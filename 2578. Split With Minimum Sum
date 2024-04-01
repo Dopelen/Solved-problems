@@ -1,0 +1,35 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This programm has O(n(log(n))) complexity by speed (bc of sorting str) O(n) by space. Where n is are len(num).
+(it is possible just log(n): https://leetcode.com/problems/split-with-minimum-sum/solutions/3256119/java-python-3-greedy-sort-then-concatenate-digits-even-and-odd-indices/)
+
+It looks like there are a lot of lines, but in reality it is a simple operation.
+
+"""
+
+class Solution:
+    def splitNum(self, num: int) -> int:
+        num = str(num)
+        num1, num2 = str(), str()
+        first = True
+        for digit in sorted(num):
+            if digit != "0":
+                if first:
+                    num1 += digit
+                    first = False
+                else:
+                    num2 += digit
+                    first = True
+        if not num1:
+            return int(num2)
+        elif not num2:
+            return int(num1)
+        return int(num1) + int(num2)
+
+
+# Godlike lvl
+class Solution:
+    def splitNum(self, num: int) -> int:
+        num = ''.join(sorted(str(num)))
+        return sum(map(int, (num[::2], num[1::2])))
+# https://leetcode.com/problems/split-with-minimum-sum/solutions/3256119/java-python-3-greedy-sort-then-concatenate-digits-even-and-odd-indices/
