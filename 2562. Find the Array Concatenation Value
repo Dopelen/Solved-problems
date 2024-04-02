@@ -1,0 +1,36 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Finally managed to use mirror indexes!
+It turned out that there are no mirror indexes. Python uses "two's complement" to reflect negative numbers. 
+Negative numbers in "two's complement" are positive numbers in which all the bits are inverted and one is added to the result. 
+For example, the inverse of 1 is (00000001). Adding 1 to the inverted number gives the result (00000010), which in binary represents -2. 
+This noticeably results in the inversion of zero represented as (11111111) in binary. 
+Consequently, when the inversion operation ~i is applied to 0, the resulting value is -1, which intriguingly corresponds to the last element when using negative indexing in Python. 
+So this is not built-in functionality, just an interesting find.
+
+"""
+
+class Solution:
+    def findTheArrayConcVal(self, nums: List[int]) -> int:
+        size = len(nums)
+        nums = list(map(str, nums))
+        answer = 0
+        odd = size % 2
+        for i in range(size//2):
+            answer += int(nums[i] + nums[~i])
+        if odd:
+            answer += int(nums[size//2])
+        return answer
+
+# Code from local genius
+def findTheArrayConcVal(nums) -> int:
+    size = len(nums)
+    answer = 0
+    odd = size % 2
+    for i in range(size // 2):
+        answer += nums[i] * (10 ** (len(str(nums[~i])))) + nums[~i]
+    if odd:
+        answer += nums[size // 2]
+    return answer
