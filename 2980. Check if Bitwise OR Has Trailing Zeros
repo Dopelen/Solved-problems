@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Bitwise operations are not part of my daily routine, so I always solve these problems at a high school level.
+Don't judge me!
+
+"""
+
+class Solution:
+    def hasTrailingZeros(self, nums: List[int]) -> bool:
+        temp = int(bin(nums[0])[-1])
+        lead_z = 0
+        for elem in nums[1:]:
+            if int(bin(elem)[-1]) == 0:
+                lead_z += 1
+            if lead_z >= 2 or temp | int(bin(elem)[-1]) == 0:
+                return True
+        return False 
+
+# without bit (not mine(https://leetcode.com/problems/check-if-bitwise-or-has-trailing-zeros/solutions/4481050/even-numbers-o-n-video-solution/))
+class Solution:
+    def hasTrailingZeros(self, nums: List[int]) -> bool:
+        even = 0
+        for n in nums:
+            if n%2 == 0: 
+                even += 1      
+		return even>=2
