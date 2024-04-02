@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+I posted solution for this problem:
+https://leetcode.com/problems/can-make-arithmetic-progression-from-sequence/solutions/4963227/we-don-t-need-sorting-we-can-do-it-in-linear-time-o-n-o-n/
+
+This program has O(n) complexity by time and O(n) by space.
+
+He knew what was possible over the line and did it over the line!
+Suddenly I thought of a hash table.
+
+"""
+
+class Solution:
+    def canMakeArithmeticProgression(self, arr: List[int]) -> bool:
+        check = defaultdict(int)
+        size = len(arr)
+        start, finish = min(arr), max(arr)
+        diff = (finish - start) / (size - 1)
+        for elem in arr:
+            check[elem] += 1
+        for elem in range(size):
+            if check[start] == 0:
+                return False
+            start += diff
+        return True
