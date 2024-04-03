@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I'm sure it can be prettier, but I'm having trouble thinking today.
+
+"""
+
+class Solution:
+    def greatestLetter(self, s: str) -> str:
+        alphabet = {ord(symbol):True for symbol in s}
+        answer = "!"
+        for elem in set(s):
+            ans = "!"
+            if ord(elem) <= 90 and alphabet.get(ord(elem) + 32) is not None:
+                ans = elem
+            elif ord(elem) >= 97 and alphabet.get(ord(elem) - 32) is not None:
+                ans = chr(ord(elem) - 32)
+            if ans > answer:
+                answer = ans 
+        return "" if answer == "!" else answer
+
+# This solution looks nice, but does not avoid repeated checks
+class Solution:
+    def greatestLetter(self, s: str) -> str:
+        a = [x for x in s if x.upper() in s and x.lower() in s] + [""]
+        return max(a).upper()
