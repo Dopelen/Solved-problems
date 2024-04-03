@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+I wanted to do it without sorting, but nothing came to mind.
+
+"""
+
+# My initial idea
+class Solution:
+    def minimumAbsDifference(self, arr: List[int]) -> List[List[int]]:
+        arr.sort()
+        prev = arr[1]
+        dif = arr[1] - arr[0]
+        for elem in arr[2:]:
+            if elem - prev < dif:
+                dif = elem - prev
+            prev = elem
+        di_val = {elem: True for elem in arr}
+        return sorted([[elem, elem + dif] for elem in arr if di_val.get(elem + dif) is not None], key = lambda x: x[0])
+
+# Upgraded version (for some reason its significantly slower then first one idk why)
+class Solution:
+    def minimumAbsDifference(self, arr: List[int]) -> List[List[int]]:
+        arr.sort()
+        m_dif = math.inf
+        dic = defaultdict(list)
+        size = len(arr) - 1
+        for ind in range(size):
+            dif = arr[ind+1] - arr[ind]
+            dic[dif].append([arr[ind], arr[ind+1]])
+            m_dif = min(m_dif, dif)
+        return dic[m_dif]
+
+# 4 lines (not mine)
+class Solution:
+    def minimumAbsDifference(self, A):
+        A.sort()
+        D      = [ A[i+1]-A[i] for i in range(len(A)-1) ]
+        target = min(D)
+        return [ [ A[i] , A[i+1] ] for i,d in enumerate(D) if d==target ]
