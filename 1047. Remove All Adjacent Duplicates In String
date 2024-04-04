@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I just use stack.
+
+"""
+
+class Solution:
+    def removeDuplicates(self, s: str) -> str:
+        stack = []
+        for elem in s:
+            if stack and stack[-1] == elem:
+                stack.pop()
+            else:
+                stack.append(elem)
+        return "".join(stack)
