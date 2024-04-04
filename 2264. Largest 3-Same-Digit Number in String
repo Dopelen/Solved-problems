@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+its O(n) so I'm fine with it.
++ its not check 3 times every symbol.
+
+"""
+
+class Solution:
+    def largestGoodInteger(self, num: str) -> str:
+        answer, stack = -1, []
+        for elem in num:
+            if stack and elem == stack[-1]:
+                stack.append(elem)
+                if len(stack) == 3 and int(stack[0]) > answer:
+                    answer = int(stack[0])
+                    stack.clear()
+            else:
+                stack.clear()
+                stack.append(elem)
+        return str(answer) * 3 if answer != -1 else ""
