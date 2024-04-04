@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+I transformed the original list so as not to waste extra memory, but at the same time I created a huge number of dictionaries and sets, classic.
+
+"""
+
+class Solution:
+    def relativeSortArray(self, arr1: List[int], arr2: List[int]) -> List[int]:
+        freq_1 = Counter(arr1)
+        unic = set(arr1) - set(arr2)
+        ind = 0
+        for elem in arr2:
+            for fr in range(freq_1[elem]):
+                arr1[ind] = elem
+                ind += 1
+        for uni in sorted(unic):
+            for fr_2 in range(freq_1[uni]):
+                arr1[ind] = uni
+                ind += 1
+        return arr1   
