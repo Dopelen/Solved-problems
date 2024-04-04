@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Unfortunately, I couldn’t figure out the thread without googling, but in the end I even understood something.
+
+"""
+
+import threading
+
+class Foo:
+    def __init__(self):
+        self.event1 = threading.Event()
+        self.event2 = threading.Event()
+
+    def first(self, printFirst: 'Callable[[], None]') -> None:
+        printFirst()
+        self.event1.set()
+
+    def second(self, printSecond: 'Callable[[], None]') -> None:
+        self.event1.wait()
+        printSecond()
+        self.event2.set()
+
+    def third(self, printThird: 'Callable[[], None]') -> None:
+        self.event2.wait()
+        printThird()
