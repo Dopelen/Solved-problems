@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I came out with a beautiful and neat code that I’m happy with.
+
+"""
+
+class Solution:
+    def areNumbersAscending(self, s: str) -> bool:
+        prev = None
+        s = s.split()
+        for symbol in s:
+            if symbol.isdigit():
+                if prev and int(symbol) <= prev:
+                    return False
+                else:
+                    prev = int(symbol)
+        return True
