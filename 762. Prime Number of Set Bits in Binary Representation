@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+It would be possible to write an algorithm for searching for prime numbers, but the maximum number of bits with which numbers can be encoded is within the limits of ~20, 
+so we need prime numbers in the range from 2 to 20, so it’s easier to use them as a separate list.
+
+"""
+
+class Solution:
+    def countPrimeSetBits(self, left: int, right: int) -> int:
+        answer = 0
+        first_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23]
+        for num in range(left, right + 1):
+            if bin(num).count("1") in first_primes:  # num.bit_count() also option
+                answer += 1
+        return answer
+
+
+# One-line (O(n) space because of iterator)
+class Solution:
+    def countPrimeSetBits(self, left: int, right: int) -> int:
+        first_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23]
+        return sum(1 for num in range(left, right + 1) if bin(num).count("1") in first_primes)
