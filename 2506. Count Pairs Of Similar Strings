@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space. (I would say that the complexity is O(n) because transformations to sets can potentially only reduce the amount of data we are working with)
+
+Initially, I was tooooo clever with the formula -> got upset -> went to Google the formula for the number of non-repeating combinations -> found what I needed -> everything fell into place.
+
+P.S: in this task, I would really need "sets" as dictionary keys, and then a voice in my head said “remember the lectures...”. 
+Yes, sets are very useful, but they are not hashable and belong to mutable data types, oh, if only we had hashable sets... spoiler (they exist). 
+I figured in my head that if frozen sets are immutable, then they must have a hash method, which means they can be dictionary keys, that’s how it all turned out. I'm happy and enjoying the beautiful code.
+
+"""
+
+class Solution:
+    def similarPairs(self, words: List[str]) -> int:
+        set_w = list(map(frozenset, words))
+        answer_di = defaultdict(int)
+        for elem in set_w:
+            answer_di[elem] += 1
+        print(answer_di)
+        return int(sum( v * (v - 1) / 2 for k, v in answer_di.items() if v > 1))
