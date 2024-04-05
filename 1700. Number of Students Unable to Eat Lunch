@@ -5,23 +5,18 @@ https://leetcode.com/problems/number-of-students-unable-to-eat-lunch/solutions/4
 
 This program has O(n) complexity by time and O(1) by space.
 
-I don't like the bulk of the code, but overall, I caught the deadlock condition that needed to be caught.
-And avoided endless iterations!
+I caught the deadlock condition that needed to be caught and avoided endless iterations!
 
 """
 
 class Solution:
     def countStudents(self, students: List[int], sandwiches: List[int]) -> int:
         st_cou = Counter(students)
-        sw_cou = Counter(sandwiches)
-        size = len(students)
-        if st_cou[0] == sw_cou[0] and st_cou[1] == sw_cou[1]:
-            return 0
+        size = ind = len(students)
         for step in range(size):
             cur = sandwiches[step]
-            if sw_cou[cur] != st_cou[cur] and  sw_cou[cur] ==  0 or st_cou[cur] == 0:
+            if st_cou[cur] == 0:
                 ind = step
                 break
-            sw_cou[cur] -= 1
             st_cou[cur] -= 1
         return size - ind
