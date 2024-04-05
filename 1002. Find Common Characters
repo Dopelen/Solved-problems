@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space. Where n number of words and m max(len(word)).
+
+Today is a day of swings between madness and genius. 
+Obviously I went too far here with madness and different dictionaries, while the solution was normal in 3 lines
+
+"""
+
+# Original solution (idk that &= exist for Counter and the &= operator takes the minimum counter when combining, learn...)
+class Solution:
+    def commonChars(self, words: List[str]) -> List[str]:
+        freq_d, common = Counter(words[0]), set(words[0])
+        for word in words[1:]:
+            common &= set(word)
+            check = Counter(word)
+            for symbol in word:
+                if symbol in common:
+                    freq_d[symbol] = min(freq_d[symbol], check[symbol]) if freq_d[symbol] != 0 else check[symbol]
+        return [elem for elem in freq_d for count in range(freq_d[elem]) if elem in common]
+
+# Sober one
+class Solution:
+    def commonChars(self, words: List[str]) -> List[str]:
+        freq_d = Counter(words[0])
+        for word in words[1:]:
+            freq_d &= Counter(word)
+        return list(freq_d.elements())
+
+
