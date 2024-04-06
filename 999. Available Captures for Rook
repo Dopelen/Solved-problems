@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(m) by space. Where n = len(matrix) and m = len(matrix[0]). (n == m In this problem)
+
+The matrices strike back.
+At first I wanted to iterate over everything in the world, but in the end I realized that I could simplify the code by only iterating horizontally and vertically from the found shape.
+The solution still turned out to be large and not neat, but the matrices were defeated.
+
+"""
+
+class Solution:
+    def numRookCaptures(self, board: List[List[str]]) -> int:
+        def check(row):
+            ans_status, answer, second_stage = False, 0, False
+            while row:
+                cur = row.popleft()
+                if cur != ".":
+                    if cur == "p":
+                        ans_status = True
+                        if second_stage:
+                            answer += 1
+                            break
+                    elif cur == "B":
+                        ans_status = False
+                        if second_stage:
+                            break
+                    elif cur == "R":
+                        if ans_status:
+                            answer += 1
+                        second_stage = True
+            return answer
+
+        lenght = height = len(board)
+        for row in range(height):
+            for elem in range(lenght):
+                if board[row][elem] == "R":
+                    hor = collections.deque(board[row])
+                    vert = collections.deque([board[ind][elem] for ind in range(height)])
+                    break
+        return check(hor) + check(vert)
