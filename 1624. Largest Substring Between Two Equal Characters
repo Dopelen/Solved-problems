@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2)/(O(n)) complexity by time and O(n) by space.
+
+I started solving it through dictionaries, got confused, solved it head-on and returned to the dictionaries. 
+Here are the solutions.
+
+"""
+
+# Bad one. O(n ** 2)
+class Solution:
+    def maxLengthBetweenEqualCharacters(self, s: str) -> int:
+        size = len(s) - 1
+        processed = set()
+        answer = -1
+        for elem in range(size):
+            if s[elem] in processed:
+                continue
+            point_2 = size
+            while elem != point_2:
+                if s[elem] == s[point_2]:
+                    answer = max(answer, (point_2 - elem - 1))
+                point_2 -= 1
+            processed.add(s[elem])
+        return answer
+
+# Good one. Quadratic time does not suit me! O(n)
+class Solution:
+    def maxLengthBetweenEqualCharacters(self, s: str) -> int:
+        size = len(s)
+        processed = defaultdict(list)
+        answer = -1
+        for elem in range(size):
+            processed[s[elem]].append(elem)
+        for k,v in processed.items():
+            if len(v) > 1:
+                current = v[-1] - v[0] - 1
+                answer = answer if answer > current else current
+        return answer  
