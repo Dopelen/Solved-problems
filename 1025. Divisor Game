@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+I immediately realized that there was a catch here! And I quickly found him.
+
+"If Alice has an even number, she can always subtract 1, giving Bob an odd number. 
+Odd numbers are not divisible by 2. They are only divisible by odd numbers. 
+Hence Bob must subtract an odd number. Since odd minus odd is even, Bob will always return an even number to Alice. 
+Alice will thus get a smaller even number after each round of play and Bob will get a smaller odd number after each round of play. 
+Eventually Bob will have to play the number 1 and will lose the game since he will have no options.
+"
+- Junaid Mansuri
+(LeetCode ID)@hotmail.com
+
+"""
+
+class Solution:
+    def divisorGame(self, n: int) -> bool:
+        return n % 2 == 0
