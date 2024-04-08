@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(len(n)) complexity by time and O(len(n)) by space.
+
+I like these types of tasks. Simple request, little catch inside.
+
+"""
+
+class Solution:
+    def alternateDigitSum(self, n: int) -> int:
+        num = list(map(int, list(str(n))))
+        return sum(num[ind] if ind % 2 == 0 else -num[ind] for ind in range(len(num)))
