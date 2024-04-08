@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I used the list in the answer to reduce the use of cumbersome formulas in the code. 
+In addition, this way we can quickly access the value (although we are not asked to do this).
+
+"""
+
+class Solution:
+    def nearestValidPoint(self, x: int, y: int, points: List[List[int]]) -> int:
+        min_d = [-1, math.inf]
+        for ind in range(len(points)):
+            if (points[ind][0] == x or points[ind][1] == y):
+                dist = abs(points[ind][0] - x) + abs(points[ind][1] - y)
+                if min_d[0] == -1 or dist < min_d[1]:
+                    min_d = [ind, dist]
+        return min_d[0]
