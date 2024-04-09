@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Simple set intersection.
+
+P.S: hash table with frozenset keys is also a possibility.
+
+"""
+
+# FirstMove
+class Solution:
+    def intersection(self, nums: List[List[int]]) -> List[int]:
+        start = set(nums[0])
+        for elem in nums[1:]:
+            start &= set(elem)
+        return sorted(start)
+
+# One line
+class Solution:
+    def intersection(self, nums: List[List[int]]) -> List[int]:
+        return sorted(set.intersection(*(set(elem) for elem in nums)))
