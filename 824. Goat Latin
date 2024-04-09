@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n)(with big hiden constant bc it's rise with amount of words in s) by space.
+
+It was strange.
+
+"""
+
+class Solution:
+    def toGoatLatin(self, sentence: str) -> str:
+        vovel = {"a", "e", "i", "o", "u", "A", "E", "I", "O", "U"}
+        list_s = sentence.split()
+        size = len(list_s)
+        for elem in range(size):
+            if list_s[elem][0] not in vovel:
+                list_s[elem] = list_s[elem][1:] + list_s[elem][0]
+            list_s[elem] += "ma" + ("a" * (elem + 1))
+        return " ".join(list_s) 
+
