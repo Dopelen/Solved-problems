@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+Instead of showing off, I decided to keep it simple first.
+Just check every pair...
+But its slow...
+
+P.S: You can solve it with Bucket sort (O(n))
+
+"""
+
+# O(n ** 2) complexity by time and O(n) by space.
+class Solution:
+    def findTheDistanceValue(self, arr1: List[int], arr2: List[int], d: int) -> int:
+        answer = 0
+        min_arr2, max_arr2 = min(arr2), max(arr2)
+        for elem in arr1:
+            breaked = False
+            for elem_ in arr2:
+                if abs(elem - elem_) <= d:
+                    breaked = True
+                    break
+            if not breaked:
+                answer += 1
+        return answer
+
+# O(n(log(n))) speed up with bisect
+class Solution:
+    def findTheDistanceValue(self, arr1: List[int], arr2: List[int], d: int) -> int:
+        answer = 0
+        size = len(arr2)
+        arr2 = sorted(arr2)
+        for elem in arr1:
+            right, left = bisect(arr2, elem) - 1, bisect_left(arr2, elem)
+            if abs(elem - arr2[right - (right == size)]) > d and abs(elem - arr2[left - (left == size)]) > d:
+                answer += 1
+        return answer
