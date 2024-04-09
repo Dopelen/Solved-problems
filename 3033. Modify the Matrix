@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space, where n = len(matrix[0]), m = len(matrix).
+
+Great! I decided in two passes.
+
+"""
+
+class Solution:
+    def modifiedMatrix(self, matrix: List[List[int]]) -> List[List[int]]:
+        maxi_col = defaultdict(int)
+        for_change = []
+        size = len(matrix)
+        for elem in range(len(matrix[0])):
+            ind, local_max = 0, -1
+            while ind != size:
+                if matrix[ind][elem] == -1:
+                    for_change.append([ind, elem])
+                local_max = max(local_max, matrix[ind][elem])
+                ind += 1
+            maxi_col[elem] = local_max
+        for elem in for_change:
+            matrix[elem[0]][elem[1]] = maxi_col[elem[1]]
+        return matrix
