@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I started solving it using dictionaries, but then I realized that the interface could be made simpler.
+
+"""
+
+class Solution:
+    def findMaxK(self, nums: List[int]) -> int:
+        answer = -1
+        set_nums = set(nums)
+        for elem in set_nums:
+            if -elem in set_nums:
+                answer = max(elem, answer)
+        return answer
