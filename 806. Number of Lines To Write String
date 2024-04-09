@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(alphabet) by space.
+
+Nice tricky puzzle.
+
+"""
+
+class Solution:
+    def numberOfLines(self, widths: List[int], s: str) -> List[int]:
+        alpha = {chr(97 + i):widths[i] for i in range(26)}
+        lines = 1
+        current = 0
+        for elem in s:
+            if current + alpha[elem] > 100:
+                lines += 1
+                current = 0
+            current += alpha[elem]
+        return [lines, current]
