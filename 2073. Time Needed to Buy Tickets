@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n)(bc of iterator in output) by space.
+
+I like how I solved the problem, but I’m haunted by the k + 1 in the output, which would fly out of range if the tests were better.
+
+"""
+
+class Solution:
+    def timeRequiredToBuy(self, tickets: List[int], k: int) -> int:
+        if tickets[k] == 1:
+            return k + 1
+        size = len(tickets)
+        base = size * tickets[k]
+        for elem in range(size): 
+            base -= tickets[k] - tickets[elem] if tickets[elem] < tickets[k] else 0
+        return base - sum(1 for elem in tickets[k+1:] if elem >= tickets[k])
