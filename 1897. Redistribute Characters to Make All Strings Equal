@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+If we can transfer as much as we want, the only thing that worries us is whether it is possible to equally divide all the letters between the number of words that are given to us.
+
+"""
+
+class Solution:
+    def makeEqual(self, words: List[str]) -> bool:
+        size = len(words)
+        check = Counter("".join(words))
+        for elem in check:
+            if check[elem] % size != 0:
+                return False
+        return True    
