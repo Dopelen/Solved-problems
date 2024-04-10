@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Warm up!
+
+"""
+
+class Solution:
+    def distributeCandies(self, candyType: List[int]) -> int:
+        candy_dif = len(set(candyType))
+        candy_size = len(candyType)//2
+        return candy_dif if candy_dif < candy_size else candy_size
+#       return min(candy_dif, candy_size)
+
+# Cringe one-line
+class Solution:
+    def distributeCandies(self, candyType: List[int]) -> int:
+        return len(set(candyType)) if len(set(candyType)) < len(candyType)//2 else len(candyType)//2
