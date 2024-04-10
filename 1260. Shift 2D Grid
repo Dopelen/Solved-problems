@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space (where n is number of rows and m is number of columns)
+
+I quickly understood the principle, but got a little stuck in the subtleties. 
+Another day, another matrix.
+
+"""
+
+class Solution:
+    def shiftGrid(self, grid: List[List[int]], k: int) -> List[List[int]]:
+        row, col = len(grid), len(grid[0])
+        size = row * col
+        new_m = [[0 for elem in range(col)] for elem_ in range(row)]
+        for r in range(row):
+            for c in range(col):
+                n_pos = (r * col + c + k) % size
+                n_r = n_pos // col
+                n_c = n_pos % col
+                new_m[n_r][n_c] = grid[r][c]
+        return new_m
