@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+For some reason this task was hard for me, especially the final part with counting combinations.
+
+"""
+
+class Solution:
+    def countVowelSubstrings(self, word: str) -> int:
+        answer = 0
+        first_ind = 0
+        key_ = ('a', 'e', 'i', 'o', 'u')
+        key_ind = {}
+        for ind, c in enumerate(word):
+            if c in key_:
+                if not key_ind:
+                    first_ind = ind       
+                key_ind[c] = ind
+                if len(key_ind) == 5:
+                    answer += min(key_ind.values()) - first_ind + 1 
+            elif key_ind:
+                key_ind = {}  
+        return answer   
+
