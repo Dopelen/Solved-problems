@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space, where n - number of words in (s1 + s2).
+
+Two dictionaries, a complete list of words, no frills
+
+"""
+
+class Solution:
+    def uncommonFromSentences(self, s1: str, s2: str) -> List[str]:
+        answer = []
+        unic = Counter(s1.split() + s2.split())
+        for k, v in unic.items():
+            if v == 1:
+                answer.append(k)
+        return answer
+
+# Even clearer with one-line
+class Solution:
+    def uncommonFromSentences(self, A: str, B: str) -> List[str]:
+        return [k for k, v in Counter(A.split() + B.split()).items() if v == 1]
+# https://leetcode.com/problems/uncommon-words-from-two-sentences/solutions/453674/accepted-python3-one-liner-using-counter-from-collections/
