@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space, where n - number of rows and m - number of columns.
+
+It was a little boring, but overall it went well. I decided to do it through a closure, it seems relatively clear 
+(I hope I’ll think the same way, even after I look at other solutions)
+(meh...There is a solution that is less clear to me, but more compact)
+
+"""
+
+class Solution:
+    def imageSmoother(self, img: List[List[int]]) -> List[List[int]]:
+        size_r, size_c = len(img), len(img[0])
+
+        def new_val(row, col):
+            b_t = True if row == 0 else False
+            b_b = True if row == size_r - 1 else False
+            b_l = True if col == 0 else False
+            b_r = True if col == size_c - 1 else False
+            top = center = bot = 0
+            cells = 1 + (not b_l) + (not b_r) + (not b_t) + (not b_b) + (not b_l and not b_t) + (not b_r and not b_t) + (not b_l and not b_b) + (not b_r and not b_b)
+            if not b_t:
+                top += img[row - 1][col] + (img[row - 1][col - 1] if not b_l else 0) + (img[row - 1][col + 1] if not b_r else 0)
+            center += img[row][col] + (img[row][col - 1] if not b_l else 0) + (img[row][col + 1] if not b_r else 0)
+            if not b_b:
+                bot += img[row + 1][col] + (img[row + 1][col - 1] if not b_l else 0) + (img[row + 1][col + 1] if not b_r else 0)
+            return (top + center + bot) // cells
+
+        new_img = [[0 for elem in range(size_c)] for el_ in range(size_r)]
+        for row in range(size_r):
+            for col in range(size_c):
+                new_img[row][col] = new_val(row, col)
+        return new_img
