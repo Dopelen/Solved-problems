@@ -1,0 +1,50 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I created a hash function that does not have any of the benefits of hash functions, and it was phenomenally slow.
+
+"""
+
+# He-He
+class MyHashSet:
+    def __init__(self):
+        self.l = []
+        self.size = 0   
+    def add(self, key: int) -> None:
+        if key not in self.l:
+            self.l.append(key)
+            self.size += 1
+    def remove(self, key: int) -> None:
+        self.l = [elem for elem in self.l if elem != key]
+        self.size = len(self.l)          
+    def contains(self, key: int) -> bool:
+        if key in self.l:
+            return True
+        return False
+
+# Human solution with _hash method.
+# it is enough to write your own from the section “the remainder of dividing the numerical representation of a key by some number (key % 1001)” 
+# and write down the shifts when hashes intersect.
+
+class MyHashSet:
+    def __init__(self):
+        self.size = 1001
+        self.buckets = [[] for elem in range(self.size)]
+
+    def add(self, key: int) -> None:
+        index = self._hash(key)
+        if key not in self.buckets[index]:
+            self.buckets[index].append(key)
+
+    def remove(self, key: int) -> None:
+        index = self._hash(key)
+        if key in self.buckets[index]:
+            self.buckets[index].remove(key)
+
+    def contains(self, key: int) -> bool:
+        index = self._hash(key)
+        return key in self.buckets[index]
+
+    def _hash(self, key: int) -> int:
+        return key % self.size
