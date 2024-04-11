@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n) by space, where n - number of words and m - max lenght of word.
+
+Having decided without regular expressions, it turned out slowly and went to redo it.
+
+"""
+
+# Clear one
+class Solution:
+    def numUniqueEmails(self, emails: List[str]) -> int:
+        dic_ans = defaultdict(int)
+        for mail in emails:
+            cur_mail = ""
+            size = len(mail)
+            plus = False
+            for i in range(size):
+                if mail[i] == "@":
+                    end = i
+                    break
+                elif mail[i] == "." or plus:
+                    continue
+                elif mail[i] == "+":
+                    plus = True
+                else:
+                    cur_mail += mail[i]
+            cur_mail = cur_mail + mail[i:]
+            dic_ans[cur_mail] += 1
+        return len(dic_ans)   
+
+# First one wasnt clear...
+class Solution:
+    def numUniqueEmails(self, emails: List[str]) -> int:
+        dic_ans = defaultdict(int)
+        for mail in emails:
+            local, domain = mail.split('@')
+            local = local.split('+')[0].replace('.',"")
+            dic_ans[local + "@" + domain] += 1
+        return len(dic_ans)
