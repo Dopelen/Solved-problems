@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+According to statistics, every 9th task is understood incorrectly by me. This was one of them.
+I solve this and then... there was a woke moment!
+
+"""
+
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        size = len(nums)
+        check = {elem:1 for elem in nums}
+        return next(el for el in range(size + 1) if check.get(el) is None)
+
+
+# My woke one-line solution!
+# The idea was to save memory, but unfortunately the generator also takes up memory equal to the list, so in this regard I was hoping for a better result.
+# Anyway I like this solution more! 
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        return sum(elem for elem in range(len(nums) + 1)) - sum(nums)
