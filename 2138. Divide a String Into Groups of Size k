@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A bit of masterful code with slices! I had to look for an additional function for splitting lines, I hope the time will come when I can do this without cheat sheets.
+
+"""
+
+class Solution:
+    def divideString(self, s: str, k: int, fill: str) -> List[str]:
+        almost_answer = [s[i:i+k] for i in range(0, len(s), k)]
+        almost_answer[-1] = almost_answer[-1] + fill * (k - len(almost_answer[-1]))
+        return almost_answer  
