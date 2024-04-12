@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(m)) ((where n is number which equal amount of numbers we have to processed and m is number of digits in n, log(n) here bc we have to convert int into str, it takes log(n) time)) complexity by time and O(n) by space.
+
+This task is cursed. 
+The example given is SPECIFICALLY misleading so that you misunderstand the task. 
+I fiddled with this for an hour, and then solved it in 4 minutes. 
+And I learned nothing new, except that a poorly written assignment can waste hundreds of hours.
+
+"""
+
+class Solution:
+    def countLargestGroup(self, n: int) -> int:
+        group = defaultdict(list)
+        cur = 0
+        for elem in range(1,n+1):
+            code = sum(int(digit) for digit in str(elem))
+            group[code].append(elem)
+        max_ = 0
+        for v in group.values():
+            max_ = max(max_, len(v))
+        return sum(1 for v in group.values() if len(v) == max_)
+
