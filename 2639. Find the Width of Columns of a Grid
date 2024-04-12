@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The difficulty of this task is to understand what they want from you.
+
+"""
+
+class Solution:
+    def findColumnWidth(self, grid: List[List[int]]) -> List[int]:
+        height, width = len(grid), len(grid[0])
+        len_count = {col:0 for col in range(width)}
+        for row in range(height):
+            for col in range(width):
+                len_count[col] = max(len_count[col], len(str(grid[row][col])))
+        return [len_count[c] for c in range(width)]
