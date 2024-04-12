@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(log(n)) by space.
+
+I learned that converting a number to a string has logarithmic complexity and is done by dividing the number based on the number system!
+
+"""
+
+class Solution:
+    def addDigits(self, num: int) -> int:
+        while num -10 >= 0:
+            num = sum(int(elem) for elem in str(num))
+        return num
+
+# More accurate, without any unnecessary transformations
+class Solution:
+    def addDigits(self, num: int) -> int:
+        while num > 9:
+            num = num % 10 + num // 10
+        return num
+
+# Olympic Games (https://www.flyingcoloursmaths.co.uk/a-neat-number-trick-digital-roots-and-modulo-9-arithmetic/) O(1)
+class Solution(object):
+    def addDigits(self, num):
+        if num == 0:
+            return 0
+        return num % 9 or 9
