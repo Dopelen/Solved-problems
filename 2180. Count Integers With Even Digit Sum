@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(len(str(num))) complexity by time and O(the same) by space.
+
+Solved the problem exactly half an hour longer due to num//2 instead of (num - 1)//2.
+And that's equal to 25 minutes more than this task requires.
+
+"""
+
+class Solution:
+    def countEven(self, num: int) -> int:
+        return (num - 1) // 2 if sum(map(int, str(num))) % 2 else num // 2
