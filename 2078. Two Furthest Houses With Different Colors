@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Made a bit of a mess with the edge cases, but got it done pretty quickly!
+
+"""
+
+class Solution:
+    def maxDistance(self, colors: List[int]) -> int:
+        colors_d = defaultdict(int)
+        size = len(colors)
+        for i_1 in range(size):
+            if not colors_d.get(colors[i_1]):
+                template = colors[i_1]
+                for i in range(size - 1, i_1 , -1):
+                    if template != colors[i]:
+                        colors_d[colors[i_1]] = i - i_1
+                        break
+        return max(colors_d.values())
