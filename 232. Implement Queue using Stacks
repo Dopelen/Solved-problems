@@ -1,0 +1,62 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Didn't notice that the task is not to make a two-way queue using stacks, so I made my life a little more difficult of course
+
+"""
+# Overcomplicated version
+class MyQueue:
+
+    def __init__(self):
+        self.size = 0
+        self.peak = []
+        self.pop_ = []
+
+    def push(self, x: int) -> None:
+        self.pop_.append(x)
+        self.size += 1
+
+    def pop(self) -> int:
+        if not self.pop_:
+            self.pop_ = list(reversed(self.peak[:-1]))
+            self.peak = [self.peak[-1]]
+        self.size -= 1
+        return self.pop_.pop()
+
+    def peek(self) -> int:
+        if not self.peak:
+            self.peak = list(reversed(self.pop_[:-1]))
+            self.pop_ = [self.pop_[-1]]
+        self.size -= 1
+        return self.peak.pop()
+
+    def empty(self) -> bool:
+        return bool(self.size)
+
+# Eligible
+class MyQueue:
+
+    def __init__(self):
+        self.size = 0
+        self.peak = []
+        self.pop_ = []
+
+    def push(self, x: int) -> None:
+        self.pop_.append(x)
+        self.size += 1
+
+    def pop(self) -> int:
+        if not self.peak:
+            self.peak = list(reversed(self.pop_[:-1]))
+            self.pop_ = [self.pop_[-1]]
+        self.size -= 1
+        return self.peak.pop() if len(self.peak) > 0 else self.pop_.pop()
+
+    def peek(self) -> int:
+        if not self.peak:
+            return self.pop_[0]
+        return self.peak[-1]
+
+    def empty(self) -> bool:
+        return not bool(self.size)
