@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Cool generators strike again!
+
+"""
+
+class Solution:
+    def digitSum(self, s: str, k: int) -> str:
+        while len(s) > k:
+            s1 = [s[i:i+k] for i in range(0, len(s), k)]
+            s2 = [str(sum(map(int, list(elem)))) for elem in s1]
+            s = "".join(s2)
+        return s
