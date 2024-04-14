@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+it's time to learn itertools and NumPy...
+
+"""
+
+# itertools
+class Solution:
+    def minStartValue(self, nums: List[int]) -> int:
+        pref = list(itertools.accumulate(nums))
+        min_ = min(pref)
+        return abs(min_) + 1 if min_ < 0 else 1
+
+# NumPy
+import numpy as np
+
+class Solution:
+    def minStartValue(self, nums: List[int]) -> int:
+        pref = np.cumsum(nums)
+        min_ = min(pref)
+        return abs(min_) + 1 if min_ < 0 else 1
