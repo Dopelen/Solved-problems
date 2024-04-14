@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The initial idea didn't look optimal, so I decided to improve it.
+
+"""
+
+# Initial idea
+class Solution:
+    def isSubstringPresent(self, s: str) -> bool:
+        size = len(s)
+        pref = Counter([s[i:i+2] for i in range(size)])
+        s = s[::-1]
+        pref_r = Counter([s[i:i+2] for i in range(size)])
+        for elem in pref:
+            if pref_r[elem] != 0 and len(elem) > 1:
+                return True
+        return False
+
+# Upgraded to one pass:
+class Solution:
+    def isSubstringPresent(self, s: str) -> bool:
+        size = len(s)
+        check = defaultdict(int)
+        for i in range(size - 1):
+            cur_el = s[i:i+2]
+            rev_el = cur_el[::-1]
+            if check.get(cur_el) is not None or check.get(cur_el) is not None or cur_el == rev_el:
+                return True
+            else:
+                check[cur_el] += 1
+                check[rev_el] += 1
+        return False
