@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) by time and O(n) by space.
+
+Datetime confusing as always.
+
+"""
+
+from datetime import datetime
+class Solution:
+    def reformatDate(self, date: str) -> str:
+        day_match = re.search(r'\b(\d+)(st|nd|rd|th)\b', date)
+        day = int(day_match.group(1))
+        date_obj = datetime.strptime(date, f"%d{day_match.group(2)} %b %Y")
+        new_date_str = date_obj.strftime("%Y-%m-%d")    
+        return new_date_str
+
+# without datetime:
+class Solution:
+    def reformatDate(self, date: str) -> str:
+        d_t = date.split()
+        months = {name:str(n).zfill(2) for name, n in zip(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], range(1,13))}
+        for i in range(len(d_t[0])-1):
+            if not d_t[0][i].isdigit():
+                d_t[0] = d_t[0][:i].zfill(2)
+                break
+        return "-".join([d_t[2], months[d_t[1]], d_t[0]])
