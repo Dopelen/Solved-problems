@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has:
+O(n) by time for put (where n the number of elements in "bucket"(key)). This is the worst case scenario with many collisions. Its O(1) with good hash-function
+O(n) by time for get (same as put)
+O(n) by time for remove (same as above)
+
+I was able to do almost everything myself, but I made a mistake in handling collisions. 
+Because initially I didn’t store a separate list for each key, but simply shifted the index when a collision occurred.
+
+"""
+
+class MyHashMap:
+    def __init__(self):
+        self.size = 1001
+        self.key = [[] for elem in range(self.size)]
+
+    def hash_(self, k: int) -> int:
+        return k % self.size
+    
+    def put(self, key: int, value: int) -> None:
+        ind = self.hash_(key)
+        for i in range(len(self.key[ind])):
+            if self.key[ind][i][0] == key: 
+                self.key[ind][i] = (key, value)
+                return
+        self.key[ind].append((key, value))
+
+    def get(self, key: int) -> int:
+        ind_ = self.hash_(key)
+        for k, v in self.key[ind_]:
+            if k == key:
+                return v
+        return -1
+
+    def remove(self, key: int) -> None:
+        ind_r = self.hash_(key)
+        for i in range(len(self.key[ind_r])):
+            if self.key[ind_r][i][0] == key:
+                self.key[ind_r].pop(i)
+                return
