@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(1) by space.
+
+To my surprise, my ability to solve matrix problems has improved significantly.
+I'm using a closure to avoid unnecessary data transfer.
+its just some constant checks for every cell.
+
+"""
+
+# Additive solution
+class Solution:
+    def surfaceArea(self, grid: List[List[int]]) -> int:
+        row = len(grid)
+        cul = len(grid[0])
+        answer = 0
+
+        def incr_ans(r, c):
+            left = grid[r][c] if c == 0 else grid[r][c] - grid[r][c - 1] if grid[r][c - 1] < grid[r][c] else 0
+            right = grid[r][c] if c == cul - 1 else grid[r][c] - grid[r][c + 1] if grid[r][c] > grid[r][c + 1] else 0
+            top = grid[r][c] if r == 0 else grid[r][c] - grid[r - 1][c] if grid[r][c] > grid[r - 1][c] else 0
+            bot = grid[r][c] if r == row - 1 else grid[r][c] - grid[r + 1][c] if grid[r][c] > grid[r + 1][c] else 0
+            ans = left + right + top +  bot + (2 if grid[r][c] != 0 else 0)
+            return ans
+        
+        for ro in range(row):
+            for cu in range(cul):
+                answer += incr_ans(ro, cu)
+        return answer
+
+# Subtractive solution. I solved a previous similar problem this way, so this time I solved it differently.
+# (https://leetcode.com/problems/surface-area-of-3d-shapes/solutions/2329304/simple-python-explained/)
+class Solution:
+    def surfaceArea(self, grid: List[List[int]]) -> int:
+        l = len(grid)
+        area=0
+        for row in range(l):
+            for col in range(l):
+                if grid[row][col]:
+                    area += (grid[row][col]*4) +2
+                if row: #row>0
+                    area -= min(grid[row][col],grid[row-1][col])*2
+                if col: #col>0
+                    area -= min(grid[row][col],grid[row][col-1])*2
+        return area
