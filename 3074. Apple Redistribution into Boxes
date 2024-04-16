@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n(log(n))) complexity by time O(1) by space.
+
+A simple problem to cheer me up a little after the previous humiliation.
+
+"""
+
+class Solution:
+    def minimumBoxes(self, apple: List[int], capacity: List[int]) -> int:
+        sum_ap = sum(apple)
+        capacity.sort(reverse = True)
+        answer = 0
+        for elem in capacity:
+            sum_ap -= elem
+            answer += 1
+            if sum_ap <= 0: break
+        return answer
