@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time O(n) by space.
+
+if you iterate sequentially, then sorting is not needed.
+
+"""
+
+class Solution:
+    def findKDistantIndices(self, nums: List[int], key: int, k: int) -> List[int]:
+        size = len(nums)
+        answer = []
+        ind = []
+        for elem in range(size):
+            if nums[elem] == key:
+                ind.append(elem)
+        for elem in range(size):
+            for elem_ in ind:
+                if abs(elem - elem_) <= k:
+                    answer.append(elem)
+                    break
+        return answer
