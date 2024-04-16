@@ -1,0 +1,31 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time O(1) by space.
+
+Many tears were shed for this task.
+At first I decided for a O(n**2), but the solution did not come on time.
+In the end, the Internet helped me cope.
+The trick was that the number of matching strings was equal to the minimum between the number of ones and zeros in a string of consecutive zeros and ones. 
+So for the sequence 01111 the number of possible pairs is 1, and in 111000 there are three.
+Having understood this, we just need to check strings of consecutive characters, and add to the answer the number of elements that are fewer among zeros and ones in every string.
+
+"""
+
+# (https://leetcode.com/problems/count-binary-substrings/solutions/4479907/python-simple-solution-beats-99/)
+class Solution:
+    def countBinarySubstrings(self, s: str) -> int:
+        last = s[0]
+        curcount = 1
+        prevcount = 0
+        ret = 0
+        for i in s[1:]:
+            if i == last:
+                curcount += 1
+            else:
+                ret += min(curcount, prevcount)
+                prevcount = curcount
+                curcount = 1
+                last = i
+        ret += min(curcount, prevcount)
+        return ret
+
