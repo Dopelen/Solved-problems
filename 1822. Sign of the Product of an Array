@@ -1,5 +1,8 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
+I posted the solution on leetcode!:
+https://leetcode.com/problems/sign-of-the-product-of-an-array/solutions/5037375/python-o-n-o-1-5-lines-easy-to-understand/
+
 This program has O(n) complexity by time and O(1) by space.
 
 I like problems that are solved without calculations.
