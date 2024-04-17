@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I had to rack my brains.
+The trick is that one of the three elements will always be the first element, because otherwise we won't be able to split the whole list into parts!
+
+"""
+
+class Solution:
+    def minimumCost(self, nums: List[int]) -> int:
+        min_1 = nums[0]
+        min_2 = min_3 = math.inf
+        size = len(nums)
+        for i in range(1, size):
+            if nums[i] < min_2:
+                min_3, min_2 = min_2, nums[i]
+            elif nums[i] < min_3:
+                min_3 = nums[i]
+        return min_1 + min_2 + min_3
