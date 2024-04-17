@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+If it weren’t for the condition “not a single code iteration should create a substring of length 1”, it would have been done in 5 minutes. 
+But I ended up solving it in several ways, and I didn’t like them all"""
+
+class Solution:
+    def reformatNumber(self, number: str) -> str:
+        new_n = ''.join(re.split(r'[ -]', number))
+        size = len(new_n)
+        if size%3 == 1:
+            chank,ans = '', []
+            for elem in range(size-4):
+                chank += new_n[elem]
+                if len(chank) == 3:
+                    ans.append(chank)
+                    chank = ''
+            new_n = ans + [new_n[size-4:size-2]] + [new_n[size-2:size]]
+        else:
+            new_n = [new_n[i:i+3] for i in range(0, size, 3)]
+        return '-'.join(new_n)
+
+
