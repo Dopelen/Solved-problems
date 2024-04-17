@@ -1,8 +1,11 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on letcode.
-This program have O(n(log(n))) complexity by time and O(n) by space.
+This program have O(n ** 2) complexity by time (sort + insort) and O(n) by space.
 
-Seems like an ok solution, just use binary search to keep the list sorted"""
+Seems like an ok solution, just use binary search to keep the list sorted
+In general, this problem can be solved in O(n(log(n))) using a heap, but I somehow forgot them.
+
+"""
 
 class Solution:
     def lastStoneWeight(self, stones: List[int]) -> int:
@@ -18,3 +21,20 @@ class Solution:
                 size -= 1
         if len(stones) == 1: return stones[0]
         else: return stones[1] - stones[0]
+
+# heap solution (https://leetcode.com/problems/last-stone-weight/solutions/1921241/python-beginner-friendly-optimisation-process-with-explanation/)
+class Solution:
+    def lastStoneWeight(self, stones: List[int]) -> int:
+        # first, negate all weight values in-place
+        for i, s in enumerate(stones):
+            stones[i] = -s
+        heapify(stones)  # pass all negated values into the min-heap
+        while stones:
+            s1 = -heappop(stones)  # the heaviest stone
+            if not stones:  # s1 is the remaining stone
+                return s1
+            s2 = -heappop(stones)  # the second-heaviest stone; s2 <= s1
+            if s1 > s2:
+                heappush(stones, s2-s1)  # push the NEGATED value of s1-s2; i.e., s2-s1
+            # else s1 == s2; both stones are destroyed
+        return 0  # if no more stones remain
