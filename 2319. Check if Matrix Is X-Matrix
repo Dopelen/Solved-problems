@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(1) by space.
+
+The matrices don't leave me alone...
+
+"""
+
+class Solution:
+    def checkXMatrix(self, grid: List[List[int]]) -> bool:
+        size = len(grid)
+        for r in range(size):
+            dig_l, dig_r = r, size - r - 1  # also you can use here inversion like "= r, ~r", but then be sure to change check below (str 15) to "c == dir_r + size"
+            for c in range(size):
+                if c == dig_l or c == dig_r:
+                    if grid[r][c] == 0:
+                        return False
+                elif grid[r][c] != 0:
+                    return False
+        return True
