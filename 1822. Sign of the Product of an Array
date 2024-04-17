@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I like problems that are solved without calculations.
+
+"""
+
+class Solution:
+    def arraySign(self, nums: List[int]) -> int:
+        pos = True
+        for elem in nums:
+            if elem == 0: return 0
+            if elem < 0: pos = not pos
+        return 1 if pos else -1  
