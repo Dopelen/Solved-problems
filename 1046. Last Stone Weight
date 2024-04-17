@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on letcode.
+This program have O(n(log(n))) complexity by time and O(n) by space.
+
+Seems like an ok solution, just use binary search to keep the list sorted"""
+
+class Solution:
+    def lastStoneWeight(self, stones: List[int]) -> int:
+        size = len(stones)
+        stones.sort()
+        while size > 2:
+            first, second = stones.pop(), stones.pop()
+            if first == second:
+                size -= 2
+            else:
+                first = first - second
+                bisect.insort(stones, first)
+                size -= 1
+        if len(stones) == 1: return stones[0]
+        else: return stones[1] - stones[0]
