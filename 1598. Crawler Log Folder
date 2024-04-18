@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+To find the depth, we simply use a stack!
+
+"""
+
+class Solution:
+    def minOperations(self, logs: List[str]) -> int:
+        stack = []
+        for elem in logs:
+            if stack and elem == "../":
+                stack.pop()
+            elif elem != "./" and elem != '../':
+                stack.append(elem)
+        return len(stack) 
