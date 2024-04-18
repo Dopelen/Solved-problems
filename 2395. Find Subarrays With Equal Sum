@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A simple solution in linear time and memory.
+
+"""
+
+class Solution:
+    def findSubarrays(self, nums: List[int]) -> bool:
+        ans = defaultdict(int)
+        for i in range(len(nums) - 1):
+            if ans.get(nums[i] + nums[i+1]) is not None:
+                return True
+            else: ans[nums[i] + nums[i+1]] += 1
+        return False
