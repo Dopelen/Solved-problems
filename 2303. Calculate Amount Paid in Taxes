@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+It looks like the problem is not imaginary, because while I was trying to understand it, I failed over and over again. It's like calculating the interest rate on a mortgage.
+
+"""
+
+class Solution:
+    def calculateTax(self, brackets: List[List[int]], income: int) -> float:
+        size = len(brackets)
+        i = tax = dif = 0
+        while income != 0 or i != size:
+            to_pay = brackets[i][0] - dif
+            if income > to_pay:
+                tax += to_pay * brackets[i][1] * 0.01
+                income -= to_pay
+            elif income <= to_pay:
+                tax += income * brackets[i][1] * 0.01
+                break
+            dif = brackets[i][0]
+            i += 1
+        return tax
