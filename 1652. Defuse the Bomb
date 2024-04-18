@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A simple solution straight away.
+There is a feeling that the solution could have been made shorter.
+
+"""
+
+class Solution:
+    def decrypt(self, code: List[int], k: int) -> List[int]:
+        size = len(code)
+        ans = [0] * size
+        def decode(ind, k):
+            ans = 0
+            if k > 0:
+                for step in range(k):
+                    ind += 1
+                    if ind == size:
+                        ind = 0
+                    ans += code[ind]
+            elif k < 0:
+                for step in range(abs(k)):
+                    ind -= 1
+                    if ind == -1:
+                        ind = size - 1
+                    ans += code[ind]
+            return ans
+
+        for i in range(size):
+            ans[i] = decode(i, k)
+        return ans
+
+# Fun Solution with double size to avoid out of range while iterating
+# https://leetcode.com/problems/defuse-the-bomb/solutions/936749/pyhton3-beats-100-double-the-code-array/
+    def decrypt(self, code: List[int], k: int) -> List[int]:
+        if k==0: return [0 for i in code]
+        temp = code
+        code = code*2
+        for i in range(len(temp)):
+            if k>0:
+                temp[i] = sum(code[i+1:i+k+1])
+            else:
+                temp[i] = sum(code[i+len(temp)+k:i+len(temp)])
+        return temp
