@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+It seemed that unpacking the arguments into a function would be appropriate here. I'm doing this for the first time.
+
+"""
+
+class Solution:
+    def convertTime(self, current: str, correct: str) -> int:
+        def convert(h,m):
+            return int(h) * 60 + int(m)
+
+        cur, cor =  convert(*current.split(":")), convert(*correct.split(":"))
+        ans = 0
+        dif = cor - cur
+        var = [60, 15, 5]
+        for i in range(3):
+            ans += dif // var[i]
+            dif = dif%var[i]
+        return ans + dif
