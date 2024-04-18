@@ -1,0 +1,44 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(nodes) complexity by time and O(height of the tree, because every recursive call requires memory to store the function's execution state) by space.
+
+In general, I solved quite a lot of problems with trees and in the end I can’t say that I understand them. Rather, I just became less afraid of them.
+
+"""
+
+class Solution:
+    def __init__(self):
+        self.size = 0
+
+    def countNodes(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return self.size
+        self.size += 1
+        self.countNodes(root.left)
+        self.countNodes(root.right)
+        return self.size
+
+
+# Optimal solution in count left and right subtree:
+# https://leetcode.com/problems/count-complete-tree-nodes/solutions/3227589/222-time-95-20-and-space-98-59-solution-with-step-by-step-explanation/
+class Solution:
+  def countNodes(self, root: Optional[TreeNode]) -> int:
+    if not root:
+      return 0
+
+    l = root
+    r = root
+    heightL = 0
+    heightR = 0
+
+    while l:
+      heightL += 1
+      l = l.left
+
+    while r:
+      heightR += 1
+      r = r.right
+
+    if heightL == heightR:  # Root is a complete tree
+      return pow(2, heightL) - 1
+    return 1 + self.countNodes(root.left) + self.countNodes(root.right)
