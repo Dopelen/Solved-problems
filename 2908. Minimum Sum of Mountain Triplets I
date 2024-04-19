@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+When it comes to triplets, it's annoying.
+For me, this is too big a task for an easy level.
+Although I have to admit that the content is more painstaking than complex.
+We calculate the prefixes and suffixes for each of the positions, and then look for the smallest of all the triplets that we get.
+
+"""
+
+
+class Solution:
+    def minimumSum(self, nums: List[int]) -> int:
+        size = len(nums)
+        min_s = float('inf')
+        min_left = [float('inf')] * size
+        min_right = [float('inf')] * size
+
+        for i in range(1, size):
+            min_left[i] = min(nums[i - 1], min_left[i - 1])
+
+        for i in range(size - 2, -1, -1):
+            min_right[i] = min(nums[i + 1], min_right[i + 1])
+
+        for i in range(1, size - 1):
+            if min_left[i] < nums[i] > min_right[i]:
+                temp_sum = min_left[i] + nums[i] + min_right[i]
+                min_s = min(temp_sum, min_s)
+
+        if min_s != float('inf'):
+            return min_s
+        else:
+            return -1
