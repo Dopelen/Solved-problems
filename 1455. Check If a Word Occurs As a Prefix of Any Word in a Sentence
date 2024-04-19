@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * l) where l is the lenght of the prefix complexity by time and O(n) by space.
+
+We can manually iterate character by character, but there is a method "str.startswith()" that can do it for us.
+
+"""
+
+class Solution:
+    def isPrefixOfWord(self, sentence: str, searchWord: str) -> int:
+        sentence = sentence.split()
+        size = len(sentence)
+        for i in range(size):
+            if sentence[i].startswith(searchWord):
+                return i + 1
+        return -1
+
+# Faster and clearer
+class Solution:
+    def isPrefixOfWord(self, sentence: str, searchWord: str) -> int:
+        for i, el in enumerate(sentence.split()):
+            if el.startswith(searchWord):
+                return i + 1
+        return -1
