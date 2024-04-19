@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Fortunately, there is a method for identifying Latin letters. 
+It would be possible to do this identification of characters by their ASCII code, 
+but there is an interval between capitals and small ones from 90 to 97, 
+which requires additional checking and this somehow affects the appearance of the code.
+
+"""
+
+class Solution:
+    def reverseOnlyLetters(self, s: str) -> str:
+        size = len(s) - 1
+        s = list(s)
+        pointer = 0
+        while pointer < size:
+            if s[pointer].isalpha():
+                if s[size].isalpha():
+                    s[pointer], s[size] = s[size], s[pointer]
+                    pointer += 1
+                size -= 1
+            else:
+                pointer += 1
+        return "".join(s)
