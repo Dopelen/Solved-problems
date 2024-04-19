@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+An interesting task in that it switched me from “it’s too easy” to “it’s too difficult” a couple of times.
+I got stuck here for a while because I was looking for the farthest point throughout the entire movement, and not based on the totality of all movements.
+
+"""
+
+class Solution:
+    def furthestDistanceFromOrigin(self, m: str) -> int:
+        return m.count('_') + abs(m.count('R') - m.count('L'))
