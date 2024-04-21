@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+For this task one line looks clear.
+
+"""
+
+class Solution:
+    def capitalizeTitle(self, title: str) -> str:
+        return " ".join([chank.lower() if len(chank) <= 2 else chank.capitalize() for chank in title.split()])
