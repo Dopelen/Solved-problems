@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n) complexity by time and O(n) by space.
+
+The solution can be accelerated by rewriting the formation of counters and many common elements in one cycle.
+
+"""
+
+class Solution:
+    def checkAlmostEquivalent(self, word1: str, word2: str) -> bool:
+        c_w_1 = Counter(word1)
+        c_w_2 = Counter(word2)
+        com = set(word1 + word2)
+        for elem in com:
+            if abs(c_w_1[elem] - c_w_2[elem]) > 3:
+                return False
+        return True
