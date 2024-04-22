@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n) complexity by time and O(n) by space. Time complexity is directly dependent on how many elements we have in a row.
+
+The trick is to use the position of the element as its number to raise to a power
+
+"""
+
+class Solution:
+    def titleToNumber(self, columnTitle: str) -> int:
+        alp = {chr(x):x-64 for x in range(65, 91)}
+        ans = depth = 0      
+        for elem in reversed(columnTitle):
+            val = alp[elem]
+            ans += val * 26 ** depth
+            depth += 1
+        return ans
