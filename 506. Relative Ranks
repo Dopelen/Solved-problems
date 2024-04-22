@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n(log(n))) complexity by time and O(n) by space.
+
+I did it kind of handicraft, but I can’t shake the feeling that it could have been simpler.
+A good way to do this is to use a heap.
+
+"""
+
+class Solution:
+    def findRelativeRanks(self, score: List[int]) -> List[str]:
+        ans = defaultdict(list)
+        size = len(score) - 1
+        score_sor = sorted(score)
+        for i in range(size, -1, -1):
+            if i == size:
+                ans[score_sor[i]].append("Gold Medal")
+            elif i == size - 1:
+                ans[score_sor[i]].append("Silver Medal")
+            elif i == size - 2:
+                ans[score_sor[i]].append("Bronze Medal")
+            else:
+                ans[score_sor[i]].append(str(size + 1 - i))
+        return [ans[elem][0] for elem in score]
