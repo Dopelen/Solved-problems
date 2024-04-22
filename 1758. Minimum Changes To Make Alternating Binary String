@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n) complexity by time and O(1) by space.
+
+Initially I wrote a lot of code, but after some thought I managed to shorten it. The feeling is that this is almost always possible when you test two opposite conditions.
+
+"""
+
+class Solution:
+    def minOperations(self, s: str) -> int:
+        check = ans_1 = ans_2 = 0
+        for i in range(len(s)):
+            if int(s[i]) != check: 
+                ans_1 += 1
+            else: 
+                ans_2 += 1
+            check  = not check
+        return min(ans_1, ans_2)
