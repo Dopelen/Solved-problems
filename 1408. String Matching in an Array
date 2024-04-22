@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n * n  * m) complexity by time (where m is max(len(word)) since in addition to testing each word with another word, this check includes matching the characters of one word to another) and O(n) by space.
+
+I solved a similar problem recently, but in this case I need to find not a prefix, but whether the string includes some substring. 
+For this I use the "in" method. 
+
+"""
+
+class Solution:
+    def stringMatching(self, words: List[str]) -> List[str]:
+        size = len(words)
+        answer = []
+        for i in range(size):
+            check = words[i]
+            for j in range(size):
+                if check in words[j] and i != j:
+                    answer.append(check)
+                    break
+        return answer
+
+# smart solution
+# https://leetcode.com/problems/string-matching-in-an-array/solutions/577564/python3-simple-code/
+class Solution:
+    def stringMatching(self, words: List[str]) -> List[str]:
+      arr = ' '.join(words)
+      subStr = [i for i in words if arr.count(i) >= 2]      
+      return subStr
