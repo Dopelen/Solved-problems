@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n * m) complexity by time and O(1) by space.
+
+I got a little confused with indices and boundaries as usual, because in the matrix they go like [y][x] and I’m used to the opposite, but overall it’s not a very painful task.
+
+"""
+
+class Solution:
+    def floodFill(self, image: List[List[int]], sr: int, sc: int, color: int) -> List[List[int]]:
+        if image[sr][sc] == color: return image
+        started_col = image[sr][sc]
+        def fill(y, x, val):
+            image[y][x] = val
+            if y != 0 and image[y - 1][x] == started_col:
+                fill(y - 1, x, color)
+            if y != height - 1 and image[y + 1][x] == started_col:
+                fill(y + 1, x, color)
+            if x != 0 and image[y][x - 1] == started_col:
+                fill(y, x - 1, color)
+            if x != width - 1 and image[y][x + 1] == started_col:
+                fill(y, x + 1, color)
+
+        height, width = len(image), len(image[0])
+        fill(sr, sc, color)
+
+        return image
