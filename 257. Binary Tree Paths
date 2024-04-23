@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n * h)(bc we storing all root-to-node paths) where h is height of the tree  by space.
+
+An enjoyable tree traversal task.
+It looks like what I implemented is the standard way to solve this problem. 
+But it is possible to make the part with constructing the path string prettier!
+
+"""
+
+class Solution:
+    def binaryTreePaths(self, root: Optional[TreeNode]) -> List[str]:
+        cur_path = []
+
+        def check(cur_p, root, con=''):
+            if not root:
+                return
+            if  not con:
+                con += str(root.val)
+            else:
+                con += "->" + str(root.val)
+            check(cur_path, root.left, con)
+            check(cur_path, root.right, con)
+            if root.left == root.right == None:
+                cur_p.append(con)
+                return 
+        
+        check(cur_path, root)
+
+        return cur_path
