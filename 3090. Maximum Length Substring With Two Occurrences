@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I solved this problem first with polynomial complexity, but then used a sliding window solution.
+The idea is simple, as soon as you come across an element that exceeds your allowable limit, then the first element of your sequence is the very element that is overflowing! 
+In this case, we simply move the left border of our check by one element to the right
+
+"""
+
+class Solution:
+    def maximumLengthSubstring(self, s: str) -> int:
+        iter_list = iter(s)
+        answer, left = 0, next(iter_list)
+        count = defaultdict(int)
+        for r_i in s:
+            count[r_i]+= 1
+            while count[r_i] == 3:
+                count[left]-= 1
+                left = next(iter_list)
+            answer = max(answer, sum(count.values()))
+        return answer
