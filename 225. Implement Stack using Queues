@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-This program has O(n) for pop() and O(1) for the rest complexity by time and O(number of push) by space.
+This program has O(n) for push() and O(1) for the rest complexity by time and O(number of push) by space.
 
 Overall, it was a cool question, but it didn’t really touch my heartstrings. 
 Every time I have to go through the entire list to get one element, I feel a little sad
