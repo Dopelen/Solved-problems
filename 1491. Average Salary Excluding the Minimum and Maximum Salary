@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+If you want to go even faster and not use the built-in minimum and maximum, you can do it in one pass, instead of 3 as here.
+
+"""
+
+class Solution:
+    def average(self, salary: List[int]) -> float:
+        min_, max_ = min(salary), max(salary)
+        return (sum(salary) - min_ - max_) / (len(salary) - 2)
