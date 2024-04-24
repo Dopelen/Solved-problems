@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I tried to do it for half an hour through some stacks with checking elements for occurrence in many pairs of elements, cursed everything in the world and did it in five minutes with a simple search i, i+1.
+You need to work on your skill of not overcomplicating...
+
+"""
+
+class Solution:
+    def findOcurrences(self, text: str, first: str, second: str) -> List[str]:
+        text = text.split()
+        answer = []
+        size = len(text)
+        for i in range(size - 1):
+            if text[i] == first:
+                if text[i + 1] == second and i + 2 < size:
+                    answer.append(text[i+2])
+        return answer
+
