@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+The hint suggested this formula for finding combinations, but I still didn’t fully understand why it worked this way. I went to see smart people from India.
+
+Oh...its "Pick two adjacent elements" so now it make sence.
+
+"""
+
+class Solution:
+    def semiOrderedPermutation(self, nums: List[int]) -> int:
+        n = len(nums)
+        first = nums.index(1)
+        second = nums.index(n)
+        return first + (n-second-1) if first < second else first + (n-second-1) - 1  
