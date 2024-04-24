@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I really like tasks like “humanity could not find the answer to this question for fifteen hundred years, write optimized code for this problem.
+
+"""
+
+class Solution:
+    def tribonacci(self, n: int) -> int:
+        if 0 <= n <= 2:
+            return n if n !=2 else 1 
+        first, second, third = 0, 1, 1
+        for i in range(n-3):
+            n_v = first + second + third
+            first = second
+            second = third
+            third = n_v
+        return first + second + third
