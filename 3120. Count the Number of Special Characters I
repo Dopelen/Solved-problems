@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Useful to know the gap between lowercase and capital letters!
+
+"""
+
+class Solution:
+    def numberOfSpecialChars(self, word: str) -> int:
+        answer = 0
+        check = {ord(symbol):1 for symbol in word}
+        for elem in check.keys():
+            if check.get(elem + 32):
+                answer += 1
+        return answer
