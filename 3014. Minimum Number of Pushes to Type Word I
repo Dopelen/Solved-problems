@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+It feels like the task was deliberately simplified by unique symbols and the alphabet limitation!
+In any case, arithmetic progression helps us again!
+
+"""
+
+# Human one!
+class Solution:
+    def minimumPushes(self, word: str) -> int:
+        size = len(word)
+        all_keys = size//8
+        left = size%8
+        f = ((1 + all_keys) * all_keys//2) * 8
+        s = left * (all_keys + 1)
+        return f + s
+
+
+# One-line
+class Solution:
+    def minimumPushes(self, word: str) -> int:
+        return (1 + len(word)//8) * (len(word)//8)//2 * 8 + len(word)%8 * (len(word)//8 + 1)
