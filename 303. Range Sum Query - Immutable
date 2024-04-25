@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(bigest gap between left and right * amount of operations) complexity by time and O(n) by space.
+
+Eh... these would have been the tasks for me a year ago...
+
+"""
+
+# MySolution
+class NumArray:
+
+    def __init__(self, nums: List[int]):
+        self.l = nums
+
+    def sumRange(self, left: int, right: int) -> int:
+        return sum(self.l[left: right + 1])
+
+
+# But if you store sum of elements for every index, it will be x10 faster
+# https://leetcode.com/problems/range-sum-query-immutable/
+class NumArray:
+    def __init__(self, nums: List[int]):
+        self.sum = []
+        sum_till = 0
+        for i in nums:
+            sum_till += i
+            self.sum.append(sum_till)
+
+    def sumRange(self, i: int, j: int) -> int:
+        if i > 0 and j > 0:
+            return self.sum[j] - self.sum[i - 1]
+        else:
+            return self.sum[i or j]
