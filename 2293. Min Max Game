@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n)) complexity by time (because we perform half the elements of operations each iteration and each iteration the number of elements is also halved) and O(n) by space.
+
+I solved the problem iteratively, but I have some inspiration that it is possible to find a formula that, based on the number of pairs, could immediately tell me the minimums and maximums of which pairs will be left.
+But I don't want to suffer trying to find her today!
+
+"""
+
+class Solution:
+    def minMaxGame(self, nums: List[int]) -> int:
+        odd = True
+        size = len(nums)
+        while size != 1:
+            new_n = []
+            for i in range(0, size, 2):
+                if odd:
+                    new_n.append(min(nums[i], nums[i+1]))
+                else:
+                    new_n.append(max(nums[i], nums[i+1]))
+                odd = not odd
+            size //= 2
+            nums = new_n
+        return  nums[0]
