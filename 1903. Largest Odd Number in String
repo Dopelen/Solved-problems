@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+In this problem we are only interested in the last digit, because it is this that signals us about parity
+
+"""
+
+class Solution:
+    def largestOddNumber(self, num: str) -> str:
+        border = len(num)
+        for i in range(border-1, -1, -1):
+            if int(num[i])%2:
+                return num[:i+1]
+        return ""
