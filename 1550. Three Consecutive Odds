@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+You can add an index shift to the right when finding an even element, in addition to increasing the index by 1, this can reduce the number of iterations required.
+
+"""
+
+class Solution:
+    def threeConsecutiveOdds(self, arr: List[int]) -> bool:
+        size = len(arr)
+        i = 0
+        while i < size - 2:
+            if arr[i]%2:
+                if arr[i+1]%2:
+                    if arr[i+2]%2:
+                        return True
+                    else: i += 1
+            i += 1
+        return False 
+
+# Cool solution
+# https://leetcode.com/problems/three-consecutive-odds/solutions/892927/python-beats-99-use-string/
+class Solution:
+    def threeConsecutiveOdds(self, arr: List[int]) -> bool:
+        return "111" in "".join([str(i%2) for i in arr])
