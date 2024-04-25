@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Simple iteration of elements with checking. 
+The only thing you should not forget about checking the first - last element.
+
+"""
+
+class Solution:                                   
+    def isCircularSentence(self, sentence: str):
+        sentence = sentence.split()               
+        prev = sentence[0][0]                     
+        for elem in sentence:                     
+            if elem[0] != prev:                   
+                return False                      
+            prev = elem[-1]                       
+        return sentence[-1][-1] == sentence[0][0] 
