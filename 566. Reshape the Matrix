@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space. Where n is size of original matrix.
+
+I unpack the matrix into a list of numbers and then split it into elements.
+
+"""
+
+class Solution:
+    def matrixReshape(self, mat: List[List[int]], r: int, c: int) -> List[List[int]]:
+        row, col = len(mat), len(mat[0])
+        if r * c != row * col or (row == r and col == c):
+            return mat
+        new_m = [el for ro in mat for el in ro]
+        new_m = [new_m[i:i + c] for i in range(0, row * col, c)]
+        return new_m
+
