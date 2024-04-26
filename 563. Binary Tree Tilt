@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I'm tortured with this tree, it's just a nightmare.
+But in the end it was defeated with help of BFS.
+
+"""
+
+class Solution:
+    def findTilt(self, root) -> int:
+        tilt_sum = 0
+
+        def all_v(node):
+            if not node:
+                return 0
+            else:
+                left = all_v(node.left)
+                right = all_v(node.right)
+                nonlocal tilt_sum
+                tilt_sum += abs(left - right)
+                return  node.val + left + right
+                
+        all_v(root)
+        return tilt_sum
