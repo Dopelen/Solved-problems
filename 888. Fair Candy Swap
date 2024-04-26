@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n**2) complexity by time and O(n) by space.
+
+"""
+
+
+# A "solution" that lasts forever and does not pass in time
+class Solution:
+    def fairCandySwap(self, aliceSizes: List[int], bobSizes: List[int]) -> List[int]:
+        total_a, total_b = sum(aliceSizes), sum(bobSizes)
+        for elem in set(aliceSizes):
+            for elem_ in set(bobSizes):
+                if total_a - elem + elem_ == total_b + elem - elem_:
+                    return [elem, elem_]
+
+
+# math solution O(n)
+# https://leetcode.com/problems/fair-candy-swap/solutions/2888042/math-behind-lee215-s-solution/
+class Solution:
+    def fairCandySwap(self, aliceSizes: List[int], bobSizes: List[int]) -> List[int]:
+        delta = (sum(aliceSizes) - sum(bobSizes)) // 2
+        aliceSizes = set(aliceSizes)
+        for size in set(bobSizes):
+            if delta + size in aliceSizes:
+                return [delta + size, size]
