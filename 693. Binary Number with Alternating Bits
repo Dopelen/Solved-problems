@@ -1,0 +1,46 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space. Where n is bit_str lenght of n.
+
+When the question arises about cyclic alternation, I always think about how to beautifully and clearly write a switch that will change its value every iteration. 
+This takes up most of the time, everything else is done quickly.
+I thought about it for a while and realized that we don't need a second value at all. 
+Since we have 1 and 0, it is enough for us to know the first character and build logic around the fact that the first and all other characters should alternate.
+
+"""
+
+# First implementation with check elem value
+class Solution:
+    def hasAlternatingBits(self, n: int) -> bool:
+        bit_s = bin(n)[2:]
+        first = bit_s[0]
+        second = str(int(not int(first)))
+        for elem in bit_s:
+            if elem != first:
+                return False
+            first, second = second, first
+        return True
+
+
+# Second implementation
+class Solution:
+    def hasAlternatingBits(self, n: int) -> bool:
+        bit_s = bin(n)[2:]
+        first = bit_s[0]
+        second = False
+        for elem in bit_s:
+            if not second:
+                if elem != first:
+                    return False
+            else:
+                if elem == first:
+                    return False
+            second = not second
+        return True
+
+# Short and smart
+# https://leetcode.com/problems/binary-number-with-alternating-bits/solutions/3434881/solution/
+class Solution:
+    def hasAlternatingBits(self, n: int) -> bool:
+        bits = bin(n)
+        return "00" not in bits and "11" not in bits
