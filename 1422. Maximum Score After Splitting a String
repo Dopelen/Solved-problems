@@ -1,0 +1,43 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space. Where n is bit_str lenght of n.
+
+I don’t like tasks where 95% of the time and effort is spent debugging a couple of edge cases.
+
+"""
+
+class Solution:
+    def maxScore(self, s: str) -> int:
+        size = len(s)
+        if size == 2: return int(s[0] == "0") + int(s[1] == "1")
+        zeroes = [[0, 0] for el in range(size)]
+        sum_z = sum_o = 0
+        for i in range(size):
+            if s[i] == "0":
+                sum_z += 1
+            if s[~i] == "1":
+                sum_o += 1
+            zeroes[i][0] = sum_z
+            zeroes[~i][1] = sum_o
+        ans = [zeroes[j][0] + zeroes[j][1] for j in range(size)]
+        max_v = max(ans)
+        if ans.index(max_v) == size-1:
+            return max(ans[:-1])
+        elif ans.index(max_v) == 0:
+            return max(ans[1:])
+        else:
+            return max_v
+
+# There are simpler way
+# https://leetcode.com/problems/maximum-score-after-splitting-a-string/solutions/4438262/98-25-easy-solution-with-explanation/
+class Solution:
+    def maxScore(self, s: str) -> int:
+        max_score = count_zeros_left = 0
+        count_ones_right = s.count('1')
+
+        for i in range(len(s) - 1):
+            count_zeros_left += s[i] == '0'
+            count_ones_right -= s[i] == '1'
+            max_score = max(max_score, count_zeros_left + count_ones_right)
+
+        return max_score
