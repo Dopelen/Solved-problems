@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+"""
+
+# Sorting with hash-map
+class Solution:
+    def arrayRankTransform(self, arr: List[int]) -> List[int]:
+        rank = 1
+        hash_s = {}
+        for el in sorted(set(arr)):
+            hash_s[el] = rank
+            rank += 1
+        return [hash_s[el] for el in arr]
+
+
+# Sorting solution.
+class Solution:
+    def arrayRankTransform(self, arr: List[int]) -> List[int]:
+        if arr == []: return []
+        sor_arr = sorted(list(enumerate(arr)), key=lambda x: x[1])
+        prev = sor_arr[0][1]
+        rank = 1
+        for el in sor_arr:
+            if prev != el[1]:
+                rank += 1
+            arr[el[0]] = rank
+            prev = el[1]
+        return arr
