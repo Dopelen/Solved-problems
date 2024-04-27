@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+The sneaky thing about this assignment is that we need to start iterating to figure out whether the sequence is ascending or not, and that's extra code because there might be a lot of the same elements at the beginning.
+
+"""
+
+class Solution:
+    def isMonotonic(self, nums: List[int]) -> bool:
+        if len(nums) == 1: return True
+        start = 0
+        while start + 1 != len(nums) and (nums[start] == nums[start + 1]):
+            start += 1
+        prev = nums[start]
+        for elem in nums[start + 1:]:
+            if (elem < prev) != (nums[start + 1] < nums[start]) and (elem != prev):
+                return False
+            prev = elem
+        return True
+
+# More readeble solution
+class Solution:
+    def isMonotonic(self, nums: List[int]) -> bool:
+        if len(nums) == 1: return True
+        prev = nums[0]
+        first = None
+        for elem in nums[1:]:
+            if first is None and elem != prev:
+                first = elem < prev
+            elif (elem < prev) != (first) and (elem != prev):
+                return False
+            prev = elem
+        return True
