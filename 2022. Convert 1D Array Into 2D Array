@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I wanted to create a cool list generator right away, but I got confused in the indexes, so I did it manually first.
+
+"""
+
+# Manually:
+class Solution:
+    def construct2DArray(self, original: List[int], m: int, n: int) -> List[List[int]]:
+        size = len(original)
+        if size != m * n: return []
+        ans = []
+        for ro in range(m):
+            row = []
+            for co in range(n):
+                row.append(original[(ro*n) + co])
+            ans.append(row)
+        return ans
+
+# With cool generator:
+class Solution:
+    def construct2DArray(self, original: List[int], m: int, n: int) -> List[List[int]]:
+        size = len(original)
+        if size != m * n: return []
+        return [[original[(ro*n) + co] for co in range(n)] for ro in range(m)]
