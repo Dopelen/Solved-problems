@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(log(n)) by space.
+
+As usual, I had to tinker with the tree.
+
+"""
+
+class Solution:
+    def findTarget(self, root: TreeNode, k: int) -> bool:
+        vals = set()
+        
+        def helper(node):
+            if not node:
+                return False
+            if node.val in vals:
+                return True
+            vals.add(k - node.val)
+            return helper(node.left) or helper(node.right)   
+        
+        return helper(root)
