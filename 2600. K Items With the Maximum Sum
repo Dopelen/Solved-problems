@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+It was harder then I thought!
+
+"""
+
+class Solution:
+    def kItemsWithMaximumSum(self, numOnes: int, numZeros: int, numNegOnes: int, k: int) -> int:
+        if numOnes > k:
+            return k
+        rem = k - numOnes - numZeros
+        if rem <= 0:
+            return numOnes
+        return numOnes - rem
