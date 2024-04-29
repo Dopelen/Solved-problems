@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n, numExchange)) complexity by time and O(1).
+
+I decided to make the task a simple iteration over a string, although the original idea was to simply invert the number. 
+BUT SURPRISE - SURPRISE. 
+In binary representation, the sign bit is also inverted, so I was not allowed to implement my two-character code.
+
+"""
+
+class Solution:
+    def numWaterBottles(self, numBottles: int, numExchange: int) -> int:
+        ans = numBottles
+        while numBottles >= numExchange:
+            new = numBottles//numExchange
+            ans += new
+            numBottles = new + numBottles % numExchange
+        return ans  
+
+# If you hate fun
+# https://leetcode.com/problems/water-bottles/solutions/3226806/python3-c-two-beautiful-solutions/
