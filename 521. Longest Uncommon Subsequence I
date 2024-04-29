@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(1).
+
+I like this decision of mine. Comprehensive and understandable.
+
+"""
+
+class Solution:
+    def findLUSlength(self, a: str, b: str) -> int:
+
+        def check(st1, st2):
+            res = -1
+            for i in range(len(st1)):
+                if st1[:i] not in st2:
+                    res = i + 1
+            return res          
+        
+        return max(check(a, b), check(b, a))
+
+# But there is smart solution! (O(n))
+# https://leetcode.com/problems/longest-uncommon-subsequence-i/solutions/3289203/521-time-91-38-and-space-94-99-solution-with-step-by-step-explanation/
+class Solution:
+    def findLUSlength(self, a: str, b: str) -> int:
+        if a == b:
+            return -1
+        else:
+            return max(len(a), len(b))
