@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+At first I solved the problem with rearranging numbers in even and odd positions, but then I realized my mistake and redid it.
+
+"""
+
+class Solution:
+    def largestInteger(self, num: int) -> int:
+        odd,  even, ans, index = [], [], [0] * len(str(num)), 0
+        for el in str(num):
+            if not int(el)%2:
+                even.append(el)
+                ans[index] = 0
+            else:
+                odd.append(el)
+                ans[index] = 1
+            index += 1
+        odd.sort()
+        even.sort()
+        ans = [even.pop() if not ans[i] else odd.pop() for i in range(len(ans))]
+        return int("".join(ans))
