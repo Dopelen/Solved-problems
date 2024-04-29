@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n).
+
+I decided to make the task a simple iteration over a string, although the original idea was to simply invert the number. 
+BUT SURPRISE - SURPRISE. 
+In binary representation, the sign bit is also inverted, so I was not allowed to implement my two-character code.
+
+"""
+
+class Solution:
+    def bitwiseComplement(self, n: int) -> int:
+        ans = ""
+        for elem in bin(n)[2:]:
+            ans += str(0 if (elem) == "1" else 1)
+        return int(ans, 2)
