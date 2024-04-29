@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(1).
+
+I'm sure it can be written shorter, but I doubt it can be done faster.
+
+"""
+
+class Solution:
+    def minimumCost(self, cost: List[int]) -> int:
+        size = len(cost)
+        cost.sort()
+        ans = free = 0
+        for elem in range(size):
+            if free == 2:
+                cost.pop()
+                free = 0
+            else:
+                ans += cost.pop()
+                free += 1
+        return ans
+
+# One-line
+# https://leetcode.com/problems/minimum-cost-of-buying-candies-with-discount/solutions/1711079/one-liner/
+class Solution:
+    minimumCost = lambda self, cost: sum(c for i, c in enumerate(sorted(cost, reverse=True)) if i % 3 != 2)
