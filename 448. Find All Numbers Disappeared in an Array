@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A task with tricks.
+Using negative values to mark the cells we saw is a very cool idea! It's a shame I didn't think of it myself.
+
+"""
+
+# One-line variantю O(n), O(n)
+def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
+	return set(range(1, len(nums) + 1)) - set(nums)
+
+# Right var O(n), O(1)
+# https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/solutions/991922/3-liner-in-python-without-extra-space-and-o-n-runtime-easy-to-understand/
+
+def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
+	for num in nums:
+		# Haven't seen before
+		if nums[abs(num)-1]>0:
+			# Store the fact that it has now been seen
+			nums[abs(num)-1] *= -1
+
+	# The numbers that weren't seen
+	return [i+1 for i, num in enumerate(nums) if num>0]
