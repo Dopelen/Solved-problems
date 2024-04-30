@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I’m just going through the divisors with an additional check of their complexity.
+
+"""
+
+class Solution:
+    def isThree(self, n: int) -> bool:
+        res = 1
+        for i in range(2, n+1):
+            if n % i == 0:
+                c = 0
+                while n % i == 0:
+                    n /= i
+                    c += 1
+                res *= (c + 1)
+            if res > 3:
+                return False
+        if n > 1: res *= 2
+        return True if res == 3 else False
+
+# Really cool one
+# https://leetcode.com/problems/three-divisors/solutions/1375468/python3-1-line/
+class Solution:
+    def isThree(self, n: int) -> bool:
+        return sum(n%i == 0 for i in range(1, n+1)) == 3
