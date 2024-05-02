@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space. By condition, the input data is limited to 5 for suits and 13 for ranks, so the time is limited to a constant O(1). 
+But if they were large, the relationship would be linear.
+
+After one check for suit we only need the number of ranks.
+
+"""
+
+class Solution:
+    def bestHand(self, ranks: List[int], suits: List[str]) -> str:
+        if len(set(suits)) == 1:
+            return "Flush" 
+        cou_val = Counter(ranks)
+        ans = {5:"Three of a Kind", 4:"Three of a Kind", 3:"Three of a Kind", 2:"Pair", 1:"High Card"}
+        return ans[cou_val.most_common(1)[0][1]]
