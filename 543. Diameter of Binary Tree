@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(nodes) complexity by time and O(nodes) by space. Because eventually we have to go around all the nodes.
+
+I had problems with this tree because it is not solved by simply iterating over the left and right subtrees, we also need to consider the maximum diameter of the tree for each node.
+
+"""
+
+class Solution:
+    def __init__(self):
+        self.max_path = 0
+
+    def dep(self, root):
+        left = self.dep(root.left) if root.left else 0
+        right = self.dep(root.right) if root.right else 0
+        self.max_path = max(self.max_path, left + right)
+        return 1 + max(left, right)
+    
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        self.dep(root)
+        return self.max_path
