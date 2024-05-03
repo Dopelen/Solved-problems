@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n**2) complexity by time and O(n**2) by space.
+
+To be honest, I'm stuck here. I didn't really like the recursive version, I didn't really like the window shift version.
+
+"""
+
+# https://leetcode.com/problems/longest-nice-substring/solutions/1074546/python3-brute-force-divide-and-conquer/
+# I like this solution, mine is conceptually the same, but it only takes 60 lines of code
+class Solution:
+    def longestNiceSubstring(self, s: str) -> str:
+        if not s: return ""
+        ss = set(s)
+        for i, c in enumerate(s):
+            if c.swapcase() not in ss: 
+                left = self.longestNiceSubstring(s[:i])
+                right = self.longestNiceSubstring(s[i+1:])
+                return max(left, right, key=len)
+        return s
