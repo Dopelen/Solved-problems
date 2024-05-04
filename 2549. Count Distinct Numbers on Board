@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This programm has O(1) complexity by time and O(1) by space.
+
+If I were organized enough, I might even write a proof that with the infinite operations described in the condition, every element will end up on the table
+
+"""
+
+class Solution:
+    def distinctIntegers(self, n: int) -> int:
+        return n - 1 if n != 1 else 1
