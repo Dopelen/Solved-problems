@@ -1,0 +1,53 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+I thought about this problem for a long time, although it seems the main concept of its solution could be very simple. 
+In my implementation, for each element we check its neighbors, creating an array of edges, and then subtract those fragments that are repeated. 
+Needless to say, this is not optimal.
+Not to mention it's hard to watch.
+This programm has O(n**2) complexity by time and O(n) by space.
+
+"""
+
+class Solution:
+    def countHillValley(self, nums: List[int]) -> int:
+        size = len(nums)
+        ans = []
+        for i in range(1, size - 1):
+            j = i
+            hill = None
+            qore = nums[i]
+
+            while i != 0 and qore == nums[i]:
+                i -= 1
+            if qore > nums[i]: hill = True
+            elif qore < nums[i]: hill = False
+
+            while j != size-1 and qore == nums[j]:
+                j += 1
+            if qore > nums[j] and hill: ans.append(1)
+            elif qore < nums[j] and hill is False: ans.append(-1)
+            else: ans.append(0)
+
+        ans_final = len(ans)
+        prev = ans[0]
+        for k in range(1, ans_final):
+            print(ans[:k], ans_final)
+            if ans[k] == prev and ans[k]:
+                ans_final -= 1
+            prev = ans[k]
+        return ans_final - ans.count(0)
+
+# There is smart way to solve this problem (O(n), O(1))
+# https://leetcode.com/problems/count-hills-and-valleys-in-an-array/solutions/1866831/python-clean-solution-simple-and-easy/
+class Solution:
+    def countHillValley(self, nums: List[int]) -> int:
+        hillValley = 0
+        for i in range(1, len(nums)-1):
+            if nums[i] == nums[i+1]:
+                nums[i] = nums[i-1]
+            elif nums[i] > nums[i-1] and nums[i] > nums[i+1]:
+                hillValley += 1
+            elif nums[i] < nums[i-1] and nums[i] < nums[i+1]:
+                hillValley += 1
+        return hillValley
