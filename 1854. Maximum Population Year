@@ -1,0 +1,35 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space. Where n is latest birth year - earliest birth year.
+
+It was worth getting some sleep and the problem I had been working on for some time was solved in 5 minutes.
+
+"""
+
+class Solution:
+    def maximumPopulation(self, logs: List[List[int]]) -> int:
+        popul = defaultdict(int)
+        max_p = [math.inf,0]
+        for date in logs:
+            for year in range(date[0], date[1]):
+                popul[year] += 1
+        for k, v in popul.items():
+            if v > max_p[1] or (v == max_p[1] and k < max_p[0]):
+                max_p = [k, v]
+        return max_p[0]
+
+# There is O(n) solution bc we have limited amount of years in input data:
+# https://leetcode.com/problems/maximum-population-year/solutions/2888736/python-97-44-faster-o-n-solution-hashmap/
+class Solution:
+    def maximumPopulation(self, logs: List[List[int]]) -> int:
+        a,n=[0]*101,len(logs)
+        for birth,death in logs:
+            a[birth-1950]+=1
+            a[death-1950]-=1
+        c=m=year=0
+        for i in range(101):
+            c+=a[i]
+            if c>m:
+                m=c
+                year=i+1950
+        return year
