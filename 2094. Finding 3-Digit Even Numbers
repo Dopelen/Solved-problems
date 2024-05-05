@@ -1,0 +1,50 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+I decided to do it head-on first to understand the problem. This is a polynomial solution, a simple search of all possible combinations, albeit very slow.
+Then I thought a little and ended up speeding up the code by 101 times. 
+100 times can be a lot or a little, the main thing is that asymptotically the code now works in O(n(log(n))).
+
+"""
+
+# This summer chield program has O(n**3) complexity by time and O(n) by space.
+class Solution:
+    def findEvenNumbers(self, digits: List[int]) -> List[int]:
+        size = len(digits)
+        answer = set()
+        for i in range(size):
+            if digits[i] == 0 : continue
+            for j in range(size):
+                if j == i: continue
+                for e in range(size):
+                    if e == i or e == j: continue
+                    if digits[e] % 2: continue
+                    answer.add(int(str(digits[i]) + str(digits[j]) + str(digits[e])))
+        return list(sorted(answer))
+
+
+
+# This program has O(n(log(n)) complexity by time and O(n) by space.
+# What I like most about this code is the sorting. 
+# If we initially sort individual elements, then the order of operations ensures that the resulting answer will also be sorted. 
+# Since the answer to the data will almost always be more than unique characters, sorting at the beginning will help speed up the program!
+
+class Solution:
+    def findEvenNumbers(self, digits: List[int]) -> List[int]:
+        cou = Counter(digits)
+        stack_1 = sorted(list(set(digits)))
+        ans = []
+        for el_1 in stack_1:
+            if el_1 == 0:
+                continue
+            pref = str(el_1)
+            for el_2 in stack_1:
+                if el_1 == el_2 and cou[el_2] < 2:
+                    continue
+                pref += str(el_2)
+                for el_3 in stack_1:
+                    if (el_3 % 2) or (el_3 == el_2 == el_1 and cou[el_1] < 3) or (el_1 == el_3 and cou[el_1] < 2) or (el_2 == el_3 and cou[el_2] < 2):
+                        continue
+                    ans.append(int(pref + str(el_3)))
+                pref = pref[0]
+        return ans
