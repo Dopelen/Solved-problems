@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Knowing the frequency of each letter, we can understand how many words we can make. Just remember to add an additional divisor with letters of which we need several in the word!
+
+"""
+
+class Solution:
+    def maxNumberOfBalloons(self, text: str) -> int:
+        symbols = Counter(text)
+        words = math.inf
+        for symbol in "balon":
+            if symbol == "l" or symbol == "o":
+                words = min(words, symbols[symbol]//2)
+            else:
+                words = min(words, symbols[symbol])
+        return words if words != math.inf else 0
