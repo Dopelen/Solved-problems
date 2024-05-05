@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I gave myself a break from intensive programming for literally two days and slept at night instead of during the day, things got better!
+
+"""
+
+class Solution:
+    def minOperations(self, nums: List[int], k: int) -> int:
+        size = i = len(nums) - 1
+        goal = set([elem for elem in range(1, k + 1)])
+        while goal != set():
+            if nums[i] in goal:
+                goal.remove(nums[i])
+            i -= 1
+        return size - i  
