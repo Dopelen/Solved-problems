@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n ** 2) complexity by time and O(n ** 2) by space.
+
+I tried to do it using regular expressions, but I got confused when creating the pattern generator, 
+so I just created a million counters, eating up all the existing memory.
+
+"""
+
+# First solution
+class Solution:
+    def shortestCompletingWord(self, licensePlate: str, words: List[str]) -> str:
+        need, new_list, i = defaultdict(int), [], 0
+        answer = "a" * 16
+
+        for elem in licensePlate.lower():
+            if elem.isalpha():
+                need[elem] += 1
+
+        for word in words:
+            new_list.append(Counter(word.lower()))
+
+        for i in range(len(words)):
+            correct = True
+            for symbol in need:
+                if need[symbol] > new_list[i][symbol]:
+                    correct = False
+                    break
+            if correct:
+                if len(answer) > len(words[i]):
+                    answer = words[i]
+        return answer
+
+# Shorter but slower (with current tests)
+class Solution:
+    def shortestCompletingWord(self, licensePlate: str, words: List[str]) -> str:
+        need = Counter(c for c in licensePlate.lower() if c.isalpha())
+        words.sort(key = len)
+        for word in words:
+            cur_count = Counter(c for c in word.lower() if c.isalpha())
+            if not (need - cur_count):
+                return word
