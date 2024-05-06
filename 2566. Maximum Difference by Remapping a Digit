@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n) complexity by time and O(n) by space. Where n is the lenght of num.
+
+I'm glad that I was able to bypass all the tricks of the test cases even before I ran the code for the first time!
+The main trick is that it is not enough to replace the first character, but you need to move on if the maximum/minimum number is already at the desired position.
+
+"""
+
+# First impression
+class Solution:
+    def minMaxDifference(self, num: int) -> int:
+        num_s = str(num)
+        i = j = 0
+        while num_s[i] == "9" and i != len(num_s) - 1:
+            i += 1
+        max_s = num_s.replace(num_s[i], "9") if num_s[i] != 9 else num_s
+        while num_s[j] == "0" and j != len(num_s) - 1:
+            j += 1
+        min_s = num_s.replace(num_s[j], "0") if num_s[i] != 0 else num_s
+        return int(max_s) - int(min_s)
+
+
+# With thinking:
+# Because leading zeros can only exist after the number has been converted, we don't have to do a similar check for the minimum.
+class Solution:
+    def minMaxDifference(self, num: int) -> int:
+        num_s = str(num)
+        i = 0
+        while num_s[i] == "9" and i != len(num_s) - 1:
+            i += 1
+        max_s = num_s.replace(num_s[i], "9") if num_s[i] != 9 else num_s
+        min_s = num_s.replace(num_s[0], "0")
+        return int(max_s) - int(min_s)
