@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(k) by space.
+
+We simply rewrite the condition with code, not forgetting about the strange behavior of zero.
+
+"""
+
+class Solution:
+    def divisorSubstrings(self, num: int, k: int) -> int:
+        num_s = str(num)
+        answer = 0
+        for i in range(len(num_s) - k + 1):
+            cur_n = int(num_s[i:i + k])
+            if cur_n and not num % cur_n:
+                answer += 1
+        return answer
