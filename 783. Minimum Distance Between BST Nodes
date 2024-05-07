@@ -1,0 +1,52 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time (bc of sorting) and O(n) by space (bc of saving elements).
+
+I solved this problem not elegantly and using additional memory, but this was the first thing that came into my head into a solution.
+
+"""
+
+class Solution:
+    def __init__(self):
+        self.val = set()
+    
+    def minDiffInBST(self, root: Optional[TreeNode]) -> int:
+
+        def helper(root):
+            if not root:
+                return
+            if root.left:
+                helper(root.left)
+            if root.right:
+                helper(root.right)
+            self.val.add(root.val)
+
+        helper(root)
+        min_v = sorted(self.val)
+        prev = min_v[0]
+        ans = 10 ** 5 + 1
+        for el in min_v[1:]:
+            ans = min(ans, abs(prev - el))
+            prev = el
+        return ans
+
+# The right way to solve this is use "in-order traversal BST"
+# The algorithm works by traversing the tree in-order, which means visiting the nodes in ascending order of their values.
+# The bypass method itself solves the problem, since in this case we are only required to maintain the minimum and compare 2 numbers at each iteration.
+# https://leetcode.com/problems/minimum-distance-between-bst-nodes/solutions/3195563/clean-codes-full-explanation-in-order-traversal-c-java-python3/
+class Solution:
+    def minDiffInBST(self, root: TreeNode) -> int:
+        self.ans = float('inf')
+        self.pred = None
+        self.inorder(root)
+        return self.ans
+
+    def inorder(self, root: TreeNode) -> None:
+        if root is None:
+            return
+        
+        self.inorder(root.left)
+        if self.pred is not None:
+            self.ans = min(self.ans, root.val - self.pred)
+        self.pred = root.val
+        self.inorder(root.right)
