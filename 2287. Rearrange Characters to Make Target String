@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Without counters, it's hard for me to imagine a solution because we need to know how many characters are needed to create the target and how many of them are in a given string.
+Then we simply divide and round down.
+We interrupt the loop if we come across 0, just for optimization.
+
+"""
+
+class Solution:
+    def rearrangeCharacters(self, s: str, target: str) -> int:
+        cou_t = Counter(target)
+        cou_s = Counter(s)
+        ans = math.inf
+        for elem in cou_t:
+            ans = min(ans, cou_s[elem]//cou_t[elem])
+            if ans == 0: break
+        return ans
