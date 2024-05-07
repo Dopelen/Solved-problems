@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A surprisingly simple task for such a complicated situation. This time I was lucky and I was able to understand what they wanted from me from the first reading.
+
+P.S: It's not often you use the max function to find a lexicographically larger element
+"""
+
+class Solution:
+    def slowestKey(self, releaseTimes: List[int], keysPressed: str) -> str:
+        d = defaultdict(list)
+        size = len(keysPressed)
+        for i in range(size):
+            d[releaseTimes[i] - releaseTimes[i - 1] if i != 0 else releaseTimes[i]].append(keysPressed[i])
+        return max(d[max(d)])
