@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time (bc of sorting) and O(n) by space.
+
+I wrote a solution with sorting, but there is a cool and faster method that I hadn’t thought of.
+You can simply find all the maxima and minima, subtract them from the total number of elements and get the answer.
+
+"""
+
+# My O(n(log(n))) solution
+class Solution:
+    def countElements(self, nums: List[int]) -> int:
+        cou = Counter(nums)
+        nums = set(nums)
+        nums = sorted(nums)
+        ans = 0
+        for i in range(1, len(nums) - 1):
+            ans += cou[nums[i]]
+            i += 1
+        return ans
+
+# My O(n) Solution
+class Solution:
+    def countElements(self, nums: List[int]) -> int:
+        mi, ma = min(nums), max(nums)
+        if mi == ma: return 0
+        mi_c, ma_c = nums.count(mi), nums.count(ma)
+        return len(nums) - mi_c - ma_c
