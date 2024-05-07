@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I began to decide in a different way, but this one suddenly came to mind.
+The main trick is that due to the specifics of the input data, as soon as the prefix sum stops growing, you hit zero! 
+This means you can simply write down the previous amount as the answer if it is more than what it was.
+
+P.S: Initially, he answer is equal to the first element to capture options where there is only 1 element at the input. 
+We also return the maximum in the program output because the response might not be overwritten correctly in cases where the last element is part of the largest sequence.
+
+"""
+
+class Solution:
+    def findMaxConsecutiveOnes(self, nums: List[int]) -> int:
+        prev = ans = nums[0]
+        for el in nums[1:]:
+            if el + prev == prev:
+                ans = max(ans, prev) 
+                prev = 0
+            else:
+                prev += 1
+        return max(ans, prev) 
