@@ -1,0 +1,19 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+It was speedrun!
+Just check distance for every elem and reset it if 1 found.
+
+"""
+
+class Solution:
+    def kLengthApart(self, nums: List[int], k: int) -> bool:
+        dist = math.inf
+        for elem in nums:
+            if elem:
+                if dist < k:
+                    return False
+                dist = 0
+            else:
+                dist += 1
+        return True
