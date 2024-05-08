@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+I didn't intend to iterate and count visits sequentially, but I still managed to do extra work.
+Initially, I thought of simply summing up all the elements visited and dividing the sum of all the steps taken by the length of the table, and then simply adding the edges. 
+But while I implemented this, I realized that we generally only need 2 elements!
+
+P.S: If we meaningfully construct the string in the response, we can easily do without sorting!
+
+"""
+
+class Solution:
+    def mostVisited(self, n: int, rounds: List[int]) -> List[int]:
+        first, last = rounds[0], rounds[-1]
+        if first == last:
+            return [first]
+        elif first < last:
+            return [el for el in range(first, last + 1)]
+        else:
+            return [el for el in range(1, last+1)] + [el1 for el1 in range(first, n+1)]
