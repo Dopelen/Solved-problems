@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I can’t say that the solution is elegant, but that’s what came to mind.
+I iterate through the string and check for elements that could be the start of the string.
+Essentially I create many potential start points and test each one until I find one that matches.
+
+"""
+
+class Solution:
+    def rotateString(self, s: str, goal: str) -> bool:
+        if len(s) != len(goal): return False
+        for i in range(len(s)):
+            if s[i] == goal[0]:
+                g_i = 0
+                for j in range(i, len(s)):
+                    if s[j] != goal[g_i]:
+                        break
+                    g_i += 1
+                    if j == len(s) - 1 and s[:i] == goal[g_i:]:
+                        return True
+        return False
+
+# 200 IQ Solution
+# https://leetcode.com/problems/rotate-string/solutions/2369025/python3-one-line-faster-than-99/
+class Solution:
+    def rotateString(self, s: str, goal: str) -> bool:
+        return len(s) == len(goal) and s in goal+goal 
