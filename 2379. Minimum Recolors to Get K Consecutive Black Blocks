@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The task stands out strongly from other tasks in the “easy” category. 
+Here you really need to think through the greedy solution step and the edge cases to solve.
+
+P.S: Although I made the task a little more complicated, it was enough to count the number of white squares in each window. In any case, a good task.
+P.P.S: My solution is faster because it does not count the number of squares on each window, but compares 2 previously calculated values for each element. So I'm happy with myself.
+
+"""
+
+class Solution:
+    def minimumRecolors(self, blocks: str, k: int) -> int:
+        potential = [1 if blocks[0] == "W" else 0]
+        val = potential[0]
+        ans = math.inf
+        for elem in blocks[1:]:
+            if elem == "W":
+                val += 1
+            potential.append(val)
+        for i in range(0, len(blocks) - k + 1):
+            ans =  min(ans, potential[i + k - 1] - potential[i] + (blocks[i] == "W"))
+        return ans
