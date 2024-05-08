@@ -1,0 +1,16 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * (log(n))) complexity by time and O(n) by space.
+
+Solved the problem literally with my last breath.
+I didn’t initially understand that sorted meant ascending and made an option covering both options.
+
+"""
+ 
+class Solution:
+    def minimumRightShifts(self, nums: List[int]) -> int:
+        size = len(nums)
+        for i in range(1, size):
+            if nums[i] < nums[i-1]:
+                nums = nums[i:]+nums[:i]
+                return size - i if nums == sorted(nums) else -1
+        return 0
