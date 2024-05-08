@@ -1,0 +1,43 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It seemed to me that it would be optimal to simply find the indexes that need to be excluded to get the desired result, but the platform says that such a solution is slow.
+
+"""
+
+# First idea
+class Solution:
+    def makeFancyString(self, s: str) -> str:
+        ans = ''
+        repl = set()
+        prev = s[0]
+        for i in range(1, len(s) - 1):
+            if s[i] != prev:
+                prev = s[i]
+            elif s[i] == prev == s[i + 1]:
+                repl.add(i-1)
+        return ''.join([s[i] for i in range(len(s)) if i not in repl])
+
+
+# After refactoring (still slow but better then before!)
+class Solution:
+    def makeFancyString(self, s: str) -> str:
+        ans = ''
+        for i in range(len(s) - 2):
+            if s[i] == s[i+1] == s[i+2]:
+                continue
+            else:
+                ans += s[i]
+        return ans + s[len(s) - 2:]
+
+
+# Much better!
+# If I use list I don't have to create a new string every time!
+class Solution:
+    def makeFancyString(self, s: str) -> str:
+        ans = []
+        for el in s:
+            if len(ans) > 1 and ans[-2] == ans[-1] == el:
+                continue
+            ans.append(el)
+        return "".join(ans)
