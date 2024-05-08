@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The same task that I solved yesterday. 
+This time I'm using inorder pass through the tree, as some smart person suggested to me!
+
+"""
+
+class Solution:
+    def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
+        self.ans = math.inf
+        self.pred = None
+        self.inorder(root)
+        return self.ans
+
+    def inorder(self, root: TreeNode) -> None:
+        if root is None:
+            return
+        
+        self.inorder(root.left)
+        if self.pred is not None:
+            self.ans = min(self.ans, root.val - self.pred)
+        self.pred = root.val
+        self.inorder(root.right)
