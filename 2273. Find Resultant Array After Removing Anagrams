@@ -1,12 +1,13 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-This program has O(n ** 2) * (m*log(m))) complexity by time and O(m) by space, where n is number of words and m max_lenght of the word. (polinom - because every pop() is also n)
 
 Seems like a simple task, but I struggled with it.
 Failed on test 196 out of 200 and had to rewrite the entire code.
 Pleasant news: I carefully re-read the Counter() documentation.
 
 """
+
+# This program has O(n ** 2) * (m*log(m))) complexity by time and O(m) by space, where n is number of words and m max_lenght of the word. (polinom - because every pop() is also n)
 
 class Solution:
     def removeAnagrams(self, words: List[str]) -> List[str]:
@@ -17,3 +18,28 @@ class Solution:
                 i-=1
             i+=1
         return words
+
+
+# Better_way (not mine) 
+# O(n * m*(log(m))) by speed and O(n) by space
+# https://leetcode.com/problems/find-resultant-array-after-removing-anagrams/
+class Solution:
+    def removeAnagrams(self, words: List[str]) -> List[str]:
+        ans=[words[0]]
+        for i in range(1,len(words)):
+            if(sorted(words[i-1])!=sorted(words[i])):
+                ans.append(words[i])
+        return ans
+
+
+# My very initial solution, modified with new knowledge
+# O(n * m) by speed and O(n * m) by space
+class Solution:
+    def removeAnagrams(self, words: List[str]) -> List[str]:
+        cou, ans = [], [words[0]]
+        for elem in words:
+            cou.append(Counter(elem))
+        for i in range(1, len(words)):
+            if cou[i-1] != cou[i]:
+                ans.append(words[i])
+        return ans
