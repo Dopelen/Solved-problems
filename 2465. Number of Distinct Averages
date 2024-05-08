@@ -1,0 +1,14 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+the solution very quickly came together in my head: a set for unique values, sorting for quick access!
+
+"""
+
+class Solution:
+    def distinctAverages(self, nums: List[int]) -> int:
+        ans, size = set(), len(nums)
+        nums.sort()
+        for i in range(size//2):
+            ans.add((nums[i] + nums[size - i - 1])/2)
+        return len(ans)
