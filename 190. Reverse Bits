@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space. You can call it O(1) but it bound to len(bit string) so...
+
+We iterate over the input bit sequence, increasing the result with the inverse element that we considered in the current iteration
+
+"""
+
+class Solution:
+    def reverseBits(self, n: int) -> int:
+        result = 0
+        for i in range(32):
+            result <<= 1
+            result |= n & 1
+            n >>= 1
+        return result
