@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+I published the solution on the LeetCode: https://leetcode.com/problems/split-the-array/solutions/5134435/1-pass-counter-o-n-time-o-n-space/
+
+This program has O(n)complexity by time and O(n) by space.
+
+Ultimately, we are only concerned with the number of unique elements in a row and those with more than two.
+I like my Solution!
+
+"""
+
+class Solution:
+    def isPossibleToSplit(self, nums: List[int]) -> bool:
+        cou = Counter(nums)
+        odd = False
+        for k, v in cou.items():
+            if v > 2:
+                return False
+            elif v % 2:
+                odd = not odd
+        return not odd
