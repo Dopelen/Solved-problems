@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+This program has O(n * m)complexity by time and O(1) by space.
+
+At first I simply constructed a list after the shift and checked whether it was equal to the original one. 
+But then I understand! We don’t need to construct a new line and clog up memory, we can just check character by character whether the value after the shift is equal to what was there before! 
+If not equal, the matrix will not be the same.
+
+"""
+
+# First one
+class Solution:
+    def areSimilar(self, mat: List[List[int]], k: int) -> bool:
+        n = len(mat[0])
+        shift = k % n
+        if not shift:
+            return True
+        for r in range(len(mat)):
+            for c in range(n):
+                if r % 2:
+                    if mat[r][c + shift if (c + shift) < n else shift + c - n] != mat[r][c]: return False
+                else:
+                    if mat[r][c - shift if (c - shift) >= 0 else n + c - shift] != mat[r][c]: return False
+        return True
+
+
+# Upgraded one
+class Solution:
+    def areSimilar(self, mat: List[List[int]], k: int) -> bool:
+        n = len(mat[0])
+        if not k % n:
+            return True
+        for r in range(len(mat)):
+            for c in range(n):
+                if mat[r][(c + k) % n] != mat[r][c]: return False # Please note that there is no difference, we will move the element to the left or to the right, if they are not equal, the program will signal us about this sooner or later.
+        return True
