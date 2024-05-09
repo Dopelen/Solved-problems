@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+This program has O(log(n))complexity by time and O(1) by space.
+
+At first I wrote a solution by brute force, but it didn’t work out in time.
+Then I wrote a kinda...logarithmic one, it passed, but it was still slow.
+My instinct told me there was a bettert solution here.
+And i found it!
+
+"""
+
+# O(log(n)) by time
+class Solution:
+    def constructRectangle(self, area: int) -> List[int]:
+        sq = int(sqrt(area))
+        w = l = sq
+        while w != 1:
+            while l != area + 1:
+                pot = l * w
+                if pot == area:
+                    return [l, w]
+                elif pot > area:
+                    l += 1
+                    w -= 1
+                    break
+                else:
+                    l += 1
+        return [area, 1]
+
+# Same idea O(log(n))
+# https://leetcode.com/problems/construct-the-rectangle/
+class Solution:
+    def constructRectangle(self, area: int) -> List[int]:
+        for l in range(int(area**0.5), 0, -1):            
+            if area % l == 0: 
+                return [area // l, l]
