@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n)))complexity by time and O(n) by space.
+
+interesting but annoying task.
+As a pleasant thing, I used the maximum to strings function.
+
+"""
+
+class Solution:
+    def maxSum(self, nums: List[int]) -> int:
+        d, ans = defaultdict(list), 0
+        for el1 in nums:
+            max_digit = int(max(str(el1)))
+            d[max_digit].append(el1)
+        for el2 in d:
+            if len(d[el2]) > 1:
+                d[el2].sort()
+                ans = max(ans, d[el2][-1] + d[el2][-2])            
+        return -1 if ans == 0 else ans
