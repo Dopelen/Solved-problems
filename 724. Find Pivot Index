@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n)complexity by time and O(1) by space (bc enumerate return one elements from nums at the time, which does not require memory to store the entire sequence).
+
+I solved this problem last time by constructing prefix sums for each position, and this time I decided to do it by subtracting the elements from the sum.
+It turned out more beautiful and clearer.
+The order of sum subtraction allows us to control whether the current element is used in the sum on the right side or not!
+
+"""
+
+class Solution:
+    def pivotIndex(self, nums: List[int]) -> int:
+        left, right = 0, sum(nums)
+        for i, el in enumerate(nums):
+            right -= el
+            if left == right: 
+                return i
+            left += el
+        return -1
