@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time (bc of factorial) and O(1) by space.
+
+Blessed be the hints below the task.
+
+"""
+
+class Solution:
+    def numPrimeArrangements(self, n: int) -> int:
+        primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97]
+        num_primes = len(primes[:bisect_right(primes, n)])
+        return (factorial(num_primes) * factorial(n - num_primes) ) % (10**9 + 7)
