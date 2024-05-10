@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+The problem bothered me for a while in my head, and then I cried while I was writing a sort for the list inside each iteration for the loop.
+
+"""
+
+class Solution:
+    def fillCups(self, amount: List[int]) -> int:
+        ans = 0
+        amount.sort()
+        while sum(amount[:2]) > 0:
+            amount[-1] -= 1
+            amount[-2] -= 1
+            ans += 1
+            amount.sort()
+        return ans + amount[-1]   
