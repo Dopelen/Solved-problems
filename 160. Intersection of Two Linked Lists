@@ -1,0 +1,48 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n + m) complexity by time and O(1) by space.
+
+I don’t interact with linked lists very often, so this problem puzzled me. I thought of a couple of solutions, but they turned out to be far from optimal.
+
+"""
+
+# There are not mine cool solution.
+# It uses a very clever way of calculating the difference in the length of lists and then comparing them to the point where they possibly have a common ending. O(n + m)
+# https://leetcode.com/problems/intersection-of-two-linked-lists/solutions/2116127/python-easy-2-approaches-o-1-space/
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        one = headA
+        two = headB
+
+        while one != two:
+            one = headB if one is None else one.next
+            two = headA if two is None else two.next
+        return one
+
+
+# Clearer and more understandable solution (but requires memory)
+# https://leetcode.com/problems/intersection-of-two-linked-lists/solutions/3176186/solution/
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> Optional[ListNode]:
+        stackA = ['A']
+        stackB = ['B']
+
+        while headA or headB:
+            if headA:
+                stackA.append(headA)
+                headA = headA.next
+
+            if headB:
+                stackB.append(headB)
+                headB = headB.next
+
+        prev = None
+        while stackA and stackB:
+            nodeA = stackA.pop(-1)
+            nodeB = stackB.pop(-1)
+
+            if nodeA != nodeB:
+                return prev
+
+            prev = nodeA
+
