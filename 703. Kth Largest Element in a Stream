@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(add_calls * n * log(n)) complexity by time and O(n) by space. Where n is final len(nums)
+
+At first I was scared by the incomprehensibility of the task, but I quickly figured it out.
+It’s just worth sorting the array and maintaining this state as elements are added, and since k is strictly greater than 0, we can use negative indexing to return the answer
+
+"""
+
+class KthLargest:
+
+    def __init__(self, k: int, nums: List[int]):
+        self.nums = sorted(nums)
+        self.k = -k
+
+    def add(self, val: int) -> int:
+        bisect.insort(self.nums, val)
+        return self.nums[self.k]
