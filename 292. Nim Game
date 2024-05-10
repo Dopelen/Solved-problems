@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+I liked the problem, I had to think a little. 
+If the number is a multiple of 4, with optimal play there is no chance of winning, because the enemy will keep you at that level so that it remains that way until he takes the remaining stones.
+
+"""
+
+class Solution:
+    def canWinNim(self, n: int) -> bool:
+        return n % 4
