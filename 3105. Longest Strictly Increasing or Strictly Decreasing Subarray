@@ -1,0 +1,36 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+When the code is not accepted the 4th time, you clearly begin to understand that something is wrong with it.
+I wrote a big and scary implementation. Sad.
+
+"""
+
+class Solution:
+    def longestMonotonicSubarray(self, nums: List[int]) -> int:
+        ans = asc = desc = 1
+        for i in range(1, len(nums)):
+            if nums[i] > nums[i-1]:
+                asc += 1
+                desc = 1
+            elif nums[i] < nums[i-1]:
+                desc += 1
+                asc = 1
+            else:
+                asc = desc = 1
+            ans = max(ans, asc, desc)
+        return ans
+
+# 10000IQ
+# https://leetcode.com/problems/longest-strictly-increasing-or-strictly-decreasing-subarray/solutions/4989205/python-3-8-lines-iteration-t-s-49-ms-16-6-mb/
+class Solution:
+    def longestMonotonicSubarray(self, nums: List[int]) -> int:
+        incr, decr, ans = 1, 1,1
+        prev = nums.pop(0)
+        for num in nums:
+            incr = incr * (num > prev) + 1
+            decr = decr * (num < prev) + 1
+            prev = num
+            ans = max(ans, incr, decr)
+        return ans
