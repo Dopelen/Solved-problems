@@ -1,0 +1,54 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I realized that I had overcomplicated something when I got a solution time 10 times slower than average. But at least the solution passed!
+
+"""
+
+# I creating index function by my own!
+class Solution:
+    def findShortestSubArray(self, nums: List[int]) -> int:
+        ans = math.inf
+        size = len(nums)
+        freq = Counter(nums)
+        degree = freq.most_common(1)[0][1]
+        to_check = [el[0] for el in freq.most_common() if el[1] == degree]
+        for elem in to_check:
+            start = end = None
+            i = 0
+            while (start is None) or (end is None):
+                if start is None:
+                    if nums[i] == elem:
+                        start = i
+                if end is None:
+                    if nums[size - i - 1] == elem:
+                        end = size - i
+                i += 1
+            ans = min(ans, end - start)
+        return ans
+
+
+# Then I thought a little and got this. x3 time faster then previous solution!
+class Solution:
+    def findShortestSubArray(self, nums: List[int]) -> int:
+        ans = math.inf
+        size = len(nums)
+        freq = Counter(nums)
+        degree = freq.most_common(1)[0][1]
+        to_check = [el[0] for el in freq.most_common() if el[1] == degree]
+        for elem in to_check:
+            ans = min(ans, size - list(reversed(nums)).index(elem) - nums.index(elem))
+        return ans
+
+
+# Good Solution is track indexses in hashtable
+# https://leetcode.com/problems/degree-of-an-array/solutions/349801/solution-in-python-3-beats-98/
+class Solution:
+    def findShortestSubArray(self, nums: List[int]) -> int:
+    	C = {}
+    	for i, n in enumerate(nums):
+    		if n in C: C[n].append(i)
+    		else: C[n] = [i]
+    	M = max([len(i) for i in C.values()])
+    	return min([i[-1]-i[0] for i in C.values() if len(i) == M]) + 1
