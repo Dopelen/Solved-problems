@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(1) by space.
+
+It took some time to formulate a solution in my head, but when it came, it became very pleasant.
+To simplify, we need to take any k elements and choose such that the difference between the largest and the smallest is minimal among all other possible combinations of elements that we can take. 
+After sorting, we can immediately tell which element will be the minimum possible (the one that is in the to elements from the current one). 
+Then we simply check all the elements, maintaining the minimum.
+
+"""
+
+class Solution:
+    def minimumDifference(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        ans = math.inf
+        for i in range(len(nums) - k + 1):
+            ans = min(ans, nums[i + k - 1] - nums[i])
+        return ans if len(nums) != 1 else 0
