@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I initially tried to make one line per line, but then I was like “why?” and wrote as a human being.
+I count the elements in each of the lines and find common ones.
+& when comparing counters works like an intersection and takes the minimum total as a result. Really nice.
+
+"""
+
+class Solution:
+    def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        inter = Counter(nums1) & Counter(nums2)
+        ans = []
+        for k,v in inter.items():
+            ans += [k] * v
+        return ans
+
+
+# You can use even shorter varian but if you forget to put parentheses when enclosing the counters, 
+# items() will most likely have priority, which will lead to code execution like k, v for intersection of the keys of counter_1 with the cou_2.items()
+# Wow
+
+class Solution:
+    def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        ans = []
+        for k,v in (Counter(nums1) & Counter(nums2)).items():
+            ans += [k] * v
+        return ans
+
+# If you really want one-line:
+class Solution:
+    def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        return list((Counter(nums1) & Counter(nums2)).elements())
