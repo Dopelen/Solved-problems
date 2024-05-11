@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Here I save all the beginnings of the "pieces" and iterate through the sequence we need to make. 
+If the piece is large, then I move on to comparing its elements with the original sequence. 
+Thus, the problem is solved in 2 passes without repeated passes through the indexes inside the check.
+
+"""
+
+class Solution:
+    def canFormArray(self, arr: List[int], pieces: List[List[int]]) -> bool:
+        chanks = {ch[0]:ch[1:] for ch in pieces}
+        i = 0
+        while i < len(arr):
+            if chanks.get(arr[i]) is None:
+                return False
+            else:
+                if len(chanks[arr[i]]) > 0:
+                    for elem in chanks[arr[i]]:
+                        i += 1
+                        if elem != arr[i]:
+                            return False
+                i += 1
+        return True
