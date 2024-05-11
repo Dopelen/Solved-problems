@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Trees seem so simple, but every time I experience mental torment when solving problems with them, I even somehow got used to matrices, but not yet to trees.
+In general, the concept is simple, we create an additional assistant function, which will make recursive calls, and in it we refer to the symmetric values of the left and right branches.
+
+"""
+
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        if not root:
+            return True
+        return self.helper(root.left, root.right)
+        
+    def helper(self, l,r):
+        if l == r == None:
+            return True
+        if l is None or r is None:
+            return False
+        if l.val != r.val:
+            return False
+        return self.helper(l.left, r.right) and self.helper(l.right, r.left)
+
