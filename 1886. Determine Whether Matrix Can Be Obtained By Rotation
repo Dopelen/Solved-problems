@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(len(mat) * len(mat[0])) complexity by time and O(len(mat[0]) by space bc we need only 1 line at the time.
+
+I had this problem for my internship exams, so I just took the old code and changed it a little to fit the input data. 
+When unfolding a matrix, unpacking helps us a lot, because converting a row to a column is exactly what we need when unfolding a matrix!
+
+"""
+
+class Solution:
+    def findRotation(self, mat: List[List[int]], target: List[List[int]]) -> bool:
+        def rotat():
+            i = 0
+            for x in zip(*mat):
+                mat[i] = list(reversed(x))
+                i += 1
+        
+        for i in range(4):
+            if mat == target:
+                return True
+            rotat()
+        return False
