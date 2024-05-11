@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space. Where n - the lenght of the input.
+
+Classic simple tasks, testing library knowledge and execution priority.
+
+"""
+
+class Solution:
+    def detectCapitalUse(self, word: str) -> bool:
+        return word.isupper() or word.islower() or word.istitle()
