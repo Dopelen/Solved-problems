@@ -1,0 +1,55 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) by time and O(n) by space.
+
+To avoid confusion, I first decided to make it as simple as possible.
+I go through all the nodes and count the frequency of occurrence of numbers.
+And then I return a list of numbers whose frequency is equal to the mode.
+
+And here we can remember that in a tree there are various traversal methods and also inorder traversal!
+
+"""
+
+# Initial solution
+class Solution:
+    def __init__(self):
+        self.freq = defaultdict(int)
+
+    def findMode(self, root: Optional[TreeNode]) -> List[int]:
+    
+        def helper(root):
+            if not root:
+                return    
+            self.freq[root.val] += 1
+            helper(root.left)
+            helper(root.right)
+        
+        helper(root)
+        modu = 0
+        for v in self.freq.values():
+            modu = max(modu, v)
+        return [el for el in self.freq if self.freq[el] == modu]
+
+
+# Inorder
+class Solution:
+    def findMode(self, root: Optional[TreeNode]) -> List[int]:
+        freq = {}
+        cur_max = 0
+        ans = []
+
+        def inorder(node):
+            if not node:
+                return
+            inorder(node.left)
+            nonlocal cur_max, ans
+            freq[node.val] = 1 + freq.get(node.val, 0)
+            if freq[node.val] > cur_max:
+                cur_max = freq[node.val]
+                ans = [node.val]
+            elif freq[node.val] == cur_max:
+                ans.append(node.val)
+            inorder(node.right)
+
+        inorder(root)
+        return ans
