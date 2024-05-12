@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+This program has O(n * log(n)) by time and O(1) by space.
+
+The first thing to do is to understand that a triangle can be formed only if the sum of its two sides is greater than the third.
+All we have to do is sort our numbers and check from large to small whether the two previous numbers are greater than the current one, and if so, this will be our answer, because all subsequent numbers are less than the current one!
+This way we find the answer in one pass. (not including sorting)
+
+"""
+
+class Solution:
+    def largestPerimeter(self, nums: List[int]) -> int:
+        nums.sort()
+        for i in range(len(nums)-1, 1, -1):
+            if nums[i] < nums[i-1] + nums[i-2]:
+                return nums[i] + nums[i-1] + nums[i-2]
+        return 0
