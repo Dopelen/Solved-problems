@@ -1,0 +1,49 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+This program has O(len(ops)) by time and O(1) by space.
+
+I honestly iterated through the entire matrix and increased all the given cells, after which I ran into a memory limit and realized. 
+Since our increase comes from the corner of the matrix, we just need to return the size of the field, which will be included in all other fields of ops, which means it will increase most often!
+And it will be the count of biggest current number.
+Cool task.
+
+"""
+
+# True Solution. Proud of yourself.
+class Solution:
+    def maxCount(self, m: int, n: int, ops: List[List[int]]) -> int:
+        size = len(ops)
+        if size == 0: return m * n
+        min_1 = min_2 = math.inf  
+        for el in ops:
+            min_1 = min(min_1, el[0])
+            min_2 = min(min_2, el[1])        
+        return min_1 * min_2
+
+
+# Honest code
+class Solution:
+    def maxCount(self, m: int, n: int, ops: List[List[int]]) -> int:
+
+        def increment(x, y):
+            for r in range(y):
+                for c in range(x):
+                    mat[r][c] += 1
+
+        def max_find():
+            max_v = 0
+            for r in range(m):
+                for c in range(n):
+                    max_v = max(max_v, mat[r][c])
+            max_c = 0
+            for row in mat:
+                max_c += row.count(max_v)
+            return max_c
+
+        mat = [[0] * m for i in range(n)]
+        for el in ops:
+            increment(el[0], el[1])
+
+        return max_find()
+
