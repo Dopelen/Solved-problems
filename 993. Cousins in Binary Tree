@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+This program has O(n) by time and O(n) by space.
+
+We go along the tree passing the name of the parent and the depth, this will allow us to record the parent and depth at the moment when we find the given value and then compare the result in the end.
+
+"""
+
+class Solution:
+    def isCousins(self, root: Optional[TreeNode], x: int, y: int) -> bool:
+        check = {x:None, y:None}
+        
+        def helper(node, d, parent):
+            nonlocal x, y
+            if not node or (check[x] is not None and check[y] is not None):
+                return
+            if node.val == x:
+                check[x] = [d, parent]
+            elif node.val == y:
+                check[y] = [d, parent]
+            helper(node.left, d+1, node.val)
+            helper(node.right, d+1, node.val)
+        
+        helper(root, 0, None)
+        
+        return (check[x][0] == check[y][0]) and (check[x][1] != check[y][1])
