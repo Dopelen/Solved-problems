@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(m) by space. Where m is alphabet and n amount of words.
+
+I don't use lexigraphic order often, but even so I didn't expect to be able to submit the solution on the 4th try. 
+For an easy task, this is clearly overkill.
+I form the alphabet specified in the condition, and then simply compare the words in pairs.
+The trick is in edge cases, if the words are the same, then whichever is longer is greater, these edge cases should be kept in mind.
+
+"""
+
+class Solution:
+    def isAlienSorted(self, words: List[str], order: str) -> bool:
+
+        def compare(w1, w2):
+            size1, size2 = len(w1), len(w2)
+            for i in range(size1):
+                if i == size2:
+                    if size1 > size2 and alp[w1[i-1]] == alp[w2[i-1]]:
+                        return False
+                    return True
+                if alp[w1[i]] < alp[w2[i]]:
+                    return True
+                elif alp[w1[i]] > alp[w2[i]]:
+                    return False
+            return True
+
+        alp = {el: i for i, el in enumerate(order)}
+        size = len(words)
+        for i in range(size - 1):
+            if not compare(words[i], words[i + 1]):
+                return False
+        return True
+
+
+# 10000IQ
+# https://leetcode.com/problems/verifying-an-alien-dictionary/solutions/801754/python-one-liner-just-sort-the-list-according-the-custom-alphabet/
+
+class Solution:
+    def isAlienSorted(self, words: List[str], order: str) -> bool:
+        return words == sorted(words,key=lambda word:[order.index(c) for c in word])
