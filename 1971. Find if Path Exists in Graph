@@ -1,0 +1,53 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Since I have been doing graph traversal for quite a long time and have done little, I wrote it quite poorly now.
+I find nodes adjacent to the starting point and through them I begin to go around the surrounding points, filling in the set of visited ones. 
+If at some point both the starting point and the goal point are passed, then we can get from one to the other
+"""
+
+# Its gigaslow but works!
+class Solution:
+    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+        if source == destination: return True
+
+        def check(el):
+            for e in el:
+                if e not in visited:
+                    visited.add(e)
+                    if nodes.get(e) is not None:
+                        check(nodes[e])
+
+        nodes = defaultdict(set)
+        for elem in edges:
+            nodes[elem[0]].add(elem[1])
+            nodes[elem[1]].add(elem[0])
+        visited = {source}
+        check(nodes[source])
+        if destination in visited and source in visited:
+                return True
+        return False
+
+# After thinking!
+class Solution:
+    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+        nodes = defaultdict(set)
+        for elem in edges:
+            nodes[elem[0]].add(elem[1])
+            nodes[elem[1]].add(elem[0])
+        
+        
+        def check(el):
+            if el == destination:
+                return True
+            visited.add(el)
+            for e in nodes[el]:
+                if e not in visited:
+                    if check(e):
+                        return True
+            return False
+        
+        
+        visited = set()
+        return check(source)
