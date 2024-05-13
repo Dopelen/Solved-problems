@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space. Where m is alphabet and n amount of words.
+
+I'm glad that this problem can be solved as greedily as possible. 
+If you have an "X" symbol, you must replace it. 
+You can only do this by changing 3 symbols, then just swap all 3 symbols from the current location and shift the index!
+
+P.S: And we don't even need to change anything in the line!
+
+"""
+
+class Solution:
+    def minimumMoves(self, s: str) -> int:
+        ans = i = 0
+        while i < len(s):
+            if s[i] == "X":
+                ans += 1
+                i += 2
+            i += 1
+        return ans
