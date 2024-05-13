@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program have O(n) complexity by time and O(n) by space.
+
+I create a dictionary from the first list, then the second, but in second I only include the elements that were in the first.
+In result I have a dictionary that contains only common elements and at the same time I have access to the index of any of the elements in the original string since I number the parts inside the dictionary generator.
+Then I iterate over the common elements, maintaining a list for those that have the minimum index difference.
+
+"""
+
+class Solution:
+    def findRestaurant(self, list1: List[str], list2: List[str]) -> List[str]:
+        first_d = {el:ind for ind,el in enumerate(list1)} 
+        second_d = {el:ind for ind,el in enumerate(list2) if el in first_d}
+        cur_ans = []
+        cur_min = math.inf
+        for elem in second_d:
+            ind_sum = first_d[elem] + second_d[elem]
+            if ind_sum < cur_min:
+                cur_min = ind_sum
+                cur_ans = [elem]
+            elif ind_sum == cur_min:
+                cur_ans.append(elem)
+        return cur_ans
