@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(h * m) complexity by time and O(h * m) by space.
+
+I think this was one of the first problems that I saw on the leetcode, and then I thought this was crazy. 
+Now, a few months later, I saw her, and again I thought this was crazy. 
+All the possible options somehow didn’t fit properly in my head :(
+
+My code took 40 lines, and everything is solved by simply searching through all possible combinations and counting bits.
+
+"""
+
+class Solution:
+    def readBinaryWatch(self, turnedOn: int) -> List[str]:
+        result = []
+        for hour in range(0, 12):
+            for minute in range(0, 60):
+                if bin(hour).count('1') + bin(minute).count('1') == turnedOn:
+                    result.append('{:d}:{:02d}'.format(hour, minute))                   
+        return result
