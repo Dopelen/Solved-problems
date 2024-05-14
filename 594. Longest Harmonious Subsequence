@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The tasks were difficult, both in the formulations and in the marginal situations and in the decisions, it is not surprising that they have such a low acceptance rating.
+
+"""
+
+# True solution O(n):
+class Solution:
+	def findLHS(self, nums: List[int]) -> int:
+		Cou = Counter(nums)
+		keys = Cou.keys()
+		ans = 0
+		for num in keys:
+			if num - 1 in keys:
+				ans = max(ans, Cou[num - 1] + Cou[num])
+		return ans
