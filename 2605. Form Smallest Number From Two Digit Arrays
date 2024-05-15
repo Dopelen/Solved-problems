@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(max(nums1, nums2)) complexity by time and O(max(nums1, nums2)) by space.
+
+A funny task with a trick, but easy to solve. 
+To my shame, I didn’t solve it the first time, because I didn’t think that the elements were unique only within their list; there could be similar ones in another.
+I didn’t bother with optimization, because each list has no more than 10 elements.
+
+"""
+
+class Solution:
+    def minNumber(self, nums1: List[int], nums2: List[int]) -> int:
+        common = [el for el in nums1 if el in nums2]
+        if common == []: 
+            m1, m2 =  min(nums1), min(nums2)
+            ans = str(min(m1, m2)) + str(max(m1, m2))
+            return int(ans)
+        return min(common)
