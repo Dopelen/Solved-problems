@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(len(str(n))) complexity by time and O(len(str(n))) by space.
+
+I thought I would solve it in one line using the format, but there is such an impenetrable abyss of different versions of Python that I decided to take the “easy” route.
+
+"""
+
+class Solution:
+    def thousandSeparator(self, n: int) -> str:
+        n_s = str(n)[::-1]
+        size = len(n_s)
+        return ".".join(n_s[i:i + 3] for i in range(0, size, 3))[::-1]
+
+# Smart  one:
+# https://leetcode.com/problems/thousand-separator/solutions/805712/python3-1-line/
+# The funny part about this solution is that the format library is designed for this type, but when using separators, if you want to solve everything in one line, it only supports "_" and ","
+# so this is a very cool way to get around this limitation
+
+class Solution:
+    def thousandSeparator(self, n: int) -> str:
+        return f"{n:,}".replace(",", ".")
