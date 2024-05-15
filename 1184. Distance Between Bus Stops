@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+To solve this problem, I used the sums of slices of the original list. With a little trick. 
+If the destination is located after the start point, then we need to compare the distance to it from the start and the distance to the start in the other direction and from the edge to the destination point.
+And if destination is found earlier, we just need to swap the “start” and “destination” positions in our formula! 
+Because the calculations will remain the same! 
+In the first case there was a (start - destination), in the second there was a (destination - start).
+"""
+
+class Solution:
+    def distanceBetweenBusStops(self, distance: List[int], start: int, destination: int) -> int:
+        size = len(distance)
+        if start == destination:
+            return 0
+        elif start > destination:
+            destination, start = start, destination
+        first_v = sum(distance[start:destination])
+        second_v = sum(distance[destination:size] + distance[:start])
+        return min(first_v, second_v)
