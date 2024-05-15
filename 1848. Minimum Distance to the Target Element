@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I calculate the absolute difference for the answer, as long as it decreases.
+Because at the moment when it starts to increase it will only continue to grow, so we know the answer at this point!
+
+"""
+
+class Solution:
+    def getMinDistance(self, nums: List[int], target: int, start: int) -> int:
+        ans = math.inf
+        for i in range(len(nums)):
+            if nums[i] == target:
+                if abs(i - start) > ans:
+                    break
+                ans = min(ans, abs(i - start))
+        return ans
