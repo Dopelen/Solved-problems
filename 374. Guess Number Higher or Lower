@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(log(n)) by space.
+
+I didn’t understand at all what they wanted from me, but just in case I wrote a binary search and it worked.
+
+"""
+
+class Solution:
+    def guessNumber(self, n: int) -> int:
+        left, right = 1, n
+        while left <= right:
+            mid = (left + right) // 2
+            result = guess(mid)
+            if result == 0:
+                return mid
+            elif result == -1:
+                right = mid - 1
+            else:
+                left = mid + 1
+        return -1
