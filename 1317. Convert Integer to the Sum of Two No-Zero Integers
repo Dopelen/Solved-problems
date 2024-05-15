@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(len(str(n))) complexity by time and O(possible symbols) by space.
+
+Initially, I wanted to count some bits, and only then I realized that the problem was about numbers in the decimal system.
+
+P.S: You can also solve by reducing numbers using remainders from division by 10, but this is more voluminous.
+"""
+
+class Solution:
+    def getNoZeroIntegers(self, n: int) -> List[int]:
+        for elem in range(n+1):
+            a = elem
+            b = n - a
+            if (not str(a).count("0")) and (not str(b).count("0")):
+                return [a, b]
