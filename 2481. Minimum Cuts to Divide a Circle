@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+When I saw the circle problem, I was nervous at first, but then I calmed down, because circles are either infinitely difficult or infinitely simple. 
+This was the second option.
+
+"""
+
+class Solution:
+    def numberOfCuts(self, n: int) -> int:
+        if n == 1: return 0
+        if not n % 2: 
+            n = n // 2
+        return n
