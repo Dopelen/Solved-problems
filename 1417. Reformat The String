@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I actually wanted to solve it in one pass through 2 pointers, but the solution absolutely didn’t add up in my head, so I decided to start with a simple union of lists.
+
+P.S: And that's where it stopped.
+"""
+
+# O(n), O(n)
+class Solution:
+    def reformat(self, s: str) -> str:
+        i = 0
+        size = len(s)
+        digits, symbols, ans = [], [], []
+        while i < size:
+            if s[i].isdigit():
+                digits.append(s[i])
+            else:
+                symbols.append(s[i])
+            i += 1
+        
+        if abs(len(digits) - len(symbols)) > 1:
+            return ""
+        
+        if len(digits) < len(symbols): # After exchanging lists, we are sure that the largest list will give the element first
+            symbols, digits = digits, symbols
+        
+        while digits and symbols:
+            ans.append(digits.pop())
+            ans.append(symbols.pop())
+        
+        return "".join(ans + digits) # don’t forget to add the remaining element if one of the lists was larger
