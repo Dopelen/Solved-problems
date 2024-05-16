@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I'm not ashamed to post clumsy solutions with various data structures!
+I solved it in several ways, they don’t differ much in time.
+
+"""
+
+class Solution:
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
+        line = []
+        while head:
+            line.append(head.val)
+            head = head.next
+        size = len(line)
+        for i in range(size//2):
+            if line[i] != line[size-i-1]:
+                return False
+        return True
