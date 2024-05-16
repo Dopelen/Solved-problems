@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) by time and O(n) by space.
+
+I decided to add the lengths of words until I get the lentght of given one, and then check whether the already glued string of words matches the given one.
+I like this solution because it works with word lengths and we don't have to constantly interact with string slices.
+"""
+
+class Solution:
+    def isPrefixString(self, s: str, words: List[str]) -> bool:
+        size = len(s)
+        l = i = 0
+        while l < size and i < len(words):
+            l += len(words[i])
+            i += 1
+        return s == "".join(words[:i])
