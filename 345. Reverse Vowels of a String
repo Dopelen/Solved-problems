@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+"""
+
+# Quickly, without thinking, in two passes
+class Solution:
+    def reverseVowels(self, s: str) -> str:
+        vov = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'}
+        cur_vov = deque()
+        ans = list(s)
+        for i in range(len(s)):
+            if ans[i] in vov:
+                cur_vov.append(ans[i])
+                ans[i] = "_"
+        for j in range(len(s)):
+            if ans[j] == "_":
+                ans[j] = cur_vov.pop()
+        return "".join(ans)
+
+# A little thought in two pointers. One pass.
+class Solution:
+    def reverseVowels(self, s: str) -> str:
+        vov = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'}
+        ans = list(s)
+        size = len(s)
+        point_1 = 0
+        point_2 = size-1
+        while point_1 < point_2:
+            while point_1 < point_2 and ans[point_1] not in vov:
+                point_1 += 1
+            while point_2 > point_1 and ans[point_2] not in vov:
+                point_2 -= 1
+            ans[point_1], ans[point_2] = ans[point_2], ans[point_1]
+            point_1 += 1
+            point_2 -= 1
+        return "".join(ans)
