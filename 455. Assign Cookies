@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) by time and O(1) by space (sort working on place). Where n is the max(len(greed) and len(s)).
+
+We are not told whether the cookies are in ascending order or the children's needs, so we sort them straight away.
+The main thing to understand here is that the maximum is achievable even with greedy calculations. 
+For us, it makes no difference whether we feed a greedy child or not, because in both cases we will only get 1 happy child, so we can safely give the biggest cookies to the most modest ones!
+
+"""
+
+class Solution:
+    def findContentChildren(self, g: List[int], s: List[int]) -> int:
+        g.sort()
+        s.sort()
+        ans = i = 0
+        for c in g:
+            while i < len(s) and  c > s[i]:
+                i += 1
+            if i == len(s):
+                break
+            ans += 1
+            i += 1
+        return ans
