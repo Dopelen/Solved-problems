@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(1) by space.
+
+I wasn't 100% sure it would work. 
+But a purely logical binary search works through the comparison of elements; 
+the comparison configuration is described for numbers and for symbols. 
+Therefore, in my head there should have been no problems with binary search and symbols.
+
+"""
+
+class Solution:
+    def nextGreatestLetter(self, letters: List[str], target: str) -> str:
+        pos = bisect_right(letters, target)
+        return letters[pos] if pos != len(letters) else letters[0]
