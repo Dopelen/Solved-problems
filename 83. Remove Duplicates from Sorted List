@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I don't like this solution because it requires creating a new linked list.
+
+"""
+
+class Solution:
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        
+        unic, n = [], None
+        while head:
+            if not unic or head.val != unic[-1]:
+                unic.append(head.val)
+            head = head.next
+        a = None
+        for el in unic[::-1]:
+            n = ListNode(el, a)
+            a = n
+        return n
+
+# Without completely creating an additional list
+# Changing a list by working with a shallow copy
+# https://leetcode.com/problems/remove-duplicates-from-sorted-list/solutions/943403/python-simple-solution/
+
+class Solution:
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        cur=head
+        while cur:
+            while cur.next and cur.next.val==cur.val:
+                cur.next=cur.next.next
+            cur=cur.next
+        return head
