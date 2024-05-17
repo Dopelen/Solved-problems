@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+We convert our numbers into strings, connect them, look at their length and the length of only unique elements. 
+Then we check for the occurrence of zero and all conditions are met.
+
+"""
+
+class Solution:
+    def isFascinating(self, n: int) -> bool:
+        ans = [el for el in str(n) + str(n*2) + str(n*3)]
+        return len(ans) == 9 and len(set(ans)) == 9 and "0" not in ans
