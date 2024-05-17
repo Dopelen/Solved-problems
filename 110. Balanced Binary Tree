@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Here we simply traverse the tree, comparing the coarseness of the left and right subtrees using a recursive call.
+
+"""
+
+class Solution:
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        
+        def check_height(node):
+            if not node:
+                return 0
+                
+            left_height = check_height(node.left)
+            if left_height == -1:
+                return -1
+
+            right_height = check_height(node.right)
+            if right_height == -1:
+                return -1
+
+            if abs(left_height - right_height) > 1:
+                return -1
+            
+            return max(left_height, right_height) + 1
+        
+        return check_height(root) != -1
