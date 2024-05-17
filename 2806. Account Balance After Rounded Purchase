@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+A fun puzzle, but not difficult. 
+I just had to juggle the conditions. 
+The result was output using the remainder of division by 10, but in general you can do this based on the length of the string, after converting the number to a string
+
+"""
+
+class Solution:
+    def accountBalanceAfterPurchase(self, purchaseAmount: int) -> int:
+        if purchaseAmount <= 10:
+            return 90 if purchaseAmount >= 5 else 100
+        else:
+            return 100 - (purchaseAmount // 10 + 1 if purchaseAmount % 10 >= 5 else purchaseAmount // 10) * 10
