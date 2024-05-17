@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+We just use two pointers.
+
+"""
+
+class Solution:
+    def largeGroupPositions(self, s: str) -> List[List[int]]:
+        size= len(s)
+        pointer_1 = pointer_2 = 0
+        prev = s[0]
+        ans = []
+        for i in range(1, size):
+            if s[i] == prev:
+                pointer_2 += 1
+            if s[i] != prev or i == size - 1:
+                if pointer_2 - pointer_1 >= 2:
+                    ans.append([pointer_1, pointer_2])
+                pointer_1 = pointer_2 = i
+                prev = s[i]
+        return ans
