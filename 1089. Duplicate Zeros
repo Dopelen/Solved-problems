@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+It turned out to be a difficult task for me, I understood the concept, but somehow I couldn’t figure out the solution in my head, so I had to look at the tips.
+
+"""
+
+class Solution:
+    def duplicateZeros(self, arr: List[int]) -> None:
+        size = len(arr)
+        cou = arr.count(0)
+        for i in range(size - 1, -1, -1):
+            if i + cou < size:
+                arr[i + cou] = arr[i]
+            if arr[i] == 0:
+                cou -= 1
+                if i + cou < size:
+                    arr[i + cou] = 0
