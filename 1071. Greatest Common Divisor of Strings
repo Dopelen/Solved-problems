@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I simply go through all possible lengths of segments up to half a line, as possible fragments for constructing another line, and add them into a set. 
+I display the largest fragment which is the intersection of two sets.
+
+"""
+
+class Solution:
+    def gcdOfStrings(self, str1: str, str2: str) -> str:
+
+        def divis(s):
+            size = len(s)
+            valid_cros = {s}
+            cur_chank = ''
+            step = 1
+            for elem in s[:size//2]:
+                cur_chank += elem
+                if (size / step).is_integer():
+                    if cur_chank * (size // step) == s:
+                        valid_cros.add(cur_chank)
+                step += 1
+            return valid_cros
+
+        cross = divis(str1) & divis(str2)
+        return max(cross) if cross else ''
