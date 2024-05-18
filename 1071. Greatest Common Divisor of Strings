@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-This program has O(n) complexity by time and O(n) by space.
+This program has O(n ** 2) complexity by time (bc for every possible fragment we have to compare it with other string) and O(n) by space.
 
 I simply go through all possible lengths of segments up to half a line, as possible fragments for constructing another line, and add them into a set. 
 I display the largest fragment which is the intersection of two sets.
