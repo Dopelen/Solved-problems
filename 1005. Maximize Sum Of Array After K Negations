@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+There was an indecently large number of tests in this problem and at some point the solution had to be rebuilt.
+But in the end the solution seems adequate.
+
+"""
+
+class Solution:
+    def largestSumAfterKNegations(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        size = len(nums) - 1
+        i = 0
+        while i < size and k > 0 and nums[i] < 0:
+            nums[i] *= -1
+            k -= 1
+            i += 1
+        if nums[i] != 0 and k % 2:
+            if i + 1 == size:
+                i -= 1
+            if nums[i] > nums[i-1]:
+                i -= 1
+            nums[i] *= -1
+        return sum(nums)
