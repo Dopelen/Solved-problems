@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+We need the sort order to change only once and the last element to be less than or equal to the first, because in this case we can restore the sort order.
+
+"""
+
+class Solution:
+    def check(self, nums: List[int]) -> bool:
+        i = 1
+        point = None
+        while i < len(nums):
+            if nums[i] < nums[i - 1]:
+                if point is None:
+                    point = i
+                else:
+                    return False
+            i += 1
+        return point is not None and nums[-1] <= nums[0] or point is None
