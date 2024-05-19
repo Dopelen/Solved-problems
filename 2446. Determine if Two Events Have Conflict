@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The main difficulty, as usual, is converting the date into a format with which you can do something.
+But this is optional.
+
+"""
+
+class Solution:
+    def haveConflict(self, event1: List[str], event2: List[str]) -> bool:
+        from datetime import datetime
+        t1_s = datetime.strptime(event1[0], "%H:%M").time()
+        t1_e = datetime.strptime(event1[1], "%H:%M").time()
+        t2_s = datetime.strptime(event2[0], "%H:%M").time()
+        t2_e = datetime.strptime(event2[1], "%H:%M").time()
+
+        return (t1_s >= t2_s and t2_e >= t1_s) or (t2_s >= t1_s and t1_e >= t2_s)
+
+
+# Also possible!
+# https://leetcode.com/problems/determine-if-two-events-have-conflict/solutions/2734341/python3-1-line/
+class Solution:
+    def haveConflict(self, event1: List[str], event2: List[str]) -> bool:
+        return event1[0] <= event2[0] <= event1[1] or event2[0] <= event1[0] <= event2[1]
