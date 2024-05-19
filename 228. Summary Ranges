@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n)  complexity by time and O(n) by space.
+
+Not very nice edge cases, but overall the concept is pretty simple. 
+If the elements differ by 1, you indicate that the element was skipped; at the moment when they differ by more than 1, you supplement the answer.
+
+"""
+
+class Solution:
+    def summaryRanges(self, nums: List[int]) -> List[str]:
+        size = len(nums)
+        if not size: return []
+        ans = []
+        border = str(nums[0])
+        skiped = False
+        for i in range(1, size):
+            if nums[i] - 1 != nums[i - 1] or i == size:
+                if skiped:
+                    border += "->" + str(nums[i - 1])
+                ans.append(border)
+                border = str(nums[i])
+                skiped = False
+            else:
+                skiped = True
+        if skiped:
+            border = border + "->" + str(nums[- 1])
+        ans.append(border)
+        return ans
