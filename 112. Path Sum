@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+We need sum exactly! from root to leaf. This is emphasized in the condition, but I still managed to pile up errors related to this.
+
+"""
+
+class Solution:
+    def hasPathSum(self, root: Optional[TreeNode], targetSum: int) -> bool:
+
+        def helper(r, s):
+            if not r:
+                return False
+            s += r.val
+            if s == targetSum and (not r.left and not r.right):
+                return True
+            else:
+                return helper(r.left, s) or helper(r.right, s)
+
+        return helper(root if root else [], 0)
+
