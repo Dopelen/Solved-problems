@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I think that deleting the value of the source data in order to understand something is beyond good and evil, but I completed the task!
+
+"""
+
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        while head and head.val is not None:
+            head.val = None
+            head = head.next
+        if not head:
+            return False
+        else:
+            return True
+
+
+
+# human solution, if you want save your list:
+# https://leetcode.com/problems/linked-list-cycle/solutions/823960/two-approaches-in-python-3-dictionary-and-two-pointers/
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        fast = slow = head
+        
+        while fast and fast.next:
+            slow, fast = slow.next, fast.next.next
+            if fast == slow:
+                return True
+        
+        return False
