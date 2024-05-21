@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A simple task to process maxima from a list with conditions.
+Using Counter().
+
+"""
+
+class Solution:
+    def mostFrequentEven(self, nums: List[int]) -> int:
+        cou = Counter(nums)
+        ans = [-1, -1]
+        for k, v in cou.items():
+            if not k % 2:
+                if v > ans[1] or (v == ans[1] and k < ans[0]):
+                    ans = [k, v]
+        return ans[0]
