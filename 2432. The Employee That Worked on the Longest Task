@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+In general, we are dont care about worker IDs here, we only need to know the difference between two subsequent tasks, 
+and if it is greater than what we encountered before, we update the answer.
+
+"""
+
+class Solution:
+    def hardestWorker(self, n: int, logs: List[List[int]]) -> int:
+        ans = logs[0]
+        for i in range(1, len(logs)):
+            dif = logs[i][1] - logs[i - 1][1]
+            if (dif > ans[1]) or ((dif == ans[1]) and (logs[i][0] < ans[0])):
+                ans = [logs[i][0], dif]
+        return ans[0]
