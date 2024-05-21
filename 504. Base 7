@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log_base_7_n) complexity by time and O(log_base_7_n) by space.
+
+A difficult task for me in which I initially over-thought everything.
+
+"""
+
+class Solution:
+    def convertToBase7(self, num: int) -> str:
+        if num == 0: return "0"
+        ans = []
+        neg = num < 0
+        
+        if neg:
+            num = -num
+
+        while num > 0:
+            ans.append(str(num % 7))
+            num //= 7
+        
+        return ("-" if neg else "") + "".join(reversed(ans))
