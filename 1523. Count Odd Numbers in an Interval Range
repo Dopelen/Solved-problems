@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+It seems that the idea is simple, every second number is even and every second is odd, but some difficulties arise when you start to understand it. 
+If the range boundaries are equal, we need to return 0 if they are even and 1 if they are not. 
+If both boundaries are even, then the odd ones between them are simply integer division from their difference, but what if not? 
+And if both are odd, we need to return all the odd ones from the dipozone (their dif -1), not including the edges + the edges.
+
+"""
+
+# Human
+class Solution:
+    def countOdds(self, low: int, high: int) -> int:
+        h = high % 2
+        l = low % 2
+        return (high - low - 1 if h == l == 1 else high - low) // 2 + h + l
+
+# Better person
+# https://leetcode.com/problems/count-odd-numbers-in-an-interval-range/solutions/1813332/python-3-math-intuitive/
+class Solution:
+  def countOdds(self, low: int, high: int) -> int:
+    if low % 2 == 0:
+      return (high-low+1)//2
+    return (high-low)//2 + 1
+
+# One-line
+class Solution:
+    def countOdds(self, low: int, high: int) -> int:
+        return (high - low - 1 if high % 2 == low % 2 == 1 else high - low) // 2 + high % 2 + low % 2
