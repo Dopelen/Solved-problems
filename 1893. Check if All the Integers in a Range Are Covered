@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(1) by space.
+
+The greatest difficulty is in the edge cases. 
+The idea of the problem itself is interesting, because we are mainly interested only in the edges of the intervals, and sorting allows us to reliably trace the coverage of these intervals.
+
+"""
+
+class Solution:
+    def isCovered(self, ranges: List[List[int]], left: int, right: int) -> bool:
+        ranges.sort(key=lambda x: x[0])
+        for el in ranges:
+            if el[0] == left or el[1] == left or left > el[0] and left < el[1]:
+                left = el[1] + 1
+        return left > right
