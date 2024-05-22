@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+To solve this, I compiled lists of “beliefs” for each. 
+And in the end, I’m just looking for a person who everyone believes (except 1) and who didn’t vote.
+
+P.S: I looked at the solutions, the conventional way to solve this problem is to create a list where each index corresponds to a person, and increase his power of attorney depending on each vote for him, and then find the one for whom n-1 votes.
+
+"""
+
+class Solution:
+    def findJudge(self, n: int, trust: List[List[int]]) -> int:
+        if n == 1 and trust == []: return 1
+        t, n_j = defaultdict(list), set()
+        for el in trust:
+            n_j.add(el[0])
+            t[el[1]].append(el[0])
+        for k, v in t.items():
+            if len(v) == n - 1 and k not in n_j:
+                return k
+        return -1
