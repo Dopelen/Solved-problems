@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+First I overcomplicated something by entering queues, then I did a simple iteration.
+We can optimize the memory solution by moving from the end of the lists to the beginning, lowering the index and skipping elements if we come across #, 
+the main thing is to remember that # can go several in a row and take this into account.
+"""
+
+# This program has O(n) complexity by time and O(n) by space.
+class Solution:
+    def backspaceCompare(self, s: str, t: str) -> bool:
+        first, second = [], []
+        
+        for elem in s:
+            if elem == "#":
+                if first:
+                    first.pop()
+            else:
+                first.append(elem)
+
+        for elem in t:
+            if elem == "#":
+                if second:
+                    second.pop()
+            else:
+                second.append(elem)
+
+        return first == second
