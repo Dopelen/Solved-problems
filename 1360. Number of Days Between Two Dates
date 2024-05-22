@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space (these are my guesses because we should at least go through the lines).
+
+Someday I'll get used to the date-time...or not...
+
+"""
+
+class Solution:
+    def daysBetweenDates(self, date1: str, date2: str) -> int:
+        date2 = datetime.datetime.strptime(date2, "%Y-%m-%d")
+        date1 = datetime.datetime.strptime(date1, "%Y-%m-%d")
+        difference = abs(date2 - date1)
+        return difference.days
