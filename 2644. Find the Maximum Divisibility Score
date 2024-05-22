@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n) by space. 
+Where n is number of elements in nums and m is number of divisors.
+
+I introduced a counter to avoid counting repeated values several times. 
+You can also introduce set(divisors) for the same reason. 
+I just iterate through the list and maintain the maximum.
+
+"""
+
+class Solution:
+    def maxDivScore(self, nums: List[int], divisors: List[int]) -> int:
+        cou = Counter(nums)
+        ans = [math.inf, -math.inf]
+        for div in divisors:
+            cur = [div, 0]
+            for elem in cou.keys():
+                if not elem % div:
+                    cur[1] += cou[elem]
+            if cur[1] > ans[1] or (cur[1] == ans[1] and cur[0] < ans[0]):
+                ans = cur
+        return ans[0]
+
+
+# Simplified version
+class Solution:
+    def maxDivScore(self, nums: List[int], divisors: List[int]) -> int:
+        ans = [math.inf, -math.inf]
+        for div in divisors:
+            cur = 0
+            for elem in nums:
+                if not elem % div:
+                    cur += 1
+            if cur > ans[1] or (cur == ans[1] and div < ans[0]):
+                ans = [div, cur]
+        return ans[0]
