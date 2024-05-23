@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+If the element we were looking for was unique, we could simply subtract the indices, without any additional checks. 
+
+If you really don’t like brute force, you can count the indices of all occurrences of our target, and take the closest one while we go back and forth, 
+but to collect these indices, you still have to go through all the elements. 
+We'll just shorten the constant a little.
+"""
+
+class Solution:
+    def closetTarget(self, words: List[str], target: str, startIndex: int) -> int:
+        if target not in words: return -1
+        size = len(words)
+        forward = backward = 0
+        i = startIndex
+        while words[i % size] != target:
+            i += 1
+            forward += 1
+        while words[startIndex % size] != target:
+            startIndex -= 1
+            backward += 1
+        return min(forward, backward)
