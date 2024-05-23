@@ -1,6 +1,6 @@
 #!/usr/bin/python
-"""You can see the description of the task using the code specified in the title on letcode.
-This program has O(n*m)(n - elements, m - highest amount of repeat symbol) complexity by time and O(n) by space.
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m)(n - elements, m - highest amount of repeat symbol) complexity by time and O(n * m) by space.
 
 """
 
@@ -12,6 +12,7 @@ class Solution:
                 answer.append(nums[elem])
         return answer
 
+
 #I feel like it is possible to reduce the number of inserts that are provided, but I don't know how exactly "extend" operation performs in terms of runtime compared to the "append"
 class Solution:
     def decompressRLElist(self, nums: List[int]) -> List[int]:
@@ -19,3 +20,20 @@ class Solution:
         for elem in range(0,size,2):
             answer.extend(nums[elem]*[nums[elem+1]])
         return answer
+
+
+# *I accidentally solved the same problem a couple of months later*
+# I really wanted to pack everything into one generator (well, technically there are two of them)
+class Solution:
+    def decompressRLElist(self, nums: List[int]) -> List[int]:
+        return [item for i in range(0, len(nums), 2) for item in [nums[i + 1]] * nums[i]]
+
+
+# Same code:
+class Solution:
+    def decompressRLElist(self, nums: List[int]) -> List[int]:
+        size = len(nums)
+        ans = []
+        for i in range(0, size, 2):
+            ans += [nums[i + 1]] * nums[i]
+        return ans
