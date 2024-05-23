@@ -1,0 +1,20 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The initial decision did not pass on time. I had to come up with something faster.
+Calculating combinations is still a headache.
+
+I think sorting the lists so they can be turned one way is a great idea!
+"""
+
+class Solution:
+    def numEquivDominoPairs(self, dominoes: List[List[int]]) -> int:
+        pairs = defaultdict(int)
+        for d in dominoes:
+            p = tuple(sorted(d))
+            pairs[p] += 1
+        ans = 0
+        for v in pairs.values():
+            s = v*(v-1)//2
+            ans += s
+        return ans
