@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+In problems like this, indexes drive me crazy. The first player passes...2 to the right... 
+As a result, you sit for half an hour with a piece of paper and write down extreme cases.
+
+"""
+
+class Solution:
+    def circularGameLosers(self, n: int, k: int) -> List[int]:
+        get_ball = set()
+        i = 1
+        nxt = 0
+        while nxt not in get_ball:
+            get_ball.add(nxt)
+            nxt = (nxt + (k * i)) % n
+            i += 1
+        return [p + 1 for p in range(1, n) if p not in get_ball]
