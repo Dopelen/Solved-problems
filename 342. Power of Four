@@ -1,0 +1,15 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(1) by space.
+
+Im not into math today.
+"""
+
+class Solution:
+    def isPowerOfFour(self, n: int) -> bool:
+        for i in range(16):
+            cur_v = 4 ** i
+            if cur_v == n:
+                return True
+            elif cur_v > n:
+                return False
+        return False
