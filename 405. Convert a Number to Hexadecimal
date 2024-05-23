@@ -1,0 +1,19 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The other day I was solving a similar problem about converting to the seven-base number, 
+the only difference here is the use of two’s complement method to reflect negative numbers and the conversion of numbers greater than 9 into letters.
+
+"""
+
+class Solution:
+    def toHex(self, num: int) -> str:
+        if num == 0: return '0'
+        conv = '0123456789abcdef'
+        ans = ''
+        if num<0: num += 2 ** 32
+        while num > 0:
+            digit = num % 16
+            num = (num-digit) // 16
+            ans += str(conv[digit])
+        return ans[::-1]
