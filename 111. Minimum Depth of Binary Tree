@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+"""
+
+
+# Initially, I added an additional function to transmit depth, but this can be done without calling an additional function!
+# Raw version
+class Solution:
+    def minDepth(self, root: Optional[TreeNode]) -> int:
+        def check(r, d):
+            if r.left is None and r.right is None:
+                return d
+            elif not r.left:
+                return check(r.right, d + 1)
+            elif not r.right:
+                return check(r.left, d + 1)
+            else:
+                return min(check(r.right, d + 1), check(r.left, d + 1))        
+        if not root:
+            return 0
+        return check(root, 1)
+
+
+# After thinking:
+class Solution:    
+    def minDepth(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0        
+        if root.left is None and root.right is None:
+                return 1
+        elif not root.left:
+            return self.minDepth(root.right) + 1
+        elif not root.right:
+            return self.minDepth(root.left) + 1
+        else:
+            return min(self.minDepth(root.right), self.minDepth(root.left)) + 1
