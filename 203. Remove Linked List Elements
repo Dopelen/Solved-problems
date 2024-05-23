@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Even reading the analysis of similar tasks, I still don’t fully understand what’s going on. 
+When I point at the same list through 3 different variables, darkness envelops me.
+"""
+
+class Solution:
+    def removeElements(self, head: Optional[ListNode], val: int) -> Optional[ListNode]:
+        fake = ListNode(0, head)  # to process case where first element has to be deleted
+        prev, cur = fake, head  
+        while cur:
+            if cur.val == val:
+                prev.next = cur.next
+            else:
+                prev = cur
+            cur = cur.next
+        return fake.next
