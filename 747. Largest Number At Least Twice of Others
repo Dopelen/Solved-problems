@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Just checking the multiplication of each element.
+Alternatively, you could look at the last two elements after sorting.
+"""
+
+class Solution:
+    def dominantIndex(self, nums: List[int]) -> int:
+        l = max(nums)
+        for i, v in enumerate(nums):
+            if v == l:
+                ans = i
+            elif v * 2 > l:
+                return -1
+        return ans
+
