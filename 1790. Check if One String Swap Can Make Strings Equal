@@ -1,0 +1,31 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode."""
+
+# This program has O(n) complexity by time and O(1) by space.
+# Lots of extra stuff to prevent unnecessary iterations
+
+class Solution:
+    def areAlmostEqual(self, s1: str, s2: str) -> bool:
+        dif = []
+        for i in range(len(s1)):
+            if s1[i] != s2[i]:
+                if len(dif) >= 2:
+                    return False
+                dif.append(i)
+        if len(dif) == 0:
+            return True
+        elif len(dif) == 1:
+            return False  
+        return s1[dif[0]] == s2[dif[1]] and s1[dif[1]] == s2[dif[0]]
+
+
+# This program has O(n) complexity by time and O(n) by space.
+# Сompact, but the loop is not interrupted, which can lead to memory consumption.
+
+class Solution:
+    def areAlmostEqual(self, s1: str, s2: str) -> bool:
+        dif = [i for i in range(len(s1)) if s1[i] != s2[i]]
+        if len(dif) == 0: return True
+        if len(dif) == 2:
+            return s1[dif[0]] == s2[dif[1]] and s1[dif[1]] == s2[dif[0]] 
+        return False
