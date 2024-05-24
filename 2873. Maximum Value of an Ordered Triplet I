@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 3) complexity by time and O(1) by space.
+
+I completed the problem in 2 minutes and then I was like, 
+“Wait a minute, it should be solved faster using prefixes and suffixes” 
+I sat for a whole hour on it and finally solved it, and it turned out that such a problem exists at the medium level! 
+So I’ll post a quick solution there: 2874. Maximum Value of an Ordered Triplet II
+"""
+
+# Brute force
+class Solution:
+    def maximumTripletValue(self, nums: List[int]) -> int:
+        size = len(nums)
+        ans = -math.inf
+        for i in range(size):
+            for j in range(i+1, size):
+                for k in range(j+1, size):
+                    ans = max(ans, (nums[i] - nums[j]) * nums[k])
+        return 0 if ans < 0 else ans
