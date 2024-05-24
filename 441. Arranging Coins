@@ -1,0 +1,44 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(log(n)) complexity by time and O(1) by space.
+
+I initially knew that this was not the optimal solution, but I decided based on how I understood the problem. 
+There is clearly an insufficient description of the problem here, and although the problem seems simple, there are several pitfalls hidden in it.
+
+"""
+
+
+# first idea
+class Solution:
+    def arrangeCoins(self, n: int) -> int:
+        rows, step = 0, 1
+        while n > 0:
+            n -= step
+            step += 1
+            if n >= 0:
+                rows += 1
+        return rows
+
+
+# we can find all we need with 1 variable
+class Solution:
+    def arrangeCoins(self, n: int) -> int:
+        rows  = 0
+        while n >= 0:
+            rows += 1
+            n -= rows
+        return rows - 1
+
+
+# fast Gauss formula solution
+class Solution:
+    def arrangeCoins(self, n: int) -> int:
+        left,right=1,n
+        while left<=right:
+            mid=(right+left)//2
+            num=(mid/2)*(mid+1)
+            if num<=n:
+                left=mid+1
+            else:
+                right=mid-1
+        return right
