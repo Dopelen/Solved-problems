@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and O(1) by space.
+
+A painstaking and not very pleasant task, although according to the description it looks simple
+
+"""
+
+class Solution:
+    def countTime(self, time: str) -> int:
+        hh = mm = 1
+        
+        if time[0:2] == "??":
+            hh = 24
+
+        elif time[0] == "?":
+            if time[1] in "0123":
+                hh = 3
+            else:
+                hh = 2
+        
+        elif time[1] == "?":
+            if time[0] in "01":
+                hh = 10
+            elif time[0] == "2":
+                hh = 4
+
+        if time[3] == "?":
+            mm *= 6
+        if time[4] == "?":
+            mm *= 10
+
+        return mm * hh
