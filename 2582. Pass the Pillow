@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time where and O(1) by space.
+
+I calculate the number of passes that were completely made using integer division, and then subtract the remaining steps from the edge where I left off after the division.
+
+"""
+
+class Solution:
+    def passThePillow(self, n: int, time: int) -> int:
+        if time < n:
+            return time + 1
+        else:
+            passes = time // (n - 1)
+            left = time % (n - 1)
+            return left + 1 if not passes % 2 else n - left
