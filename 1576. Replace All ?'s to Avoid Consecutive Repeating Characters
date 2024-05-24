@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and O(n) by space.
+
+Checking the neighbors with "?" symbols, if there are also "?", put any letter, but if there are others, put any other letter!
+
+"""
+
+class Solution:
+    def modifyString(self, s: str) -> str:
+        
+        def change(i):
+            block = {None if i == 0 else ord(s[i - 1]),
+                     None if i + 1 == self.size or s[i + 1] == "?" else ord(s[i + 1])}
+            while (97 + self.new_s) in block:
+                self.new_s += 1
+                if self.new_s == 26:
+                    self.new_s = 0
+            s[i] = chr(97 + self.new_s)        
+        
+        s = list(s)
+        self.new_s = 0
+        self.size = len(s)
+        for i in range(self.size):
+            if s[i] == "?":
+                change(i)
+
+        return "".join(s)
