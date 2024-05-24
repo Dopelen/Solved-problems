@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and O(n) by space.
+
+I count consecutive characters using a flag and a counter; instead, I could use the indices of the beginning and end of repeating characters, and the same thing would happen.
+
+"""
+
+class Solution:
+    def findTheLongestBalancedSubstring(self, s: str) -> int:
+        i = potential_zero = potential_one = ans = 0
+        flag = False
+        size = len(s)
+        while i < size:
+            if s[i] == "0":
+                if flag:
+                    ans = max(ans, min(potential_one, potential_zero) * 2)
+                    potential_zero = potential_one = 0
+                    flag = not flag
+                potential_zero += 1
+            
+            elif s[i] == "1":
+                potential_one += 1
+                flag = True
+            i += 1
+
+        return max(ans, min(potential_one, potential_zero) * 2)
