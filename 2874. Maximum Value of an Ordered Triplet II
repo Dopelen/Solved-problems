@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Having a prefix maximum array and a suffix maximum array, we can calculate its value for each element using the formula given in the condition.
+Then we simply need to find the maximum of these values. You can even maintain the maximum as the iteration progresses, this will speed up the program a little!
+"""
+
+class Solution:
+    def maximumTripletValue(self, nums: List[int]) -> int:
+        size = len(nums)
+        pref_max = [0] * size
+        suf_max = [0] * size
+        cur_pref = cur_suf = ans = 0
+        
+        for i, e in enumerate(nums):
+            cur_pref = max(cur_pref, e)
+            pref_max[i] = cur_pref
+
+        for i in range(size - 1, -1, -1):
+            cur_suf = max(nums[i], cur_suf)
+            suf_max[i] = cur_suf
+
+        for j in range(1,size - 1):
+            ans = max(ans, (pref_max[j - 1] - nums[j]) * suf_max[j + 1])
+
+        return ans
+
+# Smart one
+# https://leetcode.com/problems/maximum-value-of-an-ordered-triplet-ii/solutions/4113801/one-pass-fastest-solution-beats-100-c-python-java/
+class Solution:
+    def maximumTripletValue(self, nums: List[int]) -> int:
+        highest = 0  # to store highest number till now: nums[i]
+        highest_diff = 0  # to store highest diff: nums[i] - nums[j]
+        answer = 0  # to store current max value: (nums[i] - nums[j]) * nums[k]
+        for num in nums:
+            answer = max(answer, highest_diff * num)
+            highest_diff = max(highest_diff, highest - num)
+            highest = max(highest, num)
+        return answer
