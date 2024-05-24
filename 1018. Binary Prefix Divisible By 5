@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(1) complexity by time and O(1) by space.
+
+I began to deal with a bunch of input data transformations...sent...it went through...
+and it turned out to be 100 times slower than the average solution.
+
+It got me thinking.
+
+Such a quick solution told me that there was no transformation into strings, and most likely the number was obtained by purely mathematical operations, and so it turned out.
+
+"""
+
+# Gigachad 1 digit IQ solution:
+class Solution:
+    def prefixesDivBy5(self, nums: List[int]) -> List[bool]:
+        nums = list(map(str, nums))
+        size = len(nums)
+        ans = [0] * size
+        for i in range(size):
+            rep = "".join(nums[:i + 1])
+            ans[i] = int(rep, 2) % 5 == 0
+        return ans
+
+
+# Normal solution
+# Double the previous value each time and add the remainder.
+class Solution:
+    def prefixesDivBy5(self, nums: List[int]) -> List[bool]:
+        num = 0
+        for i,n in enumerate(nums):
+            num = (num * 2 + n) % 5
+            nums[i] = num == 0
+        return nums
