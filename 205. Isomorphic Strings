@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n) complexity by time and O(n) by space.
+
+I check every element with the indexes of their first occurrence in the string for both strings.
+If they are isomorphic the first occurrence for each elem in every strings will be the same.
+
+"""
+
+class Solution:
+    def isIsomorphic(self, s: str, t: str) -> bool:
+        di_1, di_2 = {}, {}
+        size = len(s)
+        for i in range(size):
+            if di_1.get(s[i]) is None:
+                di_1[s[i]] = str(i)
+            if di_2.get(t[i]) is None:
+                di_2[t[i]] = str(i)
+            if di_1[s[i]] != di_2[t[i]]:
+                return False
+        return True
