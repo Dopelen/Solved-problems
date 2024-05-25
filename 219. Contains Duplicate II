@@ -1,0 +1,44 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+The entire IT community cried while they looked at this cycle in a cycle in a cycle, but today Oleg didn’t come up with anything better.
+Jk, I fixed it!
+
+"""
+
+# Solution with tears 
+# This program has O(n**2) complexity by time and O(n) by space.
+
+class Solution:
+    def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
+        dupl = defaultdict(list)
+        for i, el in enumerate(nums):
+            dupl[el].append(i)
+        
+        for v in dupl.values():
+            size = len(v)
+            if size > 1:
+                i = 0
+                for i in range(size):
+                    for j in range(i + 1, size):
+                        if abs(nums[i] - nums[j]) <= k:
+                            return True
+        return False
+
+# After some thinking
+# If you think about it, only neighboring indices will give us the minimum k, because as the index increases, the difference k will also increase, 
+# so there is no need to go through all the combinations. We can simply store for each number the index of its previous occurrence, 
+# and check the condition using the formula each time the element is encountered. This way we will solve the problem in one pass.
+# This program has O(n) complexity by time and O(n) by space.
+
+class Solution:
+    def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
+        dupl = {}
+        for i, el in enumerate(nums):
+            if dupl.get(el) is None:
+                dupl[el] = i
+            else:
+                if abs(dupl[el] - i) <= k:
+                    return True
+                dupl[el] = i
+        return False
