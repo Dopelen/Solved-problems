@@ -1,0 +1,31 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n) complexity by time and O(1) by space.
+
+It may seem that we need to iterate through the entire list, because any string of 1s will confuse us, we need to know whether it is the continuation of 11 or the beginning of 10. 
+However, we need only the last part of the list up to the first zero, not counting the last one.
+And although I solved it with full iteration, it seems that iteration from the end towards the beginning to the first zero is more optimal.
+
+"""
+
+# Full iteration
+class Solution:
+    def isOneBitCharacter(self, bits: List[int]) -> bool:
+        size, i = len(bits), 0
+        if size == 1: return True
+        while i < size:
+            if bits[i] == 1:
+                i += 1
+            i += 1
+            if i == size - 1 and bits[i] == 0:
+                return True
+        return False
+
+# Reverse one
+class Solution:
+    def isOneBitCharacter(self, bits: List[int]) -> bool:
+        even = True
+        for elem in bits[-2::-1]:
+            if elem: even = not even
+            else: break
+        return even
