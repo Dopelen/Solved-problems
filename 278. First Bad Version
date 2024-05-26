@@ -1,0 +1,16 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(n) by space.
+
+The task of implementing a binary search with some conditions.
+"""
+
+class Solution:
+    def firstBadVersion(self, n: int) -> int:
+        l, r = 1, n
+        while l < r:
+            m = (r + l) // 2
+            if isBadVersion(m):
+                r = m
+            else:
+                l = m + 1
+        return l
