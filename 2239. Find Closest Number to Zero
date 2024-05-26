@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The problem pretends to be very easy to solve. It is, but it has a couple of nasty snags inside.
+
+"""
+
+class Solution:
+    def findClosestNumber(self, nums: List[int]) -> int:
+        closest = math.inf
+        for elem in nums:
+            if abs(elem) < closest:
+                closest = abs(elem)
+                pos = elem > 0
+            elif abs(elem) == closest and not pos and elem > 0:
+                pos = True
+        return closest if pos else -closest
