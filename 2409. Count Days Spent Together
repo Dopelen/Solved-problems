@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Glad I managed to solve it on the first try. With dates, I'm not always sure how the intersections work in each problem.
+
+"""
+
+class Solution:
+    def countDaysTogether(self, arriveAlice: str, leaveAlice: str, arriveBob: str, leaveBob: str) -> int:
+        months = {1:31, 2:28, 3:31, 4:30, 5:31, 6:30, 7:31, 8:31, 9:30, 10:31, 11:30, 12:31}
+        
+        def days(d):
+            date = 0
+            for i in range(1, int(d[:2])):
+                date += months[i]
+            date += int(d[3:])
+            return date
+        
+        ans = min(days(leaveAlice), days(leaveBob)) - max(days(arriveAlice), days(arriveBob))
+        return ans + 1 if ans >= 0 else 0
