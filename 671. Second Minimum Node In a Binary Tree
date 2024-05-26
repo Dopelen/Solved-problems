@@ -1,0 +1,19 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It’s very easy to solve if you know DFS, or use an additional set to store values, otherwise it’s quite difficult to get the solution neatly in your head.
+
+"""
+
+class Solution:
+    def findSecondMinimumValue(self, root: Optional[TreeNode]) -> int:
+        
+        def helper(r):
+            if not r:
+                return math.inf
+            if r.val != root.val:
+                return r.val
+            return min(helper(r.left), helper(r.right))
+        
+        second = min(helper(root.left), helper(root.right))
+        return second if second != math.inf else -1
