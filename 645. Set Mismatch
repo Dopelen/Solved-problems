@@ -1,0 +1,25 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+"""
+
+# I solved it through dictionaries, but I didn't like it and decided to continue
+class Solution:
+    def findErrorNums(self, nums: List[int]) -> List[int]:
+        reference = {el:2 for el in range(1, len(nums) + 1)}
+        ans = [0,0]
+        for el in nums:
+            reference[el] -= 1
+            if reference[el] == 0:
+                ans[0] = el
+        ans[1] = next(k for k,v in reference.items() if v == 2)
+        return ans
+
+# I liked the second solution better
+class Solution:
+    def findErrorNums(self, nums: List[int]) -> List[int]:
+        size = len(nums)
+        reference = size * (size + 1) // 2
+        current_sum = sum(nums)
+        most = Counter(nums).most_common(1)[0][0]
+        return [most, reference - (current_sum - most)]
