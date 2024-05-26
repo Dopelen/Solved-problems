@@ -1,0 +1,20 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+There's an incredible amount of transformation that needs to be done, but I managed it
+"""
+
+class Solution:
+    def mostCommonWord(self, paragraph: str, banned: List[str]) -> str:
+        paragraph = re.sub(r'[{}]'.format(re.escape(string.punctuation)), ' ', paragraph)
+        paragraph = paragraph.lower()
+        paragraph = paragraph.split()
+        words = Counter(paragraph)
+        banned = set(banned)
+        ans = [None, 0]
+        for k, v in words.items():
+            if v > ans[1] and k not in banned:
+                ans = [k, v]
+        return ans[0]
+
+
