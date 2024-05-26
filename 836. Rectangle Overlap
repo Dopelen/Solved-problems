@@ -1,0 +1,11 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+Also a problem from Yandex lecture hall about intersecting segments, time, geometric, event. 
+The solution is stored in the brain!
+
+"""
+
+class Solution:
+    def isRectangleOverlap(self, rec1: List[int], rec2: List[int]) -> bool:
+        return  (min(rec1[2], rec2[2]) - max(rec1[0], rec2[0]) > 0) and (min(rec1[3], rec2[3]) - max(rec1[1], rec2[1]) > 0)
