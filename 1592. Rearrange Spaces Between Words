@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+This crutch about the number of words being zero really makes me cringe.
+"""
+
+class Solution:
+    def reorderSpaces(self, text: str) -> str:
+        pure_s = text.split()
+        size = len(pure_s) - 1
+        space_int = sum(1 for i in text if i == " ")
+        if size == 0:
+            return pure_s[0] + " " * space_int        
+        space = " " * (space_int // size)
+        return f"{space}".join(pure_s) + (" " * (space_int % size))
