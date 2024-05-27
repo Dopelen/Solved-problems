@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+Although the task is simple, for some reason I didn’t immediately figure out how exactly to solve it. Too many different ways.
+"""
+
+class Solution:
+    def maxSubsequence(self, nums: List[int], k: int) -> List[int]:
+        backup = Counter(sorted(nums)[len(nums) - k:])
+        ans = []
+        for el in nums:
+            if backup[el] > 0:
+                backup[el] -= 1
+                ans.append(el)
+        return ans
