@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+I wrote a cool solution using strings, but the last two tests with similar numbers ruined it, so I had to write a very polynomial solution.
+
+"""
+
+class Solution:
+    def containsPattern(self, arr: List[int], m: int, k: int) -> bool:
+        size = len(arr)
+        for i in range(len(arr) - m):
+            sub = arr[i:i+m] * k
+            sub_size = len(sub)
+            if any(arr[j:j + sub_size] == sub for j in range(size - sub_size + 1)):
+                return True
+        return False
