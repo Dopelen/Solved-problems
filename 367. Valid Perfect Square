@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(1) by space.
+
+There are so many binsearch tasks today that I might even understand it quite well!
+"""
+
+class Solution:
+    def isPerfectSquare(self, num: int) -> bool:
+        low, high = 0, num
+        while low <= high:
+            m = low + (high - low) // 2
+            cur = m * m
+            if cur > num:
+                high = m - 1
+            elif cur < num:
+                low = m + 1
+            elif cur == num:
+                return True
+        return False
