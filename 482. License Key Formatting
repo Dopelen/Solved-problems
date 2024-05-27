@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+An ordinary task without tricks, just take it and do it. Be aware of edge cases.
+
+P.S: There is a feeling that it is being carefully resolved through the queue.
+"""
+
+class Solution:
+    def licenseKeyFormatting(self, s: str, k: int) -> str:
+        s = ''.join(s.split("-")).upper()
+        size = len(s)
+        ans = []
+        while size > 0:
+            ans.append(s[size - k if size - k > 0 else 0: size])
+            size -= k
+            if size > 0:
+                ans.append("-")
+        return "".join(reversed(ans))
