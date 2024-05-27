@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+Initially, I decided on autopilot using a polynomial, but the last 5 tests didn’t let me in on time. 
+Then I noticed that I was calculating the average for each number, although I was really only concerned with the average for the answer. 
+Since each number has the same number of terms, the largest number will have the largest average. 
+Having corrected this in the generator, I realized that I was still not allowed in due to time. 
+
+# This program has O(n * k) complexity by time and O(n) by space
+class Solution:
+    def findMaxAverage(self, nums: List[int], k: int) -> float:
+        return max([sum(nums[i:i+k]) for i in range(len(nums) - k + 1)])/k
+
+
+I had to think for 5 minutes and decide using kinda prefix sum. 
+We subtract the first element - add a new one on the right - check whether the new sum of the old answer is greater.
+"""
+
+# This program has O(n) complexity by time and O(k) by space.
+class Solution:
+    def findMaxAverage(self, nums: List[int], k: int) -> float:
+        ans = new_v = sum(nums[0:k])
+        for i in range(k, len(nums)):
+            new_v += nums[i] - nums[i - k]
+            ans = max(ans, new_v)
+        return ans/k
