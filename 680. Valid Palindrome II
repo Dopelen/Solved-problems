@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and O(n) by space.
+
+At first I solved it by some inconvenient search, but after another mistake it dawned on me. 
+If I encounter a mismatch at different ends of a string, all I need to do is check whether the remaining segment without the first or without the second character is a polydrome.
+I’m very glad that I came up with such a quick solution myself, I didn’t expect that after that I would get stuck with the problem of pointers sticking to the boundaries of the list, but I managed it in the end.
+
+"""
+
+class Solution:
+    def validPalindrome(self, s: str) -> bool:
+        if s == s[::-1]: return True
+        pointer_1, pointer_2 = 0, len(s) - 1
+        while pointer_1 < pointer_2:
+            if s[pointer_1] != s[pointer_2]:
+                first = s[pointer_1 + 1:pointer_2 + 1] == s[pointer_2: pointer_1:-1]
+                second = s[pointer_1:pointer_2] == s[pointer_2 - 1: pointer_1 - 1:-1]
+                if pointer_1 == 0:
+                    second = s[pointer_1:pointer_2] == s[pointer_2 - 1::-1]
+                return first or second
+            pointer_1 += 1
+            pointer_2 -= 1
+        return True
