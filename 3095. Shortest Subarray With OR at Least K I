@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n ** 2) complexity by time and O(n) by space.
+
+I'm pretty bad at understanding bitwise operations, but if you consistently follow the steps into which you broke the problem down yourself, it won't be very difficult.
+
+"""
+
+class Solution:
+    def minimumSubarrayLength(self, nums: List[int], k: int) -> int:
+        short = math.inf
+        size = len(nums)
+        for i in range(size):
+            new = 0 | nums[i]
+            if new >= k: return 1
+            j = i
+            while j < size - 1 and new < k:
+                j += 1
+                new |= nums[j]
+            if new >= k:
+                short = min(short, j - i)
+        return short + 1 if short != math.inf else -1
