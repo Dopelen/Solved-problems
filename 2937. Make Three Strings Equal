@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and O(1) by space.
+
+I like problems in which understanding the conditions immediately provides a simple path to solving them.
+As soon as the characters from the left end begin to differ, from that moment on there is no need to talk about string equality.
+
+"""
+
+class Solution:
+    def findMinimumOperations(self, s1: str, s2: str, s3: str) -> int:
+        same_s = 0
+        for el1, el2, el3 in zip(s1,s2,s3):
+            if el1 == el2 == el3:
+                same_s += 1
+                continue
+            break
+        if same_s == 0: return -1
+        return len(s1) - same_s + len(s2) - same_s + len(s3) - same_s
