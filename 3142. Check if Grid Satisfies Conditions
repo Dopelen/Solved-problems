@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-This code has O(m* n) complexity by time and O(m* n) by space.
+This code has O(m * n) complexity by time and O(1) by space.
 
 Solution through a simple pass through the matrix without touching the boundaries.
 
