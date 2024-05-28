@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(log(n)) complexity by time and O(log(n)) by space.
+
+The fact that zero does not exist in Excel added a lot of problems for me. 90% of the solution was to deal with this problem.
+
+"""
+
+class Solution:
+    def convertToTitle(self, columnNumber: int) -> str:
+        alp = {i:s for i,s in zip(range(0,26), string.ascii_uppercase)}
+        ans = []
+        while columnNumber:
+            columnNumber -= 1
+            ans.append(alp[columnNumber % 26])
+            columnNumber //= 26
+        ans.reverse()
+        return "".join(ans)
