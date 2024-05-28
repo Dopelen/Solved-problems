@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n ** 2) complexity by time and O(1) by space.
+
+I immediately realized that it was unlikely that they would let me go through all the numbers given the limit of 10 ** 8, 
+and I used the formula that I found earlier today to solve another similar problem.
+We use the observation that if some number n is a divisor of k, then k divided by n will also be a divisor of k.
+
+"""
+
+class Solution:
+    def checkPerfectNumber(self, num: int) -> bool:
+        goal = num
+        for i in range(1, int(sqrt(num)) + 1):
+            if num % i == 0:
+                goal -= i
+                if i != num // i and i != 1:
+                    goal -= num // i
+        return goal == 0 and num != 1
