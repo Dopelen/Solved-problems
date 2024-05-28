@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(m* n) complexity by time and O(m* n) by space.
+
+Solution through a simple pass through the matrix without touching the boundaries.
+
+"""
+
+class Solution:
+    def satisfiesConditions(self, grid: List[List[int]]) -> bool:
+        size_r, size_c = len(grid), len(grid[0])
+        for r in range(size_r):
+            for c in range(size_c):
+                if r != size_r - 1:
+                    if grid[r][c] != grid[r + 1][c]:
+                        return False
+                if c != size_c - 1:
+                    if grid[r][c] == grid[r][c + 1]:
+                        return False
+        return True
