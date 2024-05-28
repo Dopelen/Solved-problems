@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and O(1) by space.
+
+I really wanted to make it shorter, but in the end it took me twice as long, and it still turned out big.
+
+"""
+
+class Solution:
+    def minNumberOfHours(self, initialEnergy: int, initialExperience: int, energy: List[int], experience: List[int]) -> int:
+        size = len(energy)
+        train = 0
+        for i in range(size):
+            if initialEnergy <= energy[i]:
+                dif_en = (energy[i] - initialEnergy + 1)
+                train += dif_en
+                initialEnergy += dif_en
+            if initialExperience <= experience[i]:
+                dif_ex = (experience[i] - initialExperience + 1)
+                train += dif_ex
+                initialExperience += dif_ex
+            initialEnergy -= energy[i]
+            initialExperience += experience[i]
+        return train
