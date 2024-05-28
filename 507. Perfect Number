@@ -6,6 +6,11 @@ I immediately realized that it was unlikely that they would let me go through al
 and I used the formula that I found earlier today to solve another similar problem.
 We use the observation that if some number n is a divisor of k, then k divided by n will also be a divisor of k.
 
+P.S:
+There are only 5 perfect numbers from 1 to 10 ** 8, soo...
+class Solution:
+    def checkPerfectNumber(self, num: int) -> bool:
+        return num in (6, 28, 496, 8128, 33550336)
 """
 
 class Solution:
