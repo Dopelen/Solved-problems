@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and O(n) by space.
+
+It was a beautiful solution, but I had to take into account the option with many identical words that can occupy different letters of the pattern.
+To do this, I entered a set() of words that are already someone’s meanings, and carried out an additional check.
+
+P.S: Another way to deal with this is to initially check that the number of unique characters in the first and second line is the same.
+"""
+
+class Solution:
+    def wordPattern(self, pattern: str, s: str) -> bool:
+        s = s.split()
+        if len(s) != len(pattern): return False
+        follow = {}
+        in_f = set()
+        for pat, symb in zip(pattern, s):
+            if follow.get(pat) is None and symb not in in_f:
+                follow[pat] = symb
+                in_f.add(symb)
+            else:
+                if (symb in in_f and follow.get(pat) is None) or follow[pat] != symb:
+                    return False
+        return True
+
+
+# Second version
+class Solution:
+    def wordPattern(self, pattern: str, s: str) -> bool:
+        s = s.split()
+        if len(s) != len(pattern) or len(set(pattern)) != len(set(s)): return False
+        follow = {}
+        for pat, symb in zip(pattern, s):
+            if follow.get(pat) is None:
+                follow[pat] = symb
+            else:
+                if follow[pat] != symb:
+                    return False
+        return True
