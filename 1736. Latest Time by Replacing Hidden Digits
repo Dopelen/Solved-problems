@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and O(n) by space.
+
+Very similar to the previous task with the same condition, but there it was necessary to find the number of possible “valid” time displays. 
+Problem 2437.
+
+"""
+
+class Solution:
+    def maximumTime(self, time: str) -> str:
+        time = list(time)
+        if time[0] == "?":
+            time[0] = "2" if time[1] in "0123?" else "1"
+        if time[1] == "?":
+            time[1] = "9" if time[0] in "01" else "3"
+        if time[3] == "?":
+            time[3] = "5"
+        if time[4] == "?":
+            time[4] = "9" 
+        return "".join(time)
