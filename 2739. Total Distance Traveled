@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+Well, of course, if the percentage of correct solutions is 30, the problem cannot be so simple... 
+The trick is that the additional fuel is also taken into account in the calculations for the injection of subsequent additional fuel. 
+This part is confusing when you realize it.
+
+"""
+
+class Solution:
+    def distanceTraveled(self, mainTank: int, additionalTank: int) -> int:
+        if mainTank < 5:
+            return mainTank * 10
+        else:
+            additionalTank -= 1
+            add = (mainTank - 5)// 4
+            return (mainTank + 1 + min(add, additionalTank)) * 10
