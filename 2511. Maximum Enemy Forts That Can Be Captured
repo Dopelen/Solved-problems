@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I was confused with the condition, so I decided conservatively. I just looked for all 1s and iterated from them to the right and left, looking for -1.
+"""
+
+class Solution:
+    def captureForts(self, forts: List[int]) -> int:
+        size = len(forts)
+        ans = i = 0
+        while i < size:
+            if forts[i] == 1:
+
+                left = i - 1
+                while left >= 0 and forts[left] == 0:
+                    left -= 1
+                if left >= 0 and forts[left] == -1:
+                    ans = max(ans, i - left - 1)
+
+                right = i + 1
+                while right < size and forts[right] == 0:
+                    right += 1
+                if right < size and forts[right] == -1:
+                    ans = max(ans, right - i - 1)
+                i = right
+
+            else:
+                i += 1
+        return ans
+
+
+# amaizing solution
+# https://leetcode.com/problems/maximum-enemy-forts-that-can-be-captured/solutions/2946519/c-java-python3-scan-one-pass/
+class Solution: 
+    def captureForts(self, forts: List[int]) -> int:
+        ans = ii = 0 
+        for i, x in enumerate(forts): 
+            if x: 
+                if forts[ii] == -x: ans = max(ans, i-ii-1)
+                ii = i 
+        return ans 
