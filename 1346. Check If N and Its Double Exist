@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Don't let the zero fool you!
+Just using hashmap and check everyelem for his double in it.
+"""
+
+class Solution:
+    def checkIfExist(self, arr: List[int]) -> bool:
+        cou = Counter(arr)
+        for el in arr:
+            if cou.get(el * 2) is not None:
+                if el == 0 and cou[0] == 1:
+                    continue
+                return True
+        return False
