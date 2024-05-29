@@ -1,0 +1,10 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+At first I simply took the solution from the problem of checking points for collinearity, but then I tried a different approach, checking the area of ​​the triangle constructed from these points for equality to 0.
+"""
+
+class Solution:
+    def isBoomerang(self, points: List[List[int]]) -> bool:
+        return not (points[1][0] - points[0][0]) * (points[2][1] - points[0][1]) == (points[1][1] - points[0][1]) * (points[2][0] - points[0][0])
