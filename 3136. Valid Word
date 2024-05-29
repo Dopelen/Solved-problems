@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I didn't know that y is a consonant...
+"""
+
+class Solution:
+    def isValid(self, word: str) -> bool:
+        if len(word) < 3: return False
+        first = second = False
+        vowel = {'a', 'e', 'i', 'o', 'u', "A", "E", "I", "O", "U"}
+        constant = {"b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "z", 'y', "B", "C", "D","F", "G","H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T","V","W","X", "Z", "Y"}
+        for el in word:
+            if el in vowel:
+                first = True
+            elif el in constant:
+                second = True
+            elif not el.isdigit():
+                return False
+        return first and second
+
+# Cool solution with special symbols
+# https://leetcode.com/problems/valid-word/solutions/5118468/python-3-7-lines-sets-t-s-98-21/
+
+vowels  = set('aeiouAEIOU')
+special = set('@#$')
+
+class Solution:
+    def isValid(self, word: str) -> bool:
+
+        if len(word) < 3: return False
+        word = set(word)
+
+        if word & special: return False 
+        if not word & vowels: return False
+      
+        return word - (vowels|set(digits))
