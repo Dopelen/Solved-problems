@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) (but there are 3 elements comone -> O(1)) complexity by time and O(1) by space.
+
+This task seems cool to me, they implicitly require checking for aspect ratio while the main question in the task is different.
+"""
+
+class Solution:
+    def triangleType(self, nums: List[int]) -> str:
+        ans = {1:"equilateral", 2:"isosceles", 3:"scalene"}
+        nums.sort()
+        if nums[0] + nums[1] > nums[2]:
+            return ans[len(set(nums))]
+        return "none"
