@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+I wanted to solve this problem humanly without comparing string slices, but I really liked the method that I saw about a month ago for its simplicity and clarity.
+
+"""
+
+class Solution:
+    def maxRepeating(self, sequence: str, word: str) -> int:
+        size = len(word)
+        while word in sequence:
+            word += word[0:size]
+        return len(word)//size - 1
