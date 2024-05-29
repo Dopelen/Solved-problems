@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+There was a similar problem in Yandex lectures and I thought I remembered the solution, but due to the fact that I’m pretty bad at geometry, I had to think a lot.
+The idea is simple, if the points lie on the same straight line, the relationship between the x end and the x beginning will be the same as the ratio of the y_end / y_beginning. 
+In the solution, we simply use the product notation to avoid possible problems associated with float values ​​when dividing.
+
+"""
+
+class Solution:
+    def checkStraightLine(self, coordinates: List[List[int]]) -> bool:
+        (x0, y0), (x1, y1) = coordinates[: 2]
+        for x, y in coordinates:
+            if (x1 - x0) * (y - y1) != (x - x1) * (y1 - y0):
+                return False
+        return True
