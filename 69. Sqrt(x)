@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(1) by space.
+
+They're asking me to write a binary search again!
+True, to my shame I have to say that I still have problems understanding the search boundaries, when they should be turned on and when not.
+I use the left index as the return value because we are asked to return the nearest integer, which is exactly l-1.
+
+"""
+
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        l, r = 0, x
+        while l <= r:
+            m = l + (r-l) // 2
+            if m * m < x:
+                l = m + 1
+            elif m * m > x:
+                r = m - 1
+            else:
+                return m
+        return l - 1
