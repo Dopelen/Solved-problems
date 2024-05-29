@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Just maintaining a set with all the numbers highlighted.
+"""
+
+class Solution:
+    def numDifferentIntegers(self, word: str) -> int:
+        ans = set()
+        cur = ''
+        for elem in word:
+            if elem.isdigit():
+                cur += elem
+            elif elem.isalpha() and len(cur) != 0:
+                ans.add(int(cur))
+                cur = ''
+        if len(cur) != 0: ans.add(int(cur))
+        return len(ans)
+
+
+# Cool regex solution:
+# https://leetcode.com/problems/number-of-different-integers-in-a-string/solutions/1491046/python3-short-and-easy-to-understand/
+class Solution:
+    def numDifferentIntegers(self, word: str) -> int:
+        word = re.findall('(\d+)', word)
+        nums = [int(i) for i in word]
+        
+        return len(set(nums))
+
+# Cool groupby solution
+# https://leetcode.com/problems/number-of-different-integers-in-a-string/solutions/1130755/python3-groupby/
+class Solution:
+    def numDifferentIntegers(self, word: str) -> int:
+        seen = set()
+        for key, grp in groupby(word, str.isdigit): 
+            if key: seen.add(int("".join(grp)))
+        return len(seen)
