@@ -1,0 +1,10 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+If they had asked me at an interview, on the one hand I would have been delighted, but on the other... And for this I learned trees, sortings, algorithms and heaps...
+"""
+
+class Solution:
+    def countSegments(self, s: str) -> int:
+        return len(s.split())
