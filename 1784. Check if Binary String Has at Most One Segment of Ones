@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+From the moment I realized that there were no leading zeros, the solution immediately came together, I wrote a five-line one, which worked, but then I decided to shorten it, made a bunch of mistakes and this chimera came out.
+P.S: After I explained the solution to myself, I easily removed half of all the checks, so now it’s not a chimera, but a beautiful solution!
+
+"""
+
+# if no zeroes -> True    if no ones from first zero -> True    if 1 elem and its one
+class Solution:
+    def checkOnesSegment(self, s: str) -> bool:
+        start = s.find("0")
+        return (start == -1) or (s[start:].count("1") == 0)
