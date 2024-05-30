@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) space.
+
+They asked me to do it over the line, it seems to have worked, I don’t really like the constant, a lot of occurrence checks and overrides, but in general these are minor things.
+"""
+
+class Solution:
+    def thirdMax(self, nums: List[int]) -> int:
+        m = [-math.inf] * 3
+        for el in nums:
+            if el > m[2]:
+                m[0], m[1], m[2] = m[1],m[2], el
+            elif el > m[1] and el not in m:
+                m[0], m[1] = m[1], el
+            elif el > m[0] and el not in m:
+                m[0] = el
+        return m[0] if m[0] != -math.inf else max(m)
