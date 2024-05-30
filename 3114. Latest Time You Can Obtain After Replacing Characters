@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) space.
+
+Another task about clocks, this time not 24 but 12 format. We change a couple of conditions in the previous code and send it.
+
+"""
+
+class Solution:
+    def findLatestTime(self, s: str) -> str:
+        time = list(s)
+        if time[0] == "?":
+            time[0] = "1" if time[1] in "01?" else "0"
+        if time[1] == "?":
+            time[1] = "1" if time[0] in "1" else "9"
+        if time[3] == "?":
+            time[3] = "5"
+        if time[4] == "?":
+            time[4] = "9" 
+        return "".join(time)
