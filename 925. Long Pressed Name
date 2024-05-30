@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+For an easy task, I put in an incredible amount of effort. 
+At first I solved it through iteration, piled up so many if else conditions that I got angry and rewrote it through queues.
+But forgot to add some of the checks that were in the previous version, in general it’s still a hassle.
+
+"""
+
+class Solution:
+    def isLongPressedName(self, name: str, typed: str) -> bool:
+        if len(typed) < len(name): return False
+        q_n = deque(name)
+        q_t = deque(typed)
+        prev = q_n[0]
+        while q_n and q_t:
+            symb = q_n.popleft()
+            typ = q_t.popleft()
+            while symb != typ and q_t:
+                if prev != typ:
+                    return False
+                typ = q_t.popleft()
+            prev = typ
+        return (not q_n and not q_t and symb == typ) or (not q_n and len(set(q_t)) == 1 and set(q_t).pop() == symb)
