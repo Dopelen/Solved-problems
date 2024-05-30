@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I think I have solved typical tasks like this several times already. 
+However, that didn't stop me from crashing in a couple of edge cases where the sequence is purely increasing or decreasing.
+
+"""
+
+class Solution:
+    def validMountainArray(self, arr: List[int]) -> bool:
+        if len(arr) < 3: return False
+        change = True
+        prev = arr[0]
+        for el in arr[1:]:
+            if change:
+                if el < prev:
+                    change = False
+            elif not change:
+                if el > prev:
+                    return False
+            if el == prev: return False
+            prev = el
+        return change == False and arr[1] > arr[0]
