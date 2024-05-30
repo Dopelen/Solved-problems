@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+At first I didn’t understand the assignment at all, then I wrote it crookedly, then I found 10 extreme cases, but I processed them all.
+Still didn't pass the tests. 
+I read 5 pages of comments as if no one understood anything and this is the worst description of the problem in the world, I calmed down a little, deleted two-thirds of the code, everything went away. 
+I was just solving the wrong problem. 
+We only need the sequence from zero. 
+And when deriving the answer, you need to compare the sum of the sequence with the sum of the longest sequence (and not the longest as stated in the condition).
+
+"""
+
+class Solution:
+    def missingInteger(self, nums: List[int]) -> int:
+        size = len(nums)
+        j = 0
+        while j + 1 < size and nums[j] + 1 == nums[j + 1]:
+            j += 1
+        ans = sum(nums[:j + 1])
+        while ans in set(nums):
+            ans += 1
+        return ans
