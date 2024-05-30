@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+In terms of timing, it seems that I decided it optimally, but some kind of unpleasant feeling remained inside.
+Basically I was checking for discrepancies in the lines, but 80% of the time was spent processing edge cases where the lines are identical
+
+"""
+
+class Solution:
+    def buddyStrings(self, s: str, goal: str) -> bool:
+        size = len(s)
+        if size != len(goal) or size == 1: return False
+        miss = []
+        for i in range(size):
+            if s[i] != goal[i]:
+                miss.append(i)
+            if len(miss) > 2:
+                return False
+        dif = len(miss)
+        if dif == 0:
+            for k, v in Counter(s).items():
+                if v >= 2: return True
+        elif dif == 2:
+            return s[miss[0]] == goal[miss[1]] and s[miss[1]] == goal[miss[0]]
+        else:
+            return False
+
+# Compact but slower
+class Solution:
+    def buddyStrings(self, s: str, goal: str) -> bool:
+        size = len(s)
+        if size != len(goal) or size == 1: return False
+        miss = [i for i in range(size) if s[i] != goal[i]]
+        dif = len(miss)
+        if dif == 0:
+            for k, v in Counter(s).items():
+                if v >= 2: return True
+        elif dif == 2:
+            return s[miss[0]] == goal[miss[1]] and s[miss[1]] == goal[miss[0]]
+        else:
+            return False
