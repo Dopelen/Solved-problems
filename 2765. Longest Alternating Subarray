@@ -1,0 +1,31 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(1) space.
+
+I wrote a big, ugly code that runs in polynomial time. 
+But if we look closely at the problem, we can solve the problem more simply. 
+We need to find segments with alternating elements.
+"""
+
+class Solution:
+    def alternatingSubarray(self, nums: List[int]) -> int:
+        size = len(nums)
+        ans = 0
+        for j in range(size):
+            cur = 1
+            first = True
+            for i in range(j + 1, size):
+                if first:
+                    if nums[i] - nums[i-1] == 1:
+                        cur += 1
+                        first = not first
+                    else:
+                        break
+                elif not first:
+                    if nums[i] - nums[i-1] == -1:
+                        cur += 1
+                        first = not first
+                    else:
+                        break
+            ans = max(ans, cur)
+        return ans if ans > 1 else -1
