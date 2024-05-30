@@ -22,3 +22,14 @@ class Solution:
             if el == prev: return False
             prev = el
         return change == False and arr[1] > arr[0]
+
+
+# Cool solution
+# https://leetcode.com/problems/valid-mountain-array/solutions/1717215/python3-double-barrel-explained/
+def validMountainArray(self, a: List[int]) -> bool:
+	start, end, L = 0, -1, len(a)
+	while start < L-1 and a[start] < a[start+1]: 
+		start += 1
+	while end > -L and a[end] < a[end-1]: 
+		end -= 1
+	return start == end + L and 0 < start and end < -1
