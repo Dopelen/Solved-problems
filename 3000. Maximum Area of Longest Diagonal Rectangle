@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) space.
+
+I really didn’t like the cumbersome condition, but in the end I was able to do everything beautifully. 
+A little trick was used in the code. 
+We are asked to compare diagonals, but the formula for calculating the diagonal contains a sqrt. 
+However, we do not need to calculate the sqrt, because if the diagonal is larger than the other, then the value under the sqrt will be larger. 
+This way we speed up the code by using "pseudo diagonal".
+
+"""
+
+class Solution:
+    def areaOfMaxDiagonal(self, dimensions: List[List[int]]) -> int:
+        ans = [0, 0]
+        for i, el in enumerate(dimensions):
+            diag = el[0] ** 2 + el[1] ** 2
+            area = el[0] * el[1]
+            if ((diag > ans[1]) or (diag == ans[1] and area > ans[0])):
+                ans = [area, diag]
+        return ans[0]
