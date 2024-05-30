@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) space.
+
+Task to compile a list of conditions.
+
+"""
+
+class Solution:
+    def categorizeBox(self, length: int, width: int, height: int, mass: int) -> str:
+        setting = [length, width, height, mass]
+        b = h = False
+        if any(el >= 10**4 for el in setting) or setting[0] * setting[1] * setting[2] >= 10 ** 9: b = True
+        if setting[3] >= 100: h = True
+        if b and h: return "Both"
+        if not b and not h: return "Neither"
+        else: return "Bulky" if b else "Heavy"
