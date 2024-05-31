@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and O(1) by space.
+
+A seemingly simple problem that sits in a huge pile of strange cases.
+"""
+
+class Solution:
+    def canPlaceFlowers(self, flowerbed: List[int], n: int) -> bool:
+        size = len(flowerbed)
+        i = em = 0
+        while i < size:
+            if flowerbed[i] == 0 and (flowerbed[i - 1] == 0 or i == 0) and (i + 1 == size or flowerbed[i + 1] == 0):
+                em += 1
+                i += 1
+            i += 1
+            if i == size - 2 and flowerbed[i - 1] and (flowerbed[i] == flowerbed[i + 1] == 0):
+                em += 1
+                i += 2
+        return em >= n
