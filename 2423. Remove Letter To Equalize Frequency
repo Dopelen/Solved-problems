@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+An absolutely mind-blowing task. Every time I'm asked to count the frequency of frequencies, my brain crumbles.
+
+"""
+
+class Solution:
+    def equalFrequency(self, word: str) -> bool:
+        freq = Counter(word)
+        s = Counter(freq.values())
+        if len(s) == 1:
+            return list(s.keys())[0] == 1 or list(s.values())[0] == 1
+        if len(s) == 2:
+            first = min(s.keys())
+            second = max(s.keys())
+            return (first + 1 == second and s[second] == 1) or (first == 1 and s[first] == 1)
+        else:
+            return False
