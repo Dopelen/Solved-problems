@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and O(1) by space.
+
+I was suffocated by 7000 thousand test cases, but the problem was that I described the condition incorrectly, and did not check the conditions everywhere to take into account the substring.
+In the end, the solution turned out to be neat and understandable.
+"""
+
+class Solution:
+    def longestAlternatingSubarray(self, nums: List[int], threshold: int) -> int:
+        ans = i = 0
+        size = len(nums)
+        while i < size:
+            if nums[i] % 2 == 0 and nums[i] <= threshold:
+                start = i
+                while (i < size - 1) and (nums[i] % 2 != nums[i + 1] % 2) and (nums[i + 1] <= threshold):
+                    i += 1
+                ans = max(ans, i - start + 1)
+            i += 1
+        return ans
