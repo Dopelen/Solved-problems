@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n(log(n))) complexity by time and O(n) by space.
+
+Overall I liked the challenge, but there is a lot to do.
+I immediately realized that I needed to count the cards and look at the sizes, in a couple of minutes I realized that all the divisors needed to be multiples of each other and... 
+At this point everything slowed down for me, because I had to write a formula for finding the divisors and I was not I am sure that this is the optimal way, so I was distracted a lot. 
+But overall it seems ok.
+
+P.S: find_divisors is overkill for sure.
+"""
+
+class Solution:
+    def hasGroupsSizeX(self, deck: List[int]) -> bool:
+        
+        def find_divisors(n):
+            divisors = set()
+            for i in range(1, int(math.sqrt(n))+1):
+                if n % i == 0 and i != 1:
+                    divisors.add(i)
+                if i != n // i:
+                    divisors.add(n // i)
+            return divisors
+        
+        cou = Counter(deck)
+        comdiv = {v for v in Counter(deck).values()}
+        ans = []
+        for e in comdiv:
+            ans.append(find_divisors(e))
+        return len(reduce(lambda a, b: a & b, ans)) > 0
+
+
+# Short version
+# https://leetcode.com/problems/x-of-a-kind-in-a-deck-of-cards/solutions/350904/solution-in-python-3-beats-99-one-line/
+class Solution:
+    def hasGroupsSizeX(self, deck: List[int]) -> bool:
+        return reduce(gcd,Counter(deck).values()) != 1
