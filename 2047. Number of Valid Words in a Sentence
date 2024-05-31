@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+We check each word three times against each regular expression.
+I wouldn’t expect regular expressions to run faster than polynomial time, so I think the complexity will be O(n ** 2)
+
+"""
+
+class Solution:
+    def countValidWords(self, sentence: str) -> int:
+        sentence = sentence.split()
+        ans = 0
+        for tok in sentence:
+            a = b = c = False
+            if re.search(r"\d" ,tok) is None:
+                a = True
+            if re.search(r'^[^-]*[a-z]-[a-z][^-]*$|^[^-]*$', tok) is not None:
+                b = True
+            if re.search(r'^[a-z-]*[!.,]?$|^[a-z]*$', tok) is not None:
+                c = True
+            if a == b == c == True: ans += 1
+        return ans
+
+# without regex
+# https://leetcode.com/problems/number-of-valid-words-in-a-sentence/solutions/1537625/python3-check-words/
+
+class Solution:
+    def countValidWords(self, sentence: str) -> int:
+        
+        def fn(word): 
+            """Return true if word is valid."""
+            seen = False 
+            for i, ch in enumerate(word): 
+                if ch.isdigit() or ch in "!.," and i != len(word)-1: return False
+                elif ch == '-': 
+                    if seen or i == 0 or i == len(word)-1 or not word[i+1].isalpha(): return False 
+                    seen = True 
+            return True 
+        
+        return sum(fn(word) for word in sentence.split())
