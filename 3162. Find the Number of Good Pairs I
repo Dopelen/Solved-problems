@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n ** 2) complexity by time and O(1) by space.
+
+I decided not to bother and sort through it even without taking into account repeating characters and other accelerations.
+"""
+
+class Solution:
+    def numberOfPairs(self, nums1: List[int], nums2: List[int], k: int) -> int:
+        ans = 0
+        for el in nums1:
+            for el2 in nums2:
+                ans += 1 if el % (el2 * k) == 0 else 0
+        return ans 
+
+
+# O(m * n) Solution
+# https://leetcode.com/problems/find-the-number-of-good-pairs-i/solutions/5209053/python-3-4-lines-filter-nums1-and-count-t-s-98-61/
+class Solution:
+    def numberOfPairs(self, nums1: List[int], nums2: List[int], k: int, ans = 0) -> int:
+        nums1 = list(map(lambda x: x//k, filter(lambda x: x%k == 0, nums1)))
+        for n1, n2 in product(nums1, nums2):
+            if n1%n2 == 0: ans+= 1
+        return ans
