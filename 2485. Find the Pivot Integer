@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(log(n)) complexity by time and O(1) by space.
+
+Another sequence task.
+We calculate the sum of an arithmetic sequence, take its root and check whether it is an integer. 
+If yes, the pivot exists. 
+There is a less fast way - simply iterate over all possible steps of the arithmetic sequence and compare first half and second.
+"""
+
+class Solution:
+    def pivotInteger(self, n: int) -> int:
+        sum = n * (n + 1) // 2
+        a = math.sqrt(sum)
+        if a - math.ceil(a) == 0:
+            return int(a)
+        else:
+            return -1
