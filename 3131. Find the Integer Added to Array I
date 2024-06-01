@@ -1,0 +1,10 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(1) by space.
+
+We need to find the difference between two matching elements, the easiest way to do this is to find two elements with a direct match (for us this is the minimum or maximum).
+"""
+
+class Solution:
+    def addedInteger(self, nums1: List[int], nums2: List[int]) -> int:
+        return min(nums2) - min(nums1)
