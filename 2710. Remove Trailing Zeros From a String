@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+
+The task is to find the last non-zero.
+"""
+
+class Solution:
+    def removeTrailingZeros(self, num: str) -> str:
+        size = len(num) - 1
+        while size != 0 and num[size] == "0":
+            size -= 1
+        return num[:size + 1]
+
+
+# Cool one
+# https://leetcode.com/problems/remove-trailing-zeros-from-a-string/solutions/3570271/java-c-python-js-1-line-strip/
+class Solution:
+    def removeTrailingZeros(self, num: str) -> str:
+        return num.rstrip('0')
