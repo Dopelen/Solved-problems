@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+
+At first I created generators, but then I decided to redo it so that it would become clear what was actually happening.
+"""
+
+class Solution:
+    def isArraySpecial(self, nums: List[int]) -> bool:
+        first = nums[0] % 2
+        for i in range(1, len(nums)):
+            second = nums[i] % 2
+            if second == first:
+                return False
+            first = second 
+        return True
