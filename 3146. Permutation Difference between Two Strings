@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+
+Initially, I used 2 dictionaries, but then I realized that by iterating through the indexes of the "s", we immediately have access to the index from from which we need to subtract the second one.
+"""
+
+class Solution:
+    def findPermutationDifference(self, s: str, t: str) -> int:
+        t_d = {i:v for v, i in enumerate(t)}
+        ans = 0
+        for i, v in enumerate(s):
+            ans += abs(i - t_d[v])
+        return ans
