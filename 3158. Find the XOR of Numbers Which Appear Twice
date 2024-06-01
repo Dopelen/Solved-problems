@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+
+We find all repeating elements and use reduce to reduce the sequence of repeating characters into a result XOR of the entire sequence.
+"""
+
+class Solution:
+    def duplicateNumbersXOR(self, nums: List[int]) -> int:
+        ans = [el for el, v in Counter(nums).items() if v == 2]
+        return reduce(lambda x, y: x ^ y, ans, 0)
