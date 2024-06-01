@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+
+Bitwise operations try to hurt me, but today I'm stronger.
+"""
+
+class Solution:
+    def decode(self, encoded: List[int], first: int) -> List[int]:
+        ans = [first]
+        for el in encoded:
+            ans.append(el ^ ans[-1])
+        return ans
