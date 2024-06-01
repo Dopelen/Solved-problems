@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+
+We generate a list of the required numbers and then check each of them.
+"""
+
+class Solution:
+    def selfDividingNumbers(self, left: int, right: int) -> List[int]:
+        check = [el for el in range(left, right + 1)]
+        ans = []
+        for el in check:
+            temp = el
+            while temp != 0:
+                symb = temp % 10 
+                if symb == 0 or el % symb != 0:
+                    break
+                temp //= 10
+            if temp == 0: ans.append(el)
+        return ans
