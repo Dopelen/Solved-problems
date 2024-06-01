@@ -1,0 +1,10 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+
+You can rename them directly by simply writing new names in a line and assigning them to the dataframe, but it seems to me that this is more correct.
+"""
+
+def renameColumns(students: pd.DataFrame) -> pd.DataFrame:
+    students.rename(columns={'id': 'student_id', 'first': 'first_name', 'last': 'last_name', 'age': 'age_in_years'}, inplace=True)
+    return students
