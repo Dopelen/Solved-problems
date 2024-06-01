@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+
+The binary search tree itself provides us with the value in an ordered manner. 
+All we need to do is write them out in one list and then redefine the nodes of the original tree to those that we wrote out, removing the left part and adding the right one.
+"""
+
+class Solution(object):
+    def increasingBST(self, root):
+        def in_order(node):
+			    if not node:
+				    return []
+			    return in_order(node.left) + [node] + in_order(node.right)
+
+		nodelist = in_order(root)
+		for i in range(len(nodelist)-1):
+			nodelist[i].left = None
+			nodelist[i].right = nodelist[i+1]
+		nodelist[-1].left = None
+		nodelist[-1].right = None
+		return nodelist[0]
