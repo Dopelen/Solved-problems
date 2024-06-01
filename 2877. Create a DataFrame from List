@@ -1,0 +1,9 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+
+Pandas has snuck into my tasks again, but she's lightweight, so I won't miss her!
+"""
+
+def createDataframe(student_data: List[List[int]]) -> pd.DataFrame:
+    return pd.DataFrame(data=student_data, columns=['student_id', 'age'],)
