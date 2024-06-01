@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(log(n)) complexity by time and O(1) by space.
+
+When it comes to the digits of a number, we can either parse the number into a string or into remainders from division by 10, the second method is faster, sooo...
+"""
+
+class Solution:
+    def sumOfTheDigitsOfHarshadNumber(self, x: int) -> int:
+        s = x
+        div = 0
+        while s != 0:
+            div += s % 10
+            s //= 10
+        return div if x % div == 0 else -1
+
