@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+
+To be honest, I didn’t fully understand the task, and went purely on intuition, it always seemed that there were some restrictions, and I couldn’t just give away the elements from eadges.
+"""
+
+class Solution:
+    def diStringMatch(self, s: str) -> List[int]:
+        dq = deque([el for el in range(len(s) + 1)])
+        ans = []
+        for el in s:
+            if el == "I":
+                ans.append(dq.popleft())
+            else:
+                ans.append(dq.pop())
+        ans.append(dq.pop())
+        return ans
+
+
+# Then I realized that we don't even need a dq. Just the current high and low.
+class Solution:
+    def diStringMatch(self, s: str) -> List[int]:
+        left, right = 0, len(s)
+        ans = []
+        for el in s:
+            if el == "I":
+                ans.append(left)
+                left += 1
+            else:
+                ans.append(right)
+                right -= 1
+        return ans + [left if ans[-1] == "I" else right]
