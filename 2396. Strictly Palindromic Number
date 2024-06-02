@@ -1,0 +1,10 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+Knowing the fact that a number in base n-2 is always equal to 12 helps the solution a lot, but it all looks as strange as possible.
+"""
+
+class Solution:
+    def isStrictlyPalindromic(self, n: int) -> bool:
+        return False
