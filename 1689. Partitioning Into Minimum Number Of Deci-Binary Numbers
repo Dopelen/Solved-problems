@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(1) by space.
+
+The structure of the condition hints to us that we can raise 1 or 2 symbols by one at a time. 
+In this case, the minimum required number of operations is reduced to the maximum digit in number, since there is no way to get 5 except by adding "1" 5 times.
+"""
+
+class Solution:
+    def minPartitions(self, n: str) -> int:
+        return int(max(n))
