@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The optimal solution is to create a duplicate pointer, and by moving it, enter the values ​​we need into the original linked list.
+
+However, this solution is hard to wrap my head around, so I decided to start with something simple. 
+I selected all the nodes and then constructed a new list. 
+It's quite slow and requires more memory and time than I'd like.
+
+So I thought carefully and wrote the correct solution
+"""
+
+
+# First One
+# This program has O(n) complexity by time and O(n) by space.
+class Solution:
+    def insertGreatestCommonDivisors(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        nodes = []
+        while head:
+            nodes.append(head.val)
+            head = head.next
+            if head:
+                nodes.append(gcd(nodes[-1], head.val))      
+        prev = None
+        while nodes:
+            new_n = ListNode(nodes.pop(), prev)
+            prev = new_n
+        return new_n
+
+
+# Second One
+# This program has O(n) complexity by time and O(1) by space.
+class Solution:
+    def insertGreatestCommonDivisors(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = head
+        while dummy and dummy.next:
+            dummy.next = ListNode(gcd(dummy.val, dummy.next.val), dummy.next)
+            dummy = dummy.next.next
+        return head
