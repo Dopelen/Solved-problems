@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(m) complexity by time and O(m). Where m is number of "getValue" operations.
+
+I spent about 15 minutes trying to understand what they wanted from me, and in the end I looked at the hints and understood, at the same time spotting a couple of tricks. 
+The point is that we don’t have to change the entire matrix, we just need to save the operations on the ranges and go through them from the end. 
+If there were changes in this segment, we return the value after the change; if not, we check the earlier ones.
+
+"""
+
+class SubrectangleQueries:
+
+    def __init__(self, rectangle: List[List[int]]):
+        self.rec = rectangle
+        self.operations = []        
+
+    def updateSubrectangle(self, row1: int, col1: int, row2: int, col2: int, newValue: int) -> None:
+        self.operations.append((row1, col1, row2, col2, newValue))
+
+    def getValue(self, row: int, col: int) -> int:
+        for row1, col1, row2, col2, val in reversed(self.operations):
+            if row >= row1 and col >= col1 and row <= row2 and col <= col2:
+                return val
+        return self.rec[row][col]
