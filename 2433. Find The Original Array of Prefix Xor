@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+I had to think about it, but it wasn't very difficult.
+
+"""
+
+class Solution:
+    def findArray(self, pref: List[int]) -> List[int]:
+        size = len(pref)
+        arr = [pref[0]] + [0] * (size - 1)
+        for i in range(1, size):
+            arr[i] = pref[i] ^ pref[i-1]
+        return arr
