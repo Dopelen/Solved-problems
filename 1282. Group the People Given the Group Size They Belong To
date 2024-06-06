@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+solved by a greedy algorithm.
+
+"""
+
+class Solution:
+    def groupThePeople(self, groupSizes: List[int]) -> List[List[int]]:
+        groups = defaultdict(list)
+        ans = []
+        for i, elem in enumerate(groupSizes):
+            groups[elem].append(i)
+            if len(groups[elem]) == elem:
+                ans.append(groups[elem])
+                groups[elem] = []
+        return ans
