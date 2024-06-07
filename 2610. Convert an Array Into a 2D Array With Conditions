@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+We create arrays, add to them the frequencies of occurrence of each of the numbers.
+
+"""
+
+class Solution:
+    def findMatrix(self, nums: List[int]) -> List[List[int]]:
+        cou = Counter(nums)
+        groups = [[] for e in range(cou.most_common(1)[0][1])]
+        for k, v in cou.items():
+            for i in range(v):
+                groups[i].append(k)
+        return groups
+
