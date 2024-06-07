@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I’m always a little happy when I can use something from the library at the right time.
+I apply the XOR operation to all elements, and then compare the result of this with our given number. 
+The number of different bits will be the answer, because this is exactly the number of bits that we will have to change.
+
+"""
+
+class Solution:
+    def minOperations(self, nums: List[int], k: int) -> int:
+        xo = reduce((lambda x, y: x ^ y), nums) ^ k
+        return xo.bit_count()
