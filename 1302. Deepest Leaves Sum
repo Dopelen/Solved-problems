@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Everything is quite simple here. 
+We traversed the tree in linear time, maintaining 2 variables through __init__. 
+So at any iteration we knew what the current maximum depth was and based on this we could update the answer.
+Its just Depth-first search (DFS)
+
+"""
+
+class Solution:
+    def __init__(self):
+        self.d = 0
+        self.ans = 0
+    
+    def deepestLeavesSum(self, root: Optional[TreeNode]) -> int:
+        
+        def trav(r, d=0):
+            if not r:
+                return
+            if d == self.d:
+                self.ans += r.val
+            elif d > self.d:
+                self.d = d
+                self.ans = r.val
+            if r.left:
+                trav(r.left, d + 1)
+            if r.right:
+                trav(r.right, d + 1)
+        
+        trav(root)
+        return self.ans
