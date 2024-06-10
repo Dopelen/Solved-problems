@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-This program has O(the number of iterations we will have to do multiplied by the number of people) complexity by time and O(num_people) by space.
+This program has O(n) complexity by time and O(n) by space.
 
 I wrote a recursive solution for this problem. 
 The problem is interesting, there are 3 main subtleties that need to be taken into account in order to get a beautiful and understandable solution.
