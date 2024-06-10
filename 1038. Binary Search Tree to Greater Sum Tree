@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(the number of iterations we will have to do multiplied by the number of people) complexity by time and O(num_people) by space.
+
+I wrote a recursive solution for this problem. 
+The problem is interesting, there are 3 main subtleties that need to be taken into account in order to get a beautiful and understandable solution.
+
+The first is the process of changing meaning.
+We want to change every node in the tree, but we need to do it in such a way that the new values ​​do not mix with the old ones. 
+This can be solved quite simply, we go from leaves to root, thus the changed value is passed higher for subsequent calculations.
+
+The second subtlety is the transfer of calculations to the neighboring subtree, since for the left trees we need to add the sum of the parent nodes.
+
+Third, don't forget about the edge case where the node has a left child, but no right one in left subtree. 
+In this case, you need to add the parent value.
+"""
+
+class Solution:
+    def bstToGst(self, root: TreeNode) -> TreeNode:
+        
+        def helper(r, bonus=0):
+            if not r.left and not r.right:
+                r.val += bonus
+                return r.val
+            if r.right:
+                r.val += helper(r.right, bonus)
+            if not r.right and bonus != 0:
+                r.val += bonus
+            if r.left:
+                return helper(r.left, r.val)
+            return r.val
+
+        helper(root)
+        return root
