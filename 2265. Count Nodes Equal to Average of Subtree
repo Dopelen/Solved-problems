@@ -1,0 +1,52 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+We walk along the tree to the leaves, and then build a solution from bottom to top, returning from each lower level the accumulating sum of the subtree and the number of elements.
+
+"""
+
+# After refactoring:
+class Solution:
+    
+    def averageOfSubtree(self, root: TreeNode) -> int:
+        ans = 0
+
+        def helper(r, accumulated_s=0, ammount=0):
+            nonlocal ans
+            if not r:
+                return 0, 0
+            left_s, left_c =  helper(r.left)
+            right_s, right_c = helper(r.right)
+            cur_s = left_s +  right_s + r.val
+            cur_cou =  left_c + right_c + 1
+            if cur_s // cur_cou == r.val:
+                ans += 1
+            return cur_s, cur_cou
+
+        helper(root)
+        return ans
+
+
+# Before:
+class Solution:
+    
+    def averageOfSubtree(self, root: TreeNode) -> int:
+        ans = 0
+
+        def helper(r, accumulated_s=0, ammount=0):
+            nonlocal ans
+            if not root.left and not root.right:
+                ans += 1
+                return (r.val, 1)
+            left, right = [0, 0], [0, 0]
+            if r.right:
+                right = helper(r.right)
+            if r.left:
+                left = helper(r.left)
+            if (left[0] + right[0] + r.val) // (left[1] + right[1] + 1) == r.val:
+                ans += 1
+            return (left[0] + right[0] + r.val, left[1] + right[1] + 1)
+
+        helper(root)
+        return ans
