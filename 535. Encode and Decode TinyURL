@@ -1,0 +1,44 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+In essence, the whole task boils down to the fact that we need to implement a hash table.
+"""
+
+# Main idea
+# https://leetcode.com/problems/encode-and-decode-tinyurl/solutions/1974286/python3-using-dictionary-faster-than-95-42/
+
+class Codec:
+    def __init__(self):
+        self.dict = {}
+        self.key = 1
+    
+    def encode(self, longUrl: str) -> str:
+        self.dict[self.key] = longUrl
+        self.key += 1
+        return self.key-1
+
+    def decode(self, shortUrl: str) -> str:
+        return self.dict[shortUrl]
+
+# Solution
+from random import choice 
+class Codec:
+
+    def __init__(self):
+        self.alp = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        self.d = {}
+
+    def get_k(self):
+        return "".join(choice(self.alp) for i in range(7))
+
+    def encode(self, longUrl: str) -> str:
+        k = self.get_k()
+        while k in self.d:
+            k = self.get_key()
+        self.d[k] = longUrl
+        return "http://tinyurl.com/" + k
+
+    def decode(self, shortUrl: str) -> str:
+        key = shortUrl[shortUrl.rindex('/')+1:]
+        return self.d[key] if key in self.d else ''
