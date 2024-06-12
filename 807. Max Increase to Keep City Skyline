@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This programm has O(n * n) complexity by speed and O(n * n) by space.
+
+I remember a complicated version of this problem was at the Yandex lecture hall.
+Unfortunately, I didn’t fully understand the task before I started writing the solution, and therefore added some redundancies. 
+The main thing to consider is that we are concerned about the skyline, and it does not matter to us how the maximum height in the row is achieved.
+Therefore, you can decide greedily.
+We stretch all the columns horizontally to the maximum height in the row, and lower them if there are smaller vertical values.
+
+I introduced maximum dictionaries to speed up the solution, but in general it is possible without them.
+"""
+
+class Solution:
+    def maxIncreaseKeepingSkyline(self, grid: List[List[int]]) -> int:
+        size = len(grid)
+        ans = 0
+        vert = [[row[c] for c in range(size)] for row in zip(*grid)]
+        hor_max = {k:max(grid[k]) for k in range(size)}
+        vert_max = {k:max(vert[k]) for k in range(size)}
+        for i in range(size):
+            for j in range(size):
+                ans += min(hor_max[i], vert_max[j]) - grid[i][j]
+        return ans
