@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(1) by space.
+
+The difficulty of the task lies in on-site sorting. 
+If you do not use the built-in functions, you will have to manipulate three pointers, rearranging them at each step. 
+Because of the risk of me going crazy while I deal with this, I just used in-place sorting.
+
+"""
+
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        nums.sort()
