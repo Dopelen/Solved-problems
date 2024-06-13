@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I'm having a really hard time iterating through a linked list using multiple variables. 
+I don't like looking at hints, so often it's just torture. 
+This time I fiddled around for more than an hour, but in the end I mastered the task. 
+In my implementation we create a pair of pointers. 
+The head remains "unchanged", we change the nodes of the head with the help of "dummy", one by one, and with the help of d2 we iterate over the values ​​inside the list and accumulate the sum. 
+As soon as we hit 0. Using a dummy, we set the accumulated amount to the head.val, and move the pointer to the next node.
+
+"""
+
+class Solution:
+    def mergeNodes(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = head
+        accum = 0
+        while dummy:
+            if dummy.val == 0:
+                d = dummy.next          
+                while d.val != 0:
+                    accum += d.val
+                    d = d.next
+                dummy.val = accum
+                dummy.next = d if d.next != None else None
+                dummy = dummy.next
+                accum = 0
+        return head
