@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+At first the idea was to add elements in real time to a sorted list that were not initially there, but it resulted in polynomial complexity. 
+Then I made a series of loops, one of which worked when it encountered values ​​that were originally in the list, and the second when it encountered values ​​that were not there. 
+There I got confused 200 times and came to a solution simply by adding or removing the last position from the list. 
+What works for a constant. 
+If we take a number from the edge of the sorted list, increase it by 1 and check to see if it is in the original list -> 
+If it is not there, then it is less than all the numbers at the moment and we can check this number by completing the answer if it has more than 1 occurrence, 
+but if it is there, we will simply increase its frequency and take next element from the list.
+
+"""
+
+class Solution:
+    def minIncrementForUnique(self, nums: List[int]) -> int:
+        cou = Counter(nums)
+        processed = list(reversed(sorted(cou.keys())))
+        ans = 0
+        while processed:
+            elem = processed.pop()
+            cur_val = cou[elem]
+            if cur_val > 1:
+                new_v = elem + 1
+                cur_val -= 1
+                ans += cur_val
+                if new_v not in cou:
+                    processed.append(new_v)
+                cou[new_v] += cur_val    
+        return ans
