@@ -1,0 +1,46 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+It was a day off, I saw a problem of a hard level, figured that it could be solved by dynamic programming, remembered how it was all done, and wrote a rough solution.
+That did not pass in time, because it works in quite polynomial time.
+My idea was to take the most profitable project for the initial capital, increase the capital, add a new project until the limit on projects runs out.
+There is a clear problem here that at each step I have to go through all the remaining projects.
+
+I thought for a long time about how to solve this problem, and in the end, I looked at the tips and realized that you can use a priority queue for this.
+"""
+
+# O(n ** 2) brute-force
+    def findMaximizedCapital(self, k: int, w: int, profits: List[int], capital: List[int]) -> int:
+        size = len(profits)
+        processed = {num for num in range(size)}
+        while processed and k > 0:
+            new_w, ind = 0, -1
+            for i in processed:
+                if capital[i] <= w:
+                    if w + profits[i] > new_w:
+                        new_w = w + profits[i]
+                        ind = i
+            if ind == -1: return w
+            processed.remove(ind)
+            w = new_w
+            k -= 1
+        return w
+
+
+# O(n(log(n))) priority queue, heap
+class Solution:
+    def findMaximizedCapital(self, k: int, w: int, profits: List[int], capital: List[int]) -> int:
+        size = len(profits)
+        proc = [(capital[i], profits[i]) for i in range(size)]
+        proc.sort()
+        i = 0
+        max_w = []
+        while k > 0:
+            while i < size and proc[i][0] <= w:
+                heapq.heappush(max_w, -proc[i][1])
+                i += 1
+            if not max_w:
+                break
+            w -= heapq.heappop(max_w)
+            k -= 1
+        return w
