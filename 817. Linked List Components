@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I decided to solve problems about linked lists, because I systematically have problems with them and...
+To my misfortune, I ended up with one with a very unclear description and a whirlpool of frustration in the comments. 
+Fortunately, having understood the condition over time, I was able to cope with it quite easily.
+
+It turned out that the whole problem boils down to counting groups in a linked list consisting of numbers from the list.
+"""
+
+class Solution:
+    def numComponents(self, head: Optional[ListNode], nums: List[int]) -> int:
+        nums = set(nums)
+        ans = chank = 0
+        while head:
+            if head.val in nums:
+                chank = True
+            elif chank:
+                ans += 1
+                chank = False
+            head = head.next
+        if chank: ans += 1  
+        return ans
