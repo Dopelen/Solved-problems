@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(1) by space, where (n - lenghr of row and m - number of columns)
+
+It is not difficult to notice that the answer will be simply multiplying all neighboring units, skipping lines where there are no units.
+
+By initializing the new variable with 0, we can very compactly work out the situation where we encounter the first line in which ones are found.
+"""
+
+class Solution:
+    def numberOfBeams(self, bank: List[str]) -> int:
+        ans = cur = new = 0
+        size = len(bank)
+        for i in range(size):
+            cur = bank[i].count("1")
+            if cur == 0:
+                continue
+            ans += cur * new
+            new = cur
+        return ans
