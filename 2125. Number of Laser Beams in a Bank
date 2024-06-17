@@ -3,10 +3,9 @@
 This program has O(n * m) complexity by time and O(1) by space, where (n - lenghr of row and m - number of columns)
 
 It is not difficult to notice that the answer will be simply multiplying all neighboring units, skipping lines where there are no units.
-
-By initializing the new variable with 0, we can very compactly work out the situation where we encounter the first line in which ones are found.
 """
 
+# Before
 class Solution:
     def numberOfBeams(self, bank: List[str]) -> int:
         ans = cur = new = 0
@@ -17,4 +16,16 @@ class Solution:
                 continue
             ans += cur * new
             new = cur
+        return ans
+
+
+# After refactoring
+class Solution:
+    def numberOfBeams(self, bank: List[str]) -> int:
+        ans = prev = 0
+        for i in bank:
+            cur = i.count("1")
+            if cur:
+                ans += cur * prev
+                prev = cur
         return ans
