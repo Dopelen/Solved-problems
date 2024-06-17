@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(sqrt(c)) complexity by time and O(1) by space.
+
+Another daily task, at first I was afraid that some properties of squares were needed here, but then I pulled myself together and decided to approach the task with at least brute force, to do everything that was in my hands. 
+I simply went through all the possible sums of squares of the numbers between the left and right numbers, increasing the left side or decreasing the right until they were equal.
+
+P.S:
+I'm using the variables "a" and "b" to represent the left and right border squares. 
+In general, this is not necessary at all, and will make the code cleaner, but in this case, at each iteration, both the left and right sides will be squared, while only one of them was changed. 
+If I knew for sure whether such calculations are optimized in Python or not, I wouldn’t bother so much.
+"""
+
+# Mine
+class Solution:
+    def judgeSquareSum(self, c: int) -> bool:
+        left, right = 0, int(sqrt(c))
+        a, b =  left ** 2, right ** 2
+        while left <= right:
+            s = a + b
+            if s == c:
+                return True
+            elif s < c:
+                left += 1
+                a = left ** 2
+            elif s > c:
+                right -= 1
+                b = right ** 2
+        return a + b == 0
+
+# The generally accepted solution is different, and even in complexity. 
+# In my implementation, there is 1 squaring per iteration, while in the generally accepted one, 1 squaring and one root extraction.
+# https://leetcode.com/problems/sum-of-square-numbers/solutions/5324311/2-easy-approaches-beats-70-efficient-sum-of-squares-check-for-integer-c/
+
+class Solution:
+    def judgeSquareSum(self, c: int) -> bool:
+        for a in range(int(sqrt(c)) + 1):  # Iterate through all possible values of `a`
+            b = sqrt(c - a * a)  # Compute `b` as the square root of `c - a^2`
+            if b == int(b):  # Check if `b` is an integer
+                return True  # If `b` is an integer, return true
+        return False  # If no such pair `(a, b)` is found, return false
