@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Just a traversal through the tree passing two parent nodes.
+
+"""
+
+# With nonlocal
+class Solution:
+    def sumEvenGrandparent(self, root: TreeNode) -> int:
+        ans = 0
+        def travers(r, parent=None, grand=None):
+            if not r: return
+            nonlocal ans
+            if grand:
+                ans += r.val
+            grand = parent
+            parent = r.val if r.val % 2 == 0 else None
+            if r.left:
+                travers(r.left, parent, grand)
+            if r.right:
+                travers(r.right, parent, grand)
+        travers(root)
+        return ans
+
+# Without
+class Solution:
+    def sumEvenGrandparent(self, root: TreeNode) -> int:
+        def travers(r, parent=None, grand=None):
+            if not r: return 0 
+            v = r.val if grand else 0
+            grand = parent
+            parent = r.val if r.val % 2 == 0 else None
+            v += travers(r.left, parent, grand)
+            v += travers(r.right, parent, grand)
+            return v
+        return travers(root)
