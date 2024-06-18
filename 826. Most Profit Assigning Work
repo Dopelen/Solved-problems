@@ -1,0 +1,63 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+Another daily task.
+
+Well, I've overcomplicated everything here. 
+First, I created pairs: profit - complexity. 
+Then sorted them. 
+Then replaced profit with the maximum of all tasks that are easier. 
+Then sorted the workers.
+Then using a binsearch, looked for its place in this list, reducing the search boundary of the binsearch. 
+Technically, of course, it’s great that I can do this, but all these optimizations are useless, because everything can be done simpler.
+"""
+
+
+# My solution
+class Solution:
+    def maxProfitAssignment(self, difficulty: List[int], profit: List[int], worker: List[int]) -> int:
+        ans = cur_max = j = 0
+        work = [[d, p] for d, p in zip(difficulty, profit)]
+        work.sort(key=lambda x:x[0])
+        for j, e in enumerate(work):
+            cur_max = max(cur_max, e[1])
+            work[j][1] = cur_max
+        worker.sort()
+        m = len(work)
+        for w in worker[::-1]:
+            i = bisect_right(work, w, lo=0, hi=m, key = lambda x: x[0])
+            if i == 0: return ans
+            ans += work[i - 1][1]
+            m = i
+        return ans
+
+# After refactoring (thats better!):
+class Solution:
+    def maxProfitAssignment(self, difficulty: List[int], profit: List[int], worker: List[int]) -> int:
+        ans = cur_max = j = 0
+        work = sorted([[d, p] for d, p in zip(difficulty, profit)], key=lambda x:x[0])
+        worker.sort()
+        for w in worker:
+            while j < len(work) and w >= work[j][0]:
+                cur_max = max(cur_max, work[j][1])
+                j += 1
+            ans += cur_max
+        return ans
+
+# Clear one
+# https://leetcode.com/problems/most-profit-assigning-work/solutions/5331464/greedy-100-faster/
+
+class Solution:
+    def maxProfitAssignment(self, difficulty: List[int], profit: List[int], worker: List[int]) -> int:
+        res, j, best, temp = 0, 0, 0, []
+        for i in range(len(worker)):
+            temp.append((difficulty[i], profit[i]))
+        temp.sort()
+        worker.sort()
+        for work in worker:
+            while j < len(temp) and work >= temp[j][0]:
+                best = max(best, temp[j][1])
+                j += 1
+            res += best
+        return res
