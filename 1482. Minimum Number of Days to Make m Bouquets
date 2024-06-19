@@ -1,0 +1,60 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+
+I started this solution with a greedy algorithm that does not pass in time (O(n **2))
+And in fact, this solution is not as far off as it might seem, we just need to find the right day, and not iterate one by one over all possible days. 
+By using binary search we can significantly reduce the number of iterations we need to do
+"""
+
+# This program has O(n ** 2) complexity by time and O(n) by space.
+class Solution:
+    def minDays(self, bloomDay: List[int], m: int, k: int) -> int:
+        cur_g, ans = 0, -1
+        size = len(bloomDay)
+        days = sorted(list(set(bloomDay)))
+        for d in days:
+            i = cur_g = 0
+            while i < size and ans == -1:
+                if bloomDay[i] <= d and i + k <= size and sum(1 if e <= d else 0 for e in bloomDay[i:i+k]) == k:
+                    cur_g += 1
+                    i = i + k
+                else:
+                    i += 1
+            if cur_g >= m:
+                ans = d
+                break
+        return ans
+
+
+# This program has O(n(log(n))) complexity by time and O(1) by space.
+class Solution:
+    def minDays(self, bloomDay: List[int], m: int, k: int) -> int:
+        size_of_input = len(bloomDay)
+        if k * m > size_of_input: return -1
+        left, right = min(bloomDay), max(bloomDay)
+        
+        def check(ind):
+            size = b = i = 0
+            while i < size_of_input:
+                while i < size_of_input and bloomDay[i] <= ind:
+                    size += 1
+                    if size == k:
+                        b += 1
+                        size = 0
+                    i += 1
+                if i < size_of_input and bloomDay[i] > ind: 
+                    size = 0
+                if b > m: 
+                    return True
+                i += 1
+            return b >= m
+        
+        while left < right:
+            center = left + (right - left) // 2
+            if check(center):
+                right = center
+            else:
+                left = center + 1
+
+        return left
+
