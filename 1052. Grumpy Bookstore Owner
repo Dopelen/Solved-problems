@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+New daily challenge!
+I simply calculated the grunt reduction potential for each segment and found the maximum potential grunt reduction. 
+It is this segment that we use to our advantage.
+The answer is simply the sum of all satisfied visitors + satisfied visitors received in the moment when the grumbling was contained.
+"""
+
+class Solution:
+    def maxSatisfied(self, customers: List[int], grumpy: List[int], minutes: int) -> int:
+        size = len(customers)
+        potential = [sum([customers[i] for i in range(minutes) if grumpy[i]])] + [0] * (size - minutes)
+        start = minutes
+        j = 1
+        while start < size:
+            potential[j] = potential[j - 1] - (customers[start - minutes] if grumpy[start - minutes] else 0) + (customers[start] if grumpy[start] else 0)
+            start += 1
+            j += 1
+        return sum([customers[k] for k in range(size) if not grumpy[k]]) + max(potential)
