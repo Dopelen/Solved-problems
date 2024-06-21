@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+With medium-level tasks, it’s rare for everything to come together in my head right away, but here it happened, and I’m very happy. 
+Just go around the tree, constructing new nodes. 
+Essentially, you just need to take the algorithm from the condition and implement it.
+"""
+
+class Solution:
+    def constructMaximumBinaryTree(self, nums: List[int]) -> Optional[TreeNode]:
+        if not nums:
+            return None
+        cur_val = max(nums)
+        mid = nums.index(cur_val)
+        left = self.constructMaximumBinaryTree(nums[:mid])
+        right = self.constructMaximumBinaryTree(nums[mid + 1:])
+        new_node = TreeNode(cur_val, left, right)
+        return new_node
+
+
+# Ugly and pointless option
+class Solution:
+    def constructMaximumBinaryTree(self, nums: List[int]) -> Optional[TreeNode]:
+        if not nums: return None
+        return TreeNode(max(nums), self.constructMaximumBinaryTree(nums[:nums.index(max(nums))]), self.constructMaximumBinaryTree(nums[nums.index(max(nums)) + 1:]))
