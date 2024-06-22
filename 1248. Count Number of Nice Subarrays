@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+It took me to look at the hints for the task and more than an hour of time, but I managed it and even understood what was that.
+And I caught all the edge cases before the test cases!
+It was a little tiring, but I'm pleased with myself.
+
+"""
+
+class Solution:
+    def numberOfSubarrays(self, nums: List[int], k: int) -> int:
+        before = {}
+        even = ans = 0
+        for i, el in enumerate(nums):
+            if el % 2 == 0:
+                even += 1
+            else:
+                before[i] = even
+                even = 0
+        odd = sorted(before.keys())
+        size = len(odd)
+        j = k - 1
+        while j + 1 <= size:
+            prev = before[odd[j - k + 1]]
+            next = before[odd[j + 1]] if j + 1 < size else 0
+            if j == size - 1 : next = even  # Here's a little trick. If there are even numbers left after the last odd one, then our old "even" variable will not be equal to zero and we must add them to our calculation in last iteration
+            ans += (1 + prev + (prev * next) + next)
+            j += 1
+        return ans
