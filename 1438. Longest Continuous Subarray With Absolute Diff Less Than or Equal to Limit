@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I came up with a solution in literally 5 minutes for an ordered array, but reality turned out to be cruel, and to solve it I had to sit for a couple more hours. 
+Figuring out how to maintain the minimums and maximums of the array.
+
+"""
+
+# Unfortunately this is not my idea
+# https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/solutions/5354709/98-54-easy-solution-with-explanation/?envType=daily-question&envId=2024-06-23
+class Solution:
+    def longestSubarray(self, nums: List[int], limit: int) -> int:
+        desc = collections.deque()
+        asc = collections.deque()
+        ans = 0
+        left = 0
+        for right, num in enumerate(nums):
+            while desc and num > desc[-1]:
+                desc.pop()
+            desc.append(num)
+            while asc and num < asc[-1]:
+                asc.pop()
+            asc.append(num)
+            while desc[0] - asc[0] > limit:
+                if desc[0] == nums[left]:
+                    desc.popleft()
+                if asc[0] == nums[left]:
+                    asc.popleft()
+                left += 1
+            ans = max(ans, right - left + 1)
+        return ans
