@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Honestly, I tried very hard to think about solving this problem, but so far it’s difficult for me.
+I came up with a couple of drafts, but not the final solution.
+"""
+
+# Not mine unfortunately
+# https://leetcode.com/problems/minimum-number-of-k-consecutive-bit-flips/solutions/5359680/easy-java-python3-c-solution-4-ms/
+class Solution:
+    def minKBitFlips(self, nums: List[int], k: int) -> int:
+        size = len(nums)
+        flip = ans = 0
+        new = [0] * size
+        for i in range(size):
+            if i >= k:
+                flip ^= new[i - k]
+            if flip == nums[i]:
+                if i + k > size:
+                    return -1
+                new[i] = 1
+                flip ^= 1
+                ans += 1
+        return ans
