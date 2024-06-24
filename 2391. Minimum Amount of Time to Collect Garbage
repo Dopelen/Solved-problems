@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Not a very difficult task that just requires carefully specifying the garbage collection algorithm.
+
+I initially find the indexes of the last place where garbage of each type was noticed, I do this iterating from end to beginning.
+Then I go through the list three times, adding time for each type.
+"""
+
+class Solution:
+    def garbageCollection(self, garbage: List[str], travel: List[int]) -> int:
+        size = len(garbage)
+        ans = 0
+        types = [["G", None], ["P", None], ["M", None]]
+        for i in range(size-1, -1, -1):
+            if all([types[0][1],types[1][1],types[2][1]]):
+                break
+            if not types[0][1] and "G" in garbage[i]:
+                types[0][1] = i
+            if not types[1][1] and "P" in garbage[i]:
+                types[1][1] = i
+            if not types[2][1] and "M" in garbage[i]:
+                types[2][1] = i
+        
+        for el in types:
+            if el[1] is None:
+                continue
+            j = 0
+            while j <= el[1]:
+                ans += garbage[j].count(el[0])
+                if j < el[1]: 
+                    ans += travel[j]
+                j += 1
+        
+        return ans
+
+# Cool Solution
+# https://leetcode.com/problems/minimum-amount-of-time-to-collect-garbage/solutions/4308246/video-give-me-10-minutes-beats-98-how-we-think-about-a-solution/
