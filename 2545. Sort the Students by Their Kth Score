@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+It is not often that you come across a simple syntax task among medium-level tasks. 
+When you know the basic mechanism, you don’t even have to think - you immediately see what needs to be written here. 
+A couple of minutes are actually spent on distrust of the task. 
+Suddenly there is some kind of catch!
+"""
+
+class Solution:
+    def sortTheStudents(self, score: List[List[int]], k: int) -> List[List[int]]:
+        return sorted(score, key=lambda x: x[k], reverse=True)
