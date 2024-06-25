@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I really wanted to write an implementation on the spot, but everything that comes out is not what I want. 
+I had to decide with additional memory.
+"""
+
+class Solution:
+    def pivotArray(self, nums: List[int], pivot: int) -> List[int]:
+        les, eq, great = [], [], []
+        for i in range(len(nums)):
+            if nums[i] < pivot:
+                les.append(nums[i])
+            elif nums[i] == pivot:
+                eq.append(nums[i])
+            else:
+                great.append(nums[i])
+        return les + eq + great
+
+
+# most "on the spot" solution I was able to achieve
+class Solution:
+    def pivotArray(self, nums: List[int], pivot: int) -> List[int]:
+        pointer = 0
+        size = len(nums)
+        g = []
+        for i in range(size):
+            if nums[i] < pivot:
+                nums[pointer], nums[i] = nums[i], nums[pointer]
+                pointer += 1
+            elif nums[i] > pivot:
+                g.append(nums[i])
+
+        for i in range(pointer, size):
+            if nums[i] == pivot:
+                nums[pointer], nums[i] = nums[i], nums[pointer]
+                pointer += 1
+        nums[pointer:] = g
+        return nums
