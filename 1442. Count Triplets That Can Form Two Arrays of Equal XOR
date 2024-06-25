@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I've been living without XOR operators and triplets for too long, it's time to pay up.
+"""
+
+class Solution:
+    def countTriplets(self, arr: List[int]) -> int:
+        size = len(arr)
+        pref = [0] * (size + 1)
+        ans = 0
+        for i in range(size):
+            pref[i + 1] = pref[i] ^ arr[i]
+        for j in range(size):
+            for k in range(j+1, size):
+                if pref[j] == pref[k + 1]:
+                    ans += (k - j)
+        return ans
