@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Of course I overdid it. 
+I went to read about AVL trees and ways to maintain height with a difference of +-1, I thought about how to introduce a parent into the class and recalculate the height with each rotation, but this, of course, is overcomplicated.
+You can simply go trough the tree with power of dfs and build a new(balanced) one.
+"""
+
+class Solution:
+    def balanceBST(self, root: TreeNode) -> TreeNode:
+        
+        def dfs(r):
+            if not r: 
+                return []
+            return dfs(r.left) + [r.val] + dfs(r.right)
+
+        ordered_val = dfs(root)
+
+        def build(l, r):
+            if l > r: 
+                return None
+            m = (l + r) // 2
+            root = TreeNode(ordered_val[m])
+            root.left, root.right = build(l, m-1), build(m + 1, r)
+            return root
+
+        return build(0, len(ordered_val) - 1)
