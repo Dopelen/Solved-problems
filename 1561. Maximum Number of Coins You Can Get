@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+I liked this problem. 
+At least I took a little break from data structures.
+We know that the length of the list is a multiple of 3 and we can take the 2nd maximum in each iteration of the problem.
+By condition, in each iteration we inevitably lose the maximum, but we can choose the third element that we will lose. 
+It is to our advantage that the third element is always the minimum. 
+Over iterations we will lose n minimums and n maxima, so to answer we just need to sort the list and take every second element in the segment from the “number of iterations” to the end in steps of 2.
+"""
+
+class Solution:
+    def maxCoins(self, piles: List[int]) -> int:
+        size = len(piles)
+        iterations = size // 3
+        piles.sort()
+        return sum(piles[i] for i in range(iterations, size, 2))
