@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+If you look closely, you can see that each of the roads in the list is displayed only once. 
+Based on this, when meeting any of the cities, you can add +1 weight to it. 
+The question remains small: How to count the number of repetitions of each city (you can’t just use a counter, because it’s a list of lists) and how to rank them.
+I considered the constructions to be a simple search, and ranked them by sorting, then simply calculated the sum of all ranks for each of the roads.
+"""
+
+class Solution:
+    def maximumImportance(self, n: int, roads: List[List[int]]) -> int:
+        connect = defaultdict(int)
+        for elem in roads:
+            connect[elem[0]] += 1
+            connect[elem[1]] += 1
+        rang = sorted(connect.items(), key=lambda x: x[1])
+        for r in rang[::-1]:
+            connect[r[0]] = n
+            n -= 1
+        return sum(connect[el[0]] + connect[el[1]] for el in roads)
+
+# A little trick I didn't think of. 
+# We don't need to go through the roads a second time to answer; we just need to take the rank of the city and multiply it by the number of roads that lead to it.
+# ans += r[0] * r[1]
