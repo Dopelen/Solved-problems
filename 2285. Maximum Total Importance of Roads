@@ -22,4 +22,4 @@ class Solution:
 
 # A little trick I didn't think of. 
 # We don't need to go through the roads a second time to answer; we just need to take the rank of the city and multiply it by the number of roads that lead to it.
-# ans += r[0] * r[1]
+# ans += n * r[1]
