@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I should remember DFS and BFS, because I just couldn’t implement them on my own, although I should have. 
+I got a little confused in the release of labeled nodes, which is why I got quadratic time, but after thinking and repeating a little, I was able to implement this algorithm.
+
+What I really like about this implementation is that we traverse in ascending order, which means we don’t need to sort the response at the end.
+"""
+
+class Solution:
+    def getAncestors(self, n: int, edges: List[List[int]]) -> List[List[int]]:
+        adj = defaultdict(list)
+        ans = [[] for i in range(n)]
+        for parent, chield in edges:
+            adj[parent].append(chield)
+
+        def dfs(parent, curr):
+            for ch in adj[curr]:
+                if ans[ch] and ans[ch][-1] == parent: continue
+                ans[ch].append(parent)
+                dfs(parent, ch) 
+
+        for i in range(n): dfs(i, i)
+        return ans
+
