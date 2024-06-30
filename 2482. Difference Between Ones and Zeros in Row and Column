@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+I assembled two assistant matrices to track the frequency of ones and zeros, and then simply changed the original one according to the formula that was given. 
+The main difficulty is to calculate the frequency in the columns and not make mistakes in the indexes (which I did a couple of times)
+
+"""
+
+class Solution:
+    def onesMinusZeros(self, grid: List[List[int]]) -> List[List[int]]:
+        row, col = len(grid), len(grid[0])
+        row_o_z = [[0, 0] for _ in range(row)]
+        col_o_z = [[0, 0] for _ in range(col)]
+
+        for i, g in enumerate(grid):
+            row_o_z[i][0] = g.count(0)
+            row_o_z[i][1] = g.count(1)
+
+        for index, column in enumerate(zip(*grid)):
+            col_o_z[index][0] = column.count(0)
+            col_o_z[index][1] = column.count(1)
+
+        for i in range(row):
+            for j in range(col):
+                grid[i][j] = row_o_z[i][1] + col_o_z[j][1] - row_o_z[i][0] - col_o_z[j][0]
+        
+        return grid
