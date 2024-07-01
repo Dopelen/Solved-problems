@@ -1,0 +1,31 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+The problem is difficult because non-optimal solutions are very obsessive in your head, and the description is quite incomprehensible. 
+Nevertheless, I quickly figured it out and wrote a simple solution algorithm.
+
+"""
+
+class Solution:
+    def processQueries(self, queries: List[int], m: int) -> List[int]:
+        ans = [0] * len(queries)
+        perm = deque([i for i in range(1, m + 1)])
+        for i, el in enumerate(queries):
+            cur = perm.index(el)
+            perm.remove(el)
+            perm.appendleft(el)
+            ans[i] = cur
+        return ans
+
+# For somereason this solution working way faster then mine
+class Solution:
+    def processQueries(self, queries: List[int], m: int) -> List[int]:
+        p = [num for num in range(1, m + 1)]
+        n = len(queries)
+        arr = []
+        for i in range(n):
+            index = p.index(queries[i])
+            arr.append(index)
+            p.insert(0, p.pop(index))
+        return arr
