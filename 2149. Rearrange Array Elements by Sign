@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The other day there was a similar task. 
+If it is possible to use additional memory, it will always be clearer what you are doing if you use it. 
+If there was a change in the requirements in place, we would have to do magic with pointers
+
+"""
+
+class Solution:
+    def rearrangeArray(self, nums: List[int]) -> List[int]:
+        size = len(nums)
+        ans = [0] * size
+        pos = [e for e in nums if e >= 0]
+        neg = [el for el in nums if el < 0]
+        for i in range(size//2):
+            ans[i * 2] = pos[i]
+            ans[i * 2 + 1] = neg[i]
+        return ans
