@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(m * n(log(n))) complexity by time and O(n) by space.
+
+I would like to solve it faster, but I decided to start by solving it head-on and sorting each fragment, fortunately the time limit allowed.
+If you think about it, you can come up with a solution without explicit sorting by using minimums and maximums, which works faster.
+"""
+
+class Solution:
+    def checkArithmeticSubarrays(self, nums: List[int], l: List[int], r: List[int]) -> List[bool]:
+        size = len(l)
+        ans = [True] * size
+        for i in range(size):
+            cur = sorted(nums[l[i]:(r[i] + 1)])
+            check = [cur[j + 1] - cur[j] for j in range(len(cur) - 1)]
+            if len(set(check)) != 1:
+                ans[i] = False
+        return ans  
