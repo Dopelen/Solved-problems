@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+We can say that the problem is solved by brute force.
+You can find the smallest difference by decreasing the value from one end or the other. 
+We simply find the smallest and largest values, and then check for which configuration will give the most optimal answer.
+
+"""
+
+class Solution:
+    def minDifference(self, nums: List[int]) -> int:
+        size= len(nums)
+        if size < 5:
+            return 0
+        nums.sort()
+        min_diff = min(
+            nums[size-1] - nums[3],
+            nums[size-2] - nums[2],
+            nums[size-3] - nums[1],
+            nums[size-4] - nums[0] 
+        )
+        return min_diff
