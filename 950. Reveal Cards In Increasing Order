@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+I find the concept of a solution pretty quickly, but writing code is always a challenge for me. 
+Actually, the main execution time here was spent on writing strict, logical and beautiful code. 
+The result is n log n searches, but in general their number can be reduced by passing indices of boundaries and steps, 
+but understanding the principles of how they grow would take me a non-zero amount of time, so I’ll leave it as it is.
+
+"""
+
+class Solution:
+    def deckRevealedIncreasing(self, deck: List[int]) -> List[int]:
+        size = len(deck)
+        deck = deque(sorted(deck))
+        ans = [None] * size
+        even = True
+        while deck:
+            for i in range(size):
+                if not ans[i]:
+                    if even:
+                        ans[i] = deck.popleft()
+                        even = False
+                    else:
+                        even = True
+        return ans
