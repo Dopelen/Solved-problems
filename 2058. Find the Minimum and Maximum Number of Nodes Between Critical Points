@@ -1,0 +1,29 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Based on the principle of my solution, it turned out to be the same as most, but in terms of code execution time, it slows down. 
+I can't understand why this happens. 
+Maybe it's a matter of multiple assignment or some other slow operation that I don't know is slow.
+But the task itself is understandable. 
+Find the first occurrence of a critical point and track subsequent ones.
+"""
+
+class Solution:
+    def nodesBetweenCriticalPoints(self, head: Optional[ListNode]) -> List[int]:
+        local_max = local_min = from_first = from_prev =  math.inf
+        prev = head.val
+        head = head.next
+        while head.next:
+            if (prev > head.val < head.next.val) or (prev < head.val > head.next.val):
+                if from_first != math.inf:
+                    local_max = from_first
+                    local_min = min(local_min, from_prev)
+                    from_prev = 0
+                else: 
+                    from_first = from_prev = 0
+            if from_first != math.inf:
+                from_first += 1
+                from_prev += 1
+            prev = head.val
+            head = head.next
+        return [local_min, local_max] if local_max != math.inf else [-1, -1]
