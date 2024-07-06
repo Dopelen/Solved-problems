@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m * (log(min(n, m)))) complexity by time and O(n + m) by space.
+
+Lots of cycles, but understandable. 
+I fill in the lists of diagonals, sort and overwrite the original values. 
+Since each diagonal does not intersect with the others, there will be no conflicts.
+"""
+
+class Solution:
+    def diagonalSort(self, mat: List[List[int]]) -> List[List[int]]:
+        rows = cur_r = len(mat) - 1
+        col = len(mat[0]) - 1
+
+        def check(r, c):
+            cur_dig = []
+            r_, c_ = r, c
+            while r <= rows and c <= col:
+                cur_dig.append(mat[r][c])
+                r += 1
+                c += 1
+            cur_dig.sort(reverse=True)
+            while cur_dig:
+                mat[r_][c_] = cur_dig.pop()
+                r_ += 1
+                c_ += 1
+
+        while cur_r >= 0:
+            check(cur_r, 0)
+            cur_r -= 1
+
+        cur_c = 1
+        while cur_c <= col:
+            check(0, cur_c)
+            cur_c += 1
+
+        return mat
