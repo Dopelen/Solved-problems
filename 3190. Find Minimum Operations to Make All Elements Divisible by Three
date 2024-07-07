@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Busy day! Fortunatly I found new easy problem!
+If elem % 3 == 1 its -1 if == 2 its +1
+"""
+
+class Solution:
+    def minimumOperations(self, nums: List[int]) -> int:
+        return sum(1 for elem in nums if elem % 3)
