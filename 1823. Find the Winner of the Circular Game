@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2)  complexity by time and O(n) by space.
+
+I was in a rush, so no optimal sollution yet! Just 2 deque!
+"""
+
+class Solution:
+    def findTheWinner(self, n: int, k: int) -> int:
+        cur = deque(i for i in range(1, n + 1))
+        left = deque()
+        while (len(cur) + len(left)) > 1:
+            for j in range(k - 1):
+                if not cur:
+                    cur, left = left, cur
+                left.append(cur.popleft())
+            if cur:
+                cur.popleft()
+            elif left:
+                left.popleft()
+        return cur.popleft() if cur else left.popleft()
