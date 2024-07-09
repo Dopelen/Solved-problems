@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I accidentally posted the first solution with debug output and it slowed my program down by a quarter. 
+I didn't expect this. 
+The task itself is simple - if you finished before the next guest: add extra time that the guest was sitting
+"""
+
+class Solution:
+    def averageWaitingTime(self, customers: List[List[int]]) -> float:
+        size = len(customers)
+        prev_time = sum(customers[0])
+        total_wait = customers[0][1]
+        for c in customers[1:]:
+            total_wait += (prev_time - c[0] + c[1]) if c[0] < prev_time else c[1]
+            prev_time = max(sum(c), prev_time + c[1])
+        return total_wait / size
