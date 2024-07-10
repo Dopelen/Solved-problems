@@ -1,9 +1,8 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-This program has O(n) complexity by time and O(n) by space.
+This program has O(n ** 2) complexity by time and O(n) by space.
 
-I remembered the solutions through the stack, it turned out a little untidy, but overall I’m happy that I remembered.
-
+The problem itself is not of medium complexity and can be solved by brute force with quadratic complexity.
 """
 
 class Solution:
@@ -11,19 +10,16 @@ class Solution:
         ans = [0] * len(s)
         steps = {"L":-1,"U":-1,"D":1,"R":1}
         for i, elem in enumerate(s):
-            pos = startPos
+            pos_y, pos_x = startPos[0], startPos[1]
             moves = 0
             for check in s[i:]:
-                print(s[i:], pos)
                 if check in "LR":
-                    pos[1] += steps[check]
+                    pos_x += steps[check]
                 else:
-                    pos[0] += steps[check]
+                    pos_y += steps[check]
                 moves += 1
-                print(check, pos)
-                if (pos[0] < 0) or (pos[1] < 0) or (pos[0] == n) or (pos[1] == n):
-                    print("break at", pos)
+                if (pos_y < 0) or (pos_x < 0) or (pos_y == n) or (pos_x == n):
                     moves -= 1
-                    break     
+                    break   
             ans[i] = moves
         return ans
