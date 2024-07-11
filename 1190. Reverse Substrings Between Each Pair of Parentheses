@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+A worthy task. Requires thought to avoid code clutter and has an elegant solution. I like this.
+I iterate through the string and maintaining a stack of indexes of opening brackets.
+If I find a symbol I just add it to the answer.
+If I find "(" -> append its indexs to the stack.
+If its ")" -> I reversing the slice from the previous index of the opening bracket to the end of the answer and delete index from stack.
+"""
+
+class Solution:
+    def reverseParentheses(self, s: str) -> str:
+        stack = []
+        ans = []
+        for symbol in s:
+            if symbol == "(":
+                stack.append(len(ans))
+            elif symbol == ")":
+                ans[stack[-1]:] = reversed(ans[stack[-1]:])
+                stack.pop()
+            else:
+                ans.append(symbol)
+        return "".join(ans)
