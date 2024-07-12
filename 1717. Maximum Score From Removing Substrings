@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n).
+
+I quickly came up with an adequate solution concept, but missed a couple of edge cases, which resulted in some tinkering. 
+As a result, I wrote it through a queue and a stack, I take one element at a time and check it for compliance with the pattern; 
+if it does, I delete the last two characters. 
+First I check for the most profitable pattern and then for the less profitable one.
+
+"""
+
+
+class Solution:
+    def maximumGain(self, s: str, x: int, y: int) -> int:
+        ans = 0
+        s_que = deque(list(s))
+        first_q, second_q = [], []
+        maxima = max(x, y)
+        minimum = min(x, y)
+        max_pattern = ["a", "b"] if x >= y else ["b", "a"]
+
+        def greed(q_for_iteration, current_stack, pattern, ans_amplifier):
+            nonlocal ans
+            while q_for_iteration:
+                current_stack.append(q_for_iteration.popleft())
+                if current_stack[-2::] == pattern:
+                    ans += ans_amplifier
+                    del current_stack[-2::]
+            return current_stack
+
+        row_que = deque(greed(s_que, first_q, max_pattern, maxima))
+        greed(row_que, second_q, max_pattern[::-1], minimum)
+                   
+        return ans
