@@ -1,0 +1,9 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I really like tasks like “humanity could not find the answer to this question for fifteen hundred years, write optimized code for this problem.
+
+"""
+
+Hm...
