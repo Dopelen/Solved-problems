@@ -1,9 +1,66 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-This program has O(n) complexity by time and O(1) by space.
+This program has O(n(log(n))) complexity by time and O(n) by space.
 
-I really like tasks like “humanity could not find the answer to this question for fifteen hundred years, write optimized code for this problem.
+In general, a feasible task that does not require special knowledge of complex data structures or sorting, especially taking into account the hints in the description.
+You need to think a little, calculate the edge cases and don't try to solve with O(n ** 2) complexity, because with an input of 10 ** 5 it won't work.
 
+I immediately translated all the data into a dictionary and then used it. 
+I didn't really like messing with the indexes of all this data for each position, but this is a common practice when you need sequential output, but also sorting.
 """
 
-Hm...
+class Solution:
+    def survivedRobotsHealths(self, positions: List[int], healths: List[int], directions: str) -> List[int]:
+        size = len(positions)
+        d = {positions[i]:[i, healths[i], directions[i]] for i in range(size)}
+        positions.sort()
+        cur_state = []
+        for robot in positions:
+            if (not cur_state) or (d[cur_state[-1]][2] == d[robot][2]):
+                cur_state.append(robot)
+            else:
+                 while (cur_state and d[robot][1] > 0) and (d[cur_state[-1]][2] == "R" and d[robot][2] == "L"):
+                    if d[robot][1] == d[cur_state[-1]][1]:
+                        d[robot][1] = 0
+                        cur_state.pop()
+                    elif d[robot][1] > d[cur_state[-1]][1]:
+                        d[robot][1] -= 1
+                        cur_state.pop()
+                    else:
+                        d[cur_state[-1]][1] -= 1
+                        d[robot][1] = 0
+                 if d[robot][1] > 0:
+                    cur_state.append(robot)
+
+        cur_state.sort(key=lambda x: d[x][0])
+        return [d[elem][1] for elem in cur_state]
+
+
+# There better solution without second sort and with better space complexity (unfortunatly not mine)!
+class Solution:
+    def survivedRobotsHealths(self, positions: List[int], healths: List[int], directions: str) -> List[int]:
+        n = len(positions)
+        ind = [i for i in range(n)]
+        ind.sort(key=lambda x: positions[x])
+        s = []
+        for x in ind:
+            if directions[x] == 'L':
+                while s:
+                    y = s[-1]
+                    if healths[x] == healths[y]:
+                        healths[x] = healths[y] = 0
+                        s.pop()
+                        break
+                    if healths[x] > healths[y]:
+                        healths[x] -= 1
+                        healths[y] = 0
+                        s.pop()
+                    else:
+                        healths[x] = 0
+                        healths[y] -= 1
+                        break
+            else:
+                s.append(x)
+        r = [x for x in healths if x]
+        return r
+
