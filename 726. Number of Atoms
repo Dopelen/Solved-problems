@@ -1,0 +1,52 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time
+You might think the complexity should be logarithmic due to the sorting of the answer, BUT the answer contains unique elements, and there is a finite number of them, so specifically in this case the complexity will be O(n) and O(n) by space.
+
+I used 100% of my brain to think through all the edge cases, so in the tests the solution failed only 4 times, not 10!
+A feasible task, but with a large number of different “BUT”.
+The basis of my solution is to iterate from the end to the beginning, maintaining the regions that need to be multiplied. 
+Areas are defined using "borders".
+The key to multiplying an area is the "(" symbol.
+At this moment we multiply all our elements and if we have a "multiplier" left, then they will have to be multiplied within the framework of a different multiplication area.
+
+"""
+
+class Solution:
+    def countOfAtoms(self, formula: str) -> str:
+        count = defaultdict(int)
+        current_elements = deque()
+        current_multiplier = []
+        composite_elem = ""
+        composite_digit = ""
+        for elem in formula[::-1]:
+            if elem.isdigit():
+                composite_digit = elem + composite_digit
+            elif elem.islower():
+                composite_elem += elem
+            elif elem.isupper():
+                composite_elem = elem + composite_elem
+                if not current_multiplier:
+                    count[composite_elem] += int(composite_digit) if composite_digit else 1
+                else:
+                    current_elements.appendleft([composite_elem, int(composite_digit) if len(composite_digit) > 0 else 1])
+                composite_digit = ""
+                composite_elem = ""
+            elif elem == ")":
+                current_multiplier.append(int(composite_digit) if composite_digit else 1)
+                current_elements.appendleft('border')
+                composite_digit = ""
+            elif elem == "(":
+                if current_elements:
+                    for el in current_elements:
+                        if el == "border":
+                            break
+                        el[1] *= current_multiplier[-1]
+                    current_multiplier.pop()
+                    current_elements.remove("border")
+                if not current_multiplier:
+                    for j in current_elements:
+                        count[j[0]] += j[1]
+                    current_elements.clear()
+        answer = [k + (str(count[k]) if count[k] != 1 else "") for k in sorted(count.keys())]
+        return "".join(answer)
