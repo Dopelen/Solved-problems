@@ -1,0 +1,66 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+
+At first I wanted to do it in one pass, but for ease of understanding I turned it into two.
+I create a list of adjacencies "parent: children".
+Recording all received nodes and children's nodes. 
+The number that remains after subtracting only the child nodes from all nodes will be the root of the tree. 
+From it I recursively construct a tree.
+
+PS: God bless those who could have brought here a tree with the same node values, but did not.
+"""
+
+class Solution:
+    def createBinaryTree(self, descriptions: List[List[int]]):
+        all_values, all_chields = set(), set()
+        adjacency_list = {}
+        for elem in descriptions:
+            if elem[0] not in adjacency_list:
+                adjacency_list[elem[0]] = [elem[1] if elem[2] else None, elem[1] if not elem[2] else None]
+            else:
+                if elem[2]:
+                    adjacency_list[elem[0]][0] = elem[1]
+                else:
+                    adjacency_list[elem[0]][1] = elem[1]
+            all_values |= {elem[0], elem[1]}
+            all_chields.add(elem[1])
+        root_val = all_values - all_chields
+
+        def constract_tree(val):
+            if val is None:
+                return
+            left = constract_tree(adjacency_list[val][0]) if adjacency_list.get(val) else None
+            right = constract_tree(adjacency_list[val][1]) if adjacency_list.get(val) else None
+            node = TreeNode(val, left, right)
+            return node
+        
+        return constract_tree(root_val.pop())
+
+
+# But here is more elegant solution
+# https://leetcode.com/problems/create-binary-tree-from-descriptions/solutions/5478171/array-for-treenode-seen-bitset-parent-array-455ms-beats-99-34/
+class Solution:
+    def createBinaryTree(self, descriptions: List[List[int]]) -> Optional[TreeNode]:
+        root, n= -1, len(descriptions)
+        parent={}
+        node={}
+
+        for x, y, l in descriptions:
+            if x not in node:
+                node[x]=TreeNode(x)
+                if x not in parent:
+                    root=x
+            if y not in node:
+                node[y]=TreeNode(y)
+            parent[y]=x
+            if l:
+                node[x].left=node[y]
+            else:
+                node[x].right=node[y]
+
+        while root in parent:
+            root=parent[root]
+
+        return node[root]
