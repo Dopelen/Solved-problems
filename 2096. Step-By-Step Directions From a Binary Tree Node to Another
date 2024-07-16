@@ -1,0 +1,60 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+
+Although I quickly wrote down the principle of the solution, it did not go through memory, which is why I began to invent various heuristics using queues and attempts to remove recursion. 
+As a result, I already had 3 different solutions, each of which did not pass the tests.
+The problem was that by passing a list modified by a new element into a recursive function, I was creating a huge number of lists, each of which overloaded the stack. 
+And the solution was simple. 
+Take one list - add a new path element to it, and if it does not lead us to the desired value, delete it.
+
+I spent a lot of time on the task, but overall I’m happy, because I’ve never seen such a method of transferring data into a function. 
+I learned something new, joyfully.
+"""
+
+class Solution:
+    def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -> str:
+        
+        def lowestCommonAncestor(node):
+            if not node or node.val == startValue or node.val == destValue:
+                return node
+            left = lowestCommonAncestor(node.left)
+            right = lowestCommonAncestor(node.right)
+            if left or right:
+                return node
+            else:
+                return left or right
+
+        def finding_node(r, target, path):
+            if r is None:
+                return False
+            if r.val == target:
+                return True
+            path.append("L")
+            left_path = finding_node(r.left, target, path)
+            if left_path:
+                return path
+            path.pop()
+            path.append("R")
+            right_path = finding_node(r.right, target, path)
+            if right_path:
+                return path
+            path.pop()
+            return False 
+        
+        lca = lowestCommonAncestor(root)
+        to_start, to_end = [], []
+        finding_node(lca, startValue, to_start)
+        finding_node(lca, destValue, to_end)
+        
+        same_index = 0
+        min_lenght = min(len(to_start), len(to_end))
+        while same_index < min_lenght and to_start[same_index] == to_end[same_index]:
+            same_index += 1
+        to_start = to_start[same_index:]
+        to_end = to_end[same_index:]
+        path_to_start = ["U"] * len(to_start)
+        
+        return "".join(path_to_start + to_end)
+
