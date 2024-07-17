@@ -1,0 +1,35 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Yesterday's hours of parsing binary trees bore fruit.
+The task was not very difficult, I thought carefully, wrote a couple of solutions and chose the most beautiful one for me.
+
+If the node is to be deleted, I do not return anything and start the process of creating new trees for answer from the left and right subtrees.
+If the node does not need to be deleted, I construct it further and then check whether its parent has been deleted, depending on this I add it to the response or not.
+
+"""
+
+class Solution:
+    def delNodes(self, root: Optional[TreeNode], to_delete: List[int]) -> List[TreeNode]:
+        ans = []
+        to_delete = set(to_delete)
+        
+        def helper(node, detouch):
+            if not node:
+                return None
+
+            if node.val in to_delete:
+                helper(node.left, True)
+                helper(node.right, True)
+                return None
+
+            if node.val not in to_delete:
+                new_node = TreeNode(node.val, helper(node.left, False), helper(node.right, False))
+                if detouch:
+                    ans.append(new_node)
+            
+            return new_node
+
+        helper(root, True)
+        return ans
