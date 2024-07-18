@@ -1,0 +1,50 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * distance ** 2) complexity by time and O(n) by space.
+
+For me the task was quite difficult. 
+I thought about solutions for transferring indexes, lists, queues and settled on queues.
+When I get to the leaf of the tree, I return a queue with a length of "distance" and a value of 1 in 0 position. 
+The index in the element in queue means the depth, and the number is the number of leafs at this depth. 
+Every time I pass my queue up, I add 0 to it, and since the queue has "max_len" parametr, the extra leaf fall out of the other end. 
+If any of the nodes received a queue on both the left and right, I recalculate the answer, which is a big hidden constant, because I move through the indices of both queues, it takes linear time for each index, and I do it "len(left) * len(right)" times. 
+The only reason I can get away with this is because the maximum distance value is 10, so this whole hidden constant comes down to one.
+Then I return queue equal to the sum of the previous two.
+"""
+
+class Solution:
+    def countPairs(self, root: TreeNode, distance: int) -> int:
+        answer = 0
+        
+        def helper(node):
+            nonlocal answer
+            
+            if not node.left and not node.right:
+                leaf = deque([1] + [0] * (distance - 1), distance)
+                print(leaf, "leaf!")
+                return leaf
+            
+            left = right = None
+            if node.left: 
+                left = helper(node.left)
+            if node.right: 
+                right = helper(node.right)
+
+            if left and right:
+                index_left = index_right = 0
+                while index_left < len(left):
+                    while index_right < len(right) and ((index_left + 1) + (index_right + 1) <= distance):
+                        answer += (left[index_left] * right[index_right])
+                        index_right += 1
+                    index_left += 1
+                    index_right = 0
+                result_q = deque([a + b for a, b in zip(left, right)], distance)
+                result_q.appendleft(0)
+                return result_q
+
+            else:
+                (left or right).appendleft(0)
+                return left or right
+        
+        helper(root)
+        return answer
