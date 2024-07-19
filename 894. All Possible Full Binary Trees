@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2 ** n) complexity by time and O(n ** 2)  by space.
+
+I thought hard about the problem and got confused. The comments helped me figure it out a little, but it was still pretty weird.
+I took this decision as a basis:
+https://leetcode.com/problems/all-possible-full-binary-trees/solutions/3803404/unorthodox-combinatorial-search-backtracking-approach-python-3/
+but it still doesn’t quite fit in my head.
+It generates all possible trees. At each step we decrement n by 2 and continue to call the function recursively until n is equal to zero
+"""
+
+class Solution:
+    def allPossibleFBT(self, n: int) -> List[Optional[TreeNode]]:
+        answer = []
+        if not n % 2:
+            return answer
+        
+        def new_trees(n, node, unprocessed):
+            if n == 0:
+                answer.append(deepcopy(head))
+                return
+            node.left = TreeNode()
+            node.right = TreeNode()
+            unprocessed.append(node.left)
+            unprocessed.append(node.right)
+            for ind, next_node in enumerate(unprocessed):
+                new_trees(n - 2, next_node, unprocessed[ind+1:])
+                next_node.left = next_node.right = None
+                if n - 2 == 0: return
+        head = TreeNode()
+        unprocessed = []
+        new_trees(n-1, head, unprocessed)
+        return answer 
