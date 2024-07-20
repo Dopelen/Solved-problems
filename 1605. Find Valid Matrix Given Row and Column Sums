@@ -1,0 +1,52 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space. Where n = max(len(row), len(col))
+
+For some reason, it took me a relatively long time to figure out how to move around the matrix; I couldn’t do it without an example on paper.
+I decided to use recursion again because it was easier to understand, although it is preferable to do such things in an iterative format so as not to overflow the call stack.
+
+"""
+
+# Recursion
+class Solution:
+    def restoreMatrix(self, rowSum: List[int], colSum: List[int]) -> List[List[int]]:
+        width, height = len(colSum), len(rowSum)
+        answer = [[0 for col in range(width)] for row in range(height)]
+      
+        def complite_row(i):
+            cur_min = min(colSum)
+            cur_position = colSum.index(cur_min)
+            answer[i][cur_position] = min(cur_min, rowSum[i])
+            if cur_min >= rowSum[i]:
+                cur_min -= rowSum[i]
+                colSum[cur_position] = cur_min
+            else:
+                rowSum[i] -= cur_min
+                colSum[cur_position] = math.inf
+                complite_row(i)
+
+        for i in range(height):
+            complite_row(i) 
+        return answer
+
+
+# Iterative
+class Solution:
+    def restoreMatrix(self, rowSum: List[int], colSum: List[int]) -> List[List[int]]:
+        width, height = len(colSum), len(rowSum)
+        answer = [[0 for col in range(width)] for row in range(height)]
+
+        for i in range(height):
+            while rowSum[i] != math.inf:
+                cur_min = min(colSum)
+                cur_position = colSum.index(cur_min)
+                answer[i][cur_position] = min(cur_min, rowSum[i])
+                if cur_min >= rowSum[i]:
+                    cur_min -= rowSum[i]
+                    colSum[cur_position] = cur_min
+                    rowSum[i] = math.inf
+                else:
+                    rowSum[i] -= cur_min
+                    colSum[cur_position] = math.inf            
+        
+        return answer
