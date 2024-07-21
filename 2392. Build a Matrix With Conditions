@@ -1,0 +1,102 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(k ** 2) complexity by time and O(k ** 2) by space.
+
+I roughly sketched out the algorithm for the solution, but it will hardly take place in time with polynomial complexity, because the input data is 10 ** 4. 
+There should be logarithmic complexity, to achieve it you need to build a graph, and then implement its traversal. 
+How to implement all this correctly is the main question.
+
+After some thought, I went into the tips, because "hard" problems are often solved through the use of some kind of algorithm that you simply do not know.
+Here you will need to use DFS and topological sorting. Luckily these are the algorithms that I am at least familiar with.
+
+Unfortunately, the problem is complex enough that I couldn’t solve it myself in a reasonable amount of time (less than 4 hours), so I took help from the community.
+"""
+
+# There is a main solution
+# https://leetcode.com/problems/build-a-matrix-with-conditions/solutions/5510063/explanations-no-one-will-give-you-very-detailed-approach-extremely-simple-and-effective/
+
+class Solution:
+    def buildMatrix(self, k: int, rowConditions: list[list[int]], colConditions: list[list[int]]) -> list[list[int]]:
+
+        def dfs(current_node, adjacency_list, visited, cur_path, result):
+            if current_node in cur_path:
+                return False 
+            if current_node in visited:
+                return True
+            visited.add(current_node)
+            cur_path.add(current_node)
+            for neighbor in adjacency_list[current_node]:
+                if not dfs(neighbor, adjacency_list, visited, cur_path, result):
+                    return False
+            cur_path.remove(current_node)
+            result.append(current_node)
+            return True
+
+        def topological_sorting(edges):
+            graph = defaultdict(list)
+            for src, dst in edges:
+                graph[src].append(dst)
+
+            topo_visited = set()
+            topo_current_path = set()
+            topo_result = []
+
+            for src in range(1, k + 1, 1):
+                if not dfs(src, graph, topo_visited, topo_current_path, topo_result):
+                    return []
+
+            return topo_result[::-1]
+
+        row_sorting = topological_sorting(rowConditions)
+        col_sorting = topological_sorting(colConditions)
+        if [] in (row_sorting, col_sorting):
+            return []
+
+        value_position = {n: [0, 0] for n in range(1, k + 1, 1)}
+        for ind, val in enumerate(row_sorting):
+            value_position[val][0] = ind
+        for ind, val in enumerate(col_sorting):
+            value_position[val][1] = ind
+
+        answer = [[0 for _ in range(k)] for _ in range(k)]
+        for value in range(1, k + 1, 1):
+            row, column = value_position[value]
+            answer[row][column] = value
+        return answer
+
+
+# Topological sort with deque version (faster, better!)
+# stil not mine :(
+class Solution:
+    def buildMatrix(
+        self, k: int, rowConditions: List[List[int]], colConditions: List[List[int]]
+    ) -> List[List[int]]:
+        def f(cond):
+            g = defaultdict(list)
+            indeg = [0] * (k + 1)
+            for a, b in cond:
+                g[a].append(b)
+                indeg[b] += 1
+            q = deque([i for i, v in enumerate(indeg[1:], 1) if v == 0])
+            res = []
+            while q:
+                for _ in range(len(q)):
+                    i = q.popleft()
+                    res.append(i)
+                    for j in g[i]:
+                        indeg[j] -= 1
+                        if indeg[j] == 0:
+                            q.append(j)
+            return None if len(res) != k else res
+
+        row = f(rowConditions)
+        col = f(colConditions)
+        if row is None or col is None:
+            return []
+        ans = [[0] * k for _ in range(k)]
+        m = [0] * (k + 1)
+        for i, v in enumerate(col):
+            m[v] = i
+        for i, v in enumerate(row):
+            ans[i][m[v]] = v
+        return ans
