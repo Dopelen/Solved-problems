@@ -1,0 +1,44 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2 ** n) complexity by time and O(n) by space.
+
+I made a simple traversal of the graph. 
+Works with polynomial complexity. 
+Got stuck at the beginning because I was processing visited nodes as was done in the original algorithm.
+Then I realized that the nature of the representation and the task suggests that their processing is not needed, even if the path passes through the same points - the trajectory will be unique.
+
+"""
+
+class Solution:
+    def allPathsSourceTarget(self, graph: List[List[int]]) -> List[List[int]]:
+        target = len(graph) - 1
+        answer = []
+
+        def dfs(current_path, cur_index):
+            current_path.append(cur_index)
+            if cur_index == target:
+                answer.append(deepcopy(current_path))
+            for elem in graph[cur_index]:
+                dfs(current_path, elem)
+            return current_path.pop()
+
+        dfs([], 0)
+        return answer
+
+
+# Cool Solution with generator
+# https://leetcode.com/problems/all-paths-from-source-to-target/solutions/2524319/python-elegant-short-dfs-generators/
+class Solution:
+  def allPathsSourceTarget(self, graph: List[List[int]]) -> Generator:
+  	def dfs(u: int, t: int, path: List[int]) -> Generator:
+  		if u == t:
+  			yield path
+  
+  		for v in graph[u]:
+  			yield from dfs(v, t, path + [v])
+  
+  	graph = {
+  		u: set(neighbours)
+  		for u, neighbours in enumerate(graph)
+  	}
+  	return dfs(0, len(graph) - 1, [0])
