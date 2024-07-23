@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+
+"""
+
+class Solution:
+    def bstFromPreorder(self, preorder: List[int]) -> Optional[TreeNode]:
+        size = len(preorder)
+        
+        def constract_tree(tree, cur_ind):
+            cur_ind += 1
+            cur_val = preorder[cur_ind]
+            if tree.val > cur_val:
+                tree.left = TreeNode(cur_val)
+                constract_tree(tree.left, cur_ind)
+            else:
+                tree.right = TreeNode(cur_val)
+                constract_tree(tree.right, cur_ind)
+            return cur_ind
+        
+        return constract_tree(TreeNode(preorder[0]), 0) 
