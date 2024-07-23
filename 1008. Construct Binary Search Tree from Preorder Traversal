@@ -2,22 +2,18 @@
 """You can see the description of the task using the code specified in the title on leetcode.
 This program has O(n ** 2) complexity by time and O(n) by space.
 
-
+To my shame, there are a lot of cool solutions here that I haven’t come up with.
 """
 
+# For example, finding a node through sorting
+# https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/solutions/252232/java-c-python-o-n-solution/
+
 class Solution:
-    def bstFromPreorder(self, preorder: List[int]) -> Optional[TreeNode]:
-        size = len(preorder)
-        
-        def constract_tree(tree, cur_ind):
-            cur_ind += 1
-            cur_val = preorder[cur_ind]
-            if tree.val > cur_val:
-                tree.left = TreeNode(cur_val)
-                constract_tree(tree.left, cur_ind)
-            else:
-                tree.right = TreeNode(cur_val)
-                constract_tree(tree.right, cur_ind)
-            return cur_ind
-        
-        return constract_tree(TreeNode(preorder[0]), 0) 
+    def bstFromPreorder(self, A):
+        if not A: 
+            return None
+        root = TreeNode(A[0])
+        i = bisect.bisect(A, A[0])
+        root.left = self.bstFromPreorder(A[1:i])
+        root.right = self.bstFromPreorder(A[i:])
+        return root
