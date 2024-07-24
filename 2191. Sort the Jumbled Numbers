@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+I started solving it using the usual method, tried to work around the edge cases with zeros, and it turned out to be cumbersome, with a lot of data type translations.
+Then I looked for ways to improve it, and found a method that seems to have never been seen before, although it is in the standard library. 
+With a translator it turned out much more compact and clearer.
+
+PS: It seems that you can calculate new values ​​not through "str", but through the remainder of division by 10, but it seems to me that this is not so clear.
+"""
+
+# After I found the translate method:
+class Solution:
+    def sortJumbled(self, mapping: List[int], nums: List[int]) -> List[int]:
+        translate_table = str.maketrans(''.join(map(str, range(10))), ''.join(map(str, mapping)))
+        mapped_dict = defaultdict(list)
+        for elem in nums:
+            mapped_val = str(elem).translate(translate_table)
+            mapped_val_int = int(mapped_val)
+            mapped_dict[mapped_val_int].append(elem)
+        almost_answer = sorted(mapped_dict.keys())
+        return list(chain.from_iterable(mapped_dict[elem] for elem in almost_answer))
+
+# Initial Solution
+class Solution:
+    def sortJumbled(self, mapping: List[int], nums: List[int]) -> List[int]:
+        mapped_dict = defaultdict(list)
+        for elem in nums:
+            mapped_val = []
+            for digit in str(elem):
+                new_val = str(mapping[int(digit)])
+                if not mapped_val and new_val == "0":
+                    continue
+                mapped_val.append(new_val)
+            if not mapped_val:
+                mapped_dict[0].append(elem)
+            else:
+                mapped_dict[int(''.join(mapped_val))].append(elem)
+        almost_answer = sorted(mapped_dict.keys())
+        return list(chain(*[mapped_dict[elem] for elem in almost_answer])
