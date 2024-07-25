@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n(log(n))) complexity by time and O(n) by space.
+
+The task was simple, just write a sorting algorithm with your own hands.
+The problem with such tasks is that if you know the algorithm by heart, you will write it in a minute, and if not, you will go Google it and there will be a complete pseudocode of what needs to be done.
+I didn’t remember the algorithm by heart, but I tried not to just copy it.
+"""
+
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        
+        def heapify(arr, n, i):
+            largest = i
+            left = 2 * i + 1
+            right = 2 * i + 2
+            if left < n and arr[i] < arr[left]:
+                largest = left
+            if right < n and arr[largest] < arr[right]:
+                largest = right
+            if largest != i:
+                arr[i], arr[largest] = arr[largest], arr[i]
+                heapify(arr, n, largest)
+
+        n = len(nums)
+        for i in range(n // 2 - 1, -1, -1):
+            heapify(nums, n, i)
+        for i in range(n - 1, 0, -1):
+            nums[i], nums[0] = nums[0], nums[i]  
+            heapify(nums, i, 0)        
+        return nums
+
