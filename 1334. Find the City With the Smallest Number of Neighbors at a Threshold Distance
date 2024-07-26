@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 3) complexity by time and O(n ** 2) by space.
+
+The task turned out to be strange, as if it was created for using this algorithm.
+I immediately looked at the hints, because I had forgotten the graph traversal algorithms and went to see which one the authors wanted from me. 
+I implemented it, and then thought for another 20 minutes about why I did it. 
+After reading the task 15 more times, I came to an understanding and sent the solution. 
+Luckily for me, the maximum number of nodes in the data set is 100, so even the complexity of n ** 3 passes.
+
+From an implementation perspective, it's just the Floyd-Warshall algorithm with couple "list comparison" on top of it for answer.
+
+"""
+
+class Solution:
+    def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
+        matrix = [[0 if i == j else math.inf for i in range(n)] for j in range(n)]
+        for elem in edges:
+            matrix[elem[0]][elem[1]] = matrix[elem[1]][elem[0]] = elem[2]
+        for k in range(n):
+            for i in range(n):
+                for j in range(n):
+                    matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j])
+        closest_cities = closest_cities = [sum(1 for elem in line if elem != 0 and elem <= distanceThreshold) for line in matrix]
+        smalest_city_pool = min(closest_cities)
+        potential_answers = [i for i in range(len(closest_cities)) if closest_cities[i] == smalest_city_pool]
+        return max(potential_answers)
