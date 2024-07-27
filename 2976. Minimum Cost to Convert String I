@@ -1,0 +1,51 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * ( n + e ) * log(n)) complexity by time and O(n ** 2) by space. Where n - number of vertice and e - number of ribs.
+
+For me, this task was a couple of hours of headache, especially at the moment when after two hours of trying I failed at 500th infinitely large test. 
+After that, I opened the first hint and it said not to forget that several values ​​for the same exchange can occur in a row. That was the problem.
+
+As for the solution itself, intuition immediately prompted me to use graphs, although at first I was tormented by doubts, because for each symbol in the exchange it was necessary to go through the entire graph to find the shortest paths, 
+but then I quickly realized that for each symbol to go through a graph the size of the alphabet is not so scary. Just a small constant.
+Since we do not have negative nodes, I chose the dijkstra algorithm, but I did not remember it by heart, I had to peek. 
+Then all that was left was to write and process the edge cases.
+"""
+
+class Solution:
+    def minimumCost(self, source: str, target: str, original: List[str], changed: List[str], cost: List[int]) -> int:
+
+        def dijkstra(graph, start, all_nodes):
+            queue = []
+            distances = {vertex: math.inf for vertex in all_nodes}
+            distances[start] = 0
+            heapq.heappush(queue, (0, start))
+            while queue:
+                current_distance, current_vertex = heapq.heappop(queue)
+                if current_distance > distances[current_vertex]:
+                    continue
+                for neighbor, weight in graph[current_vertex].items():
+                    distance = current_distance + weight
+                    if distance < distances[neighbor]:
+                        distances[neighbor] = distance
+                        heapq.heappush(queue, (distance, neighbor))
+            return distances
+
+        adjastency_list = defaultdict(dict)
+        for key, value, weight in zip(original, changed, cost):
+            adjastency_list[key][value] = weight if not adjastency_list[key].get(value) else min(adjastency_list[key][value], weight)
+
+        all_nodes = set(source + target + ''.join(original) + ''.join(changed))
+
+        decoder = defaultdict(dict)
+        for elem in all_nodes:
+            distances = dijkstra(adjastency_list, elem, all_nodes)
+            decoder[elem].update(distances)
+
+        answer = 0
+        for s, t in zip(source, target):
+            if s != t:
+                if not decoder.get(s) or not decoder[s].get(t) or decoder[s][t] == math.inf:
+                    return -1
+                else:
+                    answer += decoder[s][t]
+        return answer
