@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I used a simple BFS to find the shortest path and the second shortest path, while modifying the time when passing.
+Probably the biggest trick was calculating the time with the traffic light 
+and that the paths are the same in "weight" which guarantees that the longer path will always take more time.
+If you know the algorithm, it is not very difficult. But if you do not know ...
+"""
+
+class Solution:
+    def secondMinimum(self, n: int, edges: List[List[int]], time: int, change: int) -> int:
+
+        adjust_list = [[] for _ in range(n)]
+        for vert_1, vert_2 in edges:
+            adjust_list[vert_1 - 1].append(vert_2 - 1)
+            adjust_list[vert_2 - 1].append(vert_1 - 1)
+
+        least = None
+        queue = deque([(0, 0)])
+        seen = [[] for _ in range(n)]
+
+        while queue:
+            time_to_leave, vert_value = queue.popleft()
+            if vert_value == n - 1:
+                if least is None:
+                    least = time_to_leave
+                elif least < time_to_leave:
+                    return time_to_leave
+
+            if (time_to_leave // change) % 2:
+                time_to_leave = (time_to_leave // change + 1) * change
+            time_to_leave += time
+
+            for vert in adjust_list[vert_value]:
+                if not seen[vert] or len(seen[vert]) == 1 and seen[vert][0] != time_to_leave:
+                    seen[vert].append(time_to_leave)
+                    queue.append((time_to_leave, vert))
+
