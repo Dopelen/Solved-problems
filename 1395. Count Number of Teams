@@ -1,0 +1,62 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+At first I used prefixes and suffixes and tried to derive a formula for calculating combinations of length 3 in a sorted array, having spent an hour on this and having achieved nothing, 
+I remembered a trick that was in the Yandex workshop.
+For each index we have a prefix and a suffix. 
+So we can find out in how many combinations our element is central. 
+The number of combinations obtained from this will simply be the product of the prefix and suffix.
+It remains only to add an edge case that I forgot about, when our element does not have a suffix or prefix.
+"""
+
+# O(n(log(n)))
+class Solution:
+    def numTeams(self, rating: List[int]) -> int:
+        answer = 0
+        size = len(rating)
+
+        combinations_backward = [None for _ in range(size)]
+        processed_backward = []
+        cur_index = size - 1
+        for elem_b in rating[::-1]:
+            index = bisect.bisect(processed_backward, elem_b)
+            combinations_backward[cur_index] = len(processed_backward) - index
+            processed_backward.insert(index, elem_b)
+            cur_index -= 1
+
+        combinations_forward = [[] for _ in range(size)]
+        processed_forward = []
+        cur_index = 0
+        for elem in rating:
+            index = bisect.bisect(processed_forward, elem)
+            combinations_forward[cur_index] = index
+            processed_forward.insert(index, elem)
+            cur_index += 1
+
+        for i in range(size):
+            answer += combinations_forward[i] * combinations_backward[i]
+
+            left_greater = i - combinations_forward[i]
+            right_smaller = (size - i - 1) - combinations_backward[i]
+            answer += left_greater * right_smaller
+
+        return answer
+
+
+# The hint says "try all brute force options" but this solution doesn't work :)
+# O(n ** 3)
+class Solution:
+    def numTeams(self, rating: List[int]) -> int:
+        answer = 0
+        size = len(rating)
+        for i in range(size):
+            for j in range(i + 1, size):
+                if rating[i] != rating[j]:
+                    for k in range(j + 1, size):
+                        if rating[j] != rating[k] or rating[k] != rating[i]:
+                            if rating[i] > rating[j] > rating[k]:
+                                answer += 1
+                            elif rating[i] < rating[j] < rating[k]:
+                                answer += 1
+        return answer
