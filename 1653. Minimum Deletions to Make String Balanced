@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+The problem seemed to be pushing me to solve it through suffixes and prefixes.
+I did it that way initially, but then I realized that there a simpler way.
+It is enough to iterate from the end to the beginning, calculate the number of "a" symbols that are potentially subject to deletion, and compare for each element what is more profitable, to delete all A or all B.
+Information about all A is in the counter variable, and B is in the response variable.
+Without the hints from the comments, I wouldn't have come to this so quickly.
+"""
+
+class Solution:
+    def minimumDeletions(self, s: str) -> int:
+        count_a = ans = 0
+        for i in range(len(s)-1, -1, -1):
+            if s[i] == 'a': 
+                count_a +=1
+            else: 
+                ans = min(ans + 1, count_a)
+        return ans
