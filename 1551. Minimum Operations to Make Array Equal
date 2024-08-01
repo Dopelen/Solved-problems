@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(1) complexity by time and same by space.
+
+A small and pleasant task. A breath of fresh air after last week's bombardment of prefix problems.
+It took extra brainpower to isolate the formula that solves everything for the constant, but with the help of a pencil, notebook and patience I managed to do it relatively quickly.
+
+"""
+
+class Solution:
+    def minOperations(self, n: int) -> int:
+        if n <= 2:
+            return n - 1
+        changes_amount = ((2 * n + 1) // 2) - 1
+        pairs_amount = n // 2
+        sum_of_changes  = ((changes_amount + (1 if not n % 2 else 2)) * pairs_amount) // 2
+        return sum_of_changes
