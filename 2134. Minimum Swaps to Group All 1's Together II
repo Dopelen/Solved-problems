@@ -1,0 +1,20 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I always forget about the trick of adding two original strings together when the task involves a loop.
+This is where it should have been used. 
+And then take a window of size "number of ones" and move it, maintaining a minimum of zeros in the window. 
+This way we can find out how many zeros need to be changed for each potential position.
+"""
+
+class Solution:
+    def minSwaps(self, nums: List[int]) -> int:
+        size = len(nums)
+        total = nums.count(1)
+        nums = nums + nums
+        window = answer = nums[0:total].count(0)
+        for index in range(1, size + 1):
+            if not nums[index - 1]: window -= 1 
+            if not nums[index + total - 1]: window += 1
+            answer = min(answer, window)
+        return answer
