@@ -1,0 +1,17 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(1) by space.
+
+"""
+
+class Solution:
+    def minPairSum(self, nums):
+        nums.sort()
+        size = len(nums)
+        first, second = 0, size - 1
+        answer = - math.inf
+        while first < second:
+            pair_sum = nums[first] + nums[second]
+            answer = max(pair_sum, answer)
+            first += 1
+            second -= 1
+        return answer
