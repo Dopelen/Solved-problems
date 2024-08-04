@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O((n ** 2) * (log(n))) complexity by time and O(n ** 2) by space.
+
+I think solving for polynomial complexity n ** 2 is a normal solution, because you can't build a list of length n ** 2 without walking through it.
+There are a few annoying circumstances here that seem optional, but are just there to keep you on your toes.
+The indexing in the left-hand side answer starts at 1, so don't forget to shift the index for the answer, and round off large values.
+"""
+
+class Solution:
+    def rangeSum(self, nums: List[int], n: int, left: int, right: int) -> int:
+        final_array = [0] * (n * (n + 1)//2)
+        final_index = 0
+        for i in range(n):
+            final_array[final_index] = nums[i]
+            final_index += 1
+            for j in range(i + 1, n):
+                final_array[final_index] = final_array[final_index - 1] + nums[j]
+                final_index += 1
+        rounding = 10 ** 9 + 7
+        return sum(sorted(final_array)[left - 1:right]) % rounding
+
