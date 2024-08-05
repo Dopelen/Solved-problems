@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+In general, a simple task when you know how the "Сounter" works and understand that if you need to return the anogram, it makes no difference in what order the letters are.
+Everything that worries us - the sum of all the different letters between the Counters of the two strings.
+
+P.S: It can be solved in one line, but it will be ugly and unclear.
+"""
+
+class Solution:
+    def minSteps(self, s: str, t: str) -> int:
+        letters_s = Counter(s)
+        letters_t = Counter(t)
+        difference = letters_t - letters_s
+        converted_values = list(elem * (-1) if elem < 0 else elem for elem in difference.values())
+        return sum(converted_values)
