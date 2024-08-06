@@ -1,0 +1,32 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n(log(n))) complexity by time and O(n) by space.
+Although the complexity can be estimated as quasi-linear due to sorting, it is important to keep in mind that the maximum array for sorting is 28 characters and does not depend on the size of the input data. 
+The complexity itself is linear.
+
+Quite a simple and pleasant task.
+You count the frequency of occurrence of each letter, sort the obtained frequencies. 
+We equate the most frequent ones to 1 click and immediately supplement the answer, if there is no space in the first positions (we have 8 in total), we increase the number for the following symbols to 2 clicks.
+"""
+
+class Solution:
+    def minimumPushes(self, word: str) -> int:
+        answer = index = 0
+        amplifier = 1
+        freq = sorted(Counter(word).values(), reverse=True)
+        for elem in freq:
+            if index == 8:
+                index = 0
+                amplifier += 1
+            answer += amplifier * elem
+            index += 1
+        return answer
+
+
+# The design can be reduced to
+class Solution:
+    def minimumPushes(self, word: str) -> int:
+        answer = 0
+        freq = sorted(Counter(word).values(), reverse=True)
+        for i, count in enumerate(freq):
+            answer += ((i // 8) + 1) * count
+        return answer
