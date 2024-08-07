@@ -1,0 +1,88 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(Log(Num)) complexity by time and O(1) by space.
+
+Fun fact, this is one of the first problems I solved when I started learning programming. 
+It turns out that I was doing complicated things even then!
+The principle is simple - you break a number into digits and construct an answer from the end of the number to its beginning, each time moving to a new digit, shifting the pointer "from hundreds to thousands", "from thousands to millions" and so on.
+
+It is hard to imagine that there are problems from the "hard" category that are not tied to some advanced data structures.
+"""
+
+
+class Solution:
+    def numberToWords(self, num: int) -> str:
+        if not num:
+            return "Zero"
+
+        answer = deque()
+
+        units = {
+            1: "One",
+            2: "Two",
+            3: "Three",
+            4: "Four",
+            5: "Five",
+            6: "Six",
+            7: "Seven",
+            8: "Eight",
+            9: "Nine",
+        }
+
+        num_10_19 = {
+            10: "Ten",
+            11: "Eleven",
+            12: "Twelve",
+            13: "Thirteen",
+            14: "Fourteen",
+            15: "Fifteen",
+            16: "Sixteen",
+            17: "Seventeen",
+            18: "Eighteen",
+            19: "Nineteen"
+        }
+
+        tens = {
+            2: "Twenty",
+            3: "Thirty",
+            4: "Forty",
+            5: "Fifty",
+            6: "Sixty",
+            7: "Seventy",
+            8: "Eighty",
+            9: "Ninety"
+        }
+
+        big_grade = ["Billion" ,"Million", "Thousand", ""]
+
+        while num:
+            current_chank = num % 1000
+            local_answer = []
+            current_rank = big_grade.pop()
+
+            if current_chank:
+                first = current_chank % 10
+                current_chank //= 10
+                second = current_chank % 10
+                current_chank //= 10
+
+                if current_chank:
+                    local_answer.append(units[current_chank])
+                    local_answer.append("Hundred")
+
+                if second == 1:
+                    local_answer.append(num_10_19[10 + first])
+                else:
+                    if second:
+                        local_answer.append(tens[second])
+                    if first:
+                        local_answer.append(units[first])
+
+                if any([first, second, current_chank]) and current_rank:
+                    local_answer.append(current_rank)
+
+            num //= 1000
+            if local_answer:
+                answer.appendleft(" ".join(local_answer))
+
+        return " ".join(answer)
