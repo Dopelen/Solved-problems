@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(rows * cols) complexity by time and O(rows * cols) by space.
+
+I understood the concept of the solution pretty quickly, but I couldn't write a full code even after several hours, and usually everything is exactly the opposite. Maybe it's because I'm sick now.
+I got a 60-line version of infinite if loops, so it's embarrassing to even show it, so better enjoy this elegant solution.
+"""
+
+# https://leetcode.com/problems/spiral-matrix-iii/
+class Solution(object):
+    def spiralMatrixIII(self, rows, cols, rStart, cStart):
+        r_coord, c_coord = rStart, cStart
+        dir_r, dir_c = 0, 1
+        twice = 2
+        answer = []
+        moves = 1
+        next_moves = 2
+
+        while len(answer) < (rows * cols):
+            if (-1 < r_coord < rows) and (-1 < c_coord < cols):
+                answer.append([r_coord, c_coord])
+            r_coord += dir_r
+            c_coord += dir_c
+            moves -= 1
+            if moves == 0:
+                dir_r, dir_c = dir_c, -dir_r
+                twice -= 1
+                if twice == 0:
+                    twice = 2
+                    moves = next_moves
+                    next_moves += 1
+                else:
+                    moves = next_moves - 1
+        return answer
