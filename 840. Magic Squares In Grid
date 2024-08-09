@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n ** 2) by space.
+
+This task turned out to be much simpler than yesterday's.
+My solution is quite crude (but acceptable when the maximum matrix size is 10x10) and it can even be sped up by using a "matrix window" instead of recalculating the whole matrix at each step, 
+but we have sideways and downward shifts and I have a feeling this optimization will have a big impact on readability.
+"""
+
+class Solution:
+    def numMagicSquaresInside(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        answer = 0
+
+        for y in range(1, rows - 1):
+            for x in range(1, cols - 1):
+                all_elements = [
+                    grid[y - 1][x - 1], grid[y - 1][x], grid[y - 1][x + 1],
+                    grid[y][x - 1], grid[y][x], grid[y][x + 1],
+                    grid[y + 1][x - 1], grid[y + 1][x], grid[y + 1][x + 1]]
+                if all(x < 10 and x > 0 for x in all_elements) and len(set(all_elements)) == 9:
+                    if len(
+                        {sum(all_elements[0:3]), sum(all_elements[3:6]), sum(all_elements[6::]),
+                        all_elements[0] + all_elements[3] + all_elements[6],
+                        all_elements[1] + all_elements[4] + all_elements[7],
+                        all_elements[2] + all_elements[5] + all_elements[8],
+                        all_elements[0] + all_elements[4] + all_elements[8],
+                        all_elements[2] + all_elements[4] + all_elements[6]}) == 1:
+                        answer += 1
+        return answer
