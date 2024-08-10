@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n ** 2) complexity by time and O(n ** 2) by space.
+
+This task turned out to be very difficult for me, even to understand what was wanted from me and how to understand the condition, it took time.
+After trying to figure it out on my own and then reading the comments, I roughly understood what was expected of me.
+Transform the input data into a matrix, "/" == [[0, 0, 1],[0, 1, 0], [1, 0, 0]...
+Then look at this problem as a graph, and traverse it using the traversal algorithm to mark all the figures on the matrix that belong to the same region.
+
+The code and implementation itself are very simple, but the mental transitions that need to be made to get there are completely non-obvious.
+
+P.S: The implementation of the "islands" accounting itself is very beautiful in its simplicity "paint over everything nearby and increase the counter by 1.
+"""
+
+class Solution:
+    def regionsBySlashes(self, grid: List[str]) -> int:
+        size = len(grid)
+        answer = 0
+        matrix = [[0] * size * 3 for _ in range(size * 3)]
+        height = len(matrix)
+        width = len(matrix[0])
+
+        for i in range(size):
+            for j in range(size):
+                if grid[i][j] == "/":
+                    matrix[i * 3][j * 3 + 2] = matrix[i * 3 + 1][j * 3 + 1] = matrix[i * 3 + 2][j * 3] = 1
+                elif grid[i][j] == "\\":
+                    matrix[i * 3][j * 3] = matrix[i * 3 + 1][j * 3 + 1] = matrix[i * 3 + 2][j * 3 + 2] = 1
+
+        def dfs(x, y):
+            if x < 0 or y < 0 or x >= height or y >= width or matrix[x][y] != 0:
+                return 0
+            matrix[x][y] = 1
+            return 1 + dfs(x - 1, y) + dfs(x + 1, y) + dfs(x, y - 1) + dfs(x, y + 1)
+
+        for i in range(size * 3):
+            for j in range(size * 3):
+                answer += 1 if dfs(i, j) > 0 else 0
+
+        return answer
