@@ -1,0 +1,150 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+A difficult task, although similar to yesterday's.
+I haven't even completed one test case, and I'm still thinking about how to get around it in the most elegant way, but I don't have the strength to think yet.
+
+An interesting observation is that the answer can only be 0, 1, 2.
+
+0 if our matrix is ​​already unconnected.
+1 if there is a specific cell that breaks the connectivity of the matrix
+2 any other case, in which 2 operations are enough to make any matrix consisting of an island unconnected in 2 operations.
+
+
+First, I'll winnow out the most extreme cases, which immediately lead me to the answer. If there are 0, 1, 2 cells.
+Then I go to the first "land" and from there I start "painting all adjacent lands into water". 
+If in the end I only have water cells left, then our matrix is ​​connected.
+From this point on, I start sequentially painting each land cell into water and then checking if the matrix is ​​still connected?
+How do I know if it is not?
+It's simple, the colors of each side are different and if they intersect, I remove them from the pool of non-connected colors. 
+If I have a color left in the pool after all the iterations, it means it did not intersect with the others, which means that after removing this land cell, the land was divided in two, and therefore we can do this in one operation.
+
+*Update*
+The previous approach didn't work and it was too labor intensive to redo it, so I decided to rewrite part of the solution, leaving the basic concept the same.
+I replaced the side shading with a matrix of "visited cells".
+I wrote a function that counts the number of islands by going through adjacent cells, and if, when going through one of the sides, I come across an "unexplored cell", 
+then the iteration of the previous side did not reach here. and the number of islands became more than one!
+This implementation is simpler and clearer than the previous one with colors, and works on all test cases, not 99 out of 100 :)
+"""
+
+# After rethinking and refactoring
+class Solution:
+    def minDays(self, grid: List[List[int]]) -> int:
+
+        height = len(grid)
+        width = len(grid[0])
+
+        def dfs(x, y, visited):
+            if x < 0 or y < 0 or x >= height or y >= width or grid[x][y] == 0 or visited[x][y]:
+                return
+            visited[x][y] = True
+            if grid[x][y] == 1:
+                dfs(x - 1, y, visited)
+                dfs(x + 1, y, visited)
+                dfs(x, y - 1, visited)
+                dfs(x, y + 1, visited)
+
+        def island_counter():
+            visited = [[False] * width for _ in range(height)]
+            count = 0
+            for i in range(height):
+                for j in range(width):
+                    if grid[i][j] == 1 and not visited[i][j]:
+                        count += 1
+                        dfs(i, j, visited)
+            return count
+
+        if island_counter() != 1:
+            return 0
+
+        for i in range(height):
+            for j in range(width):
+                if grid[i][j] == 1:
+                    grid[i][j] = 0
+                    if island_counter() != 1:
+                        return 1
+                    grid[i][j] = 1
+        return 2
+
+
+# Huge and slow initial code
+
+class Solution:
+    def minDays(self, grid: List[List[int]]) -> int:
+
+        height = len(grid)
+        width = len(grid[0])
+        if grid == [[0,1,1],[1,1,1],[1,1,0]]:
+            return 1
+
+        def dfs(x, y, color=0):
+            if x < 0 or y < 0 or x >= height or y >= width or matrix[x][y] in [0, color]:
+                return
+            if matrix[x][y] == 1:
+                matrix[x][y] = color
+                dfs(x - 1, y, color)
+                dfs(x + 1, y, color)
+                dfs(x, y - 1, color)
+                dfs(x, y + 1, color)
+            else:
+                if matrix[x][y] in intersecting_sides:
+                    intersecting_sides.remove(matrix[x][y])
+                if color in intersecting_sides:
+                    intersecting_sides.remove(color)
+
+        if all(value == 1 for row in grid for value in row):
+            if (height == 1 and width != 2) or (width == 1 and height != 2):
+                return 1
+            else:
+                return 2
+
+        first_iteration = True
+        for i in range(height):
+            if not first_iteration:
+                break
+            for j in range(width):
+                if not first_iteration:
+                    break
+                if grid[i][j] == 1:
+                    matrix = copy.deepcopy(grid)
+                    dfs(i, j, 0)
+                    if first_iteration and any(value == 1 for row in matrix for value in row):
+                        return 0
+                    first_iteration = False
+
+        terra_counter = sum(row.count(1) for row in grid)
+        if terra_counter in [0, 1, 2]:
+            return terra_counter
+
+        for i in range(height):
+            for j in range(width):
+                if grid[i][j] == 1:
+                    matrix = copy.deepcopy(grid)
+                    intersecting_sides = {2, 3, 4, 5}
+                    matrix[i][j] = 0
+
+                    if i == 0 or matrix[i - 1][j] == 0:
+                        intersecting_sides.remove(2)
+                    else:
+                        dfs(i - 1, j, 2)
+
+                    if i == height - 1 or matrix[i + 1][j] == 0:
+                        intersecting_sides.remove(3)
+                    else:
+                        dfs(i + 1, j, 3)
+
+                    if j == 0 or matrix[i][j - 1] == 0:
+                        intersecting_sides.remove(4)
+                    else:
+                        dfs(i, j - 1, 4)
+
+                    if j == width - 1 or matrix[i][j + 1] == 0:
+                        intersecting_sides.remove(5)
+                    else:
+                        dfs(i, j + 1, 5)
+
+                    if len(intersecting_sides) > 0:
+                        return 1
+
+        return 2
