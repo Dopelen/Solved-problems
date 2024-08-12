@@ -1,0 +1,31 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I've done today's problem before, so I decided to solve some medium, and I came across a linked list.
+I'm not completely used to them, so I have to think a little each time, I continue to learn some subtleties for myself, for example, 
+if you attach another linked list to the original linked list as the next node, the pointer will remain where it was, and will not move to the end of the list. For some reason, this was not obvious to me.
+
+The solution is as follows: 
+find the point after which the replacement should occur, we attach the second list to it after its transformation, 
+find the point where the replacement should end (to the right of it is the "tail" that we should attach to list2), 
+iterate through list2 to the end and attach the "tail". 
+Then attach list2 to the point that was found initially.
+"""
+
+
+class Solution:
+    def mergeInBetween(self, list1: ListNode, a: int, b: int, list2: ListNode) -> ListNode:
+        first_part = list1
+        for _ in range(a - 1):
+            first_part = first_part.next
+        tail = first_part
+        for _ in range(b - a + 2):
+            tail = tail.next
+        end_of_list2 = list2
+        while end_of_list2.next:
+            end_of_list2 = end_of_list2.next
+        end_of_list2.next = tail
+        first_part.next = list2
+        
+        return list1
