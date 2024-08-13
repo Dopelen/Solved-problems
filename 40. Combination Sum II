@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(2 ** n) complexity by time and O(n) by space.
+
+I tried to solve this problem without the dfs, but in the end I didn't cover all the cases, spent an hour and a half, and overall, it was a total failure.
+Then I got myself together and wrote the solution after.
+"""
+
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        answer = []
+        size = len(candidates)
+        candidates.sort()
+
+        def dfs(index, path, current):
+            if current > target:
+                return
+            if current == target:
+                answer.append(path)
+                return
+
+            for i in range(index, size):
+                if i > index and candidates[i] == candidates[i - 1]:
+                    continue
+                dfs(i + 1, path + [candidates[i]], current + candidates[i])
+
+        dfs(0, [], 0)
+
+        return answer
+
