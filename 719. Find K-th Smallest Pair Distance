@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+This is a really difficult task for me.
+Specifically here I failed to cope with how the binary search and the "guessing" process should be implemented.
+I can write both sorting and the sliding window technique, but it is not always possible to apply it to a specific task.
+
+The correct implementation looks like this:
+- Sort our array
+- Take the middle between the minimum possible and maximum possible difference in our array
+- Check how many pairs of values ​​are less than or equal to the chosen middle
+- Depending on the result, change the boundaries, increase the lower or decrease the upper
+
+In fact, the whole power of this solution relative to the solution with finding all possible combinations of pairs is that we do not need to know all the differences between all values.
+In this implementation, we just need to see how many differences between numbers are less than a given one, and do this log n times.
+"""
+
+# https://leetcode.com/problems/find-k-th-smallest-pair-distance/solutions/5632765/o-n-log-n-n-log-w-binary-search-sliding-window-java-c-python-go-rust-javascript/
+# Beautiful and clear implementation
+
+class Solution:
+    def smallestDistancePair(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        low, high = 0, nums[-1] - nums[0]
+
+        while low < high:
+            mid = (low + high) // 2
+            if self.countPairs(nums, mid) < k:
+                low = mid + 1
+            else:
+                high = mid
+
+        return low
+
+    def countPairs(self, nums: List[int], distance: int) -> int:
+        count = left = 0
+        for right in range(1, len(nums)):
+            while nums[right] - nums[left] > distance:
+                left += 1
+            count += right - left
+        return count
