@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Today's problem is from a simple medium level.
+Just select the vowels, sort them and insert them back into the text.
+Sorting will arrange them in asci2 ascending order, as we require according to the condition.
+"""
+
+class Solution:
+    def sortVowels(self, s: str) -> str:
+        s_list = list(s)
+        size = len(s)
+        vowels = []
+        for i in range(size):
+            if s_list[i] in {'a', 'e', 'i', 'o', 'u', "A", "E", "I", "O", "U"}:
+                vowels.append(s_list[i])
+                s_list[i] = None
+        vowels.sort()
+        vowels.reverse()
+        answer_list = [elem if elem else vowels.pop() for elem in s_list]
+        return "".join(answer_list)
