@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I wrote the solution very quickly, in quasi-linear time. 
+It turned out not super optimal, because you can solve it faster and without bothering with creating two lists and numbering them
+(with two lists you need to be sure that the minimums and maximums are in different lists, and not elements of the same one).
+I just sort by the first element of the list, then by the last, then I take the first from the minimum list and the last from the maximum. 
+I check that they do not have the same identifier, and if not, I output the result. 
+The fact that we take the minimum element from the beginning and the maximum from the end guarantees that we will get the maximum distance.
+
+"""
+
+
+# O(n) by speed O(1) be space Solution
+class Solution:
+    def maxDistance(self, arrays: List[List[int]]) -> int:
+        min_val = arrays[0][0]
+        max_val = arrays[0][-1]
+        max_distance = 0
+        for i in range(1, len(arrays)):
+            max_distance = max(max_distance, abs(arrays[i][-1] - min_val), abs(max_val - arrays[i][0]))
+            min_val = min(min_val, arrays[i][0])
+            max_val = max(max_val, arrays[i][-1])
+        return max_distance
+
+
+# O(n(log(n))) by speed O(n) be space Solution
+class Solution:
+    def maxDistance(self, arrays: List[List[int]]) -> int:
+        for i, el in enumerate(arrays):
+            arrays[i] = (el, i)
+        
+        min_arr = sorted(arrays, key = lambda x: x[0][0])
+        max_arr = sorted(arrays, key = lambda x: x[0][-1])
+        
+        min_vals = [(min_arr[0][0][0], min_arr[0][1]), (min_arr[1][0][0], min_arr[1][1])]
+        max_vals = [(max_arr[-1][0][-1], max_arr[-1][1]), (max_arr[-2][0][-1], max_arr[-2][1])]
+        
+        answer = 0
+        for min_elem in min_vals:
+            for max_elem in max_vals:
+                if min_elem[1] != max_elem[1]:
+                    answer = max(abs(max_elem[0] - min_elem[0]), answer)
+        return answer
