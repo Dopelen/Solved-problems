@@ -1,0 +1,55 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n ** 2) by space.
+
+I started solving the problem with a bang and wrote the entire code in 15 minutes. 
+I was happy. 
+It turned out that simple dynamic programming here does not pass in time, optimizations are needed. 
+I was upset. 
+I started looking at how to optimize.
+
+The optimization consists of maintaining a "left" and "right" array for each row, 
+each of which contains information about the maximum number of points we can get if we take cells to the left and right of the current one, taking into account penalties for range.
+
+P.S: I'm sure it's clearly a "hard" lvl problem.
+"""
+
+# O(n ** 3)
+class Solution:
+    def maxPoints(self, points: List[List[int]]) -> int:
+        height = len(points)
+        width = len(points[0])
+
+        def maxValue(i, j):
+            current_val = bigest_val = points[i][j]
+            for prev_row_index in range(width):
+                bigest_val = max(bigest_val, current_val + points[i - 1][prev_row_index] - abs(j - prev_row_index))
+            points[i][j] = bigest_val
+
+        for y in range(1, height):
+            for x in range(width):
+                maxValue(y, x)
+
+        return max(points[-1])
+
+# O(n ** 2)
+class Solution:
+    def maxPoints(self, points: List[List[int]]) -> int:
+        height = len(points)
+        width = len(points[0])
+        
+        for y in range(1, height):
+            right = [0 for _ in range(width)]
+            right[-1] = points[y - 1][-1]
+            
+            for x in range(width - 2, -1, -1):
+                right[x] = max(right[x + 1] - 1, points[y - 1][x])
+
+            left = points[y - 1][0] 
+            points[y][0] = max(left, right[0]) + points[y][0]
+
+            for x in range(1, width):
+                left = max(left - 1, points[y - 1][x])
+                points[y][x] = max(left, right[x]) + points[y][x]
+
+        return max(points[-1])
