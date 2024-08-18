@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Not a very difficult task, especially considering the author's hints. 
+As soon as you understand how to generate the first list, you make the rest by analogy. 
+You can use a generator so as not to store all the values ​​or a heap, or pour in a list of all the numbers generated separately and get a solution for a constant. 
+But for me, the most understandable was simply creating a list inside a function via iteration.
+
+"""
+
+class Solution:
+    def nthUglyNumber(self, n: int) -> int:
+        ugly_numbers = [1]
+        u2, u3, u5 = 0, 0, 0
+        for _ in range(1, n):
+            next_ugly = min(ugly_numbers[u2] * 2, ugly_numbers[u3] * 3, ugly_numbers[u5] * 5)
+            if next_ugly == ugly_numbers[u2] * 2:
+                u2 += 1
+            if next_ugly == ugly_numbers[u3] * 3:
+                u3 += 1
+            if next_ugly == ugly_numbers[u5] * 5:
+                u5 += 1
+            ugly_numbers.append(next_ugly)
+
+        return ugly_numbers[-1]
