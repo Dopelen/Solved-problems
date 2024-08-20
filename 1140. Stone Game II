@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 3) complexity by time and O(n ** 2) by space for dp matrix.
+
+I think I can already solve a simple problem with dynamic programming, but as soon as there is an additional step that needs to be done before that, I get very lost.
+In this code, we go through all the positions from the end where we can start collecting stones, and check the maximum possible number of stones that we can get at each step with optimal play of the opponent.
+"""
+
+class Solution:
+    def stoneGameII(self, piles: List[int]) -> int:
+        size = len(piles)
+        dp = [[0] * (size + 1) for _ in range(size)]
+        suffix_sum = [0] * size
+        suffix_sum[-1] = piles[-1]
+
+        for i in range(size - 2, -1, -1):
+            suffix_sum[i] = suffix_sum[i + 1] + piles[i]
+
+        for i in range(size - 1, -1, -1):
+            for m in range(1, size + 1):
+                if i + 2 * m >= size:
+                    dp[i][m] = suffix_sum[i]
+                else:
+                    for x in range(1, 2 * m + 1):
+                        dp[i][m] = max(dp[i][m], suffix_sum[i] - dp[i + x][max(m, x)])
+        return dp[0][1]
