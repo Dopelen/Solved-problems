@@ -1,0 +1,36 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 3) complexity by time and O(n ** 2) by space.
+
+Today was a full day of work and, unfortunately, today's task is hard.
+The task is really difficult, and I am not ashamed that I did not figure it out on my own.
+In any case, it is worth improving dynamic programming.
+
+We create a matrix dp, where each row and each column corresponds to the indices of characters in the string. The elements of the matrix dp[i][k] will store the minimum number of operations needed to print the substring s[i...k].
+Initially, we consider all possible substrings and calculate the minimum number of operations to print them, filling the matrix dp from the bottom up (or from shorter substrings to longer ones).
+Then, for each substring, we check whether the current character has appeared in the substring before. 
+If so, we try to combine the operations using the result of the previous calculations. 
+That is, we split the substring into parts and calculate the number of steps needed to print the substring, taking into account the repetition of characters. 
+If the combination allows us to reduce the number of operations, then we update the value in the matrix dp for the current substring.
+Thus, gradually filling the matrix dp, we eventually get the minimum number of operations needed to print the entire string.
+"""
+
+class Solution:
+    def strangePrinter(self, s: str) -> int:
+        size = len(s)
+        dp = [[-1] * size for _ in range(size)]
+        return self.helper(0, size - 1, s, dp)
+
+    def helper(self, i: int, k: int, s: str, dp: list) -> int:
+        if i > k:
+            return 0
+        if dp[i][k] != -1:
+            return dp[i][k]
+        letter = s[i]
+        answer = 1 + self.helper(i + 1, k, s, dp)
+        for j in range(i + 1, k + 1):
+            if s[j] == letter:
+                updated_answer = self.helper(i, j - 1, s, dp) + self.helper(j + 1, k, s, dp)
+                answer = min(answer, updated_answer)
+        dp[i][k] = answer
+        return answer
