@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Solving a problem after a day of work is a completely different matter than solving it on a weekend. 
+But this one turned out to be quite simple.
+If you look closely, it's easy to see that if we have an edge 1 -> 2, then we can get to all the other nodes that are connected to 2 from node 1. 
+So we can simply take the list of all edges, and remove from the list of all nodes those that are the destination of each edge! 
+A short and elegant solution!
+"""
+
+class Solution:
+    def findSmallestSetOfVertices(self, n: int, edges: List[List[int]]) -> List[int]:
+        answer = set([i for i in range(n)])
+        for elem in edges:
+            if elem[1] in answer:
+                answer.remove(elem[1])
+        return answer
+
