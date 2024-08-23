@@ -1,0 +1,52 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Finally a solvable problem, although I'm a little slow today.
+The approach is simple: split the string into pieces by ("+" and "-"), then split the pieces into a numerator and a denominator by ("/").
+Group everything into a dictionary by denominators, so as not to make unnecessary calculations and calculate a common denominator. 
+In the end, we simply calculate the general answer.
+
+P.S: You can also write this solution 50 times shorter using the fraction library, which supports fraction reduction.
+"""
+
+# Row Solution
+class Solution:
+    def fractionAddition(self, expression: str) -> str:
+        answer = 0
+        size = len(expression)
+        values = defaultdict(int)
+        chunks_borders = [i for i, e in enumerate(expression) if e in {"+", "-"} or i == 0]
+        chunks_borders.append(size)
+        chunks_size = len(chunks_borders)
+        chunks = [expression[chunks_borders[i]:chunks_borders[i + 1]] for i in range(chunks_size - 1)]
+        for chunk in chunks:
+            current_chunk = chunk.split("/")
+            values[int(current_chunk[1])] += int(current_chunk[0])
+
+        divisors = [v for v in values.keys()]
+        lcm = math.lcm(*divisors)
+
+        for k, v in values.items():
+            if k != lcm:
+                v = v * (lcm // k)
+            answer += v
+        common_divisor = math.gcd(lcm, answer)
+
+        if answer % lcm == 0:
+            return str(answer//lcm) + "/1"
+        elif not(common_divisor % 1):
+            return str(answer//common_divisor) + "/" + str(lcm//common_divisor)
+        return str(answer) + "/" + str(lcm)
+
+
+# Fraction Solution
+class Solution:
+    def fractionAddition(self, expression: str) -> str:
+        fractions = re.findall(r'[+-]?\d+/\d+', expression)
+        result = sum(Fraction(frac) for frac in fractions)     
+        return f"{result.numerator}/{result.denominator}"
+
+
+
+
