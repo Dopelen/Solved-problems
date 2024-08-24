@@ -1,0 +1,62 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This pragramm has O(n) complexity by time and O(n) by space
+
+A day off and a hard task with an acceptance rate of 24%. 
+Luckily, there was no need for any complex data structures here, so I figured it out with a little help from the author.
+Although the code is large, the idea itself is not very complex.
+For a polindrome, we need the string to be a mirror image of itself relative to the central element.
+The further to the left the number is, the less we want to change it, because the larger the digit of the number, the more "expensive" it is to change it. 
+The exception is numbers that are closer to "increasing" the digit than to "decreasing".
+So I just went through a few cases:
+- The price that is needed to increase the rank (this guarantees us a polindrome, because after increasing the number we only need to add 1 to make it a polindrome 9900 + 100 = 10000, 10000 + 1 = 10001 == polindrome!
+- The price that is needed to decrease the rank, this immediately guarantees us a polindrome 1111 - 112 = 999 == polindrome!
+- The prices that are needed to transform our string into a polindrome by changing the last number of the first half, 
+for this I take the first half of the string and change the last element, subtract 1 from it, leave it the same, add one, as a result I take the one that is the cheapest, and if the "prices are equal" then the one that is less.
+"""
+
+
+class Solution:
+    def nearestPalindromic(self, n: str) -> str:
+        size = len(n)
+        if size == 1:
+            return str(int(n) - 1)
+
+        n_list = list(map(int, list(n)))
+        number_of_digits = len(n)
+        value = int(n)
+        answer = defaultdict(list)
+
+        reduce_discharge_cost = value - (10 ** (number_of_digits - 1) - 1)
+        answer[reduce_discharge_cost].append("9" * (number_of_digits - 1))
+
+        increase_rank_cost = (10 ** number_of_digits) - value + 1
+        answer[increase_rank_cost].append(str(10 ** number_of_digits + 1))
+
+        pivot_index = size // 2
+        pivot_elem = n_list[pivot_index] if size % 2 else n_list[pivot_index - 1]
+        variants = [pivot_elem - 1 if pivot_elem != 0 else 9, pivot_elem, pivot_elem + 1 if pivot_elem != 9 else 0]
+        current_min = [math.inf, None]
+        first_half = n_list[:pivot_index]
+
+        for elem in variants:
+            if not size % 2:
+                first_half[-1] = elem
+                basic = first_half + first_half[-1::-1]
+            else:
+                basic = first_half + [elem] + first_half[-1::-1]
+            basic_cost = abs(value - int("".join(map(str, basic))))
+            if current_min[0] > basic_cost and basic_cost != 0:
+                current_min = [basic_cost, "".join(map(str, basic))]
+
+        answer[current_min[0]].append("".join(map(str, current_min[1])))
+
+        if reduce_discharge_cost > 10 ** (number_of_digits - 1):
+            first_half = [n_list[0] - 1] + [9] * (pivot_index - 1)
+            testcase_216 = first_half + first_half[-1::-1]
+            testcase_216_cost = abs(value - int("".join(map(str, testcase_216))))
+            answer[testcase_216_cost].append("".join(map(str, testcase_216)))
+
+        absolut_min_cost = min(elem for elem in answer.keys())
+        answer_min = min(list(map(int, answer[absolut_min_cost])))
+        return str(answer_min)
