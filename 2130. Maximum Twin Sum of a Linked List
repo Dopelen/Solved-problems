@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I solved the problem in 3 minutes, and then I realized that it probably can’t be done this way and that it needs to be done entirely through linked lists.
+
+"""
+
+# Convert to list solution
+class Solution:
+    def pairSum(self, head: Optional[ListNode]) -> int:
+        linked_list = []
+        while head:
+            linked_list.append(head.val)
+            head = head.next
+        size = len(linked_list) // 2
+        twin_sum = 0
+        for i in range(size):
+            twin_sum = max(twin_sum, linked_list[i] + linked_list[~i])
+        return twin_sum 
+
+# True Solution
+class Solution:
+    def pairSum(self, head):
+        slow = head
+        fast = head
+        maxVal = 0
+
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+        nextNode, prev = None, None
+        while slow:
+            nextNode = slow.next
+            slow.next = prev
+            prev = slow
+            slow = nextNode
+
+        while prev:
+            maxVal = max(maxVal, head.val + prev.val)
+            prev = prev.next
+            head = head.next
+
+        return maxVal
