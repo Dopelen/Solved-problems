@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+A small task for a break. 
+Fortunately, today there are no "5-minute adventures".
+We simply change the value to the next one (fortunately, according to the condition, we are guaranteed that the next one always exists) and the pointer to the pointer to the next element.
+So easy and simple.
+"""
+
+class Solution:
+    def deleteNode(self, node):
+        node.val = node.next.val
+        node.next = node.next.next
