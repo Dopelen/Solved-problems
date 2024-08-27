@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O((n + E) * logE) complexity by time and O(n + E) by space, where E is lenght of eadges.
+
+Graph traversal with weights using Dijkstra's algorithm, adjacency list and heap with a clever calculation of probabilities.
+"""
+
+class Solution:
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start: int, end: int) -> float:
+        adjacency_list = defaultdict(list)
+        list_of_cost = [0.0] * n
+        for index, (f, t) in enumerate(edges):
+            adjacency_list[f].append((t, index))
+            adjacency_list[t].append((f, index))
+        list_of_cost[start] = 1.0
+        heap = [(-list_of_cost[start], start)]
+        while heap:
+            chance, current = heapq.heappop(heap)
+            if current == end:
+                return -chance
+            for neighbor, index in adjacency_list.get(current, []):
+                if -chance * succProb[index] > list_of_cost[neighbor]:
+                    list_of_cost[neighbor] = -chance * succProb[index]
+                    heapq.heappush(heap, (-list_of_cost[neighbor], neighbor))
+        return 0.0
