@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+I based my solution to problem "Create 1568. Minimum Number of Days to Disconnect Island", where I deleted one of the island elements one by one, and then looked to see if the island remained intact or if it was now several new islands.
+This problem is somewhat simpler because we don't need to delete anything, in fact we are only interested in one check "if this cell has land in matrix 2, is there land in this cell in matrix 1?"
+and if at least one of the cells has the answer "no", then this part of matrix 2 is not a sub-island.
+In order to select an island, we simply go around all the neighboring cells when we come across "1" in matrix 2, and mark all the cells that we went around as "visited", thus insuring ourselves against repeated visits.
+As a result of going around each island, we increase the counter if during the go-around all cells with "1" in matrix 2 were "1" in matrix 1.
+"""
+
+class Solution:
+    def countSubIslands(self, grid1: List[List[int]], grid2: List[List[int]]) -> int:
+        height = len(grid1)
+        width = len(grid1[0])
+
+        def dfs(x, y, visited, sub_island):
+            if x < 0 or y < 0 or x >= height or y >= width or grid2[x][y] == 0 or visited[x][y]:
+                return sub_island
+            visited[x][y] = True
+            if grid1[x][y] != 1:
+                sub_island = False
+            if grid2[x][y] == 1:
+                return all([dfs(x - 1, y, visited, sub_island),
+                           dfs(x + 1, y, visited, sub_island),
+                           dfs(x, y - 1, visited, sub_island),
+                           dfs(x, y + 1, visited, sub_island)
+                           ])
+
+        def island_counter():
+            visited = [[False] * width for _ in range(height)]
+            count = 0
+            for i in range(height):
+                for j in range(width):
+                    if grid2[i][j] == 1 and not visited[i][j]:
+                        if dfs(i, j, visited, True):
+                            count += 1
+            return count
+
+        return island_counter()
