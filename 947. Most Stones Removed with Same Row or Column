@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Quite a difficult task, and for some time I couldn't figure out how to approach it.
+The whole task boils down to finding "connected stones". 
+From this point on, you can imagine everything as a graph and write the traversal algorithm you want.
+"""
+
+class Solution:
+    def removeStones(self, stones: List[List[int]]) -> int:
+        answer = 0
+        rows_dict = defaultdict(list)
+        cols_dict = defaultdict(list)
+        for x, y in stones:
+            rows_dict[x].append(y)
+            cols_dict[y].append(x)
+        visited = set()
+        cluster = deque()
+
+        for x, y in stones:
+            if (x, y) not in visited:
+                cluster.append((x, y))
+                while cluster:
+                    i, j = cluster.popleft()
+                    if (i, j) not in visited:
+                        visited.add((i, j))
+                        answer += 1
+                        for r in rows_dict[i]:
+                            if r != j:
+                                cluster.append((i, r))
+                        for c in cols_dict[j]:
+                            if c != i:
+                                cluster.append((c, j))
+                    rows_dict[i].clear()
+                    cols_dict[j].clear()
+                answer -= 1
+        return answer
