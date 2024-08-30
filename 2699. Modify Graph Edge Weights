@@ -1,0 +1,54 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O((V+E)Logv)) complexity by time.
+
+5 paragraphs of conditions, 5 hints, negative edges and possible cycles. All this and much more in the Friday after work task!
+Intuition tells me that I need to find all possible paths without cycles from the start to the goal, the sum of the weights of their edges and whether there is -1 to adjust the result upwards. 
+I want to intuitively conduct the bypass using Dijkstra's algorithm, and then... Well, actually, I couldn't come up with this solution without help.
+We do need to find the shortest path using the traversal algorithm ignoring edges with weight -1, but then we need to find it again, this time taking into account the modification of these edges.
+"""
+
+# Orifinal: https://leetcode.com/problems/modify-graph-edge-weights/
+class Solution:
+    INF = int(2e9)
+    def dijkstra(self, n, source, destination, adj):
+        distance = [float('inf')] * n
+        distance[source] = 0
+        priority_queue = []
+        heapq.heappush(priority_queue, (0, source))
+        while priority_queue:
+            cost, node = heapq.heappop(priority_queue)
+            if node == destination:
+                break
+            for close_cost, close_node in adj[node]:
+                if cost + close_cost < distance[close_node]:
+                    distance[close_node] = cost + close_cost
+                    heapq.heappush(priority_queue, (distance[close_node], close_node))
+        return distance[destination]
+
+    def modifiedGraphEdges(self, n, edges, source, destination, target):
+        adj = [[] for _ in range(n)]
+        for edge in edges:
+            if edge[2] == -1:
+                continue
+            adj[edge[0]].append((edge[2], edge[1]))
+            adj[edge[1]].append((edge[2], edge[0]))
+
+        sortedDistance = self.dijkstra(n, source, destination, adj)
+        if sortedDistance < target:
+            return []
+
+        isEqual = sortedDistance == target
+        for edge in edges:
+            if edge[2] == -1:
+                edge[2] = self.INF if isEqual else 1
+                adj[edge[0]].append((edge[2], edge[1]))
+                adj[edge[1]].append((edge[2], edge[0]))
+                if not isEqual:
+                    newSortedPath = self.dijkstra(n, source, destination, adj)
+                    if newSortedPath <= target:
+                        isEqual = True
+                        edge[2] += target - newSortedPath
+        if isEqual:
+            return edges
+        return []
