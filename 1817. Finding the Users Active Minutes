@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I was like "haha easy task today!"
+I wrote the code in 10 minutes, it didn't pass and I spent 2 hours trying to understand what they wanted from me. 
+In the end, it even turned out to be a good solution.
+
+The original solution was based on 2 dictionaries, but then I realized that you can get by with one.
+Just remember all the unique moments of activity for each ID using a set to avoid duplicates, and then increase the answer field by 1, which corresponds to the frequency of the manifestation of this ID.
+
+The task itself is not difficult, but understanding what is wanted from you is a real challenge.
+"""
+
+class Solution:
+    def findingUsersActiveMinutes(self, logs: List[List[int]], k: int) -> List[int]:
+        answer = [0 for _ in range(k)]
+        unic_times_for_given_user = defaultdict(set)
+        for id, time in logs:
+            unic_times_for_given_user[id].add(time)
+        for i, e in enumerate(unic_times_for_given_user.values()):
+            answer[len(e) - 1] += 1
+        return answer
