@@ -1,0 +1,52 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+I remembered how to invert matrices. 
+I liked the task, and thought about it and did not spend half my life on it.
+
+By solution:
+We bring each row to the beginning with 1 because this way we maximize the resulting number.
+We transform the columns of the matrix into rows for convenient work and count whether there are more zeros in the column than ones, if so, then we invert the column.
+We move along the "digits" of the resulting matrix and increase the answer by 2 to the power of the digit * the number of ones in the row.
+
+"""
+
+# My chield
+class Solution:
+    def matrixScore(self, grid: List[List[int]]) -> int:
+        height, width = len(grid), len(grid[0])
+        answer = 0
+
+        for row in range(height):
+            if not grid[row][0]:
+                grid[row] = [int(not elem) for elem in grid[row]]
+
+        transposed_grid = [list(r) for r in zip(*grid)]
+        for col in range(width):
+            if sum(transposed_grid[col]) <= (height // 2):
+                transposed_grid[col] = [int(not elem) for elem in transposed_grid[col]]
+
+        for power_of_two in range(width):
+            answer += sum(transposed_grid[power_of_two]) * (2 ** ((width - 1) - power_of_two))
+        return answer
+
+
+# refactored by ChatGPT version :)
+# It uses bit shifting instead of the construct I wrote and inverts the matrix only when needed, not always.
+
+class Solution:
+    def matrixScore(self, grid: List[List[int]]) -> int:
+        height, width = len(grid), len(grid[0])
+
+        for row in range(height):
+            if grid[row][0] == 0:
+                grid[row] = [1 - elem for elem in grid[row]]
+
+        answer = 0
+        for col in range(width):
+            col_sum = sum(grid[row][col] for row in range(height))
+            max_col_sum = max(col_sum, height - col_sum)
+            answer += max_col_sum * (1 << (width - col - 1))
+
+        return answer
