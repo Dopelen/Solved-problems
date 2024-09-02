@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Fortunately, a fairly simple intermediate-level problem.
+It cannot be solved by enumerating and multiplying the original array by a factor and iterating over it due to the large size of the final array, but this is not necessary.
+You can take the remainder of dividing all the material by what is spent in one pass. Then simply get the desired index by passing for n elements!
+"""
+
+class Solution:
+    def chalkReplacer(self, chalk: List[int], k: int) -> int:
+        size = len(chalk)
+        total_chalk = sum(chalk)
+        k -= total_chalk * (k // total_chalk)
+        for i in range(size):
+            k -= chalk[i]
+            if k < 0:
+                return i
