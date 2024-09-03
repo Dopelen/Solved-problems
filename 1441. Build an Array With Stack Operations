@@ -1,0 +1,54 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n) by space.
+
+A simple task of "medium" difficulty. 
+If you look closely at the condition, you can immediately see that we need to push in any case, but if the number does not match our target, we also need to use pop as many times as it does not match
+"""
+
+class Solution:
+    def buildArray(self, target: List[int], n: int) -> List[str]:
+        answer = []
+        target = deque(target)
+        extra_elements_count = 0
+        for i in range(1, n + 1):
+            if i == target[0]:
+                answer.extend(["Pop"] * extra_elements_count)
+                extra_elements_count = 0
+                target.popleft()
+            else:
+                extra_elements_count += 1
+            answer.append("Push")
+            if not target:
+                return answer
+
+
+# ChatGPT version
+class Solution:
+    def buildArray(self, target: List[int], n: int) -> List[str]:
+        answer = []
+        target_index = 0
+        
+        for i in range(1, n + 1):
+            if target_index < len(target) and i == target[target_index]:
+                answer.append("Push")
+                target_index += 1
+            else:
+                answer.append("Push")
+                answer.append("Pop")
+            
+            if target_index == len(target):
+                break
+        
+        return answer
+
+# 10000 IQ Solution
+# https://leetcode.com/problems/build-an-array-with-stack-operations/solutions/625224/python-24ms-100-faster/
+class Solution:
+    def buildArray(self, target: List[int], n: int) -> List[str]:
+        initialValue = 1
+        output = []
+        for number in target:
+            output.extend(["Push","Pop"]*(number - initialValue) + ["Push"])
+            initialValue = number + 1
+        return output
