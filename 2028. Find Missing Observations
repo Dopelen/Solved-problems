@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I tried to resolve the difference between two consecutive levels, but something went wrong and I had to debug the code for a hour. 
+Luckily, there is another easier way.
+"""
+
+class Solution:
+    def missingRolls(self, rolls: List[int], mean: int, n: int) -> List[int]:
+        m = len(rolls)
+        observed_sum = sum(rolls)
+        total_sum = (n + m) * mean
+        missing_sum = total_sum - observed_sum
+        if missing_sum > 6 * n or missing_sum < n: 
+            return []
+        q, r = divmod(missing_sum, n)
+        return [q + 1] * r + [q] * (n - r)
