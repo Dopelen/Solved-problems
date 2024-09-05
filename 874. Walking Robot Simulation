@@ -2,7 +2,12 @@
 """You can see the description of the task using the code specified in the title on leetcode.
 This program has O(n) complexity by time and O(n) by space.
 
-Not mine solution, thinking.
+Yesterday I was in a hurry and didn't have time to do the task properly, I just threw some solution and went to bed.
+Today I responsibly looked at what was there.
+This solution belongs:
+https://leetcode.com/problems/walking-robot-simulation/solutions/5734055/simple-and-easy-solution-using-java-and-python-with-explanation/
+and I certainly couldn't write it better.
+Beautiful implementation of changing direction and maintaining current coordinates.
 """
 
 class Solution:
@@ -11,7 +16,6 @@ class Solution:
         direction=[(0,1),(1,0),(0,-1),(-1,0)]
         max_distance=0
         obstacles=set(map(tuple,obstacles))
-        
         for cmd in commands:
             if cmd==-1:
                 d=(d+1)%4
@@ -24,5 +28,4 @@ class Solution:
                         break
                     x,y=nx,ny
                     max_distance=max(max_distance,x*x+y*y)
-        
         return max_distance
