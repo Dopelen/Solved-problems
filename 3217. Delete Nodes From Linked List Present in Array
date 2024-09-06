@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+As usual with linked lists, the main thing is to understand how these pointers interact with each other, with the help of paper and pencil I figured it out.
+I create a linked list "dummy" and a linked list "current" for iteration over the "dummy", with the help of which we will delete nodes.
+We go through the "dummy" using the "current" and if we come across a value to delete, then we change the pointer of "current" to the next node.
+"""
+
+class Solution:
+    def modifiedList(self, nums: List[int], head: Optional[ListNode]) -> Optional[ListNode]:
+        nums = set(nums)
+        dummy = ListNode(next=head)
+        current = dummy
+        while current.next:
+            if current.next.val in nums:
+                current.next = current.next.next
+            else:
+                current = current.next
+        return dummy.next
