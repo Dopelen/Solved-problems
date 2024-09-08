@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I broke my brain doing this.
+Knowing the size and dimensions of the pieces is easy, but dividing it all up is a nightmare.
+We add pieces sequentially, moving the pointer to the next part.
+"""
+
+class Solution:
+    def splitListToParts(self, head: Optional[ListNode], k: int) -> List[Optional[ListNode]]:
+        size_list = head
+        size = 0
+        answer = []
+        while size_list:
+            size += 1
+            size_list = size_list.next
+        chank_size, left = divmod(size, k)
+        
+        dummy = head
+        for _ in range(k):
+            answer.append(dummy)
+            part_size = chank_size + (left > 0)
+            if left: 
+                left -= 1
+            
+            for i in range(part_size - 1):
+                if dummy:
+                    dummy = dummy.next
+            next_chank = dummy.next if dummy else None
+
+            if dummy:
+                next_chank = dummy.next
+                dummy.next = None
+                dummy = next_chank
+        
+        return answer
