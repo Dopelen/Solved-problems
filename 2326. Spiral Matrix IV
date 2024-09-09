@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+I am very proud of my solution.
+Quickly I understood how to solve it and remembered a small heuristic, the variable "direction" which contains numbers that should be added when moving in one direction or another:
+When moving to the right  its (x =+ 1, y += 0), when moving down (y += 1, x += 0) and so on.
+Although the conditions look cumbersome, they boil down to the fact that as soon as we approach the border or cell in which there is already a number, 
+we change the direction of movement, and since the directions of movement are cyclical, we simply jump to the beginning when we approach the end of the "direction" variable
+"""
+
+class Solution:
+    def spiralMatrix(self, m: int, n: int, head: Optional[ListNode]) -> List[List[int]]:
+        matrix = [[-1] * n for j in range(m)]
+        x = -1
+        y = 0
+        moves = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        direction = 0
+        while head:
+            x += moves[direction][1]
+            y += moves[direction][0]
+            matrix[y][x] = head.val
+            head = head.next
+            if ((x + 1 == n or matrix[y][x + 1] != -1) and direction == 0) or (
+                    (x - 1 == -1 or matrix[y][x - 1] != -1) and direction == 2) or (
+                    (y + 1 == m or matrix[y + 1][x] != -1) and direction == 1) or (
+                    (y - 1 == -1 or matrix[y - 1][x] != -1) and direction == 3):
+                direction = (direction + 1) % 4
+        return matrix
