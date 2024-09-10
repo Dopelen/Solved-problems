@@ -1,0 +1,47 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Quite a simple and pleasant task.
+When we take a symbol, we are obliged to take all its repetitions in this piece of the answer, so the task can be solved greedily.
+If we come across a letter whose last inclusion is even further than the last inclusion of some letter before it, we are obliged to expand the range to the maximum, 
+because according to the condition, all inclusions of this letter must be in a separate piece of the answer.
+So with the help of a simple iteration in linear time we can find the answer.
+"""
+
+# After refactoring:
+class Solution:
+    def partitionLabels(self, s: str) -> List[int]:
+        last_position_for_letter = {letter: i for i, letter in enumerate(s)}
+        answer = []
+        start = current_border = 0
+        for index, char in enumerate(s):
+            current_border = max(last_position_for_letter[char], current_border)
+            if index == current_border:
+                answer.append(index - start + 1)
+                start = index + 1
+        return answer
+
+
+# Before refactoring:
+class Solution:
+    def partitionLabels(self, s: str) -> List[int]:
+        positing_of_letters = defaultdict(list)
+        answer = []
+        size = len(s)
+        for i, e in enumerate(s):
+            positing_of_letters[e].append(i)
+        index = 0
+        while index < size:
+            start = index
+            if len(positing_of_letters[s[index]]) > 1:
+                current_border = positing_of_letters[s[index]][-1]
+                index += 1
+                while index <= current_border:
+                    current_border = max(positing_of_letters[s[index]][-1], current_border)
+                    index += 1
+                answer.append(index - start)
+            else:
+                answer.append(1)
+                index += 1
+        return answer
