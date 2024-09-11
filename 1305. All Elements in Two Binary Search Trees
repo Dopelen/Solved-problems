@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(nlog(n)) complexity by time and O(n) by space. Where n - number nodes in root1 and root2.
+
+Today is not a difficult task.
+I solved it in a simple way, I select all the values, adding to the list accessible due to closure.
+And then I sort it. It turned out a little slower, but simple and clear.
+"""
+
+# Simple solution
+class Solution:
+    def getAllElements(self, root1: TreeNode, root2: TreeNode) -> List[int]:
+        answer = []
+        
+        def traversal(root):
+            if root:
+                answer.append(root.val)
+                if root.left:
+                    traversal(root.left)
+                if root.right:
+                    traversal(root.right)
+
+        traversal(root1)
+        traversal(root2)
+        return sorted(answer)
+
+# Faster on paper (slower x2 in reality)
+class Solution:
+    def getAllElements(self, root1: TreeNode, root2: TreeNode) -> List[int]:
+
+        def traversal(root):
+            if not root: return []
+            return traversal(root.right) + [root.val] + traversal(root.left)
+
+        first_elem = traversal(root1)
+        second_elem = traversal(root2)
+        answer = []     
+        while first_elem and second_elem:                
+            answer.append(first_elem.pop() if first_elem[-1] < second_elem[-1] else second_elem.pop())
+        return answer + list(reversed(first_elem or second_elem))
+
