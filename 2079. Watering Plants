@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Luckily today is a simple task. 
+I just simulated the necessary movement. 
+The only difference with the condition is that I did not take the "next plant" but checked the current one to simplify the solution, and if there was not enough water, I simply calculated the path to the river and back.
+"""
+
+# initial Solution
+class Solution:
+    def wateringPlants(self, plants: List[int], capacity: int) -> int:
+        pointer = -1
+        answer = 0
+        current_capacity = capacity
+        size = len(plants) - 1
+        while pointer < size:
+            pointer += 1
+            if current_capacity < plants[pointer]:
+                answer += 2 * pointer + 1
+                current_capacity = capacity - plants[pointer]
+            else:
+                answer += 1
+                current_capacity -= plants[pointer]
+        return answer
+
+# After refactoring
+class Solution:
+    def wateringPlants(self, plants: List[int], capacity: int) -> int:
+        answer = 0
+        current_capacity = capacity
+        for i, plant in enumerate(plants):
+            if current_capacity < plant:
+                answer += 2 * i
+                current_capacity = capacity
+            answer += 1
+            current_capacity -= plant
+        return answer
