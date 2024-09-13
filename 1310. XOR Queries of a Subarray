@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n + q) complexity by time and O(n) by space
+
+I went to do it lazily, knowing that with a load of 10**5, the quadratic time complexity would not allow the task to be completed on time. 
+And so it turned out, 41 out of 42 tests failed.
+"""
+
+# Human Solution with prefixXOR
+class Solution:
+    def xorQueries(self, arr: List[int], queries: List[List[int]]) -> List[int]:
+        answer = []
+        prefix_xor = [0] * (len(arr) + 1)
+        for i in range(1, len(arr) + 1):
+            prefix_xor[i] = prefix_xor[i - 1] ^ arr[i - 1]
+        for a, b in queries:
+            answer.append(prefix_xor[b + 1] ^ prefix_xor[a])
+        return answer
+
+# Lazy one O(n ** 2)
+class Solution:
+    def xorQueries(self, arr: List[int], queries: List[List[int]]) -> List[int]:
+        answer = []
+        for a, b in queries:
+            answer.append(reduce(lambda x, y: x ^ y, arr[a:b + 1]))
+        return answer
