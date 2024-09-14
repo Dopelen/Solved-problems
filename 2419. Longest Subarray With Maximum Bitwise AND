@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Pretty simple task, the hard part is to understand that the AND operator is a bitwise comparison and to get its maximum value you need to compare a number with itself,
+add to this the fact that the largest numbers have the largest bitwise AND with themselves, which leads us to a simple task with 2 main steps:
+1. Find the largest number
+2. Find the length of the largest substring consisting of these numbers
+"""
+
+# Initial Solution
+class Solution:
+    def longestSubarray(self, nums: List[int]) -> int:
+        maximum_value = max(nums)
+        total_max = current_max = 0
+        for index, elem in enumerate(nums):
+            if elem == maximum_value:
+                current_max += 1
+            else:
+                total_max = max(total_max, current_max)
+                current_max = 0
+        return max(total_max, current_max)
+
+
+# In one pass
+class Solution:
+    def longestSubarray(self, nums: List[int]) -> int:
+        current_max_val = current_max_lenght = current_lenght = 0
+        for elem in nums:
+            if elem > current_max_val:
+                current_max_val = elem
+                current_lenght = current_max_lenght = 1
+            elif current_max_val == elem:
+                current_lenght += 1
+                current_max_lenght = max(current_max_lenght, current_lenght)
+            else:
+                current_lenght = 0
+        return current_max_lenght
