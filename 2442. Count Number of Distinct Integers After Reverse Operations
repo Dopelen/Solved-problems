@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+
+I simply converted the types and succeeded.
+1. Eliminate duplicates
+2. Remove spaces
+3. Reverse the string (so as not to reverse each number separately)
+4. Split the resulting string by commas
+5. Convert the elements to a int format
+6. Union the original set with the resulting one
+7. Return its length
+
+There were more points than lines of code :)
+"""
+
+# Initial Solution
+class Solution:
+    def countDistinctIntegers(self, nums: List[int]) -> int:
+        nums = set(nums)
+        processed_str = str(nums).replace(" ", "")
+        processed_set = set(map(int, processed_str[-2:0:-1].split(",")))
+        all_unic_numbers = nums.union(processed_set)
+        return len(all_unic_numbers)
+
+# After refactoring
+class Solution:
+    def countDistinctIntegers(self, nums: List[int]) -> int:
+        nums_set = set(nums)
+        reversed_set = {int(str(num)[::-1]) for num in nums}
+        all_unique_numbers = nums_set.union(reversed_set)
+        return len(all_unique_numbers)
