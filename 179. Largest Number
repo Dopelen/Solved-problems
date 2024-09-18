@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+While I was thinking about the problem, I found a trick that greatly simplifies it, it's a pity that I didn't manage to think of it earlier or come to the solution in another way.
+
+The main difficulty in the problem is that numerical sorting does not help us choose the right order for the answer. 
+Let's take 30 and 3. 
+30 is greater and if we take it first, the answer will be 303, although the correct answer is 330.
+Our task is to carry out such a sorting that would give us the maximum possible number in the end.
+
+One solution is to convert the elements to strings and multiply them to some size, say by multiplying by 10 (the ceiling of the number size is 10 ** 9).
+So 3 becomes 3333333333, and 30 becomes 3030303030...
+Although in the numerical representation 3030... is still more, but in the string comparison, by the second digit, the first will come out ahead, and essentially return us the correct answer, because it guarantees a larger value in a larger digit.
+"""
+
+class Solution:
+    def largestNumber(self, nums: List[int]) -> str:
+        str_nums = sorted(list(map(str, nums)), key=lambda x: x * 10, reverse=True)
+        if str_nums[0] == "0":
+            return "0"
+        return "".join(str_nums)
