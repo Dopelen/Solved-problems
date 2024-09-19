@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2 ** n) complexity by time and same by space.
+
+Unfortunately, the concept of today's problem itself turned out to be extremely difficult for me, and I couldn't even write a rough solution on my own.
+After looking at the solution, it seemed relatively simple, but I have no confidence at all that I could write it on my own in less than a day.
+
+The whole principle comes down to recursively traversing the left and right sides of the expression at each operation sign and calculating the results for each of the selected parts.
+"""
+
+# https://leetcode.com/problems/different-ways-to-add-parentheses/
+class Solution:
+    def diffWaysToCompute(self, input: str) -> List[int]:
+        if input.isdigit():
+            return [int(input)]
+        result = []
+        for i in range(len(input)):
+            if input[i] in "-+*":
+                left = self.diffWaysToCompute(input[:i])
+                right = self.diffWaysToCompute(input[i + 1:])
+                for l in left:
+                    for r in right:
+                        if input[i] == '+':
+                            result.append(l + r)
+                        elif input[i] == '-':
+                            result.append(l - r)
+                        elif input[i] == '*':
+                            result.append(l * r)
+        return result
