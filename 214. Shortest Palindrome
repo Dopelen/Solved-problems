@@ -1,5 +1,27 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-This program has O(n) complexity by time and O(1) by space.
+This program has O(n ** 2) complexity by time and O(n) by space.
 
+I thought about the problem for a couple of hours and even wrote down several solutions, but I still couldn’t figure out a linear implementation without hints.
 """
+
+# Like this Solution, but hard to understand
+# https://leetcode.com/problems/shortest-palindrome/solutions/5810296/recursion-with-2-pointers-kmp-beats-100/
+class Solution:
+    def shortestPalindrome(self, s: str) -> str:
+        i, n=0, len(s)
+        for c in s[::-1]:
+            if c==s[i]:i+=1
+        if i==n: return s
+        sub=s[i:]
+        return sub[::-1]+self.shortestPalindrome(s[0:i])+sub
+
+
+# genius O(n**2)
+# https://leetcode.com/problems/shortest-palindrome/solutions/5810574/python-4-lines-beats-95-simple/
+class Solution:
+    def shortestPalindrome(self, s: str) -> str:
+        r = s[::-1]
+        for i in range(len(s) + 1):
+            if s.startswith(r[i:]):
+                return r[:i] + s
