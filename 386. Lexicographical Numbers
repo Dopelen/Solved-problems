@@ -1,0 +1,56 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n) complexity by time and O(n) by space (but its O(1) additional space!).
+
+The problem was quite simple, but I was very slow in thinking, stared at the monitor for almost an hour and drooled.
+Although the principle of the solution was clear, I ran into my technical skills, and could not write a solution corresponding to my concept, then I thought HARD and solved it with a meaningful recursive algorithm.
+
+Perhaps one of the first meaningful recursive algorithms in my life!
+
+As for the solution, if you look closely, you can see that at each digit of the number we need to go from 0 to 9.
+In the case of the number 113, the first numbers will look like this:
+[1, 10, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 11, 110, 111, 112, 113, 12...
+Note that initially we add to the answer the initial numbers of each digit 1, 10, 100, and then increase the value of the last digit by 1 in range(10) and add it to answer step by step (100 -> 101 -> 102 -> ... -> 109), 
+after which we return to the level below, increase the number of the previous digit by 1 (10 -> 11) and if the maximum digit has not yet reached the value initially given to us (n), we continue this algorithm.
+As soon as we reach the limit of our digit (99 for the second or 999 for the third) or hit the maximum value that is given to us by the condition, we decrease the digit by one, and now work with it.
+By maintaining the boundaries for each digit and the value for each digit, our recursive function works flawlessly, filling in the answer in the format that we need.
+"""
+
+# My version
+class Solution:
+    def lexicalOrder(self, n: int) -> List[int]:
+        answer = []
+        grade = len(str(n))
+
+        def add_border(current):
+            nonlocal grade, limit
+            for i in range(10):
+                answer.append(digits[current])
+                digits[current] += 1
+                if current + 1 < grade:
+                    add_border(current + 1)
+                if digits[current] > n or digits[current] > limit[current]:
+                    grade -= 1
+                    break
+
+        digits = [1, 10, 100, 1000, 10000]
+        limit = [9, 99, 999, 9999, 99999]
+        add_border(0)
+
+        return answer
+
+# ChatGPT version
+# It is clearer, and I thought about solving it this way, but I went the other way with less calculations.
+class Solution:
+    def lexicalOrder(self, n: int) -> List[int]:
+        answer = []
+        current = 1
+        for _ in range(n):
+            answer.append(current)
+            if current * 10 <= n:
+                current *= 10
+            else:
+                while current % 10 == 9 or current + 1 > n:
+                    current //= 10
+                current += 1
+        return answer
