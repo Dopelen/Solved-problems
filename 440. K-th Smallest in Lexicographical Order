@@ -1,0 +1,79 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n) * log(k)) complexity by time and O(1) by space.
+
+Sunday, a difficult task with a success rate of 30...
+It's going to be a gloomy day - I thought.
+But then I saw that this was actually the task I solved yesterday, only with the "difficult" tag!
+But then I saw that the limit is now 10 ** 9, so my solution won't work :(
+
+If you take my code from yesterday (problem 386) and just modify it, even though there are no complex mathematical operations going on there, it doesn't pass in time.
+Which makes me think that there is a clear pattern to the construction of this kind of series and we don't need to calculate all the numbers to pull out the k-th element.
+If you break the problem down into parts, you can see that if we are given the number 100001, the first few elements will correspond to the numbers 
+1, 10, 100, 1000... 10 ** i where i is the power of 10 that the number rests on, 
+then all the elements that are needed to lower the current power of 10 by one + elements of powers of 10 lower that occur in the lexigraphic range.
+If we take some "convenient" number, for example 999, we can notice that the numbers in it will be distributed evenly:
+1, 10, 100, 11, 110, 111, 112... and at the end 9, 99, 990, 991...999
+And even if the number is "inconvenient" like 1003, the "surplus" will be in some specific place that we can determine.
+100, 1000, 1001, 1002, 1003.
+All that remains for us is to derive a formula that would help determine the distance between lexigraphic steps (how much we need to go from "1" to "2").
+To do this, we use a function that would calculate the number of steps needed to move to the next lexigraphically larger order.
+To go from 1 to 2, we need to take all the numbers from 10 to 100, from 100 to 1000, and so on, depending on the power of 10 we are working with.
+
+"""
+
+# True Solution
+class Solution:
+    def findKthNumber(self, n: int, k: int) -> int:
+
+        def count_steps(current, n):
+            steps = 0
+            first, last = current, current
+            while first <= n:
+                steps += min(n + 1, last + 1) - first
+                first *= 10
+                last = last * 10 + 9
+            return steps
+
+        current = 1
+        k -= 1 
+        while k > 0:
+            steps = count_steps(current, n)
+            if steps <= k:
+                current += 1
+                k -= steps
+            else:
+                current *= 10
+                k -= 1
+
+        return current
+
+
+
+# Modified 386 (didnt work)
+class Solution:
+    def findKthNumber(self, n: int, k: int) -> int:
+        if n == k == 1:
+            return 1
+
+        def lexicalOrder(n: int) -> List[int]:
+            answer = []
+            grade = len(str(n))
+
+            def add_border(current):
+                nonlocal grade, limit
+                for i in range(10):
+                    answer.append(digits[current])
+                    digits[current] += 1
+                    if current + 1 < grade:
+                        add_border(current + 1)
+                    if digits[current] > n or digits[current] > limit[current]:
+                        grade -= 1
+                        break
+
+            digits = [10 ** i for i in range(10)]
+            limit = [elem - 1 for elem in digits[1::]] + [10 ** 10 - 1]
+            add_border(0)
+            return answer
+
+        return lexicalOrder(n)[k]
