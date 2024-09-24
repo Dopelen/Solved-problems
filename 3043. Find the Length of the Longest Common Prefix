@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Nice task, the only thing is that the hints were too straightforward.
+I just break each number into possible prefixes, add them to a separate set, and then compare with possible prefixes from the second list, updating the answer.
+"""
+
+class Solution:
+    def longestCommonPrefix(self, arr1: List[int], arr2: List[int]) -> int:
+        answer = 0
+        arr1, arr2 = set(arr1), set(arr2)
+        check_factory = set()
+        for elem in arr1:
+            elem = str(elem)
+            for i in range(len(elem)):
+                check_factory.add(elem[0:i + 1])
+
+        for elem in arr2:
+            elem = str(elem)
+            for j in range(len(elem)):
+                if elem[0:j + 1] in check_factory:
+                    answer = max(answer, j + 1)
+
+        return answer
+
+
+# Cool concept without convert int to str
+# https://leetcode.com/problems/find-the-length-of-the-longest-common-prefix/solutions/5826011/how-to-use-prefix-concept-here-map-trie-approaches-chalo-smjhe/https://leetcode.com/problems/find-the-length-of-the-longest-common-prefix/solutions/5826011/how-to-use-prefix-concept-here-map-trie-approaches-chalo-smjhe/
