@@ -1,0 +1,63 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+The problem is solved through a trie (loaded tree), but I have not studied such a data structure, so I had to google and think on the fly.
+I won't pretend that I wrote everything myself right away, rather I just analyzed the solutions that are available on the Internet.
+
+The problem is difficult not because of the internal logic of the solution, but because of the structure of the data, which you must know at a sufficient level to solve it.
+
+There are some subtleties in this code, firstly the search and increase functions are implemented inside the solution class, while the other tree functions are inside the tree class.
+Also, information about the presence of each letter is cleverly stored in an array of the length of the alphabet, and we simply have constant access to each of the cells we need when searching.
+
+From here on out, it's pretty simple. 
+We add each word, incrementing the counter of its prefixes during this process, and finally output a list of answers containing the values ​​of these counters for each word.
+"""
+
+# https://leetcode.com/problems/sum-of-prefix-scores-of-strings/solutions/5830227/simple-step-by-step-solution-using-trie-data-structure/
+class TrieNode:
+    def __init__(self):
+        self.list = [None] * 26
+        self.visit_count = 0
+    
+    def already_in_tree(self, char):
+        return self.list[ord(char) - ord("a")] is not None
+
+    def get(self, char):
+        return self.list[ord(char) - ord("a")]
+
+    def put(self, char, new_node):
+        self.list[ord(char) - ord("a")] = new_node
+
+    def increase(self, char):
+        self.list[ord(char) - ord("a")].visit_count += 1
+
+    def count(self, char):
+        return self.list[ord(char) - ord("a")].visit_count
+
+
+class Solution:
+    def __init__(self):
+        self.root = TrieNode()
+    
+    def insert(self, word):
+        node = self.root
+        for char in word:
+            if not node.already_in_tree(char):
+                node.put(char, TrieNode())
+            node.increase(char)
+            node = node.get(char)
+
+    def search(self, word):
+        node = self.root
+        cur_count = 0
+        for char in word:
+            cur_count += node.count(char)
+            node = node.get(char)
+        return cur_count
+
+    def sumPrefixScores(self, words: List[str]) -> List[int]:
+        for word in words:
+            self.insert(word)
+        answer = [self.search(word) for word in words]
+        return answer
