@@ -1,5 +1,21 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-This program has O(n) complexity by time and O(n) by space.
+This program has O(n(log(n))) complexity by time and O(n) by space.
 
+The main difficulty was realizing that I can't use insertion into a sorted array using the value of the first elements in the array and the element being inserted using the key parameter in the standard bisect library as I want.
+Once I accepted reality and created 2 arrays with a start and end, the problem was solved quite quickly.
 """
+
+class MyCalendar:
+    def __init__(self):
+        self.start_list = []
+        self.end_list = []
+
+    def book(self, start: int, end: int) -> bool:
+        left = bisect_right(self.end_list, start)
+        right = bisect_left(self.start_list, end)
+        if left == right:
+            bisect.insort(self.start_list, start)
+            bisect.insort(self.end_list, end)
+            return True
+        return False
