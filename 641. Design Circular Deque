@@ -1,0 +1,138 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+I decided to go the simple way, although it seems obvious that I am being asked to organize this without built-in libraries.
+So nothing should stop you from writing a solution using a linked list.
+"""
+
+# Simple way
+class MyCircularDeque:
+
+    def __init__(self, k: int):
+        self.dq = deque()
+        self.size = k
+
+    def insertFront(self, value: int) -> bool:
+        if len(self.dq) < self.size:
+            self.dq.appendleft(value)
+            return True
+        return False
+
+    def insertLast(self, value: int) -> bool:
+        if len(self.dq) < self.size:
+            self.dq.append(value)
+            return True
+        return False
+
+    def deleteFront(self) -> bool:
+        if len(self.dq):
+            self.dq.popleft()
+            return True
+        return False
+        
+
+    def deleteLast(self) -> bool:
+        if len(self.dq):
+            self.dq.pop()
+            return True
+        return False
+        
+
+    def getFront(self) -> int:
+        if len(self.dq):
+            return self.dq[0]
+        return -1
+        
+
+    def getRear(self) -> int:
+        if len(self.dq):
+            return self.dq[-1]
+        return -1
+        
+
+    def isEmpty(self) -> bool:
+        return not len(self.dq)
+
+    def isFull(self) -> bool:
+        return len(self.dq) == self.size
+
+
+# True way
+class Node:
+    def __init__(self, value: int):
+        self.value = value
+        self.next = None
+        self.prev = None
+
+class MyCircularDeque:
+    def __init__(self, k: int):
+        self.size = k
+        self.current_size = 0
+        self.head = None
+        self.tail = None
+
+    def insertFront(self, value: int) -> bool:
+        if self.current_size >= self.size:
+            return False
+        new_node = Node(value)
+        if self.current_size == 0:
+            self.head = self.tail = new_node
+        else:
+            new_node.next = self.head
+            self.head.prev = new_node
+            self.head = new_node
+        self.current_size += 1
+        return True
+
+    def insertLast(self, value: int) -> bool:
+        if self.current_size >= self.size:
+            return False
+        new_node = Node(value)
+        if self.current_size == 0:
+            self.head = self.tail = new_node
+        else:
+            new_node.prev = self.tail
+            self.tail.next = new_node
+            self.tail = new_node
+        self.current_size += 1
+        return True
+
+    def deleteFront(self) -> bool:
+        if self.current_size == 0:
+            return False
+        if self.current_size == 1:
+            self.head = self.tail = None
+        else:
+            self.head = self.head.next
+            self.head.prev = None
+        self.current_size -= 1
+        return True
+
+    def deleteLast(self) -> bool:
+        if self.current_size == 0:
+            return False
+        if self.current_size == 1:
+            self.head = self.tail = None
+        else:
+            self.tail = self.tail.prev
+            self.tail.next = None
+        self.current_size -= 1
+        return True
+
+    def getFront(self) -> int:
+        if self.current_size == 0:
+            return -1
+        return self.head.value
+
+    def getRear(self) -> int:
+        if self.current_size == 0:
+            return -1
+        return self.tail.value
+
+    def isEmpty(self) -> bool:
+        return self.current_size == 0
+
+    def isFull(self) -> bool:
+        return self.current_size == self.size
+
