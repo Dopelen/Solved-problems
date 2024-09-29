@@ -1,0 +1,59 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(n) by space.
+
+I thought about it very seriously, and even came up with a couple of tricks, but I ran into getting the minimum, when the minimum is equal to 1, and it disappears, the next minimum can be anything, and iterating to it may take quite a long time.
+At about this point I gave up, because the solution, although it will pass the check, will not work for a constant.
+
+As a result, it turned out that the "real" solution is done through a doubly linked list, which I most likely would not have written without additional help.
+(https://leetcode.com/problems/all-oone-data-structure/)
+"""
+
+My failed idea of Solution with 2 dicts and O(n):
+    class AllOne:
+        def __init__(self):
+            self.name_freq = defaultdict(int)
+            self.freq_name = defaultdict(set)
+            self.max_val = self.min_val = 0
+
+        def inc(self, key: str) -> None:
+            initial_freq = 0 if not self.name_freq.get(key) else self.name_freq[key]
+            self.name_freq[key] += 1
+            if initial_freq:
+                if len(self.freq_name[initial_freq]) == 1:
+                    del self.freq_name[initial_freq]
+                else:
+                    self.freq_name[initial_freq].remove(key)
+            self.freq_name[initial_freq + 1].add(key)
+
+            if initial_freq == self.max_val:
+                self.max_val += 1
+            if not self.freq_name[self.min_val]:
+                self.min_val += 1
+
+        def dec(self, key: str) -> None:
+            initial_freq = self.name_freq[key]
+            self.name_freq[key] -= 1
+            if not self.name_freq[key]:
+                del self.name_freq[key]
+            if len(self.freq_name[initial_freq]) == 1:
+                del self.freq_name[initial_freq]
+            else:
+                self.freq_name[initial_freq].remove(key)
+            if initial_freq != 1:
+                self.freq_name[initial_freq - 1].add(key)
+
+            if initial_freq == self.min_val:
+                if self.min_val == 1:
+                    self.min_val = min(self.name_freq.keys())
+                else:
+                    self.min_val = initial_freq - 1
+            if initial_freq == self.max_val:
+                if not self.freq_name[self.max_val]:
+                    self.max_val -= 1
+
+        def getMaxKey(self) -> str:
+            return "" if not self.max_val else next(iter(self.freq_name[self.max_val]))
+
+        def getMinKey(self) -> str:
+            return "" if not self.max_val else next(iter(self.freq_name[self.min_val]))
