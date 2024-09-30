@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) for push/pop and O(k) for increment complexity by time and O(max_size) by space.
+
+A very simple and enjoyable task for those who are just getting acquainted with the stack.
+"""
+
+class CustomStack:
+    def __init__(self, maxSize: int):
+        self.stack = []
+        self.max_size = maxSize
+
+    def push(self, x: int) -> None:
+        if len(self.stack) < self.max_size:
+            self.stack.append(x)
+
+    def pop(self) -> int:
+        if self.stack:
+            return self.stack.pop()
+        return -1
+        
+    def increment(self, k: int, val: int) -> None:
+        for index in range(min(len(self.stack), k)):
+            self.stack[index] += val
