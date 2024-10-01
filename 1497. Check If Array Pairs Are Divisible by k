@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+"Solvable" is a good definition of this problem. 
+I sat down, thought and figured out how to do it.
+Then I looked at the tips and giggled at how the author trolls users by offering useless operations.
+
+The concept of the solution is quite nice and clear.
+We only need the remainders from division by a given number and their frequency, so we boldly convert all the numbers into their remainders from division.
+If the sum of a pair of numbers should be divisible by, say, 5, and we have a remainder from division "1", 
+all that remains is to look in the dictionary to see if we have remainders from division "4". 
+And if the frequency of remainders 1 and remainders 4 match, then we move on, and if not, then we return Folse, because without 4 we will never get 1 to 5.
+"""
+
+class Solution:
+    def canArrange(self, arr: List[int], k: int) -> bool:
+        freq = [x % k for x in arr]
+        counter = Counter(freq)
+        for key in counter.keys():
+            if key == 0:
+                if counter[key]%2:
+                    return False
+            elif counter[k - key] != counter[key]:
+                return False
+        return True
