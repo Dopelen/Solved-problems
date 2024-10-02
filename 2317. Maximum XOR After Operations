@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I think that the percentage of correct solutions to this problem is so high because only those who know what they are doing try to solve it. 
+Normal people usually bypass bitwise operations :)
+
+The essence of the problem is that using the operations specified in the condition, we can transform any bit of the final XOR into 1, if we have at least one number with a "1" in the specified bit.
+Thus, the whole problem comes down to checking for each bit in the answer, whether there is at least one "1" among the given numbers in this bit. And if there is, put 1 in this sieve in the answer.
+
+And what is the easiest way to find "1" by comparing numbers?
+Correct! Using the OR operation!
+"""
+
+class Solution:
+   def maximumXOR(self, nums: List[int]) -> int:
+       answer = 0
+       for n in nums:
+           answer |= n      
+       return answer
