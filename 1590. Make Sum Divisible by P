@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I quickly figured out that I needed to solve it using prefix sums, but then I froze, the moment with calculating the difference of these sums still baffles me.
+I don't know if it's just today, or if this problem is based on 5 similar problems and is the final boss, but even after looking at the solution analysis and running the code, I can hardly understand how it works.
+Essentially, we calculate the remainder from dividing a given prefix sum by a given number, and look for segments with the same remainder (by storing them in a dictionary) and, if there is a match, 
+we calculate the length of the segment we need, through the difference in indices where the same remainder was encountered earlier.
+
+I'm sure that this is not the end of the story, I have many more prefix sums and suffering with them waiting for me.
+"""
+
+class Solution:
+    def minSubarray(self, nums: List[int], p: int) -> int:
+        size = len(nums)
+        current_sum = sum(nums)
+        total_remainder = current_sum % p
+        if total_remainder == 0:
+            return 0
+
+        remainder_dict = {0: -1}
+        current_pref_remainder = 0
+        min_lenght = size
+        for index, elem in enumerate(nums):
+            current_pref_remainder = (current_pref_remainder + elem) % p
+            if remainder_dict.get((current_pref_remainder - total_remainder) % p) is not None:
+                min_lenght = min(min_lenght, index - remainder_dict.get((current_pref_remainder - total_remainder) % p))
+            remainder_dict[current_pref_remainder] = index
+        return min_lenght if min_lenght < size else -1
