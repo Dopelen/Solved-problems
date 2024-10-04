@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A pleasant task, my brain didn't hurt at least once a week.
+Just look closely at the task.
+We know the number of groups, we know that they should have the same amount of skills, so we can calculate this amount by dividing the total sum by the number of groups.
+And now all we need to do is go through the list and see if we have a number in the list that will add the current "skill" to the required amount (the fastest and easiest way to do this is through a dictionary).
+
+You can also use sorting and two pointers for this task, but due to sorting, it will be algorithmically slower.
+"""
+
+class Solution:
+    def dividePlayers(self, skill: List[int]) -> int:
+        answer = 0
+        target = sum(skill) / (len(skill) // 2)
+        if int(target) != target:
+            return -1
+        counter = Counter(skill)
+        processed = set()
+        for elem in skill:
+            if elem not in processed:
+                second_elem = target - elem
+                if counter[elem] != counter[second_elem]:
+                    return -1
+                processed.add(elem)
+                processed.add(second_elem)
+                answer += (elem * second_elem) * (counter[elem] if elem != second_elem else counter[elem]//2)
+        return answer
