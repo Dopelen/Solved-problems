@@ -1,6 +1,26 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-This program has O(1) complexity by time and O(1) by space.
+This program has O(n) complexity by time and O(n) by space.
 
+This task was within my power. So I spent a couple of hours on it.
+The concept of the solution came to me quickly, literally in 10-15 minutes, the rest of the time I was trying to write beautiful code that would correctly handle all edge cases. 
+In the end, something terrible came out with two nested while loops, which after refactoring turned into a beautiful solution.
+
+I spent a whole hour analyzing a couple of non-working cases, as it turned out, the problem was in the counter.total() method which returned 0, 
+which gave a false positive result in cases where one letter had a positive value, and the second negative.
+
+After rewriting the method for calculating 0 values ​​in the counter, everything worked.
 """
 
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        window, size = len(s1), len(s2)
+        counter = Counter(s1)
+        for i in range(size):
+            if s2[i] in counter:
+                counter[s2[i]] -= 1
+            if i >= window and s2[i - window] in counter:
+                counter[s2[i - window]] += 1
+            if all([counter[i] == 0 for i in counter]):
+                return True
+        return False
