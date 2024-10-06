@@ -1,0 +1,63 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I liked the problem. I thought about it, debugged the edge cases, found bugs, improved the solution, and had a good time overall.
+
+When thinking about the problem, I noticed that for the cases that we really need to check, we have the smallest string and the largest, the smallest needs to be supplemented to the largest. 
+If they have the same elements at the beginning, we will supplement the end part and vice versa. 
+In fact, we don’t even have to supplement anything, it’s enough to check that the smaller string is in its original order in the larger one.
+
+This solution is easy to implement if we have two strings that have similar elements on one of the edges.
+But what if they are similar on both edges, and the mismatches are somewhere inside?
+We just need to iterate from any of the edges to the place of mismatch and cut the original strings there, so we will reduce the problem to what we have already solved 
+- find whether it is possible to supplement a string that is similar only on one side.
+"""
+
+# My Solution!
+class Solution:
+    def areSentencesSimilar(self, sentence1: str, sentence2: str) -> bool:
+        sentence1, sentence2 = sentence1.split(), sentence2.split()
+        size_1, size_2 = len(sentence1), len(sentence2)
+        smallest = min(size_1, size_2)
+        pointer = 0
+        if sentence1[0] == sentence2[0] and sentence1[-1] == sentence2[-1]:
+            while pointer != smallest and sentence1[pointer] == sentence2[pointer]:
+                pointer += 1
+            if pointer == smallest:
+                return True
+            else:
+                sentence1 = sentence1[pointer:]
+                sentence2 = sentence2[pointer:]
+                smallest -= pointer
+
+        if sentence1[0] == sentence2[0]:
+            for i in range(smallest):
+                if sentence1[i] != sentence2[i]:
+                    return False
+            return True
+
+        elif sentence1[-1] == sentence2[-1]:
+            for i in range(-1, -smallest - 1, -1):
+                if sentence1[i] != sentence2[i]:
+                    return False
+            return True
+
+        return False
+
+
+# Eleant chatGPT solution
+class Solution:
+    def areSentencesSimilar(self, sentence1: str, sentence2: str) -> bool:
+        sentence1, sentence2 = sentence1.split(), sentence2.split()
+        size_1, size_2 = len(sentence1), len(sentence2)
+        smallest = min(size_1, size_2)
+        
+        start = 0
+        while start < smallest and sentence1[start] == sentence2[start]:
+            start += 1
+        
+        end = 0
+        while end < smallest - start and sentence1[-(end + 1)] == sentence2[-(end + 1)]:
+            end += 1
+        
+        return start + end >= smallest
