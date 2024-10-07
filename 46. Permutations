@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * n!) complexity by time and O(n) by space.
+
+I'm glad we have a permutation function, but it seems the author expected a more detailed approach.
+
+The idea of ​​the second solution can be represented as a tree traversal, it consists in the fact that we recursively descend from the first element to the last, 
+at each level calling the traversal function for all possible values ​​at the moment (excluding those that were used earlier).
+For example 1, 2, 3, the value 1 will lead to possible continuations 2 and 3, and they in turn to 3 and 2.
+value 2 to values ​​1 and 3, and then 3 and 1 respectively, and so on, which leads us to exponential complexity.
+At the moment of reaching the last element, we begin collecting the answer 3 -> 2 -> 1, 2 -> 3 -> 1
+"""
+
+# With function 
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        return permutations(nums)
+
+
+# Solid beautiful solution
+https://leetcode.com/problems/permutations/solutions/5152552/video-simple-backtracking-solution/
+
+class Solution:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        if len(nums) == 1:
+            return [nums[:]]
+        res = []
+
+        for _ in range(len(nums)):
+            n = nums.pop(0)
+            perms = self.permute(nums)
+
+            for p in perms:
+                p.append(n)
+
+            res.extend(perms)
+            nums.append(n)
+
+        return res
+
