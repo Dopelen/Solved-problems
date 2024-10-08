@@ -26,3 +26,6 @@ class Solution:
                 s[index], s[pointer] = s[pointer], s[index]
                 pointer -= 1
         return answer
+
+
+# UPDATE: We can remove the conversion to a list and the line with the "swap" of brackets and the solution will remain exactly the same.
