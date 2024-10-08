@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The concept of the solution is quite simple. 
+We use two pointers. 
+The role of the first is played by the "index" variable during iteration in the for loop, the role of the second is played by the "pointer" variable we introduced.
+We calculate the balance of opening and closing brackets, and if it is broken, we change the current bracket with the last opening one.
+Keep in mind that when we change the brackets, the balance changes by 2, because we removed the closing one (this is +1) and added the opening one (another +1). 
+And also do not forget to additionally change the pointer to the closing bracket by another -1 after the loop, because the bracket we found will be used at the moment, and next time we will need to look to the left of the list.
+"""
+
+class Solution:
+    def minSwaps(self, s: str) -> int:
+        s = list(s)
+        size = len(s)
+        answer = balance = 0
+        pointer = -1
+        for index in range(size):
+            balance += 1 if s[index] == "[" else -1
+            if balance < 0:
+                while s[pointer] != "[":
+                    pointer -= 1
+                answer += 1
+                balance += 2
+                s[index], s[pointer] = s[pointer], s[index]
+                pointer -= 1
+        return answer
