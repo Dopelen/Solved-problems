@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+One of the easiest intermediate level problems.
+The concept of the solution is simple. 
+We definitely need to insert an extra parenthesis if our iteration encounters a closing parenthesis that does not match the opening one.
+If we handle this case, we are left with only opening parentheses that were not previously closed. 
+To make them valid, just add the difference between the opening and closing parentheses to the answer at the end!
+"""
+
+class Solution:
+    def minAddToMakeValid(self, s: str) -> int:
+        balance = answer = 0
+        for symbol in s:
+            balance += 1 if symbol == "(" else -1
+            if balance < 0:
+                answer += 1
+                balance += 1
+        return answer + balance
