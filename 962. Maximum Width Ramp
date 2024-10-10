@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) / O(n) complexity by time and O(n) by space.
+
+It seemed to me that my solution should pass due to the time limit, but I was wrong.
+In the discussions I saw that a monotonic stack can be used and if you know this technology, the solution is not very difficult.
+The only problem is that you need to know this technology.
+"""
+
+# Real solution!
+class Solution:
+    def maxWidthRamp(self, nums: List[int]) -> int:
+        stack = []
+        size = len(nums)
+        answer = 0
+        
+        for index in range(size):
+            if not stack or nums[stack[-1]] > nums[index]:
+                stack.append(index)
+
+        for i in range(size - 1, -1, -1):
+            while stack and nums[stack[-1]] <= nums[i]:
+                answer = max(answer, i - stack.pop())
+        
+        return answer
+
+
+# A solution that has not passed the time limit O(n ** 2)
+class Solution:
+    def maxWidthRamp(self, nums: List[int]) -> int:
+        first_index = answer = 0
+        last_index = size = len(nums) - 1
+        while first_index <= size and first_index < last_index:
+            while nums[first_index] > nums[last_index]:
+                last_index -= 1
+            answer = max(answer, last_index - first_index)
+            first_index += 1
+            if size - first_index <= answer:
+                break
+            last_index = size
+        return answer
