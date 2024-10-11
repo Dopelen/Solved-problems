@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n)) complexity by time and O(n) by space.
+
+I saw this problem on Yandex practical course, but by now I have already forgotten the solution.
+I had to go to the tips and see what people would describe.
+The moment with sorting was very difficult for me to understand and in general I really don’t like the difficulties that problems that require using heaps cause for me, I need to improve this, but when? :(
+"""
+
+class Solution:
+    def smallestChair(self, times: List[List[int]], targetFriend: int) -> int:
+        size = len(times)
+        order = sorted(range(size), key=lambda x: times[x][0])
+        empty, taken = list(range(size)), []
+        for i in order:
+            arrival, leave = times[i]
+            while taken and taken[0][0] <= arrival:
+                heappush(empty, heappop(taken)[1])
+            seat = heappop(empty)
+
+            if i == targetFriend:
+                return seat
+
+            heappush(taken, (leave, seat))
