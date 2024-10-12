@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n ** 2) / O(n(log(n)) complexity by time and O(n).
+
+My greedy solution, as expected, did not pass the input :(
+
+The idea of ​​the solution is quite simple, if the current beginning of the interval intersects with the current "end" - we are forced to create a new group, otherwise we take the coordinate of the next "end" from the sorted array of interval endings.
+"""
+
+# Actual Solution
+class Solution:
+    def minGroups(self, intervals: List[List[int]]) -> int:
+        intervals_start = sorted(i[0] for i in intervals)
+        intervals_end = sorted(i[1] for i in intervals)
+        end = answer = 0
+        for start in intervals_start:
+            if start > intervals_end[end]:
+                end += 1
+            else:
+                answer += 1
+        return answer
+
+
+# Gready Solution
+class Solution:
+    def minGroups(self, intervals: List[List[int]]) -> int:
+        intervals = sorted(intervals, key= lambda x: x[0])
+        groups = [intervals[0]]
+        for interval in intervals[1:]:
+            added = False
+            for group in groups:
+                if group[-1] < interval[0]:
+                    group[-1] = interval[-1]
+                    added = True
+                    break
+            if not added: groups.append(interval)
+        return len(groups)
