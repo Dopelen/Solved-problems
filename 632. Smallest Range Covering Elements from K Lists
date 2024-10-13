@@ -1,0 +1,59 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(k)) complexity by time and O(n) by space.
+
+Eh, I thought about it well and started writing, but then I realized that my solution, although it finds an interval that includes numbers from each group, is not minimal. 
+I was upset.
+The correct solution includes some of mine, but also requires heap inclusion. 
+We update the interval minimum and maximum based on the minimum values ​​of each interval while iterating.
+"""
+
+# https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/solutions/5905062/straight-forward-heap-priority-queue-solution-w-example-walkthrough-python-java-c/
+# Real Solution with heap:
+class Solution:
+    def smallestRange(self, nums: List[List[int]]) -> List[int]:
+        size = len(nums)
+        heap = []
+        cur_max = -math.inf
+        for i in range(size):
+            heapq.heappush(heap, (nums[i][0], i, 0))
+            cur_max = max(cur_max, nums[i][0])
+        small = [-math.inf, math.inf]
+        while heap:
+            cur_min, list_idx, i = heapq.heappop(heap)
+            if (cur_max - cur_min < small[1] - small[0]) or (
+                    (cur_max - cur_min == small[1] - small[0]) and cur_min < small[0]):
+                small = [cur_min, cur_max]
+            if i + 1 < len(nums[list_idx]):
+                next = nums[list_idx][i + 1]
+                heapq.heappush(heap, (next, list_idx, i + 1))
+                cur_max = max(cur_max, next)
+            else:
+                break
+        return small
+
+
+# First Solution which didnt work
+class Solution:
+    def smallestRange(self, nums: List[List[int]]) -> List[int]:
+        size = len(nums)
+        freq_forward = [len(a) for a in nums]
+        nums = [[(i, el) for el in nums[i]] for i in range(size)]
+        nums = sorted([item for sublist in nums for item in sublist], key = lambda x:x[1])
+        left_border = right_border = 0
+
+        for index, elem in nums:
+            freq_forward[index] -= 1
+            if not freq_forward[index]:
+                left_border = elem
+                break
+
+        for index, elem in nums[::-1]:
+            freq_forward[index] -= 1
+            if not freq_forward[index]:
+                right_border = elem
+                break
+
+        return [left_border, right_border]
+
+
