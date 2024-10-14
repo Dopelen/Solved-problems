@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n)) + k(log(n))) complexity by time and O(n) by space.
+
+A clear task, when we need to work with min/max elements, heaps immediately come to mind!
+The only problem is that there is no max heap in the standard library, and here you will have to invert the values ​​and use the min heap, or write the logic for constructing the max heap yourself :)
+
+From the interesting: 
+I learned that the standard library has private methods for working with max heap
+heapq._heapify_max
+heapq._heappop_max
+heapq._heappushpop_max
+And in theory, you can work with heaps to some extent, but it is worth remembering that a simple push will break the structure of the heap and all the magic will turn into a pumpkin.
+"""
+
+class Solution:
+    def maxKelements(self, nums: List[int], k: int) -> int:
+        answer = 0
+        max_heap = ([-elem for elem in nums])
+        heapify(max_heap)
+        for i in range(k):
+            current_val = heappop(max_heap)
+            answer += -current_val
+            heappush(max_heap, current_val // 3)
+        return answer
