@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Perhaps the fatigue from work affected me, because I couldn’t write a solution right away.
+Then I remembered the piles from yesterday's task, and with a little help I coped with this task.
+
+As last time, we create the maximum pile from the minimum by inverting the indices, for this reason, instead of "reducing" the frequencies, we "add" them during the iteration.
+And we simply greedily form our answer, put the most frequent symbol until we get 2 of them in a row, then move on to the next one.
+"""
+
+class Solution:
+    def longestDiverseString(self, a: int, b: int, c: int) -> str:
+        answer = []
+        max_heap = []
+        if a: heapq.heappush(max_heap, (-a, 'a'))
+        if b: heapq.heappush(max_heap, (-b, 'b'))
+        if c: heapq.heappush(max_heap, (-c, 'c'))
+
+        while max_heap:
+            current_count, character = heapq.heappop(max_heap)
+            if len(answer) >= 2 and answer[-2::] == [character] * 2:
+                if not max_heap:
+                    break
+                next_count, next_character = heapq.heappop(max_heap)
+                answer.append(next_character)
+                next_count += 1
+                if next_count < 0:
+                    heapq.heappush(max_heap, (next_count, next_character))
+                heapq.heappush(max_heap, (current_count, character))
+            else:
+                answer.append(character)
+                current_count += 1
+                if current_count < 0:
+                    heapq.heappush(max_heap, (current_count, character))
+
+        return ''.join(answer)
