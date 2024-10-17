@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n ** 2) complexity by time and O(n). where n - number of digits in nums.
+
+Not a very difficult problem, but it took me a long time to figure it out in my head.
+I convert the number into a list mathematically, and then iterate over it. 
+If I encounter at any point a digit that is greater than the current leading digit we are checking (from most significant to least significant), 
+I swap them and return the answer, because we are guaranteed not to get a number greater than that.
+
+Notes: forward iteration with finding a larger number using pointers is faster than using the max function.
+I can use the index function of the list, since I need the least significant digit that can replace our leading digit, for optimal value increment.
+"""
+
+# Mine initial O(n ** 2) Solution
+class Solution:
+    def maximumSwap(self, num: int) -> int:
+        num_for_list = num
+        size = len(str(num))
+        processed_number = []
+        while num_for_list:
+            processed_number.append(num_for_list % 10)
+            num_for_list //= 10
+        pointer_1 = size - 1
+        while pointer_1 != 0:
+            target = max(processed_number[:pointer_1 + 1])
+            if target == processed_number[pointer_1]:
+                pointer_1 -= 1
+            else:
+                index = processed_number[:pointer_1].index(target)
+                processed_number[pointer_1], processed_number[index] = processed_number[index], processed_number[pointer_1]
+                return sum([processed_number[i] * 10 ** i for i in range(size)])
+        return num
+
+
+# Optimized O(n) version with last apperance dict (to avoid max call every iteration)
+class Solution:
+    def maximumSwap(self, num: int) -> int:
+        num_list = list(map(int, str(num)))
+        last = {x: i for i, x in enumerate(num_list)}
+        for i, x in enumerate(num_list):
+            for d in range(9, x, -1):
+                if last.get(d, -1) > i:
+                    num_list[i], num_list[last[d]] = num_list[last[d]], num_list[i]
+                    return int(''.join(map(str, num_list)))
+        return num
