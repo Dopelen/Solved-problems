@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2 ** n) complexity by time and O(n) by space.
+
+I was sure I had solved this problem before, but I don't see any submitted solutions.
+The OR operator returns True whenever one of the bits is True, which leads us to an interesting conclusion.
+If at least one bit in a position was set to 1, it will be 1 from the moment it was set until the very end.
+Which in turn leads us to the fact that the maximum OR will be the OR applied to the entire array of numbers.
+
+Having found the maximum, we can now simply go through the elements and check each combination for compliance with the maximum OR.
+For me the hardest part was writing the recursive component, I always have trouble when it comes to combinations.
+"""
+
+class Solution:
+    def backtrack(self, nums, index, currentOR, maxOR, count):
+        if currentOR == maxOR:
+            count[0] += 1
+        for i in range(index, len(nums)):
+            self.backtrack(nums, i + 1, currentOR | nums[i], maxOR, count)
+
+    def countMaxOrSubsets(self, nums: List[int]) -> int:
+        max_or = 0
+        for elem in nums:
+            max_or |= elem
+        count = [0]
+        self.backtrack(nums, 0, 0, max_or, count)
+        return count[0]
