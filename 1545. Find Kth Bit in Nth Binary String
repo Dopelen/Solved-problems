@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I'm sick and not very smart.
+So I'm really stuck with my solution.
+There is a solution here, to find K-th bit without generation.
+
+In it, we recursively call the function on each substring, checking which of them contains our K, similar to how we do a binary search. 
+Knowing that each substring has a "1" in the middle allows us to find the value we need faster than if we generated the whole thing.
+"""
+
+# https://leetcode.com/problems/find-kth-bit-in-nth-binary-string/solutions/5934308/python-divide-and-conquer-pattern/
+class Solution:
+    def findKthBit(self, n: int, k: int) -> str:
+        if n == 1: return '0'
+        length = (1 << n) - 1
+        mid = length // 2 + 1
+        if k == mid: return '1'
+        if k < mid: return self.findKthBit(n - 1, k)
+        return '1' if self.findKthBit(n - 1, length - k + 1) == '0' else '0'
