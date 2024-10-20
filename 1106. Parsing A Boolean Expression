@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+When it comes to parentheses and sequential operations, it's usually done with a stack.
+This problem is no exception, and although I couldn't figure it out myself when I was sick, 
+the concept itself is not as complicated as problems of this level often are.
+
+We perform the operations in parentheses sequentially, replacing the expression with their final boolean value and eventually returning it.
+"""
+
+# https://leetcode.com/problems/parsing-a-boolean-expression/solutions/5939345/beats-100-optimized-solution-python-java-c-o-n-o-n/
+
+class Solution:
+    def parseBoolExpr(self, expression: str) -> bool:
+        st = deque()
+        for c in expression:
+            if c == "," or c == "(":
+                continue
+            if c in ["t", "f", "!", "&", "|"]:
+                st.append(c)
+            elif c == ")":
+                has_true = False
+                has_false = False
+                while st[-1] not in ["!", "&", "|"]:
+                    top_value = st.pop()
+                    if top_value == "t":
+                        has_true = True
+                    elif top_value == "f":
+                        has_false = True
+                op = st.pop()
+                if op == "!":
+                    st.append("t" if not has_true else "f")
+                elif op == "&":
+                    st.append("f" if has_false else "t")
+                else:
+                    st.append("t" if has_true else "f")
+        return st[-1] == "t"
