@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * 2 ** n) complexity by time and O(n) by space.
+
+An interesting problem that is solved using backtracking, a technique I am not so familiar with.
+The idea is that for each position we check all possible divisions, recursively calling a function for all possible divisions of our string.
+Although the code is small, due to the large number of recursions, it would be very difficult to write it beautifully (I did not manage).
+"""
+
+# https://leetcode.com/problems/split-a-string-into-the-max-number-of-unique-substrings/solutions/5944986/easy-backtracking-solution-python-java-c/
+class Solution:
+    def maxUniqueSplit(self, s: str) -> int:
+        def check(start, used):
+            if start == len(s):
+                return 0
+            max_split = 0
+            for end in range(start + 1, len(s) + 1):
+                substring = s[start:end]
+                if substring not in used:
+                    used.add(substring)
+                    max_split = max(max_split, 1 + check(end, used))
+                    used.remove(substring)
+            return max_split
+        return check(0, set())
