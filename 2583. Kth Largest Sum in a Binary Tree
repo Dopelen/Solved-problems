@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n)) complexity by time and O(n) by space.
+
+To my delight, today I came across a RELATIVELY simple problem on binary trees.
+To solve it, we just need to traverse the tree, maintaining the sum of the node values ​​for each level. 
+To do this, it is enough to pass the "level + 1" from the current node to it's childrens during recursive descent, and use this level as an index in the array in which we will accumulate the sums!
+After traversing the entire tree, all that remains is to sort the resulting list and take the value by index from the condition.
+This is the elegant solution I came up with.
+
+NOTE: I also used a closure to have access to the sum list without introducing global variables.
+"""
+
+class Solution:
+    def kthLargestLevelSum(self, root: Optional[TreeNode], k: int) -> int:
+        level_sum = []
+        
+        def travers_tree(level, r):
+            if len(level_sum) <= level:
+                level_sum.append(0)
+            level_sum[level] += r.val
+            if r.left:
+                travers_tree(level + 1, r.left)
+            if r.right:
+                travers_tree(level + 1, r.right)
+
+        travers_tree(0, root)
+        level_sum.sort(reverse=True)
+        return -1 if k > len(level_sum) else level_sum[k - 1]
