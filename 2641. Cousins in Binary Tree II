@@ -1,0 +1,36 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A logical continuation of yesterday's task (2583)!
+We only need a small addition.
+After traversing the tree and recording the sums of the values ​​for each level, we traverse the tree a second time using the node value change function. 
+For each node, we change its value by the difference between the sum of the values ​​for its level and the sum of its values ​​with its brother (which we get from the parent above).
+I think my solution is beautiful and compact.
+"""
+
+class Solution:
+    def replaceValueInTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        level_sum = []
+
+        def sum_of_levels(level, r):
+            if len(level_sum) <= level:
+                level_sum.append(0)
+            level_sum[level] += r.val
+            if r.left:
+                sum_of_levels(level + 1, r.left)
+            if r.right:
+                sum_of_levels(level + 1, r.right)
+
+        def changing_values(level, r, siblings_val):
+            r.val = level_sum[level] - siblings_val 
+            siblings_val = (r.left.val if r.left else 0) + (r.right.val if r.right else 0)
+            if r.left:
+                changing_values(level + 1, r.left, siblings_val)
+            if r.right:
+                changing_values(level + 1, r.right, siblings_val)
+
+        sum_of_levels(0, root)
+        changing_values(0, root, level_sum[0])
+
+        return root
