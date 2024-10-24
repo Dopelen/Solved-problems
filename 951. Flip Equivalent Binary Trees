@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Although the task is similar to those I did the other day, it was very difficult for me to figure out the final part with how to correctly write the flip(tree). 
+Although in the end the solution turned out to be short and quite beautiful.
+Essentially, we go down the tree, checking if there is one in any of the branch combinations that satisfies our condition, and if we get to the point where the branches r1 and r2 are equal or both are empty, we return true, otherwise false.
+
+Fun fact, even though I wrote this solution myself, I still have a hard time wrapping my head around it.
+"""
+
+class Solution:
+    def flipEquiv(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> bool:
+        
+        def flip(node1, node2):
+            if node1 == node2:
+                return True
+            elif (not node1 or not node2) or (node1.val != node2.val):
+                return False
+                    
+            return((flip(node1.left, node2.left) or flip(node1.left, node2.right)) and 
+            (flip(node1.right, node2.right) or flip(node1.right, node2.left)))
+
+        return flip(root1, root2)
