@@ -1,0 +1,49 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+Figured out the solution pretty quickly!
+I'm really glad, this week there are quite a few problems that I was able to solve independently!
+
+First we need a sort that will arrange all the folders in lexegraph order.
+Then we need to take the outermost folder and compare it with the next in the queue:
+if the first characters of the next folder match the first characters of the outermost one - it's a subfolder! We can safely throw it out and check the next one.
+And if not - we add the outermost folder to the answer, changing the check standard to the folder that didn't match.
+
+After going through this in turn, we will form a response from unique folders, excluding all possible subfolders.
+
+Note: I had to do an additional check, because there is a case when our folder is "/a" and the one following it is "/ac" (for example).
+In this case our algorithm will give a false positive result, because "/ac" starts with "/a", but in fact is not its subfolder. 
+For these cases, we also check that the subfolder has a slash("/") where the matching characters end.
+"""
+
+# MySolution
+class Solution:
+    def removeSubfolders(self, folder: List[str]) -> List[str]:
+        folder.sort()
+        folder = deque(folder)
+        current_folder = folder.popleft()
+        answer = []
+        while folder:
+            if folder[0].startswith(current_folder) and (folder[0] == len(current_folder) or folder[0][len(current_folder)] == "/"):
+                folder.popleft()
+            else:
+                answer.append(current_folder)
+                current_folder = folder.popleft()
+        if not answer or current_folder != answer[-1]:
+            answer.append(current_folder)
+        return answer
+
+
+# You can shorten the code by getting rid of the queue and using the last answer in the response as a reference instead of a variable.
+class Solution:
+    def removeSubfolders(self, folder: List[str]) -> List[str]:
+        folder.sort()
+        answer = [folder[0]]
+        
+        for i in range(1, len(folder)):
+            if not folder[i].startswith(answer[-1] + "/"):
+                answer.append(folder[i])
+                
+        return answer
+
