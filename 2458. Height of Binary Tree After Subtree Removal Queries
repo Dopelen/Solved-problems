@@ -1,0 +1,65 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A very pleasant task in that it is not necessary to know some incredibly complex data structures. 
+It is enough to understand the general concept of the tree and the operations that you will now perform with it in the task.
+
+The main trick is that if we delete a subtree that includes the maximum depth, the new maximum depth will now belong to the subtree from the same level 
+(those that are smaller remain above), it remains to find from the subtrees remaining at this depth the one that will be deeper than the rest!
+(if there are other subtrees at this depth, if not, then this is just the distance from the subtree to the root)
+
+I noticed these features and sat down to think hard.
+Initially, I wrote a solution with the search for the "maximum" for each level, when accessing it, but this exceeded the time limit.
+
+Then I made a max heap at each level, moved forward a couple of tests and failed again.
+
+Then it was time to think hard, and it dawned on me that it was enough for me to keep 2 maximums for each level!
+If there is 1 node at a given level - everything is simple, there are no nodes deeper than this one in the tree and we simply return the distance to the root, 
+if there are more than 1, and we delete the first one, which is considered the maximum, we just need to take the second one. 
+And if the one being deleted is not the maximum at the level, we can simply take the first one!
+
+The task took me 4-5 hours and I'm glad I completed it without help.
+"""
+
+class Solution:
+    def treeQueries(self, root: Optional[TreeNode], queries: List[int]) -> List[int]:
+        answer = []
+        heights = dict()
+        depths_values = [{root.val}]
+        depths_max = []
+
+        def calculate_hight(root, h, d):
+            if not root: return h
+            if len(depths_values) <= d: depths_values.append(set())
+            depths_values[d].add(root.val)
+            left_height = calculate_hight(root.left, h, d + 1)
+            right_height = calculate_hight(root.right, h, d + 1)
+            current_max = max(left_height, right_height)
+            heights[root.val] = (current_max, d)
+            return current_max + 1
+
+        calculate_hight(root, 1, 0)
+
+        for e in depths_values:
+            first_max = second_max = 0
+            for elem in e:
+                potential_max = heights[elem][0]
+                if potential_max >= first_max:
+                    second_max = first_max
+                    first_max = potential_max
+                elif potential_max > second_max:
+                    second_max = potential_max
+            depths_max.append((first_max, second_max))
+        
+        for q in queries:
+            current_depth = heights[q][1]
+
+            if len(depths_values[current_depth]) == 1:
+                new_max = current_depth - 1
+            else:
+                first_max, second_max = depths_max[current_depth]
+                new_max = (current_depth - 1) + (second_max if heights[q][0] == first_max else first_max)
+            answer.append(new_max)
+
+        return answer
