@@ -2,5 +2,52 @@
 """You can see the description of the task using the code specified in the title on leetcode.
 This program has O(n(log(n))) complexity by time and O(n) by space.
 
+Nice and pleasant task, you just need to think a little.
+First observation - we need only unique values.
+Second - we can instantly check if there is a required square of a number if all elements are in the set.
+Third - a number always has one specific square, this means that if we iterate over a sorted list and the number has already been processed earlier within another chain of squares. 
+The previous chain is larger than the current one, since it started earlier and reached the current value, and the continuation of these chains are identical! 
+With this knowledge, we can skip those values ​​that were processed earlier and speed up the solution.
+
+This is all we need to know to meet the deadline and write a beautiful solution.
 """
 
+# Initial one O(n(log(n)))
+class Solution:
+    def longestSquareStreak(self, nums: List[int]) -> int:
+        unic_elems = {elem for elem in nums}
+        processed = set()
+        answer = 0
+        sorted_elems = sorted(list(unic_elems))
+        for elem in sorted_elems:
+            if elem not in processed:
+                current_answer = 1
+                processed.add(elem)
+                elem = elem ** 2
+                while elem in unic_elems and elem not in processed:
+                    processed.add(elem)
+                    current_answer += 1
+                    elem = elem ** 2
+                answer = max(answer, current_answer)
+
+        return answer if answer != 1 else -1
+
+
+# ChatGPT version (We get rid of sorting, but the worst-case scenario becomes O(n ** 2) if the elements in the set are sorted in descending order.
+class Solution:
+    def longestSquareStreak(self, nums: List[int]) -> int:
+        unic_elems = set(nums)
+        processed = set()
+        answer = 0
+        for elem in unic_elems:
+            if elem not in processed:
+                current_answer = 1
+                processed.add(elem)
+                elem = elem ** 2
+                while elem in unic_elems:
+                    processed.add(elem)
+                    current_answer += 1
+                    elem = elem ** 2
+                answer = max(answer, current_answer)
+
+        return answer if answer != 1 else -1
