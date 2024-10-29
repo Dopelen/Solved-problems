@@ -1,0 +1,31 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n * m) complexity by time and O(n * m) by space.
+
+I solved it using a traversal with the growth of the largest sequence.
+There are a couple of difficulties here.
+First, in fact, we need to traverse by column, which is not as familiar as traversal by row.
+Second, it is not really enough for us to pull the maximum sequence from the cells earlier, it must also end with a suitable number.
+"""
+
+class Solution:
+    def maxMoves(self, grid: List[List[int]]) -> int:
+        width, height = len(grid[0]), len(grid)
+        traverse = [[0] * width for _ in range(height)]
+        answer = 0
+
+        for column in range(width - 2, -1, -1):
+            for row in range(height):
+                right_up = right_mid = right_down = 0
+                if row != 0 and grid[row][column] < grid[row - 1][column + 1]:
+                    right_up = max(traverse[row][column], traverse[row - 1][column + 1] + 1)
+                if grid[row][column] < grid[row][column + 1]:
+                    right_mid = max(traverse[row][column], traverse[row][column + 1] + 1)
+                if row != height - 1 and grid[row][column] < grid[row + 1][column + 1]:
+                    right_down = max(traverse[row][column], traverse[row + 1][column + 1] + 1)
+                current_length = max([right_up, right_mid, right_down])
+                traverse[row][column] = current_length
+
+        for row in range(height):
+            answer = max(answer, traverse[row][0])
+        return answer
