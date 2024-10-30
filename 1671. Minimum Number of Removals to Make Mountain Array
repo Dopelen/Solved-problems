@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+I don't really like these kinds of problems. I basically figured out the solution, but I don't know the algorithm.
+You need to take the algorithm of the largest increasing subsequence, and apply it to subarrays.
+If there had been a simpler problem on the same concept before, I don't think I would have had such problems with it.
+
+The task itself is not very difficult, but if you do not approach it in any way, it can cause problems.
+"""
+
+# https://leetcode.com/problems/minimum-number-of-removals-to-make-mountain-array/solutions/5984530/beats-74-29-step-by-step-breakdown/
+class Solution:
+    def minimumMountainRemovals(self, nums: List[int]) -> int:
+        size = len(nums)
+        lis = [1] * size
+        lds = [1] * size
+
+        for i in range(size):
+            for j in range(i):
+                if nums[i] > nums[j]:
+                    lis[i] = max(lis[i], lis[j] + 1)
+
+        for i in range(size - 1, -1, -1):
+            for j in range(size - 1, i, -1):
+                if nums[i] > nums[j]:
+                    lds[i] = max(lds[i], lds[j] + 1)
+
+        max_length = 0
+        for i in range(1, size - 1):
+            if lis[i] > 1 and lds[i] > 1:
+                max_length = max(max_length, lis[i] + lds[i] - 1)
+
+        return size - max_length
