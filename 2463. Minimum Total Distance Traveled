@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+Either it was the day or the task, but I couldn't solve it even with hints. 
+Apparently 3 difficult tasks in 4 days is too much. 
+I hope there will come a time when I won't experience so many insurmountable difficulties with such tasks.
+"""
+
+# https://leetcode.com/problems/minimum-total-distance-traveled/solutions/5988185/beats-100-working-31-10-2024-explained-step-by-step-happy-halloween-night-shift/
+class Solution:
+    def minimumTotalDistance(self, robot: List[int], factory: List[List[int]]) -> int:
+        robot.sort()
+        factory.sort()
+        robot_size = len(robot)
+        factory_size = len(factory)
+        dp = [[0] * (factory_size + 1) for _ in range(robot_size + 1)]
+        for i in range(robot_size):
+            dp[i][-1] = math.inf
+        for j in range(factory_size - 1, -1, -1):
+            prefix = 0
+            qq = deque([(robot_size, 0)])
+            for k in range(robot_size - 1, -1, -1):
+                prefix += abs(robot[k] - factory[j][0])
+                if qq[0][0] > k + factory[j][1]:
+                    qq.popleft()
+                while qq and qq[-1][1] >= dp[k][j + 1] - prefix:
+                    qq.pop()
+                qq.append((k, dp[k][j + 1] - prefix))
+                dp[k][j] = qq[0][1] + prefix
+
+        return dp[0][0]
