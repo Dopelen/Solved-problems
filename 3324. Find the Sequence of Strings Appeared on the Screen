@@ -1,0 +1,43 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(the number of iterations we will have to do multiplied by the number of people) complexity by time and O(num_people) by space.
+
+I really wanted to solve it quickly and beautifully, but I was very confused, so I wrote something to start with and started refactoring.
+
+In the first implementation, I simply update the intermediate answer, which causes a lot of unnecessary transformations.
+I check the identity of the intermediate and target answers, then add each step element by element.
+I have a suspicion that the leetcode is deceiving me, saying that the complexity of this algorithm is linear. Because checking the identity of lists does not seem to be a constant operation.
+According to my estimates, it is quadratic, which is mainly based on comparing arrays + dont forget about hidden constant in the alphabet size.
+
+Then I just got myself together, thought a bit and wrote a beautiful solution.
+"""
+
+# fast and beatiful solution after refactoring O(n)
+class Solution:
+    def stringSequence(self, target: str) -> List[str]:
+        answer = []
+        current_seq = ""
+        for elem in target:
+            answer += [current_seq + chr(i) for i in range(97, ord(elem) + 1)]
+            current_seq = answer[-1]
+        return answer
+
+
+# initial Solution O(n ** 2)
+class Solution:
+    def stringSequence(self, target: str) -> List[str]:
+        target_mirror = [ord(elem) for elem in target]
+        answer = [[97]]
+        current_str = [97]
+        current_ind = 0
+        while current_str != target_mirror:
+            if current_str[-1] == target_mirror[current_ind]:
+                current_str.append(97)
+                current_ind += 1
+            else:
+                current_str[-1] += 1
+            answer.append(current_str.copy())
+
+        for index,elem in enumerate(answer):
+            answer[index] = "".join([chr(char) for char in elem])
+        return answer
