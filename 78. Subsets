@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O((2 ** n) * n) complexity by time and O((2 ** n) * n) by space.
+
+Since this is a mid-level task, I'm expected to personally implement the combination method from the itertools library.
+But I've had a hard day, so I'll just use my knowledge of that library + it's not written anywhere that I can't use standard libraries :)
+"""
+
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        subsets = []
+        size = len(nums)
+        for current_length in range(size + 1):
+            subsets.extend(combinations(nums, current_length))
+        return [list(subset) for subset in subsets]
+        
