@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+We brute force the process, so first iteration took n time, second n - 1 and so on.
+That lead us to n ** 2 complexity.
+"""
+
+class Solution:
+  def triangularSum(self, nums: List[int]) -> int:
+    n = len(nums)
+    while n > 0:
+      for i in range(n-1):
+        nums[i] = (nums[i] + nums[i+1]) % 10
+      n -= 1
+    return nums[0]
