@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and same be space.
+
+I decided to first collect the prefix lengths for each character repetition, and then split them into fragments according to the problem statement.
+We first count the prefixes in O(n) time
+Then we construct the answer in O(n)
+Then the complexity in time and space will be O(n)
+
+note:
+In general, you can add an answer to the character counting stage, adding a part each time the counter reaches 9.
+Probably an even clearer way.
+"""
+
+class Solution:
+    def compressedString(self, word: str) -> str:
+        pre_answer = []
+        prev = word[0]
+        counter = 0
+        for elem in word:
+            if elem == prev:
+                counter += 1
+            else:
+                pre_answer.append((counter, prev))
+                prev = elem
+                counter = 1
+
+        if not pre_answer or prev != pre_answer[-1][1]:
+            pre_answer.append((counter, prev))
+
+        answer = [("9" + elem[1]) * (elem[0]//9) + ((str(elem[0] % 9) + elem[1]) if elem[0] % 9 else "") for elem in pre_answer]
+        return "".join(answer)
