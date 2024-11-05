@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Quite a simple problem. It can be solved even without hints.
+A section of size 2 must consist of identical symbols, there are no other ways to make a specific pair of numbers the same except by changing one of them.
+Once this concept is understood, the solution itself fits into one cycle.
+"""
+
+class Solution:
+    def minChanges(self, s: str) -> int:
+        size = len(s)
+        return sum(s[i] != s[i + 1] for i in range(0, size, 2))
