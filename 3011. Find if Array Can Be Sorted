@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+I liked this task.
+I split the entire array into "pieces", each of which includes digits with the same number of "1" in the bit representation. 
+We know that if this condition is met, then within this array we can sort them as we please, which is what we do.
+All that remains for us is to make sure that the original array, sorted in ascending order, will be identical to the array of the pieces we sorted!
+Because in pieces with an equal number of 1, we can swap the numbers as we please, but as soon as the number changes, at this point only the next fragment can be sorted.
+"""
+
+class Solution:
+    def canSortArray(self, nums: List[int]) -> bool:
+        size = len(nums)
+        index = 0
+        while index != size:
+            start = index
+            while index < size - 1 and bin(nums[index]).count('1') == bin(nums[index + 1]).count('1'):
+                index += 1
+            if index != size:
+                index += 1
+            nums[start:index] = sorted(nums[start:index])
+
+        return nums == sorted(nums)
