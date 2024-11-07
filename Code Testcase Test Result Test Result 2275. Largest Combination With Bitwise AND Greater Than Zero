@@ -1,0 +1,49 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The main thing to understand is that our answer is the maximum number of bits set to 1 among all the numbers at each position.
+
+Initially, I simply converted the numbers into bit representations and walked through them, calculating the number of ones at each position.
+
+Then I decided that this was not very nice and put everything into an array.
+So I can walk through the entire number at once, filling in the necessary positions, and the answer will be the maximum that will be found at all positions, and I don’t necessarily have to check for going beyond the counting limits!
+"""
+
+# after THINKING
+class Solution:
+    def largestCombination(self, candidates: List[int]) -> int:
+        bit_list = [bin(num)[2:] for num in candidates]
+        answer = [0] * 24
+        for elem in bit_list:
+            for i in range(-1, -len(elem) - 1, -1):
+                answer[i] += elem[i] == "1"
+        return max(answer)
+
+
+# Initial Solution
+class Solution:
+    def largestCombination(self, candidates: List[int]) -> int:
+        answer = 1
+        bits = len(bin(max(candidates)))
+        bit_list = [bin(num)[2:] for num in candidates]
+        for i in range(-1, -bits, -1):
+            intermediate_answer = 0
+            for elem in bit_list:
+                if (len(elem) + i >= 0) and int(elem[i]):
+                    intermediate_answer += 1
+            answer = max(answer, intermediate_answer)
+        return answer
+
+
+# Really smart and really fast
+https://leetcode.com/problems/largest-combination-with-bitwise-and-greater-than-zero/solutions/6017209/double-loop-vs-1-loop-count-if-7ms-beats-99-25/
+class Solution:
+    def largestCombination(self, candidates: List[int]) -> int:
+        max_set=0
+        for b in range(24):
+            b_bit_set=0
+            for x in candidates:
+                b_bit_set+=(x>>b &1)
+            max_set=max(max_set, b_bit_set)
+        return max_set
