@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space for dp matrix.
+
+An interesting problem that is solved in a clear way with hints. 
+The only difficulty is to form the final answer, this can be difficult, especially if you are not at all friendly with bitwise operations.
+In my solution, I used a trick that I spied on another user (https://leetcode.com/problems/maximum-xor-for-each-query/?envType=daily-question&envId=2024-11-08)
+, with a substitution ~ operation that flips bits, which allows us to quickly and very coolly find the value we need for each position.
+"""
+
+class Solution:
+    def getMaximumXor(self, nums: List[int], maximumBit: int) -> List[int]:
+        max_possible_val = (1 << maximumBit) - 1
+        size = len(nums)
+        current_xor = 0
+        answer = [0] * size
+        for i in range(size):
+            current_xor ^= nums[i]
+            answer[size - i - 1] = ~current_xor & max_possible_val
+        return answer
