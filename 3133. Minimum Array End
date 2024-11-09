@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+Bitwise operations all week... hard...
+The first thing I noticed was that the first element would be the final "AND" we need for the results of all operations.
+Then I realized that if we need to get the final AND equal to some number, its 1 bits should be in all numbers in the series we are considering, and all the rest should grow linearly to ensure that the number grows at the minimum possible rate.
+I even thought about a tree that I would walk to get the desired bit combination, but this solution was very complicated. 
+In the end, I came to a simple pass through the bits of the number x, preserving its ones and substituting the bits from the last number n.
+
+class Solution:
+    def minEnd(self, n: int, x: int) -> int:
+        full_x = bin(x)[2:].zfill(64)
+        last_n = bin(n - 1)[2:].zfill(64)
+        result = ['0'] * 64
+        j = 0
+
+        for i in range(64):
+            if full_x[-1 - i] == '1':
+                result[-1 - i] = '1'
+            else:
+                result[-1 - i] = last_n[-1 - j]
+                j += 1
+
+        return int(''.join(result), 2)
+
+"""
+
