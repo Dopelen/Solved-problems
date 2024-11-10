@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It's very hard to think.
+I'm glad I crawled into the solution, because even looking at them I don't fully understand what's going on.
+Still, bitwise operations are more difficult for me than data structures, because I never specifically studied them.
+The solution itself consists of using the sliding window technique, which is not difficult in itself, but correctly thinking of applying it to bitwise operations is not a trivial task.
+"""
+
+class Solution:
+    def minimumSubarrayLength(self, nums: List[int], k: int) -> int:
+        size = len(nums)
+        bits = [0] * 32
+        min_length = math.inf
+        left_pointer = 0
+        current_or = 0
+
+        for right_pointer in range(size):
+            current_or |= nums[right_pointer]
+
+            for bit in range(32):
+                if nums[right_pointer] & (1 << bit):
+                    bits[bit] += 1
+
+            while left_pointer <= right_pointer and current_or >= k:
+                min_length = min(min_length, right_pointer - left_pointer + 1)
+                updated_or = 0
+                for update_bit in range(32):
+                    if nums[left_pointer] & (1<<update_bit):
+                        bits[update_bit] -= 1
+                    if bits[update_bit] > 0:
+                        updated_or |= (1 << update_bit)
+
+                current_or = updated_or
+                left_pointer += 1
+
+        return min_length if min_length != math.inf else -1
