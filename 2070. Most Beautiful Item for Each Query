@@ -4,3 +4,19 @@ This program has O(n) complexity by time and O(n) by space.
 
 pass
 """
+class Solution:
+    def maximumBeauty(self, items: List[List[int]], queries: List[int]) -> List[int]:
+        size = len(items)
+        answer = [0] * size
+        items.sort(key= lambda x: x[0])
+        current_max = 0
+        for index, elem in enumerate(items):
+            current_max = max(current_max, elem[1])
+            items[index][1] = current_max
+        
+        for i in range(size):
+            position = bisect_right(items, queries[i])
+            answer[i] = items[position - 1] if position else 0
+
+        return answer
+       
