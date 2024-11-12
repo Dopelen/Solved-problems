@@ -1,22 +1,46 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-This program has O(n) complexity by time and O(n) by space.
+This program has O(n(log(n))) complexity by time and O(n) by space.
 
-pass
+I'm glad I managed to solve the problem quickly, and it's very similar to a standard problem from programming courses.
+I'm sure it can be implemented faster, but I did what I could.
+I sorted the array by "price" to be sure that at each step of the cycle I have the maximum possible "beauty" for each price.
+Then I simply iterated over the list, assigning each element the maximum "beauty" at the moment.
+Then it's just a small matter - using binary search to find the insertion point for each element of the list.
+If the standard library did not support this operation in one line, I would have to figure out how to match each element to its position in the list, but fortunately it worked out :)
 """
+
+# My version
 class Solution:
     def maximumBeauty(self, items: List[List[int]], queries: List[int]) -> List[int]:
-        size = len(items)
+        size = len(queries)
         answer = [0] * size
         items.sort(key= lambda x: x[0])
         current_max = 0
         for index, elem in enumerate(items):
             current_max = max(current_max, elem[1])
             items[index][1] = current_max
-        
         for i in range(size):
-            position = bisect_right(items, queries[i])
-            answer[i] = items[position - 1] if position else 0
-
+            position = bisect_right(items, queries[i], key = lambda x: x[0])
+            answer[i] = items[position - 1][1] if position else 0
         return answer
        
+# ChatGPT one
+class Solution:
+    def maximumBeauty(self, items: List[List[int]], queries: List[int]) -> List[int]:
+        items.sort()
+        prices = []
+        beauties = []
+        
+        current_max_beauty = 0
+        for price, beauty in items:
+            current_max_beauty = max(current_max_beauty, beauty)
+            prices.append(price)
+            beauties.append(current_max_beauty)
+
+        answer = []
+        for query in queries:
+            position = bisect_right(prices, query)
+            answer.append(beauties[position - 1] if position > 0 else 0)
+
+        return answer
