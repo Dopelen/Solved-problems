@@ -1,0 +1,36 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+The head-on O(n ** 2) solution is written in exactly one minute.
+Speed up to O(n(log(n)))
+
+There is an additional condition that prevents you from sorting:
+0 <= i < j < n
+but it doesn't really mean anything, once you realize this, the solution will not only become simpler, but at least possible!
+The thing is that we are talking about indices, and for any i and j you can swap them and get a correct statement. 
+So the order in this problem does not matter, although it tries to convince you that it does not.
+"""
+
+# head-on
+class Solution:
+    def countFairPairs(self, nums: List[int], lower: int, upper: int) -> int:
+        size = len(nums)
+        pairs = set()
+        for i in range(size):
+            for j in range(i + 1, size):
+                if lower <= nums[i] + nums[j] <= upper:
+                    pairs.add((i, j))
+        return len(pairs)
+
+# with bisect
+class Solution:
+    def countFairPairs(self, nums: List[int], lower: int, upper: int) -> int:
+        size = len(nums)
+        nums.sort()
+        answer = 0
+        for i in range(size - 1):
+            low = bisect_left(nums, lower - nums[i], i + 1)
+            up = bisect_right(nums, upper - nums[i], i + 1)
+            answer += up - low
+        return answer
