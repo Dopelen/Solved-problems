@@ -1,5 +1,35 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-This program has O(n) complexity by time and O(n) space because when replacing elements we create a new string.
+This program has O(n(log(n))) complexity by time and O(n) space.
 
+The task is not very difficult, you just need to think a little and write a binary search.
+I did not cope with the first one right away, just like with the second one! But give me time!
 """
+
+# Initial Solution
+class Solution:
+
+    def minimizedMaximum(self, n: int, quantities: List[int]) -> int:
+        def canDistribute(k):
+            pre_answer = []
+            for elem in quantities:
+                dif_stores = elem // k
+                pre_answer += [k] * dif_stores + ([elem % k] if elem % k else [])
+            return len(pre_answer) <= n
+
+        left, right = 1, max(quantities)
+        while left < right:
+            mid = (right + left) // 2
+            if canDistribute(mid):
+                right = mid
+            else:
+                left = mid + 1
+
+        return left
+
+
+# binsearch will be the same but you can speed up solution by changin check function
+# for example to this
+def canDistribute(k):
+    stores_needed = sum((quantity + k - 1) // k for quantity in quantities)
+    return stores_needed <= n
