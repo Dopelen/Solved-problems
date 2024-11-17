@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n(log(n))) complexity by time and O(n) by space.
+
+I got a bit stuck with this problem, then wrote a solution using pointers and then realized that it's not that simple.
+Because of the negative numbers, we can't just adjust the sliding window, because we can miss valid answers. 
+I switched to prefixes and the last numbers of the prefix, but also didn't find success.
+For the correct solution, it was missing to add a minimum heap, which would allow you to keep the minimum prefixes in itself and remove them from the current sequence, 
+checking whether the solution became better after that, which would allow you to solve the problem correctly.
+
+I tried and did not quite get to the right solution myself, there is still much to learn!
+"""
+
+# https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/solutions/6052938/video-full-explanation-beats-100-sliding-window-monotonic-queue-deque/
+class Solution:
+    def shortestSubarray(self, nums: List[int], k: int) -> int:
+        answer = math.inf
+        current_sum = 0
+        min_heap = []
+
+        for i in range(len(nums)):
+            current_sum += nums[i]
+            if current_sum >= k:
+                answer = min(answer, i + 1)
+
+            while min_heap and current_sum - min_heap[0][0] >= k:
+                prefix, end_index = heapq.heappop(min_heap)
+                answer = min(i - end_index, answer)
+
+            heapq.heappush(min_heap, (current_sum, i))
+
+        return -1 if answer == math.inf else answer
