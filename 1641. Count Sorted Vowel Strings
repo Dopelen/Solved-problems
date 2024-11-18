@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Quite a simple combination problem, but I couldn't solve it in a good way, apparently it was just that kind of day.
+"""
+
+# Human Solution O(n)
+# https://leetcode.com/problems/count-sorted-vowel-strings/
+class Solution(object):
+    def countVowelStrings(self, n):
+        a, e, i, o, u = 1, 1, 1, 1, 1
+
+        while n > 1:
+            o += u
+            i += o
+            e += i
+            a += e
+            n -= 1
+
+        return a + e + i + o + u
+
+# Unhuman Solution O(1)
+# https://leetcode.com/problems/count-sorted-vowel-strings/solutions/4304846/python-best-solution/
+class Solution:
+    def countVowelStrings(self, n: int) -> int:
+        mul=1
+        j=1
+        for i in range(5,5+n):
+            mul=(mul*i)//j
+            j+=1
+        return mul
