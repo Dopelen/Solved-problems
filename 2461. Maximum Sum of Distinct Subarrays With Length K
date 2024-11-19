@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+I wrote the solution in linear time without thinking twice, but it didn't pass the time limit.
+?!
+
+Then I just noticed that the sum doesn't have to be calculated every time, and can be maintained as well as the number of elements.
+This would reduce the complexity from O(n * k) to O(n)
+"""
+
+class Solution:
+    def maximumSubarraySum(self, nums: List[int], k: int) -> int:
+        window = Counter(nums[0:k-1])
+        current_sum = sum(set(window.keys()))
+        answer = 0
+        for i in range(len(nums) - k + 1):
+            current_val = nums[k - 1 + i]
+            window[current_val] += 1
+            current_sum += current_val if window[current_val] == 1 else 0
+            if len(window) == k:
+                answer = max(answer, current_sum)
+            window[nums[i]] -= 1
+            if window[nums[i]] == 0:
+                current_sum -= nums[i]
+                del window[nums[i]]
+        return answer
