@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+"""
+
+The problem is an imposter. 
+It seems easy, but in fact you need to think carefully when solving it.
+Dynamic programming runs into a time limit, and the usual approach with two pointers is not quite trivial.
+With the help of hints, I was able to find a solution, but I rarely used inverse solutions, so it was not at all obvious to me.
+In general, we redefine the problem to find the maximum segment in at which the sum of the occurrences of the letters remaining outside it will be valid.
+Once we calculate this segment, we can subtract this segment from the entire length and get the result we need.
+
+"""
+
+class Solution:
+    def takeCharacters(self, s: str, k: int) -> int:
+        answer = math.inf
+        check = Counter(s)
+        if k == 0: return 0
+        if any([check["a"] < k, check["b"] < k, check["c"] < k]): return -1
+        left_pointer = 0
+        for right_pointer in range(len(s)):
+            check[s[right_pointer]] -= 1
+            while min(check.values()) < k:
+                check[s[left_pointer]] += 1
+                left_pointer += 1
+            answer = min(answer, len(s) - (right_pointer - left_pointer + 1))
+        return answer
