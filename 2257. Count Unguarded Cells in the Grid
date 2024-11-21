@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+I wouldn't say the task is difficult. 
+Just put walls and guards in the grid and then fill each guard's field of view with 1, then return the amount to 0 in the grid.
+It seemed to me that it would be necessary to add some optimization so as not to fill the intersecting fields of different guards twice, but the solution worked without it!
+"""
+
+class Solution:
+    def countUnguarded(self, m: int, n: int, guards: List[List[int]], walls: List[List[int]]) -> int:
+        grid = [[0 for i in range(n)] for j in range(m)]
+        for w in walls:
+            grid[w[0]][w[1]] = "W"
+        for g in guards:
+            grid[g[0]][g[1]] = "G"
+
+        def scope(guard):
+            for up in range(guard[0] - 1, -1, -1):
+                if grid[up][guard[1]] in {"W", "G"}: break
+                grid[up][guard[1]] = 1
+
+            for down in range(guard[0] + 1, m):
+                if grid[down][guard[1]] in {"W", "G"}: break
+                grid[down][guard[1]] = 1
+
+            for left in range(guard[1] - 1, -1, -1):
+                if grid[guard[0]][left] in {"W", "G"}: break
+                grid[guard[0]][left] = 1
+
+            for right in range(guard[1] + 1, n):
+                if grid[guard[0]][right] in {"W", "G"}: break
+                grid[guard[0]][right] = 1
+
+        for guard in guards:
+            scope(guard)
+
+        return sum(element == 0 for line in grid for element in line)
