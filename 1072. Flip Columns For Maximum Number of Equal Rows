@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and sa,e by space.
+
+After reading the hint from the author, the principle of the solution becomes clear, but it is still difficult to write it if you are not closely familiar with bitwise operations.
+But the hint from the discussion reduces this problem to an easy one.
+"""
+
+# Initial idea
+class Solution:
+    def maxEqualRowsAfterFlips(self, matrix: List[List[int]]) -> int:
+        answer = Counter()
+        for row in matrix:
+            current_pattern = ["*"]
+            prev = row[0]
+            for elem in row[1:]:
+                current_pattern.append("*" if elem == prev else ".*")
+                prev = elem
+            answer["".join(current_pattern)] += 1
+        return answer.most_common()[0][1]
+
+
+# Refactored (but somehow slower then first one :))
+class Solution:
+    def maxEqualRowsAfterFlips(self, matrix: List[List[int]]) -> int:
+        answer = Counter()
+        for row in matrix:
+            normalized = tuple(elem ^ row[0] for elem in row)
+            answer[normalized] += 1
+        return max(answer.values())
