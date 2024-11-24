@@ -1,0 +1,31 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+I liked the task, it seems complicated at first, but the more you think about it, the easier it becomes.
+I started by going through the rows and replacing all the negative numbers with positive ones. 
+If there were an even number of negative numbers, I didn't touch anything, and if not, I left the smallest possible negative, because our operation from the condition allows us to carry out such a transformation.
+Then I created an additional array, into which I dumped the minimums for each row, both positive and negative, so that I could then go through them and do the operation I did earlier, leaving the smallest number negative.
+
+Then it dawned on me that you don't have to bother with it at all!
+
+We are only concerned with the total number of negative numbers in the matrix, because if it is even, we can make them all positive, and if not, we can make the smallest value in absolute number negative!
+At this point, the whole task comes down to:
+- counting the number of negative numbers
+- counting the sum of all values
+- then subtracting from the sum the minimum of the matrix multiplied by 2 (because we added 1 to the sum earlier and must also subtract it as a negative number).
+"""
+
+class Solution:
+    def maxMatrixSum(self, matrix: List[List[int]]) -> int:
+        height, width = len(matrix), len(matrix[0])
+        global_min = math.inf
+        total_sum = negative_counter = 0
+        for row in range(height):
+            for col in range(width):
+                if matrix[row][col] < 0:
+                    negative_counter += 1
+                    matrix[row][col] *= (-1)
+            global_min = min(global_min, min(matrix[row]))
+            total_sum += sum(matrix[row])
+        return total_sum if (not negative_counter % 2) else (total_sum - (global_min * 2))
