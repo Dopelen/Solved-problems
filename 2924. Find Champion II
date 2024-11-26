@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I once solved a similar problem, so I came to the solution principle in literally a minute and wrote the solution in another 2 minutes.
+
+The main trick of the problem is that if a team has ever played "weak" it will never be able to become a champion.
+This eliminates the need for a full traversal of the graph, compiling a list of neighbors, and so on. 
+It is enough to simply process all the connections and exclude weak teams. 
+As a result, we will have one strongest one(answer), or several (then we cannot say which of them is the strongest, so it will be answer == -1).
+
+Such an elegant solution!
+P.S: Instead of a set, you can use an array where each index is a representation of a team number. This seems faster.
+"""
+
+class Solution:
+    def findChampion(self, n: int, edges: List[List[int]]) -> int:
+        all_teams = {i for i in range(n)}
+        for strong, weak in edges:
+            if weak in all_teams:
+                all_teams.remove(weak)
+        return all_teams[0] if len(all_teams) == 1 else -1
