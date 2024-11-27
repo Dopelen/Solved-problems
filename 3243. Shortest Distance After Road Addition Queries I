@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n + m) complexity by time and O(n + m) by space.
+
+Even though this is a simple traversal, in a one-way graph, with no negative paths, and no strict time limits, I still somehow broke my brain trying to write the recursion.
+"""
+
+# BFS
+class Solution:
+    def shortestDistanceAfterQueries(self, n: int, queries: List[List[int]]) -> List[int]:
+
+        adjacency_lists = [[i + 1] for i in range(n)]
+        answer = []
+
+        def calculate_path():
+            q = deque()
+            q.append((0, 0))
+            visited = set()
+            visited.add((0, 0))
+            while q:
+                current_node, length_to_reach = q.popleft()
+                if current_node == n - 1:
+                    return length_to_reach
+                for neighbour in adjacency_lists[current_node]:
+                    if neighbour not in visited:
+                        q.append((neighbour, length_to_reach + 1))
+                        visited.add(neighbour)
+
+        for start, finish in queries:
+            adjacency_lists[start].append(finish)
+            answer.append(calculate_path())
+        return answer
+
