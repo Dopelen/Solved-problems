@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n * m) by space.
+
+Again a difficult task, but similar to yesterday's, we also represent the matrix as a graph and begin our traversal.
+There is a trick with calculating the time (that you need to calculate the moment when I can get to the neighboring cell) and using a priority queue, but if you know the concept itself (from yesterday), then the task ceases to be impossible.
+"""
+
+class Solution:
+    def minimumTime(self, grid: List[List[int]]) -> int:
+        height, width = len(grid), len(grid[0])
+        if grid[0][1] > 1 and grid[1][0] > 1:
+            return -1
+        visited = set()
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        priority = [(grid[0][0], 0, 0)]
+        while priority:
+            time, row, col = heappop(priority)
+            if row == height - 1 and col == width - 1:
+                return time
+            if (row, col) in visited:
+                continue
+            visited.add((row, col))
+            for dx, dy in directions:
+                nx, ny = row + dx, col + dy
+                if 0 <= nx < height and 0 <= ny < width and (nx, ny) not in visited:
+                    wait = 1 if ((grid[nx][ny] - time) % 2 == 0) else 0
+                    heappush(priority, (max(time + 1, grid[nx][ny] + wait), nx, ny))
