@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A simple task with a simple solution.
+Recursively descend the tree and change the parity flag, swapping the corresponding pairs of nodes to achieve a change
+"""
+
+class Solution:
+    def reverseOddLevels(self, root: TreeNode) -> Optional[TreeNode]:
+        
+        
+        def reverse(a: Optional[TreeNode], b: Optional[TreeNode], is_odd=False):
+            if a is None or b is None:
+                return
+            if is_odd:
+                a.val, b.val = b.val, a.val
+            reverse(a.left, b.right, not is_odd)
+            reverse(a.right, b.left, not is_odd)
+
+
+        reverse(root.left, root.right, is_odd=True)
+        return root
