@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+At first I tried to write a cool solution in linear time using a stack or a queue, but I quickly ran into trouble and decided to simplify the task for myself by going head-on.
+
+"""
+class Solution:
+    def removeOccurrences(self, s: str, part: str) -> str:
+        while part in s:
+            s = s.replace(part, "", 1)
+        return s
