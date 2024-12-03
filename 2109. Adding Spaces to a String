@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+At first I started writing a list of symbols, but I came to my senses in time and did it through slices. 
+Short and beautiful.
+Today I was pleased with a feasible task.
+"""
+
+class Solution:
+    def addSpaces(self, s: str, spaces: List[int]) -> str:
+        spaces = [0] + spaces
+        words = [s[spaces[i]: spaces[i + 1]] for i in range(len(spaces) - 1)]
+        return " ".join(words)
