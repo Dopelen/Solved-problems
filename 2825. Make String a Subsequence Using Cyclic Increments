@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I spent an hour solving a problem with complexity O(n), but ended up failing the time limit, which is what I expected.
+I was frustrated, but then it dawned on me that I don't need to store an array of all possible starts of string2 in string1 (which I did earlier), 
+because I'm only interested in the earliest start of a substring inside string1 since that would be the optimal point because it covers as many possible values ​​to its right as possible, 
+choosing any other start would only reduce the options, not expand them.
+"""
+
+# O(n)
+class Solution:
+    def canMakeSubsequence(self, str1: str, str2: str) -> bool:
+        num_str1 = [ord(elem) for elem in str1]
+        num_str2 = [ord(elem) for elem in str2]
+        size_1, size_2 = len(num_str1), len(str2)
+        pointer_1 = pointer_2 = 0
+        while pointer_2 != size_2:
+            if pointer_1 < size_1:
+                if (num_str2[pointer_2] in [num_str1[pointer_1], (num_str1[pointer_1] + 1) if (num_str1[pointer_1] != 122) else 97]):
+                    pointer_1 += 1
+                    pointer_2 += 1
+                    if pointer_2 == size_2:
+                        return True
+                else:
+                    pointer_1 += 1
+            else:
+                break
+        return False
+
