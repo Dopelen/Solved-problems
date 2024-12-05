@@ -1,0 +1,75 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space
+
+I think I found a solution, but not quite in the intended way, which is why I was falling behind in time.
+"""
+
+# Good O(n) Solution
+class Solution:
+    def canChange(self, start: str, target: str) -> bool:
+        pointer_1 = pointer_2 = 0
+        size = len(start)
+        while pointer_1 < size or pointer_2 < size:
+            while pointer_1 < size and start[pointer_1] == '_':
+                pointer_1 += 1
+            while pointer_2 < size and target[pointer_2] == '_':
+                pointer_2 += 1
+            if pointer_1 == size or pointer_2 == size:
+                return pointer_1 == pointer_2
+            if start[pointer_1] != target[pointer_2] or \
+                    start[pointer_1] == 'L' and pointer_1 < pointer_2 or \
+                    start[pointer_1] == 'R' and pointer_1 > pointer_2:
+                return False
+            pointer_1 += 1
+            pointer_2 += 1
+        return True
+
+
+# O(n ** 2) TL solution :(
+class Solution:
+    def canChange(self, start: str, target: str) -> bool:
+
+        def check_next(tar, index):
+            if tar == "L":
+                while index < size:
+                    if start[index] == "_":
+                        index += 1
+                    elif start[index] == tar:
+                        start[pointer], start[index] = start[index], start[pointer]
+                        return True
+                    else:
+                        break
+            else:
+                last_blank = None
+                while index < size:
+                    if start[index] == "_":
+                        last_blank = index
+                        if target[index] == "R":
+                            break
+                    elif start[index] == "L":
+                        break
+                    index += 1
+                if last_blank:
+                    start[pointer], start[last_blank] = start[last_blank], start[pointer]
+                    return True
+            return False
+
+        start = [elem for elem in  start]
+        target = [elem_ for elem_ in target]
+        size = len(start)
+        pointer = 0
+
+        while pointer != len(target):
+            if start[pointer] == target[pointer]:
+                pass
+            elif start[pointer] == "_":
+                if target[pointer] == "R" or (not check_next("L", pointer + 1)):
+                    return False
+            elif start[pointer] == "R":
+                if target[pointer] == "L" or (not check_next("R", pointer + 1)):
+                    return False
+            elif start[pointer] == "L":
+                return False
+            pointer += 1
+        return True
