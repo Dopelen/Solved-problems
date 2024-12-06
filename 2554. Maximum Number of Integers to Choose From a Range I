@@ -2,4 +2,21 @@
 """You can see the description of the task using the code specified in the title on leetcode.
 This program has O(n) complexity by time and O(n) by space.
 
+It seems like a simple task, but I failed at it 4 times, on some not very complicated edge cases.
+One way or another, I managed.
+
+I've had a lot of tasks lately, so I don't have much energy left for efficient code.
+Here I simply created a sequence of valid numbers and made a prefix sum from them, replenishing it until I reach the sum I need or the elements run out.
 """
+
+class Solution:
+    def maxCount(self, banned: List[int], n: int, maxSum: int) -> int:
+        banned = set(banned)
+        unbanned = [elem for elem in range(1, n + 1) if elem not in banned]
+        counter = prefix = 0
+        for elem in unbanned:
+            prefix += elem
+            counter += 1
+            if prefix > maxSum:
+                return counter - 1
+        return counter
