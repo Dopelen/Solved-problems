@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n(log(n))) complexity by time and O(n) by space.
+
+The problems are very difficult today, but I knew that I would solve it without hints.
+Purely on some subcortical knowledge I remembered the trick with reversing the problem.
+We go through the different "maximum sizes" of pieces inside the list using binary search, and see how many operations there will be for a piece of each size.
+If the sum of the operations is greater than the maximum, then you need to take a larger piece!
+"""
+
+class Solution:
+    def minimumSize(self, nums: List[int], maxOperations: int) -> int:
+
+        def min_bags(max_size):
+            operations = 0
+            for elem in nums:
+                if elem > max_size:
+                    operations += (elem - 1) // max_size
+            return operations
+
+        left, right = 1, max(nums)
+        while left < right:
+            mid = left + (right - left) // 2
+            if min_bags(mid) <= maxOperations:
+                right = mid
+            else:
+                left = mid + 1
+        return left
