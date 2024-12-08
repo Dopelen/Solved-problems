@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+In general, intersecting segments seem to be a typical problem, but I wouldn't say it's simple. 
+Here my basic intuition wasn't enough for me, and I went looking for hints.
+We maintain the maximum value in our list as a whole, but we also need to know the maximum sum of two non-intersecting segments. 
+To do this, we use binary search to find the place where the events that ended before our event began, calculate their sum, and update the answer.
+To simplify the search for the boundary with other events, we use sorting.
+"""
+
+class Solution:
+    def maxTwoEvents(self, events: List[List[int]]) -> int:
+        time, values = [], []
+        answer = prefix = 0
+        for start_t, end_t, value in sorted(events, key=lambda x: x[1]): 
+            prefix = max(prefix, value)
+            m = bisect_left(time, start_t) - 1
+            if m >= 0:
+                value += values[m]
+            answer = max(answer, value)
+            time.append(end_t)
+            values.append(prefix)
+        return answer
