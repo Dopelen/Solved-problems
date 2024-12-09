@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+I was extremely happy that I had a solution to this problem in my head as soon as I looked at it and thought about it for 5 minutes.
+The best part is that it wasn't like I remembered doing this in some other problem, but I just came up with the solution myself!
+Although the concept itself is not very complicated.
+1. I transform our array into a list of parity indices
+2. Then form lists of the beginnings and ends of all continuous segments, with alternating parities
+3. For each range I check, I simply find the closest coordinates to it using binary search.
+4. If the beginning of the test segment is greater/equal to the closest beginning and its end is earlier/equal to the corresponding end, I add True to the answer.
+"""
+
+class Solution:
+    def isArraySpecial(self, nums: List[int], queries: List[List[int]]) -> List[bool]:
+        size = len(nums)
+        nums = [elem % 2 for elem in nums]
+        starts, ends, ans = [], [], []
+        start = 0
+        for i in range(size):
+            if i == (size - 1) or nums[i] == nums[i + 1]:
+                starts.append(start)
+                ends.append(i)
+                start = i + 1
+        for j in range(len(queries)):
+            pos = bisect_right(starts, queries[j][0]) - 1
+            ans.append((starts[pos] <= queries[j][0]) and (ends[pos] >= queries[j][1]))
+        return ans
