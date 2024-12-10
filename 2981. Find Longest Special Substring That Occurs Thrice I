@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+The 50 character input limit gives us the ability to write code without worrying about algorithmic complexity, so the first thing I did was brute force everything.
+But it possible to solve it in O(n)
+"""
+# O(n ** 2)
+
+class Solution:
+    def maximumLength(self, s: str) -> int:
+        longest = 0
+        checked = set()
+
+        def check_freq(pat):
+            p = f"(?={re.escape(pat)})"
+            matches = len(re.findall(p, s))
+            return matches > 2
+
+        pattern = ""
+        for symbol in s:
+            pattern = pattern + symbol if (not pattern or (symbol == pattern[-1])) else symbol
+            if pattern not in checked:
+                if len(pattern) > longest and check_freq(pattern):
+                    longest = max(longest, len(pattern))
+            checked.add(pattern)
+        return longest if longest != 0 else -1
