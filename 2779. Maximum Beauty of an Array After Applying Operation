@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(max(nums)) by space.
+
+Initially, I divided each number into a set of possible numbers that can be obtained, but for large K I flew out of memory limitation.
+Then I got stuck, looked at a couple of hints, and it turned out that the problem had several good solutions.
+"""
+
+# Ok solution
+class Solution:
+    def maximumBeauty(self, nums: List[int], k: int) -> int:
+        max_value = max(nums)
+        range_array = [0] * (max_value + 10)
+        for num in nums:
+            left = max(0, num - k)
+            right = min(max_value, num + k) + 1
+            range_array[left] += 1
+            range_array[right] -= 1
+        result = range_array[0]
+        for i in range(1, len(range_array)):
+            range_array[i] += range_array[i - 1]
+            if range_array[i] > result:
+                result = range_array[i]
+        return result
+
+
+# Initial Solution
+class Solution:
+    def maximumBeauty(self, nums: List[int], k: int) -> int:
+        variants = Counter([j for elem in nums for j in range(0 if elem <= k else elem - k, elem + k)])
+        return variants.most_common(1)[0][1] if variants else 1
+
+# Amaizing One
+# https://leetcode.com/problems/maximum-beauty-of-an-array-after-applying-operation/solutions/6134234/sliding-window-simple-solution-one-line/
+class Solution:
+    def maximumBeauty(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        left = 0
+        for num in nums:
+            if num - nums[left] > 2*k:
+                left += 1
+        return len(nums) - left
