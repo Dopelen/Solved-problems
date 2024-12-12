@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Wrote a solution that runs in time, but takes 5433 milliseconds instead of 2. 
+Kind of an achievement!
+The task itself is not very difficult. 
+You just need to come up with a nice way to pass parents or the current maximum difference from parents to children inside the tree.
+"""
+
+# If you think a bit (1ms)
+class Solution:
+    def maxAncestorDiff(self, root: Optional[TreeNode]) -> int:
+        
+        def traverse(r, cur_min, cur_max):
+            if not r:
+                return cur_max - cur_min
+            cur_min, cur_max = min(cur_min, r.val), max(cur_max, r.val)
+            return max(traverse(r.left, cur_min, cur_max), traverse(r.right, cur_min, cur_max))
+
+        return traverse(root, root.val, root.val)
+
+
+# 5433ms Solution
+class Solution:
+    def maxAncestorDiff(self, root: Optional[TreeNode]) -> int:
+        
+        def traverse(r, parents, max_dif):
+            if not r:
+                return max_dif
+            if parents:
+                max_dif = max(max_dif, max(abs(r.val - parents[0]), abs(r.val - parents[-1])))
+            bisect.insort_left(parents, r.val)
+            parents_l = copy.deepcopy(parents)
+            parents_r = copy.deepcopy(parents)
+            left = traverse(r.left, parents_l, max_dif)
+            right = traverse(r.right, parents_r, max_dif)
+            return max(left, right)
+
+        return traverse(root, [], 0)
