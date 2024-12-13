@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+Here we didn't even have to think much!
+We need to consistently pull out the minimums from the string. 
+With the current constraints of 10 ** 5, it seems impossible to do this with O(n ** 2), so we need to speed up.
+Take a min heap, put pairs (element, its index) there.
+Start getting elements from it.
+Since in the pairs we have the element first, the heap is sorted by it. 
+We get the element - if its index is in the marked ones - we do nothing, and if not - we mark this index and 2 neighboring ones, and add element to score!
+Here is the solution 8)
+"""
+
+class Solution:
+    def findScore(self, nums: List[int]) -> int:
+        score = 0
+        marked = set()
+
+        indexed_arr = [(elem, index) for index, elem in enumerate(nums)]
+        heapq.heapify(indexed_arr)
+        while indexed_arr:
+            cur_el, cur_idx = heappop(indexed_arr)
+            if cur_idx not in marked:
+                marked |= {cur_idx - 1, cur_idx, cur_idx + 1}
+                score += cur_el
+        return score
