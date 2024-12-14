@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I thought this task was easy at first, but after 40 minutes I didn't think so anymore!
+But apparently I went down the wrong path, because after looking at the hint, I figured out the solution in 10 minutes.
+And it turned out to be wrong, and I went back to the hints.
+I liked the recursive solution, but it ran into a time limit without caching.
+"""
+
+# This one! 
+# https://leetcode.com/problems/continuous-subarrays/solutions/3706729/python-dfsmemoization-16-lines-by-pgey8c-lv4c/
+
+class Solution:
+    def continuousSubarrays(self, nums: List[int]) -> int:
+        size = len(nums)
+
+        def search(index, x, y):
+            if index >= size:
+                return 0
+            cur_min = min(x, nums[index])
+            cur_max = max(y, nums[index])
+            if abs(cur_min - cur_max) <= 2:
+                return 1 + search(index + 1, cur_min, cur_max)
+            return 0
+        ans = 0
+        for i in range(size):
+            ans += search(i, nums[i], nums[i])
+        return ans
