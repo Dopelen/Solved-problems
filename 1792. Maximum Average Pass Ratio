@@ -1,0 +1,57 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+Found myself solving problems on litcode again at 5am. Today, heaps.
+I'm glad I'm getting more confident with them, I used a few tricks here.
+The initial desire was to simply add a student to the classes in which he would give the greatest increase, but I started with the fact that at that moment I forgot to increase the total number of students in the class (ha-ha), 
+and continued with the fact that in some cases it is unclear whether a student will give a greater increase, in one case, without actually adding it.
+Having encountered these difficulties, I changed my approach a little, firstly, I began adding students to the total number, 
+secondly, I began to use a max heap (with help of negative numbers), in which I would keep "increase coefficient" which reflects the change in the average score when adding a student.
+It was a smart solution that I am proud of!
+"""
+
+# before refactoring
+class Solution:
+    def maxAverageRatio(self, classes: List[List[int]], extraStudents: int) -> float:
+        classes = [[-(((c[0] + 1) / (c[1] + 1)) - (c[0] / c[1])), c] for c in classes]
+        heapify(classes)
+        while extraStudents:
+            cur_class = heappop(classes)
+            cur_class[1][0] += 1
+            cur_class[1][1] += 1
+            cur_class[0] = -(((cur_class[1][0] + 1) / (cur_class[1][1] + 1)) - (cur_class[1][0] / cur_class[1][1]))
+            heappush(classes, cur_class)
+            extraStudents -= 1
+        avg = round(sum([elem[1][0]/elem[1][1] for elem in classes])/len(classes), 5)
+        return avg
+
+# after refactoring
+class Solution:
+    def maxAverageRatio(self, classes: List[List[int]], extraStudents: int) -> float:
+        classes = [(-(self._gain(c[0], c[1])), c[0], c[1]) for c in classes]
+        heapify(classes)
+        
+        for _ in range(extraStudents):
+            gain, pass_, total = heappop(classes)
+            pass_ += 1
+            total += 1
+            heappush(classes, (-(self._gain(pass_, total)), pass_, total))
+
+        return sum(pass_ / total for _, pass_, total in classes) / len(classes)
+
+    @staticmethod
+    def _gain(pass_: int, total: int) -> float:
+        return (pass_ + 1) / (total + 1) - pass_ / total
+
+# after 10 years of programming
+class Solution:
+    def maxAverageRatio(self, classes: List[List[int]], extraStudents: int) -> float:
+        classes = [(num/denom - (num+1)/(denom+1), num, denom) for num, denom in classes]
+        heapify(classes)
+        if classes[0][0]==0:
+            return 1
+        for i in range(extraStudents):
+            _, num, denom = heappop(classes)
+            heappush(classes, ((num+1)/(denom+1) - (num+2)/(denom+2), num+1, denom+1))
+        return sum([c[1]/c[2] for c in classes])/len(classes)
