@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+I could have just done it by brute force, but I decided to use my knowledge of the heap!
+"""
+
+class Solution:
+    def getFinalState(self, nums: List[int], k: int, multiplier: int) -> List[int]:
+        nums = [[elem, index] for index, elem in enumerate(nums)]
+        heapify(nums)
+        for i in range(k):
+            update = heappop(nums)
+            update[0] *= multiplier
+            heappush(nums, update)
+        new_nums = [0] * len(nums)
+        for elem in nums:
+            new_nums[elem[1]] = elem[0]
+        return new_nums
