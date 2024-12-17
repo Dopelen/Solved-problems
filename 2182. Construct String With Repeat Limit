@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n)) complexity by time O(n).
+
+I immediately understood the solution, but I wanted to do it beautifully, in the end I spent 2 hours fiddling around, slept on a chair and did it as I initially understood in 10 minutes.
+"""
+
+class Solution:
+    def repeatLimitedString(self, s: str, repeatLimit: int) -> str:
+        answer = []
+        unic = sorted([deque([k] * v) for k, v in Counter(s).items()])
+        while unic:
+            for _ in range(min(len(unic[-1]), repeatLimit)):
+                answer.append(unic[-1].popleft())
+            if unic[-1]:
+                if len(unic) > 1:
+                    answer.append(unic[-2].popleft())
+                else:
+                    break
+                if not unic[-2]: unic.pop(-2)
+            else: unic.pop()
+        return "".join(answer)
