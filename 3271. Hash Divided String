@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+In general, when literal steps to implementation are shown, this characterizes a simple task. 
+I don't know how it ended up in the medium
+"""
+
+class Solution:
+    def stringHash(self, s: str, k: int) -> str:
+        converted = [ord(elem) - 97 for elem in s]
+        processed = [chr(sum(converted[i:i + k]) % 26 + 97) for i in range(0,len(s),k)]
+        return "".join(processed)
