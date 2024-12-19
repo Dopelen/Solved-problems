@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I looked and understood almost immediately! 
+A pleasant feeling, a beautiful solution.
+
+P.S: You can use prefix sums instead of sets.
+"""
+
+class Solution:
+    def maxChunksToSorted(self, arr: List[int]) -> int:
+        answer = 0
+        cur_ind, cur_val = set(), set()
+        for index, element in enumerate(arr):
+            cur_ind.add(index)
+            cur_val.add(element)
+            if cur_ind == cur_val:
+                answer += 1
+                cur_ind, cur_val = set(), set()
+        return answer
