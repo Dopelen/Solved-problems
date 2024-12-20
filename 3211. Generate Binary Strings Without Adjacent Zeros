@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2 ** n) complexity by time and O(n ** 2) by space.
+
+In the problem, you need to understand the condition and think a little about the recursion.
+If we reformulate the condition, we need to get all possible strings that do not have two consecutive zeros,
+which means that when moving to a new symbol inside our recursive function, we must:
+add 1 to the current result and continue the recursive call +
+add 0 if the previous symbol is not zero, and also continue calls.
+Such a recursion structure will return all possible options.
+"""
+
+class Solution:
+    def validStrings(self, n: int) -> List[str]:
+        result = []
+
+        def construct_string(current):
+            if len(current) == n:
+                result.append(current)
+                return
+
+            construct_string(current + '1')
+            if not current or current[-1] != '0':
+                construct_string(current + '0')
+
+        construct_string("")
+        return result
