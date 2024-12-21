@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+
+I wanted to skip it initially, but still spent a couple of hours to write a solution that does not pass in time :(
+Luckily, after a ten-minute refactoring and optimization, everything worked!
+
+The essence is quite simple.
+1. We find nodes that have only 1 connection - these are our leaves.
+2. With leaves, there are only 2 options:
+- they are either already multiples of "K" and can be cut off (because we need to ensure the maximum number of individual pieces) 
+- they are not multiples and can only be considered within a larger piece 
+3. Since we either cut off the leaves from below, or their values ​​​​are already included in ours, we can only add our current value to the parent, with the hope that the total value has finally become a multiple of "K"
+4. After cutting or adding leaves, the higher nodes become leaves, and now we need to process them until we process all the nodes of our graph.
+
+This is how this problem is solved beautifully!
+"""
+
+class Solution:
+    def maxKDivisibleComponents(self, n: int, edges: List[List[int]], values: List[int], k: int) -> int:
+        if not edges:
+            return sum(1 for value in values if value % k == 0)
+        answer = 0
+        bound = defaultdict(set)
+
+        for par, chil in edges:
+            bound[par].add(chil)
+            bound[chil].add(par)
+
+        leaves = {i for i in range(n) if len(bound[i]) == 1}
+        while leaves:
+            cur = leaves.pop()
+            parent = bound[cur].pop() if bound[cur] else None
+            if values[cur] % k  == 0:
+                answer += 1
+                if parent is None:
+                    break
+            else:
+                values[parent] += values[cur]
+            bound[parent].remove(cur)
+            del bound[cur]
+            if len(bound[parent]) == 1:
+                leaves.add(parent)
+        return answer
