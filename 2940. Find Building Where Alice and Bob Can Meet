@@ -1,0 +1,71 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+I wrote the solution for 2 hours, and crashed on the last test cases due to the time limit :(
+
+"""
+
+# Right Solution
+class Solution:
+    def leftmostBuildingQueries(self, heights, queries):
+        height_len, q_len = len(heights), len(queries)
+        result = [-1] * q_len
+        deferred = [[] for _ in range(height_len)]
+        pq = []
+
+        for i in range(q_len):
+            a, b = queries[i]
+            if a > b:
+                a, b = b, a
+            if a == b or heights[a] < heights[b]:
+                result[i] = b
+            else:
+                deferred[b].append((heights[a], i))
+
+        for i in range(height_len):
+            for query in deferred[i]:
+                heapq.heappush(pq, query)
+            while pq and pq[0][0] < heights[i]:
+                result[pq[0][1]] = i
+                heapq.heappop(pq)
+
+        return result
+
+# TTL sadnes
+class Solution:
+    def leftmostBuildingQueries(self, heights: List[int], queries: List[List[int]]) -> List[int]:
+        answer = []
+        sorted_values = []
+        
+        for i in range(len(queries)):
+            if queries[i][0] > queries[i][1]:
+                queries[i][0], queries[i][1] = queries[i][1], queries[i][0]
+        
+        for index, elem in enumerate(heights):
+            insort_left(sorted_values, (elem, index))
+
+        larger_then_current = {}
+        larger_list, equal_list = [], []
+        prev = sorted_values[-1][0]
+
+        for cur in sorted_values[::-1]:
+            if cur[0] == prev:
+                equal_list.append(cur[1])
+            elif cur[0] < prev:
+                larger_list += equal_list
+                equal_list = [cur[1]]
+            larger_then_current[cur[0]] = copy.deepcopy(larger_list)
+            prev = cur[0]
+
+        for val in larger_then_current.values():
+            val.sort()
+
+        for pair in queries:
+            value_max = max(heights[pair[0]], heights[pair[1]])
+            if (pair[0] == pair[1]) or (heights[pair[0]] < heights[pair[1]]):
+                answer.append(pair[1])
+            else:
+                position = bisect_left(larger_then_current[value_max], pair[1])
+                answer.append(larger_then_current[value_max][position] if (position < len(larger_then_current[value_max])) else -1)
+        return answer
