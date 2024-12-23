@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time O(n).
+
+It is not difficult to split the tree into levels, the main difficulty is to calculate the number of permutations!
+"""
+
+class Solution:
+    def minimumOperations(self, root: Optional[TreeNode]) -> int:
+        levels = defaultdict(list)
+        answer = 0
+
+        def travers(root, lvl):
+            if not root:
+                return
+            levels[lvl].append(root.val)
+            if root.left: travers(root.left, lvl + 1)
+            if root.right: travers(root.right, lvl + 1)
+        
+        def min_swaps_to_sort(arr):
+            n = len(arr)
+            sorted_arr = sorted([(val, idx) for idx, val in enumerate(arr)])
+            visited = [False] * n
+            swaps = 0
+            for i in range(n):
+                if visited[i] or sorted_arr[i][1] == i:
+                    continue
+                cycle_length = 0
+                x = i
+                while not visited[x]:
+                    visited[x] = True
+                    x = sorted_arr[x][1]
+                    cycle_length += 1
+            
+                if cycle_length > 1:
+                    swaps += cycle_length - 1
+            return swaps
+        
+        travers(root, 0)
+        print(levels.values())
+        for level in levels.values():
+            answer += min_swaps_to_sort(level)
+        
+        return answer
+
