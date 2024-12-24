@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The problem is very well hinted, so the main problem is not understanding the logic of the solution, but writing the code.
+I use finding the "center" of each graph by traversing from the leaf side inward, and then returning the minimum possible diameter, 
+which is ironically the maximum, between the first diameter, the second, and the distance between their "center" nodes.
+"""
+
+class Solution:
+    def minimumDiameterAfterMerge(self, edges1: List[List[int]], edges2: List[List[int]]) -> int:
+        def diameter(edges):
+            size = len(edges) + 1
+            deg = [0] * size
+            adj_list = [[] for _ in range(size)]
+            for v, w in edges:
+                adj_list[v].append(w)
+                adj_list[w].append(v)
+                deg[v] += 1
+                deg[w] += 1
+            q = deque()
+            for i, d in enumerate(deg):
+                if d == 1:
+                    q.append(i)
+            level, left = 0, size
+            while left > 2:
+                qz = len(q)
+                left -= qz
+                for i in range(qz):
+                    v = q.popleft()
+                    for w in adj_list[v]:
+                        deg[w] -= 1
+                        if deg[w] == 1:
+                            q.append(w)
+                level += 1
+            return 2 * level + 1 if left == 2 else 2 * level
+
+        d1 = diameter(edges1)
+        d2 = diameter(edges2)
+        return max(d1, d2, (d1 + 1) // 2 + (d2 + 1) // 2 + 1)
