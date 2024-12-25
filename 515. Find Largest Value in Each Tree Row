@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+This is a pretty simple task.
+Just remember that there are negative numbers here, and that "if value:" type checks can fail if your value is 0, because it will be considered a default.
+Learned something new about defaultdict and am happy.
+
+P.S: The traversal order ensures that the keys will appear in increasing depth, so we don't even need to sort the output!
+"""
+
+class Solution:
+    def largestValues(self, root: Optional[TreeNode]) -> List[int]:
+        largest = defaultdict(lambda:-math.inf)
+
+        def traverse(r, depth):
+            if r is None: 
+                return
+            largest[depth] = max(r.val, largest[depth])
+            traverse(r.left, depth + 1)
+            traverse(r.right, depth + 1)
+        
+        traverse(root, 0) 
+        return [v for v in largest.values()]
