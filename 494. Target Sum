@@ -1,0 +1,67 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2 ** n) complexity by time and O(n) by space.
+
+I really liked this task.
+At first I solved it in the most crude way, simply
+# recursive(cur_s + nums[index], index + 1)
+# recursive(cur_s - nums[index], index + 1)
+which led to hundreds of calls, where each possible combination reached the end, and if it found the target in the end, then it increased the response counter.
+
+The solution did not pass in time, and I decided to write it simply on lists, where each iteration adds 2 new values.
+However, the basic logic of the work remained the same, and although moving away from recursions sped up this solution, I was still unhappy.
+
+I noticed that the values ​​were repeating, and simply instead of a list I began to pass dictionaries, which indicate how many ways a particular value was achieved.
+On the leetcode data this sped up the solution from 8000 ms to 100.
+Satisfied, he went to get sick.
+"""
+
+# Best version! O(2 ** n)
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        size = len(nums)
+        index = 0
+        current_state = defaultdict(int)
+        current_state[0] += 1
+        while index < size:
+            new_state = defaultdict(int)
+            for elem, count in current_state.items():
+                new_state[elem + nums[index]] += count
+                new_state[elem - nums[index]] += count
+            index += 1
+            current_state = new_state
+        return current_state[target]
+
+
+# O(2 ** n) no recursion version
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        size = len(nums)
+        index = 0
+        current_state = [0]
+        while index < size:
+            new_state = []
+            for elem in current_state:
+                new_state.append(elem + nums[index])
+                new_state.append(elem - nums[index])
+            index += 1
+            current_state = new_state
+        return sum(1 for e in current_state if e == target)
+
+
+# TTL O(2 ** n) first version
+class Solution:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        answer = {True: 0}
+        size = len(nums)
+
+        def recursive(cur_s, index):
+            if index != size:
+                recursive(cur_s + nums[index], index + 1)
+                recursive(cur_s - nums[index], index + 1)
+            elif cur_s == target:
+                answer[True] += 1
+            return
+
+        recursive(0, 0)
+        return answer[True]
