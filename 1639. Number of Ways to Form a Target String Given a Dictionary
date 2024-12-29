@@ -1,0 +1,43 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(m) by space.
+
+This is a difficult problem, and I need a couple more courses in dynamic programming to be able to solve it without spending a whole day on it.
+To figure out how this is solved, I watched this analysis:
+https://www.youtube.com/watch?v=KFzCRbpUcqM
+
+The concept is as follows:
+We create a two-dimensional list A, where each row corresponds to a position in words from the list words, and each element in the row stores the number of occurrences of the character from 'a' to 'z'. 
+Thus, A[j][k] will contain the number of times the letter with index k occurs at position j among all words.
+A dynamic programming table dp is created, which is used to store intermediate results. 
+Each element dp[i][j] will store the number of ways to compose the substring target[:j+1] using the first i positions in words.
+"""
+
+class Solution:
+    def numWays(self, words: List[str], target: str) -> int:
+        mod = 10**9 + 7
+        str_size = len(words[0])
+        target_size = len(target)
+        A = [[0] * 26 for _ in range(str_size)]
+        for word in words:
+            for j in range(str_size):
+                A[j][ord(word[j]) - ord('a')] += 1
+
+        dp = [[-1] * target_size for _ in range(str_size)]
+
+        def F(i: int, j: int) -> int:
+            if j == target_size:
+                return 1
+            if i == len(A):
+                return 0
+            if dp[i][j] != -1:
+                return dp[i][j]
+
+            count = F(i + 1, j)
+            count %= mod
+            count += (A[i][ord(target[j]) - ord('a')] * F(i + 1, j + 1)) % mod
+            count %= mod
+            dp[i][j] = count
+            return dp[i][j]
+
+        return F(0, 0)
