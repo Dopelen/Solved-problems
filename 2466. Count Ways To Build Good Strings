@@ -1,0 +1,59 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I spent more than an hour, but I am pleased with myself.
+
+I initially did it using dictionaries, not a list, avoiding the path of sensible people, and failed the time limit.
+I debugged and rewrote it for a long time, but I could not find the reason why everything was taking so long. Then I rewrote it on lists, and everything went well.
+It turned out that all this time the problem was in two things:
+1. The algorithm for calculating the answer, which I did not pay attention to at all
+2. Using integer division to work with numbers only in the answer, which also slowed down work with them a lot
+"""
+
+# Fast version with List (100 ms)
+class Solution:
+    def countGoodStrings(self, low: int, high: int, zero: int, one: int) -> int:
+        current_freq = [0] * (high + 1)
+        current_freq[0] = 1
+        answer = 0
+        modulo = 10**9 + 7
+        for i in range(high + 1):
+            if current_freq[i] != 0:
+                if i + zero <= high:
+                    current_freq[i + zero] = (current_freq[i + zero] + current_freq[i]) % modulo
+                if i + one <= high:
+                    current_freq[i + one] = (current_freq[i + one] + current_freq[i]) % modulo
+        for j in range(low, high + 1):
+            answer = (answer + current_freq[j]) % modulo
+        return answer
+
+# Repaired dict version (200 ms)
+class Solution:
+    def countGoodStrings(self, low: int, high: int, zero: int, one: int) -> int:
+        current_freq = defaultdict(int)
+        current_freq[0] = 1
+        modulo = 10**9 + 7
+        answer = 0
+        for length in range(high + 1):
+            if current_freq.get(length) is not None:
+                current_freq[length + zero] = (current_freq[length + zero] + current_freq[length]) % modulo
+                current_freq[length + one] = (current_freq[length + one] + current_freq[length]) % modulo
+        for i in range(low, high + 1):
+            answer = (answer + current_freq[i]) % modulo
+        return answer
+
+# initial version (infinite ms)
+class Solution:
+    def countGoodStrings(self, low: int, high: int, zero: int, one: int) -> int:
+        current_freq = defaultdict(int)
+        current_freq[0] = 1
+        answer = 0
+        for i in range(high // min(zero, one)):
+            next_freq = defaultdict(int)
+            for length, freq in current_freq.items():
+                next_freq[length + zero] += current_freq[length]
+                next_freq[length + one] += current_freq[length]
+            answer += sum(next_freq[l] for l in next_freq.keys() if (low <= l <= high))
+            current_freq = next_freq
+        return answer % (10**9 + 7)
