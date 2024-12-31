@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A good problem, which I thought about well!
+The problem is on dynamic programming, and the intuition of the solution is clear, that you need to compare potential costs for each of the options, but how to write it is not entirely obvious (at least it was to me).
+Initially, I tried to write from left to right, but then I realized that the reverse version is more adequate.
+You just iterate over all the days of the year and for each of those on which you must make a trip - check the alternatives:
+1. buy a ticket yesterday
+2. a week ago
+3. a month ago 
++ the corresponding costs for the ticket and the costs at the time of buying the ticket.
+This makes it possible to find the most optimal fare for each day!
+"""
+
+class Solution:
+    def mincostTickets(self, days: List[int], costs: List[int]) -> int:
+        total_days = days[-1] + 1
+        dp = [0] * total_days
+        fast_check = set(days)
+        for i in range(total_days):
+            if i not in fast_check:
+                dp[i] = dp[i - 1]
+            else:
+                daily = dp[max(0, i - 1)] + costs[0]
+                weekly = dp[max(0, i - 7)] + costs[1]
+                monthly = dp[max(0, i - 30)] + costs[2]
+                dp[i] = min(daily, weekly, monthly)
+        return dp[-1]
+
