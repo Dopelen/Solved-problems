@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The problem is very similar to yesterday's, and I quickly figured out how to deal with it.
+We simply create an array of prefix sums and check for each element: whats bigger? The current prefix sum or the entire sum except the current one. 
+If the first is greater than the second, we increase our answer, this is a valid split!
+"""
+
+class Solution:
+    def waysToSplitArray(self, nums: List[int]) -> int:
+        answer = 0
+        prefix_sum = list(accumulate(nums))
+        total = prefix_sum[-1]
+        for i in range(len(nums) - 1):
+            if prefix_sum[i] >= total - prefix_sum[i]:
+                answer += 1
+        return answer
