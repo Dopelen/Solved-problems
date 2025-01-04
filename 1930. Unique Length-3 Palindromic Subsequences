@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It may seem like the complexity is quadratic because for each element we potentially go through the entire string, but each element is a letter of the alphabet, so the overall complexity is limited by the input size * constant (the size of the alphabet).
+"""
+
+class Solution:
+    def countPalindromicSubsequence(self, s: str) -> int:
+        alphabet = {}
+        answer = 0
+
+        for index, symbol in enumerate(s):
+            if symbol in alphabet:
+                alphabet[symbol][1] = index
+            else:
+                alphabet[symbol] = [index, None]
+
+        for i in alphabet.values():
+            if i[1] is not None:
+                answer += len(set(list(s[i[0] + 1:i[1]])))
+
+        return answer
