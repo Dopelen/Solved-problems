@@ -1,0 +1,50 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I wrote a rough solution with the hope that it would work, but of course it didn't, so I had to think.
+
+I created an array in which I mark the beginning and end of this range, which I will use to calculate the cumulative sum.
+Initially, it is equal to zero. 
+If the direction of this range is decreasing, then from the current point to the end of the range, the cumulative sum should be reduced.
+Therefore, we add -=1 to the coordinate of the beginning, and +=1 to the end (further as before) and the opposite with increasing ranges.
+When going through the resulting array, maintaining the cumulative sum, we will know for each element how much it was increased or decreased, since its state is the current cumulative sum, and the elements of the array are its change from element to element.
+This is the main trick of the solution, which helps us avoid element-by-element calculation of each symbol, in fact, we go through the ranges 1 time, 1 time along the line and form the answer!
+"""
+
+# Actual Solution O(n)
+class Solution:
+    def shiftingLetters(self, s: str, shifts: List[List[int]]) -> str:
+        shift_ranges = [0] * (len(s) + 1)
+        c_sum = 0
+        answer = []
+        for start, end, dir in shifts:
+            if not dir:
+                shift_ranges[start] -= 1
+                shift_ranges[end + 1] += 1
+            else:
+                shift_ranges[start] += 1
+                shift_ranges[end + 1] -= 1
+
+        for i in range(len(s)):
+            c_sum += shift_ranges[i]
+            new_code = (((ord(s[i]) + c_sum) - 97) % 26) + 97
+            answer.append(chr(new_code))
+
+        return "".join(answer)
+
+
+# TTL Solution O(n ** 2)
+class Solution:
+    def shiftingLetters(self, s: str, shifts: List[List[int]]) -> str:
+        num_s = [ord(symbol) for symbol in s]
+        for start, end, dir in shifts:
+            for i in range(start, end + 1):
+                if dir and num_s[i] == 122:
+                    num_s[i] = 97
+                elif not dir and num_s[i] == 97:
+                    num_s[i] = 122
+                else:
+                    num_s[i] += 1 if dir else -1
+
+        return "".join([chr(el) for el in num_s])
