@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+For some reason I started solving the problem for a subsequence instead of a substring, but I quickly reread the condition and realized my mistake.
+If we are talking about non-unique pieces containing no more than 1 inclusion of each symbol, then I considered it adequate to solve this problem greedily. 
+Just iterate over the string and take 1 element each time, if it is already in the specified piece - we create a new one and add 1 to the answer.
+"""
+
+# dont forget to add 1 to answer -> calculate last chunk too!
+class Solution:
+    def partitionString(self, s: str) -> int:
+        answer = 0
+        chunk = {s[0]}
+        for symbol in s[1:]:
+            if symbol in chunk:
+                answer += 1
+                chunk = set()
+            chunk.add(symbol)
+
+        return answer + 1 
+
