@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Quite simple tree construction, knowing how to write a traversal and how basic operations with classes work, it will not be difficult to write a solution.
+"""
+
+class FindElements:
+    def __init__(self, root: Optional[TreeNode]):
+        self.root = root
+        self.values = set()
+        self.construct(root, 0)
+    
+    def construct(self, r, val):
+        r.val = val
+        self.values.add(val)
+        if r.left:
+            self.construct(r.left, 2 * val + 1)
+        if r.right:
+            self.construct(r.right, 2 * val + 2)
+        
+    def find(self, target: int) -> bool:
+        return target in self.values
