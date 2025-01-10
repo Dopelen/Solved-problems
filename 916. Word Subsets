@@ -1,0 +1,43 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+Glad I figured out the solution principle quickly.
+If ALL the strings in the second list must be substrings of a word from the first, we can create one dictionary that will store the required number of each letter. 
+To do this, simply go through all the words in the second list and support the maximum number of letters needed, and then check whether each word from the first has this list.
+"""
+
+
+# After refactoring (but slover than first one)
+class Solution:
+    def wordSubsets(self, words1: List[str], words2: List[str]) -> List[str]:
+        max_count = Counter()
+        for sub in words2:
+            max_count |= Counter(sub)
+        def is_universal(word_count):
+            return all(word_count[char] >= count for char, count in max_count.items())
+        return [w for w in words1 if is_universal(Counter(w))]
+
+
+# Before refactoring
+class Solution:
+    def wordSubsets(self, words1: List[str], words2: List[str]) -> List[str]:
+        answer = []
+        max_count = defaultdict(int)
+
+        def is_universal(check):
+            for key, count in max_count.items():
+                if check[key] < count:
+                    return False
+            return True
+
+        for sub in words2:
+            for k, v in Counter(sub).items():
+                max_count[k] = max(max_count[k], v)
+
+        for w in words1:
+            if is_universal(Counter(w)):
+                answer.append(w)
+
+        return answer
+
