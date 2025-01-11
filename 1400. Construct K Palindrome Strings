@@ -1,0 +1,53 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) space.
+
+I can measure the difficulty of a task by the number of circles around the room that I made while thinking and talking to myself, so this one is close to 30! 
+That is, somewhere in the medium!
+
+
+My reasoning was quite chaotic, but eventually I came to two main scenarios:
+1. We need to increase...
+2. We need to reduce...
+...the number of pieces to reach K.
+
+To begin with, we can take as a piece the number of occurrences of any symbol, because a string of identical symbols will always be a polindrome. 
+And we will have as many of these pieces as there are unique symbols in the string.
+
+1. Now the first trick, if K is greater than the number of our pieces, we can make as many polindromes from them as we want, limited only by the number of symbols in the original string. 
+Because from any piece we can unhook 1 symbol, and it will be a new polindrome.
+
+2. When reducing, we need to take into account the evenness and oddness of each symbol! 
+Because we can turn an "even string" into a polindrome by adding a different symbol, but we can't turn an odd string into a polindrome ("aa" -> "aca", but adding "c" to "aaa" will not form a polindrome).
+This leads to the second trick. 
+A symbol with an even number of letters can be added to any other polindrome and it will remain a polindrome, but a symbol with an odd number of letters cannot under any circumstances form a polindrome with another symbol, and nothing can be added to it.
+This in turn leads to a simple solution for the second case!
+If we have strings of identical letters, each of which is a polindrome, we can combine them as long as there are strings with an even number of symbols, and if they are finished, this is our limit, and if it does not correspond to the desired K, then it is impossible to bring the string to K polindromes.
+
+I am very proud of myself
+"""
+
+# Full solution
+class Solution:
+    def canConstruct(self, s: str, k: int) -> bool:
+        c = [v % 2 for _, v in Counter(s).items()]
+        symbols = len(c)
+        if symbols <= k:
+            return len(s) >= k
+        even = c.count(0)
+        while symbols > k:
+            if even:
+                even -= 1
+                symbols -= 1
+            else:
+                return False
+        return True
+
+
+# After understanding each step
+class Solution:
+    def canConstruct(self, s: str, k: int) -> bool:
+        c = [v % 2 for v in Counter(s).values()] 
+        if len(c) <= k:
+            return len(s) >= k
+        return c.count(1) <= k
