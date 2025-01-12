@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The neat trick is that we don't even have to change the parentheses!
+We just have to figure out that we don't have too many locked opening or closing parentheses and use that to produce the result.
+"""
+
+class Solution:
+    def canBeValid(self, s: str, locked: str) -> bool:
+        size = len(s)
+        if size % 2:
+            return False
+
+        def check(forward=False):
+            r = range(size - 1, -1, -1) if not forward else range(size)
+            total = opened = closed = 0
+            for index in r:
+                if locked[index] == "0":
+                    total += 1
+                elif s[index] == "(":
+                    opened += 1
+                elif s[index] == ")":
+                    closed += 1
+                if forward:
+                    if total + opened - closed < 0:
+                        return False
+                else:
+                    if total - opened + closed < 0:
+                        return False
+            return True
+
+        return check() and check(True)
