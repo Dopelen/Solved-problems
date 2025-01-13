@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and same bу space.
+
+He-he-he
+A pleasant task, partly because I solved it in exactly 2 minutes.
+If we are talking about an infinite number of operations, it is worth considering the dynamics of our string, after the operations.
+It is important to understand that as long as we have more than 2 elements, we can always remove two edge elements, and no matter how many there are, we can do this until there are 2 left if the frequency of the character is even, and 1 if it is odd.
+So the whole task comes down to simply counting characters and add to answer 2 or 1 depending on the parity :)
+"""
+ 
+# Initial Solution
+class Solution:
+    def minimumLength(self, s: str) -> int:
+        count = Counter(s)
+        answer = 0
+        for freq in count.values():
+            answer += 1 if freq % 2 else 2
+        return answer
+
+# One-line
+class Solution:
+    def minimumLength(self, s: str) -> int:
+        return sum(1 if freq % 2 else 2 for freq in Counter(s).values())
