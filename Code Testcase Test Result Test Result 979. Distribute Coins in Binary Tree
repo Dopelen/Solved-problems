@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I had to think about it!
+It was hard to figure it out today, but I didn't give up and beat the problem solo in about 40 minutes.
+The critical moment was the realization that regardless of whether we have a deficiency or an excess of values, in case of deficiency we will need to transfer the excess here, and in case of excess, we will need to output it.
+This leads us to a simple solution: in each node, add the absolute sum of children to the answer, and then return their sum to the parent, taking into account the current value of the node.
+In this simple way, the deficiency in one branch will be compensated by the excess in another, and if they remain, they will be passed up the tree, sooner or later being resolved.
+"""
+
+class Solution:
+    def distributeCoins(self, root: Optional[TreeNode]) -> int:
+        steps = {"answer": 0}
+
+        def traverse(r):
+            if not r:
+                return 0
+            left = traverse(r.left)
+            right = traverse(r.right)
+
+            steps["answer"] += abs(left) + abs(right)
+            return left + right + r.val - 1
+
+        traverse(root)
+        return steps["answer"]
