@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This program has O(n) complexity by time and O(n) by space.
+
+I am not very strong in bitwise operations, so I mostly solve such problems through strings, understanding the basic principles is enough.
+First, we simply count the number of bits in the bit representation, and then we need to set these bits to some desired number.
+The XOP operation returns 0 for the same values.
+We need to get the minimum possible number after the XOP operation of the original number and the one "selected by us".
+We know that the most significant bits are to the left, so we can get the smallest possible number by deactivating the leftmost bits.
+Actually, that's all! We go from left to right and if the number contains "1" and we have unused bits left, we put "1" in the corresponding position of our number.
+(don't forget to set all the remaining bits if we approach the border of our number and the task is solved!)
+"""
+
+class Solution:
+    def minimizeXor(self, num1: int, num2: int) -> int:
+        set_bits = bin(num2).count("1")
+        mask = list(bin(num1)[2:])
+        result = ["0"] * max(len(mask), set_bits)
+        for i in range(len(result)):
+            if not set_bits:
+                break
+            elif (len(result) - i == set_bits) or (mask[i] == "1"):
+                result[i] = "1"
+                set_bits -= 1
+            else:
+                result[i] = "0"
+        return int("".join(result), 2)
+
