@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Of course, I took the path of least resistance and tried to solve it head-on. 
+I ran into ttl, screwed on the cache, ran into space constraints.
+And at this point I decided to just think a little.
+
+The main trick is this
+If the length of one array is even, then each element of the other array will be XORed an even number of times.
+Since a ^ a = 0, then XORing an even number of times will give 0.
+If the length of the array is odd, then each element of the other array will be XORed an odd number of times, and the result will be the XOR of all elements of that array.
+
+"""
+# After analize XOR
+class Solution:
+    def xorAllNums(self, nums1, nums2):
+        size_1, size_2 = len(nums1), len(nums2)
+        x1 = x2 = 0
+        if size_1 % 2:
+            x2 = reduce(lambda x, y: x ^ y, nums2)
+        if size_2 % 2:
+            x1 = reduce(lambda x, y: x ^ y, nums1)
+        return x1 ^ x2
+
+
+# Brute force (didnt pass)
+class Solution:
+    def xorAllNums(self, nums1: List[int], nums2: List[int]) -> int:
+        result = []
+        
+        @cache
+        def calculate(x, y):
+            return x ^ y
+        
+        for i in range(len(nums1)):
+            for j in range(len(nums2)):
+                result.append(calculate(nums1[i], nums2[j]))
+        return reduce(lambda x, y: x ^ y, result)
