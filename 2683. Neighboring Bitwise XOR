@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+XOR is associative and commutative, when we try to find a correct array original, we calculate each of its elements TWICE ([i] and [i + i] -> for next step i become i + i and so on). 
+Based on the properties of XOR, if such an array exists, its XOR will be equal to 0, since any element in this case will be compared with itself and their XOR is equal to 0
+a ^ a = 0
+"""
+
+class Solution:
+    def doesValidArrayExist(self, derived: List[int]) -> bool:
+        return not reduce(lambda x, y: x ^ y, derived)
