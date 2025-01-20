@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+I started to do this task using a minimal heap and a queue, but I quickly got confused and realized that there is a faster way.
+You just go through the matrix, saving the coordinates of each number.
+Then iterating through the array, and increase the counters in a separate list, which is responsible for the number of elements on the corresponding coordinates.
+As soon as the counter reaches the value "all elements of the row/column" you return the index at the moment of checking which this happened!
+"""
+
+class Solution:
+    def firstCompleteIndex(self, arr: List[int], mat: List[List[int]]) -> int:
+        size_r, size_c = len(mat), len(mat[0])
+        rows_count = [0] * size_r
+        cols_count = [0] * size_c
+
+        positions = {}
+
+        for i_r in range(size_r):
+            for i_c in range(size_c):
+                positions[mat[i_r][i_c]] = (i_r, i_c)
+
+        for i, e in enumerate(arr):
+            rows_count[positions[e][0]] += 1
+            cols_count[positions[e][1]] += 1
+            if (rows_count[positions[e][0]] == size_c) or (cols_count[positions[e][1]] == size_r):
+                return i
