@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(1) by space.
+
+I just thought we needed to assemble a dynamic programming matrix, go through the most profitable path, and the remaining passage would be less profitable. 
+However, it turns out that the most profitable path does not mean that we leave the next person in line with the least of everything. 
+In essence, this is a problem about psychopaths, it comes down not to you having the most, but to your neighbor getting the least, even if this strategy is not optimal.
+This changes the problem to a prefix problem!
+The main trick is that the second robot can either go along the bottom line to the point where the first robot turned there, or go along the top and take everything that was left from the first after the turn.
+"""
+
+class Solution:
+    def gridGame(self, grid: List[List[int]]) -> int:
+        min_result = float('inf')
+        top = sum(grid[0])
+        bot = 0
+
+        for i in range(len(grid[0])):
+            top -= grid[0][i]
+            min_result = min(min_result, max(top, bot))
+            bot += grid[1][i]
+
+        return min_result
+
