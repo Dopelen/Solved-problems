@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+initialize the bypass from each point with water in all directions. 
+Moving within the queue one cell at a time, we can rewrite all intersecting cells.
+"""
+
+class Solution(object):
+    def highestPeak(self, isWater):
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        rows, cols = len(isWater), len(isWater[0])
+        heights = [[-1] * cols for _ in range(rows)]
+        order = deque()
+
+        for i in range(rows):
+            for j in range(cols):
+                if isWater[i][j] == 1:
+                    order.append((i, j, 0))
+                    heights[i][j] = 0
+
+        while order:
+            r, c, height = order.popleft()
+            for dr, dc in directions:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < rows and 0 <= nc < cols and heights[nr][nc] == -1:
+                    heights[nr][nc] = height + 1
+                    order.append((nr, nc, height + 1))
+
+        return heights
