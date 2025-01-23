@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+It seems like a simple task, and you can even quickly come to edge cases that make the task of average complexity 
+(how not to take into account a computer horizontally if it was previously taken into account vertically). 
+But I struggled for an hour with how to write it beautifully and in the end I still didn’t write it very cool.
+"""
+
+# After refactoring
+class Solution:
+    def countServers(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        row_counts = [sum(row) for row in grid]
+        col_counts = [sum(col) for col in zip(*grid)]
+        answer = 0
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == 1 and (row_counts[r] > 1 or col_counts[c] > 1):
+                    answer += 1
+        return answer
+
+# Before refactoring
+class Solution:
+    def countServers(self, grid: List[List[int]]) -> int:
+        row_comp = [sum(row) for row in grid]
+        col_comp = [sum(col) for col in zip(*grid)]
+        answer = 0
+        for r_index, row in enumerate(grid):
+            single = row_comp[r_index] <= 1
+            accounted = 0
+            for c_index, elem in enumerate(row):
+                if elem == 1:
+                    if col_comp[c_index] != 0:
+                        if col_comp[c_index] > 1:
+                            row_comp[r_index] -= 1
+                            answer += col_comp[c_index]
+                            col_comp[c_index] = 0
+                    else:
+                        accounted += 1
+            answer += (row_comp[r_index] - accounted) if not single else 0
+        return answer
