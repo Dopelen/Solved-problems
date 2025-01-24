@@ -1,0 +1,53 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+If we rephrase the question, we need to find all nodes of the graph that do not have cycles when passing from them to the end points. 
+To do this, we can make a recursive traversal from each node to the children with a check for getting into the visited ones.
+The concept itself is not difficult, but as often happens with recursions, there is a risk that the brain will hurt.
+"""
+
+# Before refactoring
+class Solution:
+    def eventualSafeNodes(self, graph: List[List[int]]) -> List[int]:
+        answer = []
+        memo = {}
+        
+        def recursive_traverse(i, visited):
+            if i in visited:
+                return False
+            if i in memo:
+                return memo[i]
+            visited.add(i)
+            for child in graph[i]:
+                if memo.get(child) is None:
+                    memo[child] = recursive_traverse(child, visited)
+                if memo[child] == False:
+                    return False
+            memo[i] = True
+            return True
+
+        for index, node in enumerate(graph):
+            if recursive_traverse(index, set()):
+                answer.append(index)
+
+        return answer
+
+# After refactoring
+class Solution:
+    def eventualSafeNodes(self, graph: List[List[int]]) -> List[int]:
+        n = len(graph)
+        state = [0] * n
+
+        def is_safe(node):
+            if state[node] != 0:
+                return state[node] == 2
+
+            state[node] = 1
+            for neighbor in graph[node]:
+                if not is_safe(neighbor):
+                    return False
+            state[node] = 2
+            return True
+
+        return [node for node in range(n) if is_safe(node)]
