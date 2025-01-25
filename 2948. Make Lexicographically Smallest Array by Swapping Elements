@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n(log(n))) by space.
+
+I tried to solve it for an hour without hints, wrote 50 lines of code, got upset. I looked at the hints, it is solved through graphs or division into components with sorting, I can't figure out every task :(
+"""
+
+class Solution:
+    def lexicographicallySmallestArray(self, nums: List[int], limit: int) -> List[int]:
+        size = len(nums)
+        nums2, indices, result = sorted([(nums[i], i) for i in range(size)]), [], [0] * size
+        for i in range(size):
+            if i == 0 or nums2[i][0] - nums2[i - 1][0] > limit:
+                indices.append([])
+            indices[-1].append(nums2[i][1])
+        for index in indices:
+            sorted_index = sorted(index)
+            for j in range(len(index)):
+                result[sorted_index[j]] = nums[index[j]]
+        return result
+
+
