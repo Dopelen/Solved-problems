@@ -1,0 +1,52 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A difficult task that I did not overcome.
+
+The solution is done by traversing the graph.
+We process the incoming nodes for each participant as the number of people who want to invite him.
+Then we perform a topological sort to count the nodes that are not in cycles, and continue this process by counting cycles.
+
+After the topological sort, only the nodes that are in cycles remain.
+These cycles are processed separately:
+If the cycle is of size 2 (a pair of mutual invitations), then the sum of the lengths of the paths leading to these nodes plus 2 (the pair itself) is taken into account.
+If the cycle is larger, then only its length is taken into account.
+
+Аt the end the maximum value is calculated between:
+The sum of the lengths of the paths for all pairs of mutual invitations (small_ring).
+The length of the largest cycle (big_ring).
+"""
+
+# https://leetcode.com/problems/maximum-employees-to-be-invited-to-a-meeting/solutions/5840264/python3-just-working-code-27092024-by-pi-fwzj/
+class Solution:
+    def maximumInvitations(self, favorite: List[int]) -> int:
+        n = len(favorite)
+        connections = [0] * n
+        length = [0] * n
+        for i, x in enumerate(favorite):
+            connections[x] += 1
+        que = deque([i for i in range(n) if connections[i] == 0])
+        while que:
+            current = que.popleft()
+            next = favorite[current]
+            connections[next] -= 1
+            length[next] = max(length[next], length[current] + 1)
+            if connections[next] == 0:
+                que.append(next)
+        small_ring = 0
+        big_ring = 0
+        for i in range(n):
+            if connections[i] > 0:
+                size = 1
+                connections[i] -= 1
+                next = favorite[i]
+                while next != i:
+                    connections[next] -= 1
+                    size += 1
+                    next = favorite[next]
+                if size == 2:
+                    small_ring += length[i] + length[favorite[i]] + 2
+                else:
+                    big_ring = max(big_ring, size)
+        return max(small_ring, big_ring)
