@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n ** 2) by space
+
+I spent about an hour thinking about this problem, because my head was endlessly confused about whether the first element is needed for the second, or the second for the first, and which of them needs to be recursively expanded... 
+But after a ladle of suffering, I finally figured it out.
+I just go through all the queries and recursively bypass all the necessary elements, returning the result of each bypass to the level above, so my parent gets all the nested dependencies. 
+I also remember them in a separate set, since if I counted a node once, its children will not change in any way, and we can simply return to the parent all the children counted in the previous iteration.
+Thus, the algorithmic complexity is quadratic for all unique values, but if there are children, it should work faster, since they are counted once.
+On the pleasant side, when the solution was written: perfect execution!
+"""
+
+class Solution:
+    def checkIfPrerequisite(self, numCourses: int, prerequisites: List[List[int]], queries: List[List[int]]) -> List[bool]:
+        prereq = defaultdict(set)
+        final = defaultdict(set)
+        visited = set()
+        answer = []
+
+        def travers(cur_elem):
+            if cur_elem in visited:
+                return final[cur_elem]
+            values = set()
+            if prereq.get(cur_elem):
+                for el in prereq[cur_elem]:
+                    values.add(el)
+                    values |= travers(el)
+            final[cur_elem] |= values
+            visited.add(cur_elem)
+            return values
+
+        for condition, goal in prerequisites:
+            prereq[condition].add(goal)
+
+        for key in prereq:
+            if key not in visited:
+                final[key] = travers(key)
+
+        for prerequisite, course in queries:
+            answer.append(course in final[prerequisite])
+
+        return answer
