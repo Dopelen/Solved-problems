@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+I think I'm pretty good at traversing matrices, I came up with a solution on the subway while I was driving home from work, and I coded it at home in 10 minutes.
+A typical task for traversing adjacent segments of a matrix, in this case we don't even have to change any values ​​in the matrix, it's enough to store visited cells (they could simply convert them to 0, that's also a good way)
+For each fragment of the matrix, I check whether I've visited it before, and if not, I start traversing all adjacent cells until I hit a boundary, adding the value to the local answer. After each piece, I recalculate the maximum value.
+"""
+
+class Solution:
+    def findMaxFish(self, grid: List[List[int]]) -> int:
+        visited = set()
+        answer = 0
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        rows, cols = len(grid), len(grid[0])
+
+        def catch_fishes(y, x):
+            if (0 <= y < rows) and (0 <= x < cols) and ((y, x) not in visited) and (grid[y][x] != 0):
+                local_answer = grid[y][x]
+                visited.add((y, x))
+                for dy, dx in directions:
+                    local_answer += catch_fishes(y + dy, x + dx)
+                return local_answer
+            return 0
+
+        for r in range(rows):
+            for c in range(cols):
+                if (grid[r][c] != 0) and ((r, c) not in visited):
+                    answer = max(answer, catch_fishes(r, c))
+        return answer
