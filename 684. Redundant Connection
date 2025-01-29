@@ -1,0 +1,60 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n ** 2) by space.
+If you knew how hard it was for me to think about this problem, you would cry.
+Probably just one of those days.
+I'm sure there is an adequate solution, but after looking at the 1000 node limit, I couldn't think of anything better than deleting 1 edge from the end, and traversing the entire tree.
+And if after deleting an edge some node became unavailable, I found the answer, and if not, after traversing I returned the deleted one to the list of connections and deleted the next one.
+
+P.S: You can find correct solution with union-find structure below (O(n))
+"""
+
+# Solution with tears
+class Solution:
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        all_nodes = {i for i in range(1, len(edges) + 1)}
+        adj_list = defaultdict(set)
+        for key, value in edges:
+            adj_list[key].add(value)
+            adj_list[value].add(key)
+
+        def traverse(all_c, start):
+            if adj_list[start]:
+                all_c.remove(start)
+            for v in adj_list[start]:
+                if v in all_c:
+                    traverse(all_c, v)
+
+        for j in range(len(edges) - 1, -1, -1):
+            first, second = edges[j]
+            adj_list[first].remove(second)
+            adj_list[second].remove(first)
+            check = all_nodes.copy()
+            start = 1 if adj_list[1] else 2 if adj_list[2] else 3
+            traverse(check, start)
+            if not check:
+                return [first, second]
+            adj_list[first].add(second)
+            adj_list[second].add(first)
+
+# Union find
+class Solution:
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        parent = [i for i in range(len(edges) + 1)]
+
+        def find(u: int) -> int:
+            if parent[u] != u:
+                parent[u] = find(parent[u])
+            return parent[u]
+
+        def union(u: int, v: int) -> bool:
+            u_root = find(u)
+            v_root = find(v)
+            if u_root == v_root:
+                return False
+            parent[v_root] = u_root
+            return True
+
+        for u, v in edges:
+            if not union(u, v):
+                return [u, v]
