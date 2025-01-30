@@ -1,0 +1,66 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * (n + m)) complexity by time and O(n) by space.
+
+I threw in a couple of solutions, tried to write something, and went to the hints.
+The main problem for me was how to choose a node to start the traversal from, because the graph is undirected, it is difficult to find a potential start.
+But for this, you can find a traversal from each node!
+My solution did not pass the test very well, so I went on to peek at how all this can be solved.
+The idea is this: traverse the list of connections to select all independent graphs, then calculate the sum of the groups of maximum length for each of the independent graphs.
+And we find out the maximum length by starting the traversal of the graph from each node as the initial one.
+"""
+
+# https://leetcode.com/problems/divide-nodes-into-the-maximum-number-of-groups/solutions/2875152/python3-bfs/?envType=daily-question&envId=2025-01-30
+class Solution:
+    def bfs(self, graph, i):
+        queue = deque([i])
+        seen = set([i])
+        seenLevel = set()
+        ans = 0
+        while queue:
+            ans += 1
+            nextLevel = set()
+            for _ in range(len(queue)):
+                node = queue.popleft()
+                for neighbor in graph[node]:
+                    if neighbor in seenLevel:
+                        return -1
+                    if neighbor in seen:
+                        continue
+                    seen.add(neighbor)
+                    nextLevel.add(neighbor)
+                    queue.append(neighbor)
+            seenLevel = nextLevel
+        return ans
+
+
+    def magnificentSets(self, n: int, edges: List[List[int]]) -> int:
+        adj_list = defaultdict(list)
+        for a, b in edges:
+            adj_list[a].append(b)
+            adj_list[b].append(a)
+        components = []
+        seen = set()
+        for i in range(1, n + 1):
+            if i in seen:
+                continue
+            queue = deque([i])
+            visited = set([i])
+            while queue:
+                for _ in range(len(queue)):
+                    node = queue.popleft()
+                    for neighbor in adj_list[node]:
+                        if neighbor in visited:
+                            continue
+                        visited.add(neighbor)
+                        queue.append(neighbor)
+            components.append(visited)
+            seen = seen.union(visited)
+
+        longest = [-1] * len(components)
+        for k in range(len(components)):
+            for i in components[k]:
+                longest[k] = max(longest[k], self.bfs(adj_list, i))
+        if min(longest) < 0:
+            return -1
+        return sum(longest)
