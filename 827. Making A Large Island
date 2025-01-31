@@ -1,0 +1,59 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+I did a similar problem during the Advent of Code, but there was no time limit, so I could afford to solve it as greedily as possible.
+I used a similar approach here, but with a little trick.
+If we change 0 to 1, we only need to go through the point where this change was applied a second time, because only this island could potentially grow!
+Pleased with my idea, I went to code it.
+But even this heuristic did not prevent me from catching TTL.
+Sitting down to think about further optimization, to my surprise, I found it quite quickly.
+We can replace all the "1"s with the number of "1" in the current island after the first pass, then all we need to do is add up the sums of all adjacent numbers for each 0!
+But this led to a new problem, if there is an island around, how do I know whether to add the sides or not, whether they are part of one island or several?
+I came up with an ID for the islands so that I could only put together unique islands!
+I won in the end and am pleased with myself!
+"""
+
+# After refactoring
+class Solution:
+    def largestIsland(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        total_visited = set()
+        island_sizes = {}
+        island_id = 2
+        max_size = 0
+
+        def dfs(y, x, island_id):
+            if 0 <= y < rows and 0 <= x < cols and grid[y][x] == 1 and (y, x) not in total_visited:
+                total_visited.add((y, x))
+                grid[y][x] = island_id
+                size = 1
+                for dy, dx in directions:
+                    size += dfs(y + dy, x + dx, island_id)
+                return size
+            return 0
+
+        for y in range(rows):
+            for x in range(cols):
+                if grid[y][x] == 1 and (y, x) not in total_visited:
+                    size = dfs(y, x, island_id)
+                    island_sizes[island_id] = size
+                    max_size = max(max_size, size)
+                    island_id += 1
+
+        for y in range(rows):
+            for x in range(cols):
+                if grid[y][x] == 0:
+                    connected_islands = set()
+                    new_size = 1
+                    for dy, dx in directions:
+                        ny, nx = y + dy, x + dx
+                        if 0 <= ny < rows and 0 <= nx < cols and grid[ny][nx] != 0:
+                            island_id = grid[ny][nx]
+                            if island_id not in connected_islands:
+                                connected_islands.add(island_id)
+                                new_size += island_sizes[island_id]
+                    max_size = max(max_size, new_size)
+
+        return max_size
