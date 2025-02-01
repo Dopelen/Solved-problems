@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+
+A fairly simple mid task, solved by iteration over the stack.
+"""
+
+class Solution:
+    def removeStars(self, s: str) -> str:
+        stack = []
+        for elem in s:
+            match elem:
+                case "*": stack.pop()
+                case _: stack.append(elem)
+        return "".join(stack)
