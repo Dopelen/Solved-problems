@@ -1,0 +1,36 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * n) complexity by time and O(1) by space.
+
+I saw this problem half a year ago and decided that "I'll break my brain with these indexes." And switched to something else. 
+Now I saw it, and it's time to break my brain. 
+I juggled with indexes in my head for an hour to reassemble this matrix on the spot. 
+In the end I did it, and even well, although I'm sure that it could have been done more delicately.
+
+"Things" that I discovered and that helped me.
+1. Change the cell with the initial index in each plane
+2. Divide the pass by the current radius, from the total pass through the matrix in depth
+"""
+
+class Solution:
+    def rotate(self, matrix: List[List[int]]):
+        g_x = g_y = 0
+        g_t_x = g_t_y = t_x = t_y = len(matrix) - 1
+
+        def shift_values_in_radius(i_x, i_y, t_x, t_y):
+            while i_x != t_x:
+                matrix[i_y][i_x], matrix[i_x][t_x] = matrix[i_x][t_x], matrix[i_y][i_x]
+                matrix[i_y][i_x], matrix[t_x][t_y] = matrix[t_x][t_y], matrix[i_y][i_x]
+                matrix[i_y][i_x], matrix[t_y][i_y] = matrix[t_y][i_y], matrix[i_y][i_x]
+                i_x += 1
+                t_y -= 1
+
+
+        while g_y < g_t_y:
+            i_x, i_y = g_x, g_y
+            t_x, t_y = g_t_x, g_t_y
+            shift_values_in_radius(i_x, i_y, t_x, t_y)
+            g_x += 1
+            g_y += 1
+            g_t_x -= 1
+            g_t_y -= 1
