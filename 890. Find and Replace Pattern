@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space for dp matrix.
+
+I immediately understood the concept of the solution, but I slowed down a bit thinking about how to solve it more effectively.
+In the end, I didn't just replace all the letters in the string with the letters from the pattern, but used a hash table.
+But there are so many conversions from one to another that it doesn't seem to me that it turned out so well.
+"""
+
+# Initial Solution
+class Solution:
+    def findAndReplacePattern(self, words: List[str], pattern: str) -> List[str]:
+        def construct_hash(word):
+            pat_hash = defaultdict(list)
+            pat_ind = set()
+            for index, symbol in enumerate(word):
+                pat_hash[symbol].append(index)
+            for v in pat_hash.values():
+                pat_ind.add(tuple(v))
+            return pat_ind
+
+        reference = construct_hash(pattern)
+        answer = []
+
+        for word in words:
+            if construct_hash(word) == reference:
+                answer.append(word)
+        return answer
+
+
+# After refactoring
+class Solution:
+    def findAndReplacePattern(self, words: List[str], pattern: str) -> List[str]:
+        def get_pattern_indices(s):
+            char_to_indices = defaultdict(list)
+            for i, char in enumerate(s):
+                char_to_indices[char].append(i)
+            return frozenset(tuple(indices) for indices in char_to_indices.values())
+
+        pattern_indices = get_pattern_indices(pattern)
+        return [word for word in words if get_pattern_indices(word) == pattern_indices]
