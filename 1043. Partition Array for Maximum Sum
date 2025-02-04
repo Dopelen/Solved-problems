@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * k) complexity by time and O(n * k) by space.
+
+What are the chances of getting 4 easy problems in a row! Lucky week.
+Unfortunately for me, I've already solved all the easy problems, so if I run into a repeat, I just go do some easy mid-level problem.
+Unfortunately again, I got a not-so-easy dynamic programming problem that I got stuck on.
+The solution is to calculate the maximum possible sum for each split.
+For each index, we calculate the maximum possible sum, 
+for this we take the sum calculated for K steps back dp(i - k) + the sum that we get when we change all the values ​​of the slice from k steps back to the current index to the maximum value. 
+Of all the obtained values, we write down the maximum.
+"""
+
+class Solution:
+    def maxSumAfterPartitioning(self, arr: List[int], k: int) -> int:
+        size = len(arr)
+        dp = [0] * size
+        for j in range(k):
+            dp[j] = max(arr[:j + 1]) * (j + 1)
+
+        for j in range(k, size):
+            curr = []
+            for m in range(k):
+                curr.append(dp[j - m - 1] + max(arr[(j - m):(j + 1)]) * (m + 1))
+            dp[j] = max(curr)
+
+        return dp[-1]
+
+# Faster version
+class Solution:
+    def maxSumAfterPartitioning(self, arr: List[int], k: int) -> int:
+        size = len(arr)
+        dp = [0] * (size + 1)
+
+        for i in range(size):
+            curMax = curSum = 0
+            for j in range(i, max(-1, i - k), -1):
+                if curMax < arr[j]:
+                    curMax = arr[j]
+                cur = curMax * (i - j + 1) + dp[j]
+                if curSum < cur:
+                    curSum = cur
+            dp[i + 1] = curSum
+
+        return dp[-1]
