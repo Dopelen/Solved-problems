@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n * m) complexity by time and O(n * m) complexity by space, where n is nomber of domains and m is largest domain.
+
+A nice little task. Labeled as medium, but actually rather simple.
+"""
+
+class Solution:
+    def subdomainVisits(self, cpdomains: List[str]) -> List[str]:
+        domains_freq = defaultdict(int)
+        for address in cpdomains:
+            repeat, cur_dom = address.split()
+            repeat = int(repeat)
+            cur_dom = cur_dom.split('.')
+            slice = ""
+            while cur_dom:
+                slice = cur_dom.pop() + ("." if slice else "") + slice
+                domains_freq[slice] += repeat
+        return [f"{value} {key}" for key, value in domains_freq.items()]
