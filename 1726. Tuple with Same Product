@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n ** 2) by space.
+
+An interesting combinatorics problem.
+We are primarily interested in pairs with the same product.
+Since the numbers in the list are unique, we can simply go through all the combinations of numbers and count all the possible products, counting their frequency.
+The next step is the result of the main mental work in the problem. 
+If several combinations lead to the same product, we need to 
+- multiply the ways to form the first 2 numbers (this is 2 * the number of ways to get this number) 
+- by the number of ways to form the next 2 numbers (but we remember that we cannot use the same numbers in the second pair, so it is 2 * the number of ways to form the product - 1)
+Here is the solution!
+"""
+
+class Solution:
+    def tupleSameProduct(self, nums: List[int]) -> int:
+        size = len(nums)
+        freq = defaultdict(int)
+        answer = 0
+        for i in range(size):
+            for j in range(i + 1, size):
+                freq[nums[i] * nums[j]] += 1
+
+        return sum((v * 2) * ((v - 1) * 2) if v > 1 else 0 for _, v in freq.items())
