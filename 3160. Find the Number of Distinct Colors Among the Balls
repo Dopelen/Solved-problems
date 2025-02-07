@@ -1,0 +1,57 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+If I had read the task correctly right away and hadn't spent an hour trying to solve the problem for the ranges of (x, y), then the task could have been called quite simple.
+
+The concept itself is not very complicated. 
+If a ball is already colored, remove it from the set of balls of this color and add it to the set of a new color.
+If at some point it turns out that some color has run out, reduce the number of unique colors, if it has just appeared, then increase it
+
+P.S: My original solution involved set(different indices), but if we remember that all indices are different, we actually don't need to maintain set(), just a counter of indices for each color, which speeds up the solution considerably.
+"""
+
+# Without set()
+class Solution:
+    def queryResults(self, limit: int, queries: List[List[int]]) -> List[int]:
+        answer = []
+        dist_colors = 0
+        balls = {}
+        colors = {}
+        for ball_index, color in queries:
+            if ball_index in balls:
+                prev_color = balls[ball_index]
+                colors[prev_color] -= 1
+                if colors[prev_color] == 0:
+                    del colors[prev_color]
+                    dist_colors -= 1
+            balls[ball_index] = color
+            if color in colors:
+                colors[color] += 1
+            else:
+                colors[color] = 1
+                dist_colors += 1
+            answer.append(dist_colors)
+        return answer
+
+
+# Initial Solution with set()
+class Solution:
+    def queryResults(self, limit: int, queries: List[List[int]]) -> List[int]:
+        answer = []
+        dist_colors = 0
+        balls = defaultdict(int)
+        colors = defaultdict(set)
+        
+        for ball_index, color in queries:
+            if balls[ball_index]:
+                colors[balls[ball_index]].remove(ball_index)
+                if not colors[balls[ball_index]]:
+                    dist_colors -= 1
+            if not colors[color]:
+                dist_colors += 1
+            balls[ball_index] = color
+            colors[color].add(ball_index)
+            answer.append(dist_colors)
+        
+        return answer
