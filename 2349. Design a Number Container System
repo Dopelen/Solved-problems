@@ -1,0 +1,73 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n(log(n))) complexity by time and same be space.
+
+I knew that a solution with quadratic complexity would not work, so I wrote it with a binary search right away, but it seems that it was not implied either, nevertheless it worked, only 54 times slower than the correct solution.
+"""
+
+# initial Solution
+
+class NumberContainers:
+
+    def __init__(self):
+        self.container = {}
+        self.indexes = defaultdict(list)
+        
+    def change(self, index: int, number: int) -> None:
+        if self.container.get(index):
+            self.indexes[self.container[index]].remove(index)
+        insort_left(self.indexes[number], index)
+        self.container[index] = number
+        
+    def find(self, number: int) -> int:
+        return self.indexes[number][0] if self.indexes.get(number) else -1
+
+
+
+
+# faster but still slow
+class NumberContainers:
+
+    def __init__(self):
+        self.container = {}
+        self.indexes = defaultdict(SortedSet)
+        
+    def change(self, index: int, number: int) -> None:
+        if index in self.container:
+            initial_number = self.container[index]
+            self.indexes[initial_number].remove(index)
+            if len(self.indexes[initial_number]) == 0:
+                del self.indexes[initial_number]
+        
+        self.container[index] = number
+        self.indexes[number].add(index)
+        
+    def find(self, number: int) -> int:
+        return self.indexes[number][0] if self.indexes.get(number) else -1
+
+
+
+# heappush solution
+class NumberContainers:
+
+    def __init__(self):
+        self.indexToNum = {}
+        self.numToIndices = {}
+
+    def change(self, index: int, number: int) -> None:
+        self.indexToNum[index] = number
+        if number not in self.numToIndices:
+            self.numToIndices[number] = []
+        heapq.heappush(self.numToIndices[number], index)
+
+    def find(self, number: int) -> int:
+        if number not in self.numToIndices:
+            return -1
+        pq = self.numToIndices[number]        
+        while pq:
+            currIndex = pq[0]
+            if self.indexToNum[currIndex] != number:
+                heapq.heappop(pq)
+            else:
+                return currIndex
+        return -1
