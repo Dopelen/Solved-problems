@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+interesting and pleasant task, I got stuck a couple of times and failed on some test cases, but figured out the solution.
+The problem is solved in reverse - we have a formula for how many pairs there are, and we need to subtract the number of "good pairs" from it. 
+Using secret knowledge from school algebra, we come to the idea of ​​calculating good pairs, they have the same ratio of the coordinate in the array to their value.
+Actually, this is the whole solution.
+
+"""
+class Solution:
+    def countBadPairs(self, nums: List[int]) -> int:
+        size = len(nums)
+        pairs = defaultdict(int)
+        for i in range(size):
+            pairs[nums[i] - i] += 1
+        total_pairs = (size * (size - 1)) // 2
+        good_pairs = sum((val * (val - 1)) // 2 for val in pairs.values() if val > 1)
+        return total_pairs - good_pairs
