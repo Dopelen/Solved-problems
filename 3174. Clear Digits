@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n) complexity by time and O(n) by space.
+
+Some new simple task that I haven't done yet!
+But I did a similar task last week.
+"""
+
+class Solution:
+    def clearDigits(self, s: str) -> str:
+        stack = []
+        for symbol in s:
+            if symbol.isalpha():
+                stack.append(symbol)
+            else:
+                stack.pop()
+        return "".join(stack)
