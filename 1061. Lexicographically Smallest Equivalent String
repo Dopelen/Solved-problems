@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I wrote my own workaround, but it turned out to be amazingly ineffective. 
+After that, I looked at what other options there were and found this one. 
+Quite beautiful and laconic, in which we can find a minimal lexigraphic representation of each letter.
+"""
+
+class Solution:
+    def smallestEquivalentString(self, s1: str, s2: str, baseStr: str) -> str:
+
+        def find(c):
+            i = ord(c) - ord('a')
+            while root[i] != i:
+                i = root[i]
+            return i
+
+        root = list(range(26))
+        for symbol1, symbol2 in zip(s1, s2):
+            first_pos = find(symbol1)
+            second_pos = find(symbol2)
+            if first_pos > second_pos:
+                first_pos, second_pos = second_pos, first_pos
+            root[second_pos] = first_pos
+
+        return "".join(chr(ord('a') + find(c)) for c in baseStr)
