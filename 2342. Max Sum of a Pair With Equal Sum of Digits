@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This programm has O(n) time complexity and O(n) space complexity
+
+I'm glad I figured out the solution quickly.
+We save the numbers from which each sum was obtained in the dictionary and look for the largest of these sums to answer.
+"""
+
+# After refactoring 
+
+# Initial 500 ms version
+class Solution:
+    def maximumSum(self, nums: List[int]) -> int:
+        sum_of_digits = defaultdict(list)
+        for n in nums:
+            cur_s = sum(int(symbol) for symbol in str(n))
+            sum_of_digits[cur_s].append(n)
+
+        answer = -1
+        for k, v in sum_of_digits.items():
+            if len(v) >= 2:
+                answer = max(answer, sum(sorted(v)[-2::]))
+
+        return answer
