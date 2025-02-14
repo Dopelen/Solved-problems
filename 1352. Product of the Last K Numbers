@@ -1,0 +1,87 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+I didn't meet the time limit, so I added a cache. It was still critically slow, but it counted!
+
+I didn't like my slow and lazy solution, so I spent almost 2 hours catching edge cases with zeros in my solution.
+The idea is simple.
+To speed it up, we don't need to calculate products every time. It's enough to consider 2 things.
+First - if there is a zero in the range of numbers that need to be multiplied - everything will become zero.
+Second - if we take the product of all numbers and divide it by the product of all numbers at index k, we get the product of all numbers from k to the end.
+"""
+
+# After refactoring (58ms)
+
+class ProductOfNumbers:
+    def __init__(self):
+        self.stream = [1]
+        self.zero_indices = []
+
+    def add(self, num: int) -> None:
+        if num == 0:
+            self.zero_indices.append(len(self.stream))
+            self.stream.append(1)
+        else:
+            self.stream.append(self.stream[-1] * num)
+
+    def getProduct(self, k: int) -> int:
+        if self.zero_indices and bisect_left(self.zero_indices, len(self.stream) - k) < len(self.zero_indices):
+            return 0
+        return self.stream[-1] // self.stream[-k - 1]
+
+
+# row smart version (34ms)
+class ProductOfNumbers:
+
+    def __init__(self):
+        self.stream = []
+        self.size = 0
+        self.zeroes = []
+        
+    def add(self, num: int) -> None:
+        multiplier = 1 if not self.stream or self.stream[-1] == 0 else self.stream[-1]
+        self.size += 1
+        if num == 0:
+            self.zeroes.append(self.size - 1)
+        self.stream.append(multiplier * num)
+
+    def getProduct(self, k: int) -> int:
+        if bisect_left(self.zeroes, self.size - k) != len(self.zeroes):
+            return 0
+        if k == 1:
+            if self.size == 1:
+                return self.stream[-1]
+            return self.stream[-1] // max(self.stream[-2], 1)
+        if k == self.size:
+            denominator = 1
+        elif k < self.size:
+            k += 1          
+            if self.stream[-k] == 0:
+                denominator = 1
+            else:
+                denominator = self.stream[-k]
+        else:
+            denominator = self.stream[-k]
+        return self.stream[-1] // denominator
+
+
+
+№ 3400ms
+class ProductOfNumbers:
+
+    def __init__(self):
+        self.stream = []
+        self.steam_size = 0
+        self.cache = {}
+        
+    def add(self, num: int) -> None:
+        self.stream.append(num)
+        self.steam_size += 1
+
+    def getProduct(self, k: int) -> int:
+        if (self.steam_size, k) in self.cache:
+            return self.cache[(self.steam_size, k)]
+        result = reduce(mul, self.stream[-k:], 1)
+        self.cache[(self.steam_size, k)] = result
+        return reduce(mul, self.stream[-k:], 1)
