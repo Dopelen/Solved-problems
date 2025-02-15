@@ -1,0 +1,61 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2 ** n) complexity by time and O(2 ** n) by space.
+
+I wrote a wasteful and rather slow solution. But overall it works.
+"""
+
+class Solution:
+    def punishmentNumber(self, n: int) -> int:
+        
+        def split_number(number, index, current, result):
+            if index == len(number):
+                result.append(current.copy())
+                return
+
+            for i in range(index + 1, len(number) + 1):
+                fragment = number[index:i]
+                current.append(int(fragment))
+                split_number(number, i, current, result)
+                current.pop()
+
+            return result
+
+        answer = 0
+        for value in range(1, n + 1):
+            square = value ** 2
+            combinations = split_number(str(square), 0, [], [])
+            for comb in combinations:
+                check_sum = sum(comb)
+                if check_sum == value:
+                    answer += square
+                    break
+        
+        return answer
+
+# Faster version
+class Solution:
+    
+    def canPartition(self, num, target):
+        if target < 0 or num < target:
+            return False
+
+        if num == target:
+            return True
+
+        return (
+            self.canPartition(num // 10, target - num % 10)
+            or self.canPartition(num // 100, target - num % 100)
+            or self.canPartition(num // 1000, target - num % 1000)
+        )
+
+    def punishmentNumber(self, n):
+        p_num = 0
+
+        for curr_num in range(1, n + 1):
+            sq_num = curr_num * curr_num
+
+            if self.canPartition(sq_num, curr_num):
+                p_num += sq_num
+
+        return p_num
