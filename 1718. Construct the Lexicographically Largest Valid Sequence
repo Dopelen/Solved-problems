@@ -1,0 +1,44 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2 ** n) complexity by time and O(2 ** n) by space.
+
+A very difficult task for me because of the huge amount of logic, while I roughly understood for myself, an approximate solution path, it clearly took more than an hour.
+And the point is not even that it is difficult, but in the large number of various little things:
+how to track the numbers used, 
+how to return them in case you need to roll back changes, 
+how to carry out this rollback... 
+Initially I used a sorted array of numbers for this, but when it came to backtracking, I almost went crazy.
+"""
+
+class Solution:
+    def constructDistancedSequence(self, n: int) -> List[int]:
+        size = 2 * n - 1
+        answer = [0] * size
+        visited = [False] * (n + 1)
+
+        def backtrack(index: int) -> bool:
+            if index >= size:
+                return True
+            if answer[index] != 0:
+                return backtrack(index + 1)
+            for i in range(n, 0, -1):
+                if visited[i]:
+                    continue
+                if i > 1:
+                    if index + i >= size or answer[index + i] != 0:
+                        continue
+                    answer[index] = answer[index + i] = i
+                else:
+                    answer[index] = i
+                visited[i] = True
+                if backtrack(index + 1):
+                    return True
+                if i > 1:
+                    answer[index] = answer[index + i] = 0
+                else:
+                    answer[index] = 0
+                visited[i] = False
+            return False
+
+        backtrack(0)
+        return answer
