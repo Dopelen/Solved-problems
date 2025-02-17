@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O((2 ** n) * n!) complexity by time and O((2 ** n) * n!) by space.
+
+Testing your diligence or how well you know itertools :)
+
+"""
+
+# With itertools
+class Solution:
+    def numTilePossibilities(self, tiles: str) -> int:
+        all_combinations = set()
+        for i in range(1, len(tiles) + 1):
+            all_combinations |= set(permutations(tiles, i))
+        return len(all_combinations)
+
+
+# withot itertool solution
+#https://leetcode.com/problems/letter-tile-possibilities/solutions/774815/python-3-backtracking-no-set-no-itertool-5m46/
