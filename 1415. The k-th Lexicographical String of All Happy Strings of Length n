@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(3 ** n) complexity by time and O(3 ** n) by space.
+
+Decided to choose a simple and clear solution.
+We simply construct all sequences recursively, sort them, and output the one we need by index
+"""
+
+class Solution:
+    def getHappyString(self, n: int, k: int) -> str:
+        all_happy = []
+
+        def construct_happy(cur_list):
+            nonlocal n
+            if len(cur_list) == n:
+                all_happy.append("".join(cur_list))
+            else:
+                for symbol in "abc":
+                    if not cur_list or cur_list[-1] != symbol:
+                        construct_happy(cur_list + [symbol])
+
+        construct_happy([])
+        all_happy.sort()
+        return all_happy[k - 1] if len(all_happy) >= k else ""
+
+
+# O(n) version
+# https://leetcode.com/problems/the-k-th-lexicographical-string-of-all-happy-strings-of-length-n/solutions/6439753/combinatorics-binary-expressionc-beats-1-a6k7/
