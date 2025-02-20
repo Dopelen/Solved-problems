@@ -1,1 +1,18 @@
-""""""
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+A very cool task, more for attentiveness than for combinatorics :)
+The limitation where the upper limit n is equal to 16 lines, and this is the maximum length, 
+guarantees us that we will definitely get an answer by generating any random n lines, where n is the maximum equal to 16!
+"""
+
+class Solution:
+    def findDifferentBinaryString(self, nums: List[str]) -> str:
+        size = len(nums)
+        nums = set(nums)
+
+        for i in range(size + 1):
+            binary_string = ''.join(['1' if j < i else '0' for j in range(size)])
+            if binary_string not in nums:
+                return binary_string
