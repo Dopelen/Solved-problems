@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2 ** n) complexity by time and O(2 ** n) by space.
+
+Solved by simple recursive construction of all possible strings
+"""
+
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        answer = set()
+        symbols = n * 2
+
+        def construct(cur_s, left, opened=0, closed=0):
+            if (closed > opened):
+                return
+            if left == 0:
+                if closed == opened:
+                    answer.add("".join(cur_s))
+                return
+            construct(cur_s + [")"], left - 1, opened, closed + 1)
+            construct(cur_s + ["("], left - 1, opened + 1, closed)
+
+        construct([], symbols)
+        return list(answer)
