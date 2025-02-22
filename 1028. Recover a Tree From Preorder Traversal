@@ -1,0 +1,8 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I'm very sick, so for now I don't have my code.
+"""
+
+# https://leetcode.com/problems/recover-a-tree-from-preorder-traversal/solutions/6453706/beats-100-recover-binary-tree-from-preorder-traversal-dfs-solution/?envType=daily-question&envId=2025-02-22
