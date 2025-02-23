@@ -1,0 +1,8 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n) complexity by time and O(n) by space.
+
+I'm still very sick.
+"""
+
+# https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/solutions/748216/python3-solution-with-a-detailed-explanation-construct-binary-tree-from/?envType=daily-question&envId=2025-02-23
