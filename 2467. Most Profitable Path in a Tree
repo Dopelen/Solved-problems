@@ -1,0 +1,8 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(v + e) complexity by time and O(v + e) by space.
+
+I dream of returning to the world where I solve programming problems, but for now I'm in a world where I have 39.2 for the fifth day in a row
+"""
+
+# https://leetcode.com/problems/most-profitable-path-in-a-tree/solutions/6461295/beats-100-most-profitable-path-in-a-tree-dfs-solution/?envType=daily-question&envId=2025-02-24
