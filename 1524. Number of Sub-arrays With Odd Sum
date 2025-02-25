@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Tomorrow I will probably be able to return to fully solving the problems. Today's is not very difficult.
+"""
+
+class Solution:
+    def numOfSubarrays(self, arr: List[int]) -> int:
+        oddCount, prefixSum, mod = 0, 0, 1_000_000_007
+        for a in arr:
+            prefixSum += a
+            oddCount += prefixSum % 2
+        oddCount += (len(arr) - oddCount) * oddCount
+        return oddCount % mod
