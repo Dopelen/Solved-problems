@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+The main trick is to use the difference between the maximum and minimum sum to get the answer, otherwise the code will be 5 times bigger )
+"""
+
+class Solution:
+    def maxAbsoluteSum(self, nums):
+        sum, minSum, maxSum = 0, 0, 0
+        for num in nums:
+            sum += num
+            maxSum = max(maxSum, sum)
+            minSum = min(minSum, sum)
+        return abs(maxSum - minSum)
