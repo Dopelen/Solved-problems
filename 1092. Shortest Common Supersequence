@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n ** 2) by space.
+
+The logic of the solution itself is not that complicated, but as often happens in dynamic programming problems, the main problem is to collect this programming in your head.
+First, we create a dynamic programming table, which stores for each substring of the first and second lines their largest common part.
+Then we iterate over the lines in reverse order to restore the answer, here we check both the coincidence of characters and in accordance with the dp table, we add elements to the answer.
+
+Unfortunately I managed to solve this problem with all the hints that exist
+"""
+
+class Solution:
+    def shortestCommonSupersequence(self, str1: str, str2: str) -> str:
+        first_len, second_len = len(str1), len(str2)
+        dp = [[0] * (second_len + 1) for _ in range(first_len + 1)]
+        for i in range(1, first_len + 1):
+            for j in range(1, second_len + 1):
+                if str1[i - 1] == str2[j - 1]:
+                    dp[i][j] = 1 + dp[i - 1][j - 1]
+                else:
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+
+        i, j = first_len, second_len
+        result = []
+        while i > 0 and j > 0:
+            if str1[i - 1] == str2[j - 1]:
+                result.append(str1[i - 1])
+                i -= 1
+                j -= 1
+            elif dp[i - 1][j] > dp[i][j - 1]:
+                result.append(str1[i - 1])
+                i -= 1
+            else:
+                result.append(str2[j - 1])
+                j -= 1
+
+        while i > 0:
+            result.append(str1[i - 1])
+            i -= 1
+
+        while j > 0:
+            result.append(str2[j - 1])
+            j -= 1
+
+        return ''.join(result[::-1])
