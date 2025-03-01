@@ -1,0 +1,35 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and same by space.
+
+Not a difficult task. 
+We definitely have to make a replacement if the mirror cell is different. 
+I check for vertical and horizontal and take the minimum.
+"""
+
+# Main idea
+class Solution:
+    def minFlips(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        horizontal = vertical = 0
+
+        for y in range(rows):
+            for x in range(cols//2):
+                if grid[y][x] != grid[y][~x]:
+                    horizontal += 1
+
+        for y in range(rows//2):
+            for x in range(cols):
+                if grid[y][x] != grid[~y][x]:
+                    vertical += 1
+
+        return min(horizontal, vertical)
+
+# After refactoring
+class Solution:
+    def minFlips(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        horizontal = sum(grid[y][x] != grid[y][~x] for y in range(rows) for x in range(cols // 2))
+        vertical = sum(grid[y][x] != grid[~y][x] for y in range(rows // 2) for x in range(cols))
+        
+        return min(horizontal, vertical)
