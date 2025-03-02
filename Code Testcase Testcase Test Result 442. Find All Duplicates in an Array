@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program have O(n) complexity by time and O(n) by space.
+
+I enjoyed thinking about this problem, but I didn't enjoy debugging it. I always get confused when values ​​inside an array become indexes of the same array. But never mind - I managed)
+The main trick is to represent each position of the array not only as a number that is stored there, but also as a pointer to whether this number was found in this array before, thanks to the constraints in the condition, we can do this.
+If we encounter the number 8, then we multiply the number in the cell under index 8 by -1, a negative number will indicate that this number was already in the array before, 
+and the next time we access this index - we can check whether it was before or not, simply by looking at the value of the number at position 8.
+"""
+
+class Solution:
+    def findDuplicates(self, nums: List[int]) -> List[int]:
+        answer = []
+        size = len(nums)
+        for i in range(size):
+            if nums[abs(nums[i]) - 1] < 0:
+                answer.append(abs(nums[i]))
+            else:
+                nums[abs(nums[i]) - 1] *= -1
+        return answer
