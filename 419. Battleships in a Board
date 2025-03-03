@@ -1,0 +1,46 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n ** 2) by space.
+
+A simple version of the island counting problem.
+Only here we can check 2 directions for each cell that is a ship.
+"""
+
+
+# After refactoring
+class Solution:
+    def countBattleships(self, board: List[List[str]]) -> int:
+        rows, cols = len(board), len(board[0])
+        ships = 0
+
+        for y in range(rows):
+            for x in range(cols):
+                if board[y][x] == 'X':
+                    if (y == 0 or board[y-1][x] != 'X') and (x == 0 or board[y][x-1] != 'X'):
+                        ships += 1
+
+        return ships
+
+
+# Row version
+class Solution:
+    def countBattleships(self, board: List[List[str]]) -> int:
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        rows, cols = len(board), len(board[0])
+        visited = set()
+        ships = 0
+
+        def find_ship(y, x):
+            if (0 <= y < rows) and (0 <= x < cols) and (board[y][x] == 'X') and ((y, x) not in visited):
+                visited.add((y, x))
+                for dy, dx in directions:
+                    find_ship(y + dy, x + dx)
+            visited.add((y, x))
+
+        for y in range(rows):
+            for x in range(cols):
+                if board[y][x] == 'X' and (y, x) not in visited:
+                    ships += 1
+                    find_ship(y, x)
+
+        return ships
