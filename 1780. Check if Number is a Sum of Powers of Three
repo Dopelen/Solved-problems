@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(n) by space.
+
+A strange problem, more mathematical than programming. 
+I looked at the hints and basically quickly figured out how to write it. 
+You just need to understand the fact that 2 in the tertiary power of numeration when converting from decimal is a blocking factor, because it means we must use one of the powers of three more than once, and according to the condition they must be unique.
+"""
+
+class Solution:
+    def checkPowersOfThree(self, n: int) -> bool:
+        ternary = ""
+        while n > 0:
+            remainder = n % 3
+            ternary = str(remainder) + ternary
+            n = n // 3
+        return "2" not in ternary
