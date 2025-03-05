@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+Again, a math problem on an increasing sequence.
+I just looked at the increase in results with increasing minutes and made a formula.
+"""
+
+class Solution:
+    def coloredCells(self, n: int) -> int:
+        return 2 * ((n - 1) ** 2) + 2 * (n - 1) + 1
