@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n * m) complexity by time and O(n * m) by space.
+
+A pleasant task. Which does not require any special knowledge of complex data structures, only matrices and prefix sums.
+If we look closely at the shape of the hourglass, it is a cell in the middle and three symbols above and below. 
+To speed up the calculation, we just need to count the threes in each row, and then add up each configuration of the "hourglass".
+"""
+
+class Solution:
+    def maxSum(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        biggest_sum = 0
+        sum_matrix = []
+
+        for row in range(rows):
+            cur_sum = sum(grid[row][:2])
+            sum_row = []
+            for col in range(2, cols):
+                cur_sum += grid[row][col]
+                sum_row.append(cur_sum)
+                cur_sum -= grid[row][col - 2]
+            sum_matrix.append(sum_row)
+
+        for i in range(rows - 2):
+            for j in range(cols - 2):
+                biggest_sum = max(biggest_sum, sum_matrix[i][j] + sum_matrix[i + 2][j] + grid[i + 1][j + 1] )
+
+        return biggest_sum
