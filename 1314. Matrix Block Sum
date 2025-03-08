@@ -1,0 +1,84 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m * k) complexity by time and O(m * n) by space.
+
+I wrote it using brute force, but it seems that this is not the most optimal way, so I thought about it.
+Quite quickly I realized that using prefix sums can speed up the code astronomically.
+If we need the sum of horizontal slices, we can simply take the starting point of the slice and subtract the final one from it, 
+this will give us the sum inside the slice and we will not have to recalculate anything 1000 times.
+
+But if you think about it even more, we can calculate the prefix matrix not by rows, but by rectangles!
+Which will reduce even more operations, allowing us to get the value of each cell for a constant
+"""
+
+# After super thinking O(n * m) (15ms)
+class Solution:
+    def matrixBlockSum(self, mat: List[List[int]], k: int) -> List[List[int]]:
+        rows, cols = len(mat), len(mat[0])
+        prefix = [[0] * (cols + 1) for _ in range(rows + 1)]
+        
+        for r in range(1, rows + 1):
+            row_sum = 0
+            for c in range(1, cols + 1):
+                row_sum += mat[r - 1][c - 1]
+                prefix[r][c] = prefix[r - 1][c] + row_sum
+        
+        def get_sum(r1, c1, r2, c2):
+            return prefix[r2 + 1][c2 + 1] - prefix[r1][c2 + 1] - prefix[r2 + 1][c1] + prefix[r1][c1]
+        
+        answer = [[0] * cols for _ in range(rows)]
+        for r in range(rows):
+            for c in range(cols):
+                r1, c1 = max(0, r - k), max(0, c - k)
+                r2, c2 = min(rows - 1, r + k), min(cols - 1, c + k)
+                answer[r][c] = get_sum(r1, c1, r2, c2)
+        
+        return answer
+
+
+# After thinking! O(n * m * k) (200ms)
+class Solution:
+    def matrixBlockSum(self, mat: List[List[int]], k: int) -> List[List[int]]:
+        rows, cols = len(mat), len(mat[0])
+        answer = []
+
+        def calculate_cell(r_, c_):
+            cur_sum = 0
+            for i in range(max(0, r_ - k), min(r_ + k + 1, rows)):
+                cur_sum += mat[i][min(c_ + k, cols - 1)] - (mat[i][c_ - k - 1] if (c_ - k) > 0 else 0)
+            return cur_sum
+
+        for row in range(rows):
+            for col in range(cols):
+                if col != 0:
+                    mat[row][col] = mat[row][col - 1] + mat[row][col]
+
+        for r in range(rows):
+            cur_row = []
+            for c in range(cols):
+                cur_row.append(calculate_cell(r, c))
+            answer.append(cur_row)
+
+        return answer
+
+
+# Initial one O(n * m * k ** 2) (1200ms)
+class Solution:
+    def matrixBlockSum(self, mat: List[List[int]], k: int) -> List[List[int]]:
+        rows, cols = len(mat), len(mat[0])
+        answer = []
+
+        def calculate_cell(r, c):
+            cur_sum = 0
+            for i in range(max(0, r - k), min(r + k + 1, rows)):
+                cur_sum += sum(mat[i][max(0, c - k):min(c + k + 1, cols)])
+            return cur_sum
+
+        for row in range(rows):
+            cur_row = []
+            for col in range(cols):
+                cur_row.append(calculate_cell(row, col))
+            answer.append(cur_row)
+
+        return answer
+
