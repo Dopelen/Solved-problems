@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Enjoyed the solution, came up with it while dozing on a sweet Sunday afternoon.
+The solution is as follows:
+1. Extend our sequence to take into account the cases that started at the end of the list and should capture the first elements of the circle, having passed a full cycle.
+2. Count the successively alternating elements. 
+If the length should be 3, as soon as we reach the alternation of 3 elements, we can select a group (add +1 to the answer).
+If the alternation continues, we can select another group, simply starting the current one from the second element!
+This allows us to solve the problem in linear time, without recalculating the sequences anew.
+"""
+
+class Solution:
+    def numberOfAlternatingGroups(self, colors: List[int], k: int) -> int:
+        colors += colors[:k - 1]
+        size = len(colors) - 1
+        current_group = 1
+        alternating = index = 0
+        while index < size:
+            if colors[index] != colors[index + 1]:
+                current_group += 1
+                if current_group >= k:
+                    alternating += 1
+            else:
+                current_group = 1
+            index += 1
+        return alternating
