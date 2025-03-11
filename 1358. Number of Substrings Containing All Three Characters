@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+A greatly simplified version of yesterday's task.
+Just move the window and count the number of substrings we can form at each step
+"""
+
+class Solution:
+    def numberOfSubstrings(self, s: str) -> int:
+        size = len(s)
+        symbols_map = defaultdict(int)
+        answer = left = 0
+        
+        for right in range(size):
+            symbols_map[s[right]] += 1
+            
+            while len(symbols_map) == 3:
+                answer += size - right
+                symbols_map[s[left]] -= 1
+                if symbols_map[s[left]] == 0:
+                    del symbols_map[s[left]]
+                left += 1
+                
+        return answer
