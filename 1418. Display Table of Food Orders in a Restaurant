@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(max(n, m * log(m)) * j * log(j)) complexity by time and O(m * j) by space, where n in number of orders, m is number of tables and j is number of dishes.
+
+Not a very difficult task, but quite painstaking if you try to optimize it. 
+So many data transformations and sorting by two axes did not fit well in my head, so I had to suffer for about half an hour.
+"""
+
+class Solution:
+    def displayTable(self, orders: List[List[str]]) -> List[List[str]]:
+        tables = dict()
+        dishes = set()
+        for _, table, dish in orders:
+            dishes.add(dish)
+            table = int(table)
+            if not tables.get(table):
+                tables[table] = defaultdict(int)
+            tables[table][dish] += 1
+
+        dish_order = sorted(list(dishes))
+        map_pos = {value:index + 1 for index, value in enumerate(dish_order)}
+        display_table = [["Table"] + dish_order]
+        for position in sorted(tables):
+            new_line = [str(position)] + ["0"] * len(dishes)
+            for food in tables[position]:
+                new_line[map_pos[food]] = str(tables[position][food])
+            display_table.append(new_line)
+
+        return display_table
