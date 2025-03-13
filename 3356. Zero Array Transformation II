@@ -1,0 +1,62 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * qlog(q)) complexity by time and O(n) by space.
+
+I wrote the "all_zeroed" function pretty quickly, but I had to think hard about how to use binary search. 
+Not the most optimal solution, and that was quite difficult for me.
+"""
+
+class Solution:
+    def minZeroArray(self, nums: List[int], queries: List[List[int]]) -> int:
+        size = len(nums)
+
+        def all_zeroed_at_step(step):
+            value_change = [0] * (size + 1)
+            for i in range(step):
+                left, right, val = queries[i]
+                value_change[left] += val
+                value_change[right + 1] -= val
+            curr_val = 0
+            for i in range(size):
+                curr_val += value_change[i]
+                if curr_val < nums[i]:
+                    return False
+            return True
+
+        if all(x == 0 for x in nums):
+            return 0
+        left, right = 1, len(queries)
+        if not all_zeroed_at_step(right):
+            return -1
+        while left < right:
+            mid = left + (right - left) // 2
+            if all_zeroed_at_step(mid):
+                right = mid
+            else:
+                left = mid + 1
+        return left
+
+
+# An original and better way to go around from the end and check only if necessary
+class Solution:
+    def minZeroArray(self, nums: List[int], queries: List[List[int]]) -> int:
+        size_nums = len(nums)
+        size_queries = len(queries)
+
+        delta = [0] * (size_nums + 1)
+        q = queries[::-1]
+        current_val = 0
+
+        for index, processed_num in enumerate(nums):
+            current_val += delta[index]
+            while q and current_val < processed_num:
+                left, right, value = q.pop()
+                if right >= index:
+                    if left > index:
+                        delta[left] += value
+                    else:
+                        current_val += value
+                    delta[right + 1] -= value
+            if current_val < processed_num:
+                return -1
+        return size_queries - len(q)
