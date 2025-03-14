@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+I wrote the basic logic in 5 minutes, and then spent exactly half an hour trying to correctly configure the binary search boundary update.
+"""
+
+class Solution:
+    def maximumCandies(self, candies: List[int], k: int) -> int:
+        size = len(candies)
+        candies.sort()
+        left, right = 0, sum(candies) // k
+
+        def count_piles(mid):
+            if mid == 0:
+                return float('inf')
+            total = 0
+            for candy in candies:
+                total += candy // mid
+            return total
+
+        while left < right:
+            mid = (right + left + 1) // 2
+            if count_piles(mid) >= k:
+                left = mid
+            else:
+                right = mid - 1
+
+        return left
