@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(max(nums))) complexity by time and O(n) by space.
+
+I spent half an hour fiddling with a binary search error, and then it turned out that I had added an extra cycle to the check function, which caused me to crash in TTL.
+Then I spent another half an hour thinking about why this greedy implementation works. 
+In general, it turned out to be quite exhausting.
+"""
+
+class Solution:
+    def minCapability(self, nums: List[int], k: int) -> int:
+        size = len(nums)
+        left, right = min(nums), max(nums)
+
+        def check(val):
+            len_of_subseq = index = 0
+            while index < size:
+                if nums[index] <= val:
+                    len_of_subseq += 1
+                    index += 2
+                else:
+                    index += 1
+            return len_of_subseq >= k
+
+
+        while left < right:
+            mid = (left + right) // 2
+            if check(mid):
+                right = mid
+            else:
+                left = mid + 1
+
+        return left
