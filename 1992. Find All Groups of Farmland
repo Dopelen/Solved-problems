@@ -1,0 +1,54 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+Didn't do anything fancy, just walked through the matrix and added the visited cells to the rectangle coordinate generator.
+"""
+
+class Solution:
+    def findFarmland(self, land: List[List[int]]) -> List[List[int]]:
+        rows, cols = len(land), len(land[0])
+        visited = set()
+        all_ccords = []
+
+        def calculate_land(r, c):
+            initial_r, initial_c = r, c
+            while c < cols and land[r][c] == 1:
+                c += 1
+            c -= 1
+            while r < rows and land[r][c] == 1:
+                r += 1
+            r -= 1
+            visited.update((ro, co) for ro in range(initial_r, r + 1) for co in range(initial_c, c + 1))
+            all_ccords.append([initial_r, initial_c, r, c])
+
+        for row in range(rows):
+            for col in range(cols):
+                if land[row][col] and (row, col) not in visited:
+                    calculate_land(row, col)
+
+        return all_ccords
+
+
+# The optimal version in place, which I spied when I had already sent mine. 
+# Here, playing with the fact that the completed sections will be either on the left or on top, we solve the problem of re-counting already completed cells.
+
+class Solution:
+    def findFarmland(self, land: List[List[int]]) -> List[List[int]]:
+        m, n = len(land), len(land[0])
+        ans = []
+        for i in range(m):
+            for j in range(n):
+                if (
+                    land[i][j] == 0
+                    or (j > 0 and land[i][j - 1] == 1)
+                    or (i > 0 and land[i - 1][j] == 1)
+                ):
+                    continue
+                x, y = i, j
+                while x + 1 < m and land[x + 1][j] == 1:
+                    x += 1
+                while y + 1 < n and land[x][y + 1] == 1:
+                    y += 1
+                ans.append([i, j, x, y])
+        return ans
