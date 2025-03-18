@@ -1,0 +1,52 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I was a bit slow at the very beginning, but then I came to the concept of a sliding window and quickly wrote everything.
+"""
+
+# 
+class Solution:
+    def longestNiceSubarray(self, nums: List[int]) -> int:
+        current_subseq = deque()
+        size = len(nums)
+        left = right = 0
+        answer = 1
+
+        while (left < size) and (right < size):
+            conflict = False
+            if not current_subseq:
+                current_subseq.append(nums[right])
+                right += 1
+            else:
+                for elem in current_subseq:
+                    if (elem & nums[right]):
+                        current_subseq.popleft()
+                        conflict = True
+                        break
+                if conflict:
+                    left += 1
+                else:
+                    current_subseq.append(nums[right])
+                    right += 1
+                answer = max(answer, len(current_subseq))
+                if answer == 30:
+                    return answer
+
+        return max(answer, len(current_subseq))
+
+
+# An option that I tried to come up with myself, but couldn't.
+# O(1) by space
+class Solution:
+    def longestNiceSubarray(self, nums: List[int]) -> int:
+        left = 0
+        mask = 0
+        max_len = 0
+        for right in range(len(nums)):
+            while mask & nums[right]:
+                mask ^= nums[left]
+                left += 1
+            mask |= nums[right]
+            max_len = max(max_len, right - left + 1)
+        return max_len
