@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Solved this problem right away. 
+The thing is, we can't flip a number if it wasn't flipped in the left-to-right iteration. 
+No matter how many extra flips it brings, the only way to flip a number is to do it the first time you encounter it.
+"""
+
+class Solution:
+    def minOperations(self, nums: List[int]) -> int:
+        size = len(nums)
+        flip_count = 0
+        for index in range(size - 2):
+            if not nums[index]:
+                nums[index] = not nums[index]
+                nums[index + 1] = not nums[index + 1]
+                nums[index + 2] = not nums[index + 2]
+                flip_count += 1
+        
+        return flip_count if (nums[-1] and nums[-2]) else -1
