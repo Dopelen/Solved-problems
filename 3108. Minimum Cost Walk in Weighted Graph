@@ -1,0 +1,43 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * e * q) complexity by time and O(n) by time.
+
+I understood the task itself, and even some concept appeared, but difficulties arose with writing the code.
+I understood that we need to compose the connected nodes and understood that we need to support their minimum AND, but I couldn’t write a general structure that does this in a reasonable time.
+The main step that I couldn’t make in my brain is that the AND operation is monotonous and the more edges we visit, the smaller the final result. 
+Thus, we just need to visit the AND of all connected nodes to get the minimum, and a repeated visit does not affect the result because "А AND А = А"
+"""
+
+# https://leetcode.com/problems/minimum-cost-walk-in-weighted-graph/solutions/6557496/easy-sol-with-union-find-python-c-java-b-re47/
+
+class Solution:
+    def minimumCost(self, n: int, edges: List[List[int]], query: List[List[int]]) -> List[int]:
+        parent = list(range(n))
+        
+        min_path_cost = [-1] * n
+        
+        def find_root(node: int) -> int:
+            if parent[node] != node:
+                parent[node] = find_root(parent[node])
+            return parent[node]
+        
+        for source, target, weight in edges:
+            source_root = find_root(source)
+            target_root = find_root(target)
+            
+            min_path_cost[target_root] &= weight
+            
+            if source_root != target_root:
+                min_path_cost[target_root] &= min_path_cost[source_root]
+                parent[source_root] = target_root
+        
+        result = []
+        for start, end in query:
+            if start == end:
+                result.append(0)
+            elif find_root(start) != find_root(end):
+                result.append(-1)
+            else:
+                result.append(min_path_cost[find_root(start)])
+                
+        return result
