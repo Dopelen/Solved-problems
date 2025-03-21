@@ -1,0 +1,62 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+I quickly wrote the code and then debugged it for a while.
+The main difficulty is to write a mechanism for breaking the cycle in recipes.
+When I sent it to the neural network, it said that my approach is not very optimal, referring to the Kahn algorithm. Well...
+"""
+
+class Solution:
+    def findAllRecipes(self, recipes: List[str], ingredients: List[List[str]], supplies: List[str]) -> List[str]:
+        size = len(recipes)
+        recipies_hash = {recipes[i]: set(ingredients[i]) for i in range(size)}
+        supplies_hash = set(supplies)
+        can_be_cooked = []
+
+        def find_ingredients(result, components, not_found):
+            if (components is None) or (any(elem in not_found for elem in components)):
+                return False
+
+            for component in components:
+                if component not in supplies_hash:
+                    not_found.add(component)
+                    if not (find_ingredients(component, recipies_hash.get(component), not_found)):
+                        return False
+                    not_found.remove(component)
+
+            supplies_hash.add(result)
+            return True
+
+        for k, v in recipies_hash.items():
+            if find_ingredients(k, v, set()):
+                can_be_cooked.append(k)
+
+        return can_be_cooked
+
+
+# Khan algo
+# It's beautiful, but I didn't think of it this time.
+# Not mine
+
+class Solution:
+    def findAllRecipes(self, recipes: List[str], ingredients: List[List[str]], supplies: List[str]) -> List[str]:
+        indeg = defaultdict(int)
+        graph = defaultdict(list)
+        for r, ing in zip(recipes, ingredients):
+            indeg[r] = len(ing)
+            for i in ing:
+                graph[i].append(r)
+
+        ans = []
+        queue = deque(supplies)
+        recipes = set(recipes)
+        while queue:
+            x = queue.popleft()
+            if x in recipes:
+                ans.append(x)
+            for xx in graph[x]:
+                indeg[xx] -= 1
+                if indeg[xx] == 0:
+                    queue.append(xx)
+        return ans
