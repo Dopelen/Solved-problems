@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I initially wrote some very complicated system of bypassing and constructing based on the Kahn algorithm, which I learned yesterday, which in the end did not work properly.
+Than I deleted half of the code, got together and wrote much more beautifully and briefly (I am pleased with myself). 
+Once a system for calculating groups is formed in the head, everything else is implementation details.
+"""
+
+class Solution:
+    def countCompleteComponents(self, n: int, edges: List[List[int]]) -> int:
+        hash_adjust = defaultdict(set)
+        for node_1, node_2 in edges:
+            hash_adjust[node_1].add(node_2)
+            hash_adjust[node_2].add(node_1)
+
+        processed = set()
+        connected_groups = 0
+        for index, group in hash_adjust.items():
+            if index in processed:
+                continue
+            full_schema = group | {index}
+            if not (any((hash_adjust[elem] | {elem}) != full_schema for elem in group)):
+                connected_groups += 1
+            processed |= full_schema
+
+        return connected_groups + (n - len(processed))
