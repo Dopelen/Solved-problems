@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O() complexity by time and by space.
+
+It was a week of bin search, now it's a week of graph traversal :)
+Sat with this task for 2 hours, and was very close to a completely independent solution, 
+but I screwed up with the rule for accounting for visited nodes and calculating the final value of the number of paths,
+so I had to ask the neural network what was wrong. In the end, I corrected exactly two lines and sent the correct answer
+"""
+
+class Solution:
+    def countPaths(self, n: int, roads: List[List[int]]) -> int:
+        adj_list = [[] for _ in range(n)]
+
+        for coming_from, travel_to, time in roads:
+            adj_list[coming_from].append((travel_to, time))
+            adj_list[travel_to].append((coming_from, time))
+
+
+        dist = [math.inf] * n
+        dist[0] = 0
+        shortest_ways_to_node = [0] * n
+        shortest_ways_to_node[0] = 1
+        heap = [(0, 0)]
+
+        while heap:
+            current_time, current_node = heapq.heappop(heap)
+            if current_time > dist[current_node]:
+                continue
+            for neighbor, time in adj_list[current_node]:
+                new_time = current_time + time
+                if new_time < dist[neighbor]:
+                    dist[neighbor] = new_time
+                    shortest_ways_to_node[neighbor] = shortest_ways_to_node[current_node]
+                    heapq.heappush(heap, (new_time, neighbor))
+
+                elif new_time == dist[neighbor]:
+                    shortest_ways_to_node[neighbor] = (shortest_ways_to_node[neighbor] + shortest_ways_to_node[current_node]) % (10**9 + 7)
+
+        return shortest_ways_to_node[n - 1]
