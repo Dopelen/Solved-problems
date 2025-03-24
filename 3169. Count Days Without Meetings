@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(1) by space.
+
+I really enjoyed solving this problem. 
+I first sat for 10 minutes and thought about the main edge cases, and then wrote the entire code in 8 minutes, which passed all the tests. 
+It's rare for me when everything comes together methodically and consistently.
+"""
+
+class Solution:
+    def countDays(self, days: int, meetings: List[List[int]]) -> int:
+        meetings.sort(key=lambda x: x[0])
+        free_days = days
+        start_interval, end_interval = meetings[0]
+
+        for start, end in meetings[1:]:
+            if start <= end_interval:
+                end_interval = max(end, end_interval)
+            else:
+                free_days -= end_interval - start_interval + 1
+                start_interval, end_interval = start, end
+
+        free_days -= end_interval - start_interval + 1
+        return free_days
