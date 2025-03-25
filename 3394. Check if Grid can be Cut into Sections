@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This programm has O(n * log(n)) complexity by time and O(n) by space.
+
+I immediately understood the concept of the solution, because yesterday I solved a problem on intervals, and this problem fit well with yesterday's solution.
+Essentially, we just need to sort the horizontal and vertical coordinates of the rectangles and find the points where different rectangles do not overlap each other.
+If at least in one plane it is possible to find 2 such points, then we return a positive answer.
+"""
+
+class Solution:
+    def checkValidCuts(self, n: int, rectangles: List[List[int]]) -> bool:
+        x_intervals = []
+        y_intervals = []
+
+        for x_start, y_start, x_end, y_end in rectangles:
+            x_intervals.append((x_start, x_end))
+            y_intervals.append((y_start, y_end))
+
+        def find_cut_number(intervals):
+            intervals.sort()
+            end_interval = intervals[0][1]
+            cut_number = 0
+            for start, end in intervals[1:]:
+                if start < end_interval:
+                    end_interval = max(end, end_interval)
+                else:
+                    cut_number += 1
+                    end_interval = end
+                    if cut_number == 2:
+                        return True
+            return False
+
+        return find_cut_number(x_intervals) or find_cut_number(y_intervals)
