@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * len(n)) complexity by time and O(n) by space.
+
+I was exhausted with this problem, I wrote a binary search for two hours, and then I realized that when shifting the boundaries, the optimal solution can be "jumped over" and lost, because the function is not monotonous. 
+I had to rewrite it.
+"""
+
+class Solution:
+    def minOperations(self, grid: List[List[int]], x: int) -> int:
+        flatten_list = []
+        for row in grid:
+            flatten_list.extend(row)
+        first_elem = flatten_list[0]
+        for elem in flatten_list:
+            if (elem - first_elem) % x:
+                return -1
+        min_val = min(flatten_list)
+
+        base = min_val % x
+        normalized = [(elem - base) // x for elem in flatten_list]
+        median = sorted(normalized)[len(normalized) // 2]
+
+        operations = 0
+        for num in normalized:
+            operations += abs(num - median)
+
+        return operations
