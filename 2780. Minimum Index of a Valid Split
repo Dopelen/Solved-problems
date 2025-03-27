@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+I almost died while solving all this, and I really went crazy. 
+I wrote 100 lines of code with a traversal from both sides and heaps to support maximums, then I erased everything, wrote a simple implementation and flew into TTL.
+We are essentially interested in only one dominant element. BECAUSE IT IS THERE ONLY ONE. IT IS WRITTEN AT THE BOTTOM OF THE PROBLEM IN THE TIME LIMITS, AND I DIDN'T READ THIS PART!
+"""
+
+# Right Solution
+class Solution:
+    def minimumIndex(self, nums: List[int]) -> int:
+        total_counter = Counter(nums)
+        dominant, max_freq = total_counter.most_common(1)[0]
+        if max_freq * 2 <= len(nums):
+            return -1
+        forward_count = 0
+        for index, elem in enumerate(nums):
+            if elem == dominant:
+                forward_count += 1
+                if (forward_count * 2 > (index + 1)) and ((max_freq - forward_count) * 2 > (len(nums) - index - 1)):
+                    return index
+        return -1
+
+
+# Initial TTL Solution
+class Solution:
+    def minimumIndex(self, nums: List[int]) -> int:
+        forward = Counter()
+        backward = Counter(nums)
+
+        for index, elem in enumerate(nums):
+            forward[elem] += 1
+            backward[elem] -= 1
+            dominant_forward, forward_freq = forward.most_common(1)[0]
+            dominant_backward, backward_freq = backward.most_common(1)[0]
+
+            if (forward_freq * 2 > forward.total()) and (backward_freq * 2 > backward.total()) and (dominant_forward == dominant_backward):
+                return  index
+        return -1
