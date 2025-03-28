@@ -1,0 +1,66 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m * k) complexity by time and O(n * m) by space.
+
+The simple solution does not go through time. 
+So the whole trick in optimizing traversals is to remove the extra factor in the traversal matrices associated with traversing the entire matrix for each variable and list elements.
+I tried hard, but I couldn't win without hints.
+Initially, I tried to track how many times I need to increase the current value by a value from a larger array while I'm going through the matrix. 
+But I couldn't program it properly, because I ran into the problem that I increase the numbers and at some point I go through the entire matrix, while I need to go through it uniformly in increasing order of the values ​​being checked. 
+This is where the priority queue comes in handy.
+It's a pity, I thought I could beat the challenge
+"""
+
+# Initial TTL Solution
+class Solution:
+    def maxPoints(self, grid: List[List[int]], queries: List[int]) -> List[int]:
+        directions = {(-1, 0), (1, 0), (0, -1), (0, 1)}
+        rows = len(grid)
+        cols = len(grid[0])
+        visited = set()
+        answer = []
+
+        def calculate_points(q_value, y, x):
+            if not ((0 <= y < rows) and (0 <= x < cols) and ((y, x) not in visited)):
+                return
+            visited.add((y, x))
+            if q_value > grid[y][x]:
+                answer[-1] += 1
+                for dy, dx in directions:
+                    calculate_points(q_value, y + dy, x + dx)
+
+        for q in queries:
+            answer.append(0)
+            calculate_points(q, 0, 0)
+            visited = set()
+
+        return answer
+
+# PQ Solution
+# https://leetcode.com/problems/maximum-number-of-points-from-grid-queries/solutions/6505775/maximum-number-of-points-from-grid-queries/
+class Solution:
+    def maxPoints(self, grid: List[List[int]], queries: List[int]) -> List[int]:
+        from queue import PriorityQueue
+        directions = {(-1, 0), (1, 0), (0, -1), (0, 1)}
+        rows, cols = len(grid), len(grid[0])
+        visited = [[False] * cols for _ in range(rows)]
+        answer = [0] * len(queries)
+        sorted_queries = sorted([(val, idx) for idx, val in enumerate(queries)])
+        heap = PriorityQueue()
+
+        heap.put((grid[0][0], 0, 0))
+        visited[0][0] = True
+        points = 0
+
+        for value, index in sorted_queries:
+            while not heap.empty() and heap.queue[0][0] < value:
+                _, row, col = heap.get()
+                points += 1
+
+                for dy, dx in directions:
+                    ny, nx = row + dy, col + dx
+                    if ((0 <= ny < rows) and (0 <= nx < cols) and not visited[ny][nx]):
+                        heap.put((grid[ny][nx], ny, nx))
+                        visited[ny][nx] = True
+            answer[index] = points
+        return answer
