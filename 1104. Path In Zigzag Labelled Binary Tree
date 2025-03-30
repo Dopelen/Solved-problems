@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(log(n)) by space.
+
+The task is not very difficult, but the critical moment is the calculation of the mirror element at an odd depth, once you figure out the formula, the rest is easy
+"""
+
+class Solution:
+    def pathInZigZagTree(self, label: int) -> List[int]:
+        path = [label]
+
+        while label != 1:
+            log_value = math.log2(label)
+            depth = int(log_value)
+            parent = (2 ** (depth + 1) - 1 - label + 2 ** depth) // 2
+            path.append(parent)
+            label = parent
+
+        path.reverse()
+        return path
