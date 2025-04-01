@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The problem isn't very difficult if you know dynamic programming, but I still had to look at the hints.
+the root of our solution is the array dp as expected, which stores the maximum that we can get from a certain index. 
+The maximum is calculated as a comparison of the current value + the value of the max possible points from next available question, with the value of the next index. 
+And if the next index is greater, we skip the question. 
+I construct from the end and then take the first element.
+
+"""
+
+class Solution:
+    def mostPoints(self, questions: List[List[int]]) -> int:
+        size = len(questions)
+        dp = [0] * (size + 1)
+        for i in range(size-1, -1, -1):
+            dp[i] = max(questions[i][0] + ((dp[i + questions[i][1] + 1]) if (i + questions[i][1] + 1) < size else 0), dp[i + 1])
+        return dp[0]
