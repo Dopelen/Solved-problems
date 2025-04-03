@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+If they thought I wasn't just going to put the whole value in a list and sort it, they were sorely mistaken!
+"""
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        all_values = []
+
+        def travers(root):
+            if root is None:
+                return
+            all_values.append(root.val)
+            travers(root.left)
+            travers(root.right)
+
+        travers(root)
+        all_values.sort()
+        return all_values[k - 1]
