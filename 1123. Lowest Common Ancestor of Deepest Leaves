@@ -1,0 +1,75 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I decided not to do the correct bypass and spent an absolutely indecent amount of time on such a simple task.
+First I looked for deep leaves, the second pass found the path to them, and the third excluded the upper ones, instead of doing it in one bypass.
+But I did it all myself)
+
+The right idea is to keep track of the left and right depths on each descent and cut off the part with the smaller depth until we get to the common node.
+Thanks to the previous steps we know that it stores the deepest leaves, and thanks to comparing the depths of each subtree we know that at this point they are equal, and therefore it is their first common parent.
+"""
+
+class Solution:
+    def lcaDeepestLeaves(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        depth = defaultdict(set)
+        chields = defaultdict(set)
+        max_depth = 0
+
+        def traverse(d, r):
+            nonlocal max_depth
+            if r is None:
+                return set()
+            max_depth = max(d, max_depth)
+            depth[d].add(r.val)
+            left = traverse(d + 1, r.left)
+            chields[r.val].update(left)
+            right = traverse(d + 1, r.right)
+            chields[r.val].update(right)
+            if not left and not right:
+                return {r.val}
+            return chields[r.val] | {r.val}
+                  
+        traverse(0, root)
+        path = set()
+        candidates = depth[max_depth]
+        for node_val, chield in chields.items():
+            if candidates.issubset(chield):
+                path.add(node_val)
+
+        if not path:
+            return root
+
+        def find_deepest(cur_r):
+            if (not cur_r) or (cur_r.val not in path):
+                return
+
+            if len(path) == 1:
+                if len(depth[max_depth]) == 1:
+                    return cur_r.left or cur_r.right
+                return cur_r
+
+            path.remove(cur_r.val)
+            return find_deepest(cur_r.left) or find_deepest(cur_r.right)
+
+        return find_deepest(root)
+
+
+# Correct one
+class Solution:
+    def lcaDeepestLeaves(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        def dfs(node):
+            if not node:
+                return (None, 0)
+            
+            left, left_depth = dfs(node.left)
+            right, right_depth = dfs(node.right)
+            
+            if left_depth > right_depth:
+                return (left, left_depth + 1)
+            elif right_depth > left_depth:
+                return (right, right_depth + 1)
+            else:
+                return (node, left_depth + 1)
+        
+        return dfs(root)[0]
