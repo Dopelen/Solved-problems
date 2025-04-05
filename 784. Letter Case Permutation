@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * 2 ** k) complexity by time and O(n) by space.
+
+The task is not very difficult, I solved it with a simple recursive traversal
+"""
+
+# Before refactoring
+class Solution:
+    def letterCasePermutation(self, s: str) -> List[str]:
+        all_permutations = set()
+        size = len(s)
+
+        def check_permutations(slice, index):
+            if index == size:
+                all_permutations.add("".join(slice))
+                return
+            if s[index].isdigit():
+                check_permutations(slice + [s[index]], index + 1)
+            else:
+                check_permutations(slice + [s[index].lower()], index + 1)
+                check_permutations(slice + [s[index].upper()], index + 1)
+
+        check_permutations([], 0)
+        return list(all_permutations)
+
+# After
+class Solution:
+    def letterCasePermutation(self, s: str) -> List[str]:
+        all_permutations = []
+
+        def check_permutations(slice='', index=0):
+            if index == len(s):
+                all_permutations.append(slice)
+            else:
+                if s[index].isalpha():
+                    check_permutations(slice + s[index].swapcase(), index + 1)
+                check_permutations(slice + s[index], index + 1)
+
+        check_permutations()
+        return all_permutations
