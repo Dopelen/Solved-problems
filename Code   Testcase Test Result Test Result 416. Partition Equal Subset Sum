@@ -1,0 +1,58 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * 2 ** n) complexity by time and O(n) by space.
+
+I had to think hard, but I'm very glad that I came up with my own iterative solution.
+The sum needs to be divided in two, so there is a solution only if the total sum is divisible without a remainder.
+Then I simply tried all possible combinations that can be obtained from the numbers, simply adding a new number to all previously derived sums at each step. 
+I can't bring myself to call this dynamic programming, but I think that's what it is. 
+I calculate at each step all possible sums that can be obtained for the current index.
+"""
+
+# My DP
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        total = sum(nums)
+        if total % 2:
+            return False
+
+        all_possible_numbers = set()
+        for elem in nums:
+            new_numbers = {elem}
+            for num in all_possible_numbers:
+                new_numbers.add(num + elem)
+            all_possible_numbers |= new_numbers
+
+        return (total // 2) in all_possible_numbers
+
+# Correct DP
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        total = sum(nums)
+        if total % 2 != 0:
+            return False
+
+        target = total // 2
+        dp = [False] * (target + 1)
+        dp[0] = True
+        for num in nums:
+            for j in range(target, num - 1, -1):
+                if dp[j - num]:
+                    dp[j] = True
+                    if j == target:
+                        return True
+        return dp[target]
+
+# 9000 IQ
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        totals = sum(nums)
+        if totals % 2:
+            return False
+
+        target = totals // 2
+        bitset = 1
+        for num in nums:
+            bitset |= bitset<< num
+
+        return (bitset >> target & 1) == 1
