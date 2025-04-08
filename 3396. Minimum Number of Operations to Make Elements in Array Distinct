@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Today it's easy, I solved it with one hand while drinking tea)
+"""
+
+class Solution:
+    def minimumOperations(self, nums: List[int]) -> int:
+        size = len(nums)
+        processed = set()
+        for index, elem in enumerate(nums[::-1], -size + 1):
+            if elem in processed:
+                return abs((index - 1)//3)
+            processed.add(elem)
+        return 0 if len(processed) == size else size//3
