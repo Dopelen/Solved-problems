@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+I wrote the solution in 5 minutes, and when I started writing a loop to remove the last elements from the list until I get to k, it dawned on me that binary search would do it for me!
+Good problem, I liked it.
+"""
+
+class Solution:
+    def minOperations(self, nums: List[int], k: int) -> int:
+        nums = sorted(set(nums))
+        if nums[0] < k:
+            return -1
+        return len(nums) - bisect.bisect_right(nums, k)
