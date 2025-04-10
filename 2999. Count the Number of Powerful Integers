@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This programm has O(n) complexity by time and O(n) by space.
+DP...
+My head hurt and I had to resort to hints to figure out the solution :(
+It's a shame, because overall the task is doable
+"""
+
+class Solution:
+    def numberOfPowerfulInt(self, start: int, finish: int, limit: int, s: str) -> int:
+
+        def count(val: int) -> int:
+            current_val = str(val)
+            n = len(current_val) - len(s)
+            if n < 0:
+                return 0
+            dp = [[0] * 2 for _ in range(n + 1)]
+            dp[n][0] = 1
+            dp[n][1] = int(current_val[n:] >= s)
+            for i in range(n - 1, -1, -1):
+                digit = int(current_val[i])
+                dp[i][0] = (limit + 1) * dp[i + 1][0]
+                if digit <= limit:
+                    dp[i][1] = digit * dp[i + 1][0] + dp[i + 1][1]
+                else:
+                    dp[i][1] = (limit + 1) * dp[i + 1][0]
+            return dp[0][1]
+        return count(finish) - count(start - 1)
