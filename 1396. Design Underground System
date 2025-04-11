@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The task is generally simple, the classes are a bit confusing, and I wouldn't say that the logic of the dictionary in the dictionary is intuitively clear.
+"""
+class UndergroundSystem:
+
+    def __init__(self):
+        self.starts = {}
+        self.stations_time = defaultdict(lambda: defaultdict(list))
+        
+    def checkIn(self, id: int, stationName: str, t: int) -> None:
+        self.starts[id] = (stationName, t)
+
+    def checkOut(self, id: int, stationName: str, t: int) -> None:
+        self.stations_time[stationName][self.starts[id][0]].append(t - self.starts[id][1])        
+
+    def getAverageTime(self, startStation: str, endStation: str) -> float:
+        processed_list = self.stations_time[endStation][startStation]
+        return sum(processed_list) / len(processed_list)
