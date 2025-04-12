@@ -1,0 +1,100 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * 9 ** n) complexity by time and O(n) by space
+
+I couldn't do it in an hour, so I started talking to the deepsik about the task.
+Basically, we break the task into several blocks, first we form templates of sets of numbers from which we can assemble a polindrome, at this step we literally assemble it from parts, so as not to go through all the numbers, 
+but to take only those sets that suit us + exclude those that start with 0 and those that are not divisible by k.
+Then we count the number of suitable numbers, substituting the numbers into the template.
+"""
+
+# Good version (not mine :(   )
+class Solution:
+    def countGoodIntegers(self, n: int, k: int) -> int:
+        if n == 1:
+            return sum(num % k == 0 for num in range(1, 10))
+
+        part_pals = [str(num) for num in range(10**((n//2) - 1), 10**(n//2))]
+        k_pals = []
+        if n % 2 == 0:
+            k_pals = [num + num[::-1] for num in part_pals]
+        else:
+            for mid in range(10):
+                k_pals.extend([num + str(mid) + num[::-1] for num in part_pals])
+
+        k_pals = [p for p in k_pals if int(p) % k == 0]
+        perms = set(''.join(sorted(pal)) for pal in k_pals)
+
+        cnt = 0
+        for p in perms:
+            freqs = Counter(p)
+            cnt += ((n - freqs.get('0', 0)) * factorial(n - 1))//prod(map(factorial, freqs.values()))
+        
+        return cnt
+   
+
+
+# https://leetcode.com/problems/find-the-count-of-good-integers/solutions/6641380/naruto-step-by-step-simple-easiest-expla-j7zi/
+class Solution:
+    def factorial(self, number):
+        start_n = 1
+        for i in range(1, number + 1):
+            start_n *= i
+        return start_n
+
+    def generatePalindromes(self, cur_num, index, validPalindromes, k):
+        if index >= (len(cur_num) + 1) // 2:
+            if int(cur_num) % k == 0:
+                validPalindromes.append(cur_num)
+            return
+
+        if index != 0:
+            temp = cur_num
+            temp = temp[:index] + '0' + temp[index + 1:]
+            temp = temp[:len(temp) - index - 1] + '0' + temp[len(temp) - index:]
+            self.generatePalindromes(temp, index + 1, validPalindromes, k)
+
+        for digit in range(1, 10):
+            temp = cur_num
+            temp = temp[:index] + str(digit) + temp[index + 1:]
+            temp = temp[:len(temp) - index - 1] + str(digit) + temp[len(temp) - index:]
+            self.generatePalindromes(temp, index + 1, validPalindromes, k)
+
+    def countGoodIntegers(self, n, k):
+        validPalindromes = []
+        baseForm = "0" * n
+        self.generatePalindromes(baseForm, 0, validPalindromes, k)
+
+        Patterns = set()
+
+        for palindrome in validPalindromes:
+            frequency = ['0'] * 10
+            for digit in palindrome:
+                idx = int(digit)
+                if frequency[idx] == '9':
+                    frequency[idx] = 'A'
+                else:
+                    frequency[idx] = str(int(frequency[idx]) + 1)
+            Patterns.add(''.join(frequency))
+
+        basePermutations = self.factorial(n)
+        totalCount = 0
+
+        for pattern in Patterns:
+            permutation = basePermutations
+            for freq in pattern:
+                divisor = 10 if freq == 'A' else int(freq)
+                permutation //= self.factorial(divisor)
+
+            if pattern[0] != '0':
+                zeroCount = int(pattern[0]) - 1
+                zeroRestrictedPerm = self.factorial(n - 1)
+                for freq in pattern[1:]:
+                    divisor = 10 if freq == 'A' else int(freq)
+                    zeroRestrictedPerm //= self.factorial(divisor)
+                zeroRestrictedPerm //= self.factorial(zeroCount)
+                permutation -= zeroRestrictedPerm
+
+            totalCount += permutation
+
+        return int(totalCount)
