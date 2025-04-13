@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(n) by space
+
+The snag of this problem is in optimization.
+I didn't even try an iterative solution, because we can just look at the parity of the number n and figure out how many of what operations we need, 
+but with numbers of level 10 * 15 any operations are extremely expensive and don't fit the time limit.
+We have to write pow optimization!
+"""
+
+# Initial Solution (TTL)
+class Solution:
+    def countGoodNumbers(self, n: int) -> int:
+        modulo = 10 ** 9 + 7
+        odd = n % 2
+        first_half = (5 ** (n//2 + odd)) % modulo
+        second_half = (4 ** (n//2)) % modulo
+        return (first_half * second_half) % modulo
+
+# Right Solution
+class Solution:
+    def countGoodNumbers(self, n: int) -> int:
+        modulo = 10 ** 9 + 7
+
+        def pow_mod(x, power):
+            result = 1
+            while power > 0:
+                if power % 2 == 1:
+                    result = (result * x) % modulo
+                x = (x * x) % modulo
+                power = power // 2
+            return result
+
+        odd = n % 2
+        count_5 = n // 2 + odd
+        count_4 = n // 2
+
+        first_half = pow_mod(5, count_5)
+        second_half = pow_mod(4, count_4)
+
+        return (first_half * second_half) % modulo
+
