@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I thought it was a simple problem (it is), so I came up with a plan for an optimal solution in 3 minutes, and then spent 30 debugging edge cases because I was too lazy to think of a proper solution right away.
+"""
+
+class Solution:
+    def numOfPairs(self, nums: List[str], target: str) -> int:
+        values = Counter(nums)
+        pairs = 0
+        for key, val in values.items():
+            if target.startswith(key):
+                adjust = target[len(key):]
+                pairs += val * ((val - 1) if key == adjust else values[adjust])
+        return pairs
