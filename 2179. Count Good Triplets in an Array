@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+I spent several hours struggling with this problem, but in the end I ran into a memory limit, which is a shame.
+"""
+
+# https://leetcode.com/problems/count-good-triplets-in-an-array/
+class Solution:
+    def goodTriplets(self, nums1, nums2):
+        value_to_index = {num: i for i, num in enumerate(nums1)}
+        sorted_indices = []
+        total_triplets = 0
+
+        for value in nums2:
+            index_in_nums1 = value_to_index[value]
+            left_count = bisect.bisect_left(sorted_indices, index_in_nums1)
+            right_count = (len(nums1) - 1 - index_in_nums1) - (len(sorted_indices) - left_count)
+            total_triplets += left_count * right_count
+            bisect.insort(sorted_indices, index_in_nums1)
+        return total_triplets
