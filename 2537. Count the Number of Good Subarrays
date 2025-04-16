@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Initially, I overdid it a bit with the calculation of pairs, but I corrected it in the final implementation.
+I came to the idea quite quickly, the structure is two pointers with the current number of pairs maintained.
+The main thing is to count the pairs, and as soon as their number reaches k during iteration over the list, you need to add to the answer the difference between the total length and the index at which we stopped, 
+because each subsequent element will form an array that meets our criteria.
+At this point, we move the left pointer until the number of pairs again becomes less than k, not forgetting to also increase the answer, because the shortened version of our current array is also correct and adds the answer, here we can return to shifting the right pointer.
+I liked the task itself.
+"""
+
+class Solution:
+    def countGood(self, nums: List[int], k: int) -> int:
+        left = current_pairs = good_subarrays = 0
+        current_freq = defaultdict(int)
+        
+        for right, num in enumerate(nums):
+            current_pairs += current_freq[num]
+            current_freq[num] += 1
+            
+            while current_pairs >= k:
+                good_subarrays += len(nums) - right
+                current_freq[nums[left]] -= 1
+                current_pairs -= current_freq[nums[left]]
+                left += 1
+                
+        return good_subarrays
