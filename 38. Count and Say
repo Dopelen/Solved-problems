@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2 ** n ) complexity by time and O(2 ** n) by space.
+
+A fairly simple task, I would even say that it is easy, not average, because we just need to implement the method described in the condition.
+In any case, I can take a break from algorithmic tasks until tomorrow.
+"""
+
+class Solution:
+    def countAndSay(self, n: int) -> str:
+        current_str = ["1"]
+
+        def rle_coding(s):
+            coded_list = []
+            cur_elem = s[0]
+            cur_counter = 0
+            for elem in s:
+                if elem == cur_elem:
+                    cur_counter += 1
+                else:
+                    coded_list.append(str(cur_counter))
+                    coded_list.append(cur_elem)
+                    cur_counter = 1
+                    cur_elem = elem
+            coded_list.append(str(cur_counter))
+            coded_list.append(cur_elem)
+            return coded_list
+
+        for i in range(n - 1):
+            current_str = rle_coding(current_str)
+
+        return "".join(current_str)
