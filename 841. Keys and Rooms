@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program have O(n) complexity by time and O(n) by space.
+
+The task accidentally went on the medium difficulty level, although in fact it is the simplest task on graph bypasses that can be devised, probably even if you have never met graphs, it will not be a problem.
+"""
+
+class Solution:
+    def canVisitAllRooms(self, rooms: List[List[int]]) -> bool:
+        visited = set()
+
+        def traverse(ind):
+            if ind in visited:
+                return
+            visited.add(ind)
+            for elem in rooms[ind]:
+                traverse(elem)
+
+        traverse(0)
+        return len(visited) == len(rooms)
