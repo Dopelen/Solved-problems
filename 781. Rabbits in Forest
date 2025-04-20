@@ -1,0 +1,35 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program have O(n) complexity by time and O(n) by space.
+
+A nice Easter task!
+No need to invent any very complicated algorithms, it was enough to just think and estimate possible cases.
+"""
+
+# initial Solution
+class Solution:
+    def numRabbits(self, answers: List[int]) -> int:
+        frequents = Counter(answers)
+        answer = 0
+        for ans, freq in frequents.items():
+            if ans == 0:
+                answer += freq
+            else:
+                if freq < ans:
+                    answer += ans + 1
+                else:
+                    groups_size = ans + 1
+                    number_of_groups = freq // groups_size + bool(freq % groups_size)
+                    answer += number_of_groups * groups_size
+        return answer
+
+
+# After refactoring
+    def numRabbits(self, answers: List[int]) -> int:
+        answer = 0
+        for ans, freq in Counter(answers).items():
+            if ans == 0:
+                answer += freq
+            else:
+                answer += ceil(freq / (ans + 1)) * (ans + 1)
+        return answer
