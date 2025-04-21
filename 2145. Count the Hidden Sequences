@@ -1,0 +1,63 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+I went down a dark path, trying to solve it by finding the necessary value window using binary search.
+Then I looked at the hints, saw that a completely different method was used there, but I figured that my solution should work. 
+I debugged it for an hour, but in the end it worked! 
+True, the speed was 550 ms, and not 20 as in the method from the hint, but I'm still happy.
+"""
+
+class Solution:
+    def numberOfArrays(self, differences: List[int], lower: int, upper: int) -> int:
+
+        def process_list(num):
+            cur_elem = num
+            for elem in differences:
+                cur_elem += elem
+                if cur_elem < lower:
+                    return "too_low"
+                elif cur_elem > upper:
+                    return "too_high"
+            return "correct"
+
+        def find_mid():
+            left = lower
+            right = upper
+            while left < right:
+                mid = (right + left) // 2
+                check = process_list(mid)
+                if check == "too_low":
+                    left = mid + 1
+                elif check == "too_high":
+                    right = mid
+                else:
+                    return mid
+            if left == right and process_list(left) == "correct":
+                return left
+            return
+
+        def calculate_border(is_left=True):
+            left = lower
+            right = upper
+            mid = correct_value
+            while left < right:
+                if process_list(mid) == "correct":
+                    match is_left:
+                        case False: left = mid + 1
+                        case True: right = mid
+                else:
+                    match is_left:
+                        case False: right = mid
+                        case True: left = mid + 1
+                mid = (right + left) // 2
+            return left
+
+
+        correct_value = find_mid()
+        if correct_value is None:
+            return 0
+
+        left_border = calculate_border()
+        right_border = calculate_border(False)
+        return 1 if left_border == right_border else (right_border + (right_border == upper)) - left_border
