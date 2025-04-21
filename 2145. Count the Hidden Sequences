@@ -8,6 +8,7 @@ I debugged it for an hour, but in the end it worked!
 True, the speed was 550 ms, and not 20 as in the method from the hint, but I'm still happy.
 """
 
+# My Solution
 class Solution:
     def numberOfArrays(self, differences: List[int], lower: int, upper: int) -> int:
 
@@ -61,3 +62,21 @@ class Solution:
         left_border = calculate_border()
         right_border = calculate_border(False)
         return 1 if left_border == right_border else (right_border + (right_border == upper)) - left_border
+
+# Correct Solution
+# https://leetcode.com/problems/count-the-hidden-sequences/
+class Solution:
+    def numberOfArrays(self, diff: List[int], lower: int, upper: int) -> int:
+        a = maxima = minima = 0
+        for d in diff:
+            a += d
+            maxima = max(maxima, a)
+            minima = min(minima, a)
+        return max(0, (upper - lower) - (maxima - minima) + 1)
+
+# Even faster
+class Solution:
+    def numberOfArrays(self, differences: List[int], lower: int, upper: int) -> int:
+        pfs = list(accumulate(differences, initial = 0))
+        return max(0, upper - lower - max(pfs) + min(pfs) + 1)
+
