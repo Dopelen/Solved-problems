@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(N∗Maxvalue∗Log(Maxvalue)) complexity by time and O(n) by space.
+
+I can definitely assess this task as difficult, I don't even understand how it could be solved in a reasonable amount of time, let alone in a beautiful way. 
+Here we need to make several mathematical generalizations from the category of combinatorics, which I haven't reached yet.
+"""
+
+# https://leetcode.com/problems/count-the-number-of-ideal-arrays/solutions/2261351/python3-freq-table-by-ye15-po4p/
+class Solution:
+    def idealArrays(self, n: int, maxValue: int) -> int:
+        ans = maxValue
+        freq = {x : 1 for x in range(1, maxValue+1)}
+        for k in range(1, n): 
+            temp = Counter()
+            for x in freq: 
+                for m in range(2, maxValue//x+1): 
+                    ans += comb(n-1, k)*freq[x]
+                    temp[m*x] += freq[x]
+            freq = temp
+            ans %= 1_000_000_007
+        return ans 
