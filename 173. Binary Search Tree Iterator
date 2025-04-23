@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The task was to make a class - an iterator. 
+It was not entirely obvious to me how to approach this, so I did the best I could, simply saving the results of the traversal.
+It turned out well, after that I went to look at how to make a "real" iterator, and what I saw did not bring me any new knowledge, so the task seemed not very successful, but overall it was ok.
+"""
+
+class BSTIterator:
+
+    def __init__(self, root: Optional[TreeNode]):
+        self.values = []
+        self.pointer = -1
+        
+        def traverse(r):
+            if r is None:
+                return
+            left = traverse(r.left)
+            if left: 
+                self.values.append(left)
+            self.values.append(r.val)
+            right = traverse(r.right)
+            if right:
+                self.values.append(right)
+        
+        traverse(root)
+        self.size = len(self.values) - 1
+
+
+    def next(self) -> int:
+        self.pointer += 1
+        return self.values[self.pointer]
+
+
+    def hasNext(self) -> bool:
+        return self.pointer < self.size
