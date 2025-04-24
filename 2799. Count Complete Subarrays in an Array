@@ -1,0 +1,50 @@
+#!/usr/bin/python
+ """You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n) by space.
+ 
+The problem is very similar to problem 2537 which was this week, only here we need to calculate the purity of elements passing through our array. 
+It is solved similarly with two pointers and calculation of good subarrays at the moment of reaching the required number of unique elements.
+ """
+
+# After refactoring
+class Solution:
+    def countCompleteSubarrays(self, nums: List[int]) -> int:
+        total_distinct = len(set(nums))
+        freq = defaultdict(int)
+        left = 0
+        res = 0
+        
+        for right, num in enumerate(nums):
+            freq[num] += 1
+            
+            while len(freq) == total_distinct:
+                res += len(nums) - right
+                freq[nums[left]] -= 1
+                if freq[nums[left]] == 0:
+                    del freq[nums[left]]
+                left += 1
+                
+        return res
+
+# Initial Solution
+class Solution:
+    def countCompleteSubarrays(self, nums: List[int]) -> int:
+        complete_subarrays = 0
+        size = len(nums)
+        all_dist = len(set(nums))
+        current_count = Counter()
+        current_dist = set()
+        left = 0
+
+        for right, el in enumerate(nums):
+            current_count[el] += 1
+            current_dist.add(el)
+
+            while len(current_dist) == all_dist:
+                complete_subarrays += size - right
+                current_count[nums[left]] -= 1
+                if current_count[nums[left]] == 0:
+                    current_dist.remove(nums[left])
+                left += 1
+
+        return complete_subarrays
