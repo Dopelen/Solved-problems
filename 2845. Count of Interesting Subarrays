@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Oops, an unpleasant task with several levels, got confused 10 times while reading the conditions, then when looking at examples, then when debugging. After looking at the tips it became clearer
+"""
+
+class Solution:
+    def countInterestingSubarrays(self, nums: List[int], modulo: int, k: int) -> int:
+        mapping_mod = defaultdict(int)
+        mapping_mod[0] = 1
+        answer = prefix = 0
+
+        for index, elem in enumerate(nums):
+            prefix += (elem % modulo == k)
+            answer += mapping_mod[(prefix + modulo - k) % modulo]
+            mapping_mod[prefix % modulo] += 1
+
+        return answer
