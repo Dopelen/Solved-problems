@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This programm has O(n) complexity by speed and O(1) by space.
+
+A week of subarray calculations was not in vain, I solved a difficult problem, and did not even spend the whole day on it.
+Small hints from the author were very good, they did not make the whole solution, but simply directed in the right direction! I am proud of myself.
+Once you can solve a problem for an array in which all numbers are within the given boundaries, then you can solve the whole problem!
+"""
+
+class Solution:
+    def countSubarrays(self, nums: List[int], minK: int, maxK: int) -> int:
+        fixed_bound_subarrays = 0
+
+        def calculate_result(arr):
+            sub_size = len(arr)
+            sub_arr = left = min_val = max_val = 0
+            for right, el in enumerate(arr):
+                if el == minK:
+                    min_val += 1
+                if el == maxK:
+                    max_val += 1
+                if min_val and max_val:
+                    sub_arr += sub_size - right
+                while (min_val and max_val):
+                    if arr[left] == minK:
+                        min_val -= 1
+                    if arr[left] == maxK:
+                        max_val -= 1
+                    left += 1
+                    sub_arr += (sub_size - right) if (min_val and max_val) else 0
+            return sub_arr
+
+        between_subarr = []
+        for index, elem in enumerate(nums):
+            if minK <= elem <= maxK:
+                between_subarr.append(elem)
+            else:
+                fixed_bound_subarrays += calculate_result(between_subarr)
+                between_subarr = []
+
+        fixed_bound_subarrays += calculate_result(between_subarr)
+        return fixed_bound_subarrays
