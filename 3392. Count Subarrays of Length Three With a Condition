@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program have O(n) complexity by time and O(n) by space.
+
+First I solved it for the same numbers, then for different ones, then for negative ones, then with array breaks, in general I spent half an hour until I understood what they wanted from me and wrote the code in a minute, it's embarrassing
+"""
+
+class Solution:
+    def countSubarrays(self, nums: List[int]) -> int:
+        triplets = 0
+        size = len(nums)
+        for index in range(1, size - 1):
+            triplets += (nums[index - 1] + nums[index + 1] == nums[index]/2)
+        return triplets
