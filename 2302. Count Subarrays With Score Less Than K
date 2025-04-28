@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Similar to yesterday's task, again iterating over a list with two pointers, with more complex logic for counting subarrays under the advancing condition. 
+For me, the main problem was figuring out how to count the inner arrays when I trim them from the left.
+"""
+
+# After refactoring
+class Solution:
+    def countSubarrays(self, nums: List[int], k: int) -> int:
+        left = 0
+        answer = 0
+        cur_sum = 0
+
+        for right in range(len(nums)):
+            cur_sum += nums[right]
+            while cur_sum * (right - left + 1) >= k:
+                cur_sum -= nums[left]
+                left += 1
+            answer += right - left + 1
+
+        return answer
