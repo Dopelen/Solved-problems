@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It seems we are continuing the second week of problems with pointers and different conditions.
+This time we need to count the max_freq.
+It seems I can solve the fifth typical problem quite quickly.
+"""
+
+# Before refactoring
+class Solution:
+    def countSubarrays(self, nums: List[int], k: int) -> int:
+        max_val = max(nums)
+        size = len(nums)
+        cur_max_freq = left = answer = 0
+
+        for right in range(size):
+            if nums[right] == max_val:
+                cur_max_freq += 1
+            while left <= right and cur_max_freq == k:
+                answer += size - right
+                if nums[left] == max_val:
+                    cur_max_freq -= 1
+                left += 1
+
+        return answer
+
+# After refactoring
+class Solution:
+    def countSubarrays(self, nums: List[int], k: int) -> int:
+        max_val, size = max(nums), len(nums)
+        left = res = cur_max = 0
+
+        for right in range(size):
+            cur_max += (nums[right] == max_val)
+            while cur_max >= k:
+                res += size - right
+                cur_max -= (nums[left] == max_val)
+                left += 1
+        return res
