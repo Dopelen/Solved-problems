@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+A fairly simple problem that can be solved beautifully if you understand two main points. 
+The first is that we form our subsequences based on the difference between their minimum and maximum values, which means that we don't care about the order. 
+The second is that if we don't care about the order, we can simply sort them and solve greedily!
+"""
+
+class Solution:
+    def partitionArray(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        answer, left = 1, 0
+        for right in range(len(nums)):
+            if nums[right] - nums[left] > k:
+                answer += 1
+                left = right
+        return answer
+
