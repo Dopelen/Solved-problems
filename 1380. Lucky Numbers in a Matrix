@@ -7,6 +7,8 @@ Task by itself not really difficult, but I suffuring all the time when I hiding 
 thats the moment where pain begins.
 But after all I kinda "Ok" with this solution, its not terrible in my eyes.
 
+"""
+
 class Solution:
     def luckyNumbers (self, matrix):
         rows, columns  = len(matrix), len(matrix[-1])
