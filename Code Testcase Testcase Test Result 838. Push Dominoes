@@ -1,0 +1,51 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space
+
+I initially did it through a queue, but it turned out that time is not taken into account, so I had to redo it :(
+It turned out a bit crooked, but I finished it without help
+"""
+
+class Solution:
+    def pushDominoes(self, dominoes: str) -> str:
+        size = len(dominoes)
+        time = [-1] * size
+        opposite = {"L": "R", "R": "L"}
+        dominoes = [symbol for symbol in dominoes]
+        movement = deque([(index, elem) for index, elem in enumerate(dominoes) if elem in ["L", "R"]])
+        if not movement:
+            return "".join(dominoes)
+        cur_time = time_up = 0
+        last_move = movement[-1]
+        while movement:
+            cur_index, cur_move = movement.popleft()
+            
+            if time_up and movement:
+                time_up = False
+                cur_time += 1
+                last_move = movement[-1]
+
+            if (cur_index, cur_move) == last_move and movement:
+                time_up = True
+
+            if cur_move == "L":
+                if cur_index == 0:
+                    continue
+                if dominoes[cur_index - 1] == opposite[cur_move] and time[cur_index - 1] == cur_time:
+                    dominoes[cur_index - 1] = "."
+                elif dominoes[cur_index - 1] == ".":
+                    dominoes[cur_index - 1] = cur_move
+                    time[cur_index - 1] = cur_time
+                    movement.append((cur_index - 1, cur_move))
+
+            elif cur_move == "R":
+                if cur_index == size - 1:
+                    continue
+                if dominoes[cur_index + 1] == opposite[cur_move] and time[cur_index + 1] == cur_time:
+                    dominoes[cur_index + 1] = "."
+                elif dominoes[cur_index + 1] == ".":
+                    dominoes[cur_index + 1] = cur_move
+                    time[cur_index + 1] = cur_time
+                    movement.append((cur_index + 1, cur_move))
+
+        return "".join(dominoes)
