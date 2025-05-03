@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A relatively simple task, you just need to process test cases where the dominoes have the same numbers on both sides.
+But in general, after you understand that your final candidate should be on each domino, either above or below, then everything is quite simple.
+"""
+
+# Before refactoring
+class Solution:
+    def minDominoRotations(self, tops: List[int], bottoms: List[int]) -> int:
+        candidates = {tops[0], bottoms[0]}
+        for top, bot in zip(tops, bottoms):
+            candidates &= {top, bot}
+            if not candidates:
+                return -1
+        candidate = candidates.pop()
+        swaps_top, swaps_bot = tops.count(candidate), bottoms.count(candidate)
+        return min(len(tops) - swaps_top, len(tops) - swaps_bot)
+
+# After
+class Solution:
+    def minDominoRotations(self, tops: List[int], bottoms: List[int]) -> int:
+        for value in [tops[0], bottoms[0]]:
+            if all(value in domino for domino in zip(tops, bottoms)):
+                return len(tops) - max(tops.count(value), bottoms.count(value))
+        return -1
