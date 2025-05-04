@@ -1,0 +1,51 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2 ** n) complexity by time and O(2 ** n) by space.
+
+The time limit is very soft, so I decided to use brute force. 
+Full recursive search, and even with sorting. 
+It turned out extremely slow and ugly, but a solution is a solution!
+"""
+
+# Initial
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        combinations = set()
+        size = len(candidates)
+
+        def construct_combination(ind, cur_sum, cur_l):
+            if ind == size:
+                return
+            cur_sum += candidates[ind]
+            cur_l.append(candidates[ind])
+            if cur_sum == target:
+                combinations.add(tuple(sorted(cur_l)))
+            elif cur_sum > target:
+                return
+            else:
+                for i in range(size):
+                    construct_combination(i, cur_sum, cur_l.copy())
+
+        for index in range(len(candidates)):
+            construct_combination(index, 0, [])
+
+        return list(map(list, combinations))
+
+# Optimized
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+        candidates.sort()
+        
+        def backtrack(start, path, remaining):
+            if remaining == 0:
+                res.append(path.copy())
+                return
+            for i in range(start, len(candidates)):
+                if candidates[i] > remaining:
+                    break
+                path.append(candidates[i])
+                backtrack(i, path, remaining - candidates[i])
+                path.pop() 
+        
+        backtrack(0, [], target)
+        return res
