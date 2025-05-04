@@ -18,3 +18,19 @@ class Solution:
             s = v*(v-1)//2
             ans += s
         return ans
+
+"""
+I accidentally decided to do it again a year later
+
+A simple task, it seems like the domino month has begun. 
+I'm a little sad that I didn't find a nice way to compare dominoes, I had to write it through sorting.
+The "optimal" method is not much better, there we simply write value to an array at index (smaller element is multiplied by 10 + the second one), 
+so we can guarantee the counting of unique dominoes. This is smarter than the solution that I have, but I would like elegance!
+"""
+
+class Solution:
+    def numEquivDominoPairs(self, dominoes: List[List[int]]) -> int:
+        normalized_dom = [tuple(sorted(elem)) for elem in dominoes]
+        counter_dom = Counter(normalized_dom)
+        answer = sum((value * (value - 1) // 2) for value in counter_dom.values() if value > 1)
+        return answer
