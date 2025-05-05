@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I clearly felt that there was a strict sequence here, so I just threw the results for the first 5 elements into the neural network. 
+It gave me a function that turned out to be incorrect. 
+And I eventually debugged it using comments. 
+This was the task, but I couldn't derive the function on my own.
+
+P.S: Great explanation, why its work
+https://leetcode.com/problems/domino-and-tromino-tiling/solutions/1620809/pythonjavacc-dp-image-visualized-explana-69y8/
+"""
+
+class Solution:
+    def numTilings(self, n: int) -> int:
+        MOD = 10 ** 9 + 7
+        
+        base_seq = [1,2,5]
+        if n <= 3:
+            return base_seq[n - 1]
+
+        for i in range(3, n):
+            base_seq.append((2 * base_seq[i - 1] + base_seq[i - 3]) % MOD)
+
+        return base_seq[n - 1]
+
