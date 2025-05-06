@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+The code turned out to be very slow, but it worked.
+"""
+
+# Initial version
+class Solution:
+    def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+        size = len(people)
+        people.sort(key=lambda x: (x[0], x[1]))
+        reconstructed_que = [math.inf] * size
+        for elem in people:
+            height, skips = elem
+            index = 0
+            while skips:
+                if reconstructed_que[index] == math.inf or height <= reconstructed_que[index][0]:
+                    skips -= 1
+                index += 1
+            while reconstructed_que[index] != math.inf:
+                index += 1
+            reconstructed_que[index] = elem
+        return reconstructed_que
+
+# Smart version
+# https://leetcode.com/problems/queue-reconstruction-by-height/solutions/2211602/python-easy-greedy-o-1-space-approach/
+class Solution:
+    def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+        output=[] 
+        people.sort(key=lambda x: (-x[0], x[1]))                
+        for a in people:
+            output.insert(a[1], a)
+        return output  
