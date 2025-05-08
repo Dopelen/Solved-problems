@@ -1,0 +1,57 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m * log(n * m)) complexity by time and O(n * m) by space.
+
+I used yesterday's original code, but ran into time constraints (thanks to the new modified test cases), so I used the improved code with a heap.
+"""
+
+# Heap Solution
+class Solution:
+    def minTimeToReach(self, moveTime: List[List[int]]) -> int:
+        rows, cols = len(moveTime), len(moveTime[0])
+        if rows == 1 and cols == 1:
+            return 0
+        visited = set()
+        visited.add((0, 0))
+        h = [(0, 0, 0, 0)]
+        while h:
+            time, odd, x, y = heappop(h)
+            if (x, y) == (rows - 1, cols - 1):
+                return time
+            for dx, dy in [(-1, 0), (0, -1), (0, 1), (1, 0)]:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < rows and 0 <= ny < cols and (nx, ny) not in visited:
+                    heappush(h, (max(time, moveTime[nx][ny]) + 1 + odd, not odd, nx, ny))
+                    visited.add((nx, ny))
+        return -1
+
+
+# Initial TTL Solution
+class Solution:
+    def minTimeToReach(self, moveTime: List[List[int]]) -> int:
+        rows, cols = len(moveTime), len(moveTime[0])
+        fastest_time = [[math.inf] * cols for _ in range(rows)]
+        fastest_time[0][0] = 0
+        d = {(-1, 0), (1, 0), (0, -1), (0, 1)}
+        traverse = deque([(0, 0, 0, 0)])
+        while traverse:
+            time, odd, y, x = traverse.popleft()
+            for dy, dx in d:
+                ny, nx = y + dy, x + dx
+                if 0 <= ny < rows and 0 <= nx < cols:
+                    new_time = 0
+                    if fastest_time[ny][nx] == math.inf:
+                        new_time = max(moveTime[ny][nx], time)
+                        new_time += 1 + odd
+                    else:
+                        if time + odd <= moveTime[ny][nx]:
+                            new_time = moveTime[ny][nx] + 1 + odd
+                        else:
+                            new_time = min(time + 1 + odd, fastest_time[ny][nx])
+
+                    if new_time and fastest_time[ny][nx] != new_time:
+                        fastest_time[ny][nx] = new_time
+                        if (ny, nx) != (rows - 1, cols - 1):
+                            traverse.append((new_time, not odd, ny, nx))
+
+        return fastest_time[rows - 1][cols - 1]
