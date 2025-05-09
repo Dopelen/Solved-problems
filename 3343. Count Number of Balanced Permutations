@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n**2) complexity by time and O(n ** 2) by space.
+
+There is no good day for serious problems.
+Here we use a system of distributing our numbers into different positions that I would not have thought of.
+Basically, we need to count how many times each digit occurs, then check whether it is possible to divide the sum of the digits in half, and then bypass the recursive function dfs, 
+which checks all the ways to arrange the given digits, and maybe in parts it doesn't look very difficult, but getting to this point seems downright difficult.
+"""
+
+# https://leetcode.com/problems/count-number-of-balanced-permutations/solutions/6000532/dp/?envType=daily-question&envId=2025-05-09
+class Solution:
+    def countBalancedPermutations(self, num: str) -> int:
+        cnt = Counter(int(ch) for ch in num)
+        total = sum(int(ch) for ch in num)
+
+        @cache
+        def dfs(i, odd, even, balance):
+            if odd == 0 and even == 0 and balance == 0:
+                return 1
+            if i < 0 or odd < 0 or even < 0 or balance < 0:
+                return 0
+            res = 0
+            for j in range(0, cnt[i] + 1):
+                res += math.comb(odd, j) * math.comb(even, cnt[i] - j) * dfs(i - 1, odd - j, even - cnt[i] + j, balance - i * j)
+            return res % 1000000007
+
+        return 0 if total % 2 else dfs(9, len(num) - len(num) // 2, len(num) // 2, total // 2)
