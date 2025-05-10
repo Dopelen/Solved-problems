@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I liked the task, no complicated data structures, just a little bit of thinking and debugging. 
+Any zero can replace any number, so basically we just need to calculate the sums, and so that there are no missing zeros in the smaller array.
+"""
+
+# Before refactoring
+class Solution:
+    def minSum(self, nums1: List[int], nums2: List[int]) -> int:
+        sum_1, sum_2 = sum(nums1), sum(nums2)
+        if sum_2 < sum_1:
+            sum_1, sum_2 = sum_2, sum_1
+            zeroes_1, zeroes_2 = nums2.count(0), nums1.count(0)
+        else:
+            zeroes_1, zeroes_2 = nums1.count(0), nums2.count(0)
+
+        sum_1 += zeroes_1
+        sum_2 += zeroes_2
+
+        if (sum_1 < sum_2 and zeroes_1 == 0) or (sum_1 > sum_2 and zeroes_2 == 0):
+            return -1
+        return max(sum_1, sum_2)
+
+
+# After refactoring
+class Solution:
+    def minSum(self, nums1: List[int], nums2: List[int]) -> int:
+        sum1, sum2 = sum(nums1), sum(nums2)
+        zeros1, zeros2 = nums1.count(0), nums2.count(0)
+        
+        min_sum1 = sum1 + zeros1
+        min_sum2 = sum2 + zeros2
+        
+        if min_sum1 < min_sum2 and zeros1 == 0:
+            return -1
+        if min_sum2 < min_sum1 and zeros2 == 0:
+            return -1
+            
+        return max(min_sum1, min_sum2)
