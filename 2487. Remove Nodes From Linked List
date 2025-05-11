@@ -1,0 +1,63 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It was hard for me to figure out how to do this quickly and beautifully, so I tried to find a bunch of the corresponding conditions, and then formed the necessary linked list.
+
+"""
+
+# After thinking! (O(n))
+class Solution:
+    def removeNodes(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        nodes = []
+        while head:
+            nodes.append(head)
+            head = head.next
+        answer = nodes.pop()
+        for node in nodes[::-1]:
+            if node.val >= answer.val:
+                node.next = answer
+                answer = node
+        return answer
+
+
+# After refactoring
+class Solution:
+    def removeNodes(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        stack = []
+        while head:
+            while stack and head.val > stack[-1]:
+                stack.pop()
+            stack.append(head.val)
+            head = head.next
+        
+        dummy = ListNode()
+        current = dummy
+        for num in stack:
+            current.next = ListNode(num)
+            current = current.next
+        return dummy.next
+
+
+# Slow initial solution O(n * log(n))
+class Solution:
+    def removeNodes(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        values = []
+        heapify(values)
+
+        while head:
+            while values and head.val > values[0]:
+                heappop(values)
+            heappush(values, head.val)
+            head = head.next
+
+        sorted_list = sorted(list(values))
+        sorted_heap = ListNode(sorted_list.pop())
+        pointer = sorted_heap
+
+        while sorted_list:
+            pointer.next = ListNode(sorted_list.pop())
+            pointer = pointer.next
+
+        return sorted_heap
+
