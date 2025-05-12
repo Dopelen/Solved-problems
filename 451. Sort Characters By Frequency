@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+Not a very easy task, fortunately it is solved beautifully by sorting the dictionary
+"""
+
+# initial version
+class Solution:
+    def frequencySort(self, s: str) -> str:
+        freq = dict(sorted(Counter(s).items(), key=lambda x: -x[1]))
+        answer = [symbol * fr for symbol, fr in freq.items()]
+        return "".join(answer)
+
+# 2.0 version
+class Solution:
+    def frequencySort(self, s: str) -> str:
+        return ''.join(char * freq for char, freq in Counter(s).most_common())
