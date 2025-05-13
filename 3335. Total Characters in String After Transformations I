@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n + t) complexity by time and O(n) by space.
+
+
+It was hard to find a formula, although I understood the concept pretty quickly. 
+First, divide by letters and then run the calculation for each symbol, taking into account that every 26 (for a) steps a new letter b is generated, which in turn after 25 steps generates another one, and so on.
+"""
+
+# Initial Solution
+class Solution:
+    def lengthAfterTransformations(self, s: str, t: int) -> int:
+        mod = 10**9 + 7
+        counter = [0] * 26
+        for symbol in s:
+            counter[ord(symbol) - 97] += 1
+        for round in range(t):
+            nxt = [0] * 26
+            nxt[0] = counter[25]
+            nxt[1] = (counter[25] + counter[0]) % mod
+            for i in range(2, 26):
+                nxt[i] = counter[i - 1]
+            counter = nxt
+        ans = sum(counter) % mod
+        return ans
+
+# Smart one (also slow)
+class Solution:
+    def lengthAfterTransformations(self, s: str, t: int) -> int:
+        dp = [1] * (100_000 + 26)
+        for i in range(26, len(dp)):
+            dp[i] = (dp[i-26] + dp[i-25]) % 1_000_000_007
+        ans = 0
+        cnt = Counter(s)
+        for k, v in cnt.items():
+            ans = (ans + v * dp[(ord(k) - 97) + t]) % 1_000_000_007
+        return ans
