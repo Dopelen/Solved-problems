@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+
+One of the easiest medium level problems. 
+For some reason, my solution via adding counters didn't work, I rewrote everything a little differently, but it seemed to be the same complexity, but this time everything worked out.
+"""
+
+class Solution:
+    def findCommonResponse(self, responses: List[List[str]]) -> str:
+        resp_counter = defaultdict(int)
+        for day in responses:
+            unic_responses = set(day)
+            for elem in unic_responses:
+                resp_counter[elem] += 1
+        max_freq = max(resp_counter.values(), default=0)
+        most_com = [candidate for candidate, freq in resp_counter.items() if freq == max_freq]
+        return(min(most_com))
