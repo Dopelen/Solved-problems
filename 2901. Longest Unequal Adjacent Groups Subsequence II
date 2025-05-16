@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2 * l) complexity by time and O(n) by space.
+
+The task itself is not difficult, but the description... 
+It took me 30 minutes just to understand it, then with the author's hints I was somehow able to code it. 
+The meaning is quite simple, we check all possible subsequences and remember the largest ones, after which we restore the answer using an array with previous values.
+"""
+
+class Solution:
+    def getWordsInLongestSubsequence(self, words: List[str], groups: List[int]) -> List[str]:
+        size = len(words)
+        dp = [0] * size
+        prev = [-1] * size
+
+        def is_one_char_diff(s1: str, s2: str) -> bool:
+            if len(s1) != len(s2):
+                return False
+            diff_count = 0
+            for c1, c2 in zip(s1, s2):
+                if c1 != c2:
+                    diff_count += 1
+                    if diff_count > 1:
+                        return False
+            return diff_count == 1
+
+        for i in range(size):
+            for j in range(i):
+                if groups[i] != groups[j] and len(words[i]) == len(words[j]) and is_one_char_diff(words[i], words[j]) and dp[j] + 1 > dp[i]:
+                    dp[i] = dp[j] + 1
+                    prev[i] = j
+
+        last_index_of_answer = dp.index(max(dp))
+        answer = []
+
+        while last_index_of_answer != -1:
+            answer.append(words[last_index_of_answer])
+            last_index_of_answer = prev[last_index_of_answer]
+
+        answer.reverse()
+        return answer
