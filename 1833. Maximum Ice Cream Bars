@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+An indecently simple problem that can be solved by a greedy algorithm and simple sorting
+"""
+
+# Initial Solution
+class Solution:
+    def maxIceCream(self, costs: List[int], coins: int) -> int:
+        costs.sort()
+        bars = 0
+        for price in costs:
+            if price > coins:
+                break
+            coins -= price
+            bars += 1
+        return bars
+
+# with walrus operator
+class Solution:
+    def maxIceCream(self, costs: List[int], coins: int) -> int:
+        costs.sort()
+        return sum(1 for price in costs if (coins := coins - price) >= 0)
