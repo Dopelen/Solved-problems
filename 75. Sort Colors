@@ -6,15 +6,37 @@ The difficulty of the task lies in on-site sorting.
 If you do not use the built-in functions, you will have to manipulate three pointers, rearranging them at each step. 
 Because of the risk of me going crazy while I deal with this, I just used in-place sorting.
 
+P.S:
+I accidentally solved this problem a year later, it seemed very simple to me, it turned out that last year I couldn't even solve it :D
 """
 
+# Year later Solution (2 pointers)
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        freq = Counter(nums)
+        right = len(nums) - 1
+        for cur_color in [2, 1, 0]:
+            left = 0
+            while right > 0 and freq[cur_color] > 0:
+                if nums[right] == cur_color:
+                    right -= 1
+                    freq[cur_color] -= 1
+                else:
+                    while left < right and nums[left] != cur_color:
+                        left += 1
+                    if nums[left] == cur_color and left < right:
+                        nums[right], nums[left] = nums[left], nums[right]
+                        right -= 1
+                        freq[cur_color] -= 1
+
+
+# Sort solution
 class Solution:
     def sortColors(self, nums: List[int]) -> None:
         nums.sort()
 
 
-
-# True Solution
+# True Solution (3 pointers)
 # https://leetcode.com/problems/sort-colors/solutions/3164333/solution/
 
 class Solution:
