@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+To be honest, I didn't understand what they wanted from me at all and after some painful time, I went into the answers. 
+It turned out that it was just necessary to process several operations in the flow, but I have very little experience in this, so I chose a fairly simple solution.
+"""
+
+# https://leetcode.com/problems/fizz-buzz-multithreaded/submissions/1638553819/
+from threading import Barrier
+class FizzBuzz:
+    def __init__(self, n: int):
+        self.n = n + 1
+        self.br = Barrier(4)
+
+    def fizz(self, printFizz: 'Callable[[], None]') -> None:
+        for cur in range(1, self.n):
+            if cur % 3 == 0 and cur % 5 != 0:
+                printFizz()
+            self.br.wait()
+
+    def buzz(self, printBuzz: 'Callable[[], None]') -> None:
+        for cur in range(1, self.n):
+            if cur % 3 != 0 and cur % 5 == 0:
+                printBuzz()
+            self.br.wait()
+
+    def fizzbuzz(self, printFizzBuzz: 'Callable[[], None]') -> None:
+        for cur in range(1, self.n):
+            if cur % 3 == 0 and cur % 5 == 0:
+                printFizzBuzz()
+            self.br.wait()
+
+    def number(self, printNumber: 'Callable[[int], None]') -> None:
+        for cur in range(1, self.n):
+            if cur % 3 != 0 and cur % 5 != 0:
+                printNumber(cur)
+            self.br.wait()
