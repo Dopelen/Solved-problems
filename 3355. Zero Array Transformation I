@@ -1,0 +1,55 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+I knew how to solve such problems, so all I had to do was write some code.
+We just maintain the value that we can now subtract and iterate over the indices, adjusting the value depending on the boundaries in the sorted arrays.
+Unfortunately it turned out to be quite slow and I went to refactor.
+You can remove the sorting and move the logic for forming boundaries to a difference array.
+"""
+
+# Refactored (O(n))
+class Solution:
+    def isZeroArray(self, nums: List[int], queries: List[List[int]]) -> bool:
+        size = len(nums)
+        diff = [0] * (size + 1)
+
+        for start, end in queries:
+            diff[start] += 1
+            if end + 1 < size:
+                diff[end + 1] -= 1
+
+        current = 0
+        for i in range(size):
+            current += diff[i]
+            if nums[i] > current:
+                return False
+
+        return True
+
+
+# initial Solution (O(n * log(n)))
+class Solution:
+    def isZeroArray(self, nums: List[int], queries: List[List[int]]) -> bool:
+        size = len(nums)
+        all_starts, all_ends = [], []
+        for start, end in queries:
+            all_starts.append(start)
+            all_ends.append(end)
+        all_starts.sort(reverse=True)
+        all_ends.sort(reverse=True)
+
+        decrease_for_index = []
+        decrease = index = 0
+        while index < size:
+            while all_starts and all_starts[-1] == index:
+                all_starts.pop()
+                decrease += 1
+            decrease_for_index.append(decrease)
+
+            while all_ends and all_ends[-1] == index:
+                all_ends.pop()
+                decrease -= 1
+            index += 1
+
+        return all(nums[i] <= decrease_for_index[i] for i in range(size))
