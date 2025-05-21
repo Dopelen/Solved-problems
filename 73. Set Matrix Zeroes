@@ -1,0 +1,61 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n + m) by space.
+
+You can solve with quadratic complexity, you can solve with linear complexity relative to the number of elements, and also, you can solve with a constant in memory, while I think I decided to write a linear solution.
+
+The constant memory solution is not that simple, and I had to go to the hints. 
+We use the outermost columns and rows to reflect the structure of the zeros in the matrix, and then clear them if they were originally 0, because at the end the matrix is ​​already rebuilt thanks to them.
+"""
+
+# Initial solution with O(n + m) memory
+class Solution:
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        rows, cols = len(matrix), len(matrix[0])
+        row_zeroes, col_zeroes = set(), set()
+        for row in range(rows):
+            for col in range(cols):
+                if not matrix[row][col]:
+                    row_zeroes.add(row)
+                    col_zeroes.add(col)
+                    
+        for r in range(rows):
+            for c in range(cols):
+                if r in row_zeroes:
+                    matrix[r][c] = 0
+                elif c in col_zeroes:
+                    matrix[r][c] = 0
+
+# O(1)
+class Solution:
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        rows, cols = len(matrix), len(matrix[0])
+        first_row_has_zero = first_col_has_zero = False        
+        for c in range(cols):
+            if matrix[0][c] == 0:
+                first_row_has_zero = True
+                break
+        for r in range(rows):
+            if matrix[r][0] == 0:
+                first_col_has_zero = True
+                break
+        for r in range(1, rows):
+            for c in range(1, cols):
+                if matrix[r][c] == 0:
+                    matrix[r][0] = 0
+                    matrix[0][c] = 0
+        for r in range(1, rows):
+            if matrix[r][0] == 0:
+                for c in range(1, cols):
+                    matrix[r][c] = 0
+        for c in range(1, cols):
+            if matrix[0][c] == 0:
+                for r in range(1, rows):
+                    matrix[r][c] = 0
+        if first_row_has_zero:
+            for c in range(cols):
+                matrix[0][c] = 0
+        if first_col_has_zero:
+            for r in range(rows):
+                matrix[r][0] = 0
+        return matrix
