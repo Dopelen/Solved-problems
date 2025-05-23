@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+An extremely talented solution that simply ignores the presence of edges.
+I am clearly not up to this yet, let's continue our journey along simpler routes
+"""
+
+# https://leetcode.com/problems/find-the-maximum-sum-of-node-values/solutions/4811460/greedy-sacrifice/?envType=daily-question&envId=2025-05-23
+class Solution:
+    def maximumValueSum(self, nums: List[int], k: int, edges: List[List[int]]) -> int:
+        best_sum = sum(max(n, k ^ n) for n in nums)
+        cnt = sum((n ^ k) > n for n in nums)  
+        return best_sum - (min(abs(n - (n ^ k)) for n in nums) if cnt % 2 else 0)
