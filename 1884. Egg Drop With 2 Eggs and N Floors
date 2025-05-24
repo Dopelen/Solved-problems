@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(sqrt(n)) complexity by time and O(1) by space.
+
+A simple and at the same time complex problem. 
+Complex because it is mathematical. 
+No binary search will help us here, because the question is how many attempts are required to find the answer with 2 eggs, so if one breaks, we may have to make many more attempts than we planned. 
+The idea is to split the floors into several steps, and each subsequent step reduces the number of checks we need to do. 
+So as we increase i, we decrease the number of checks in the next step to minimize the number of steps we need to do.
+"""
+
+class Solution:
+    def twoEggDrop(self, n: int) -> int:
+        i = 1
+        while (i * (i + 1)) // 2 < n:
+            i += 1
+        return i
