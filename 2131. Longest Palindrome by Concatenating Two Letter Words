@@ -1,0 +1,46 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A clear and interesting problem.
+The main difficulty is in debugging edge cases, but otherwise it is almost immediately clear what needs to be done.
+"""
+
+# Initial Solution
+class Solution:
+    def longestPalindrome(self, words: List[str]) -> int:
+        counter = Counter(words)
+        processed = set()
+        odd = False
+        length = 0
+        for key, value in counter.items():
+            if key[0] == key[1]:
+                if not odd:
+                    odd = value % 2
+                length += (value - (value % 2)) * 2
+            else:
+                backward = key[::-1]
+                if key not in processed:
+                    length += min(value, counter[backward]) * 4
+                    processed.add(backward)
+        return length + odd * 2
+
+
+# You can process only one pair at a time, then there is no need to maintain a set to check whether this pair has been processed before
+class Solution:
+    def longestPalindrome(self, words: List[str]) -> int:
+        freq = Counter(words)
+        length = 0
+        central = False
+        for word, count in freq.items():
+            if word[0] == word[1]:
+                if count % 2 == 0:
+                    length += count * 2
+                else:
+                    length += (count - 1) * 2
+                    central = True
+            else:
+                reversed_word = word[::-1]
+                if word < reversed_word:
+                    length += min(count, freq.get(reversed_word, 0)) * 4
+        return length + (2 if central else 0)
