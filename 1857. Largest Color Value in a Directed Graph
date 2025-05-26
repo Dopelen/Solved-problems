@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n + e) complexity by time and O(n + e) by space.
+
+I figured out how to bypass and find cycles, but I couldn't figure out the full solution.
+Initially, we create an adjacency list, and also the number of adjacent vertices for each. 
+Then we find a vertex with zero in-degree and begin a traversal during which we will maintain an array of how many of each color we encountered along the way. 
+Then we perform a Topological sort during which we process neighbors and add them at the moment when their in-degree counter drops to 0
+"""
+
+# https://leetcode.com/problems/largest-color-value-in-a-directed-graph/solutions/3396205/image-explanation-simple-bfs-complete-intuition-c-java-python/?envType=daily-question&envId=2025-05-26
+class Solution:
+    def largestPathValue(self, colors: str, edges: List[List[int]]) -> int:
+        size = len(colors)
+        indegrees = [0] * size
+        graph = [[] for _ in range(size)]
+        for edge in edges:
+            graph[edge[0]].append(edge[1])
+            indegrees[edge[1]] += 1
+        zero_indegree = deque()
+        for i in range(size):
+            if indegrees[i] == 0:
+                zero_indegree.append(i)
+        counts = [[0]*26 for _ in range(size)]
+        for i in range(size):
+            counts[i][ord(colors[i]) - ord('a')] += 1
+        max_count = 0
+        visited = 0
+        while zero_indegree:
+            u = zero_indegree.popleft()
+            visited += 1
+            for v in graph[u]:
+                for i in range(26):
+                    counts[v][i] = max(counts[v][i], counts[u][i] + (ord(colors[v]) - ord('a') == i))
+                indegrees[v] -= 1
+                if indegrees[v] == 0:
+                    zero_indegree.append(v)
+            max_count = max(max_count, max(counts[u]))
+        return max_count if visited == size else -1
