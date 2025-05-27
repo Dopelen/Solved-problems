@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time O(n) by space.
+
+Quite a nice problem. 
+It is enough to understand that it can be solved greedily, moving from left to right. 
+If the bit does not fit, we are forced to reverse everything to the right of the current index. 
+Adding to this the observation that every 2 reverses the row returns to its original position, we get a beautiful solution.
+"""
+
+# Before refactoring
+class Solution:
+    def minFlips(self, target: str) -> int:
+        flips = 0
+        flipped = False
+        for index in range(len(target)):
+            if (target[index] == '1' and flipped) or (target[index] == '0' and not flipped):
+                continue
+            flips += 1
+            flipped = not flipped
+        return flips
+
+# After refactoring
+class Solution:
+    def minFlips(self, target: str) -> int:
+        flips = 0
+        current = '0'
+        for bit in target:
+            if bit != current:
+                flips += 1
+                current = bit
+        return flips
