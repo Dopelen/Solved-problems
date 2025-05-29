@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n + m) complexity by time and O(n + m) by space.
+
+Yesterday's task with an additional condition.
+We need to improve the traversal algorithm to take into account the parity of the distance from each node.
+This complicates and simplifies the solution at the same time.
+We do not need to count the steps this time, we only need to consider the parity. 
+By measuring the parity from the zero node, for each node we can simply add all the even nodes as target nodes or odd nodes if the node itself is odd!
+Then it is enough to add what was obtained from the second tree, taking into account the additional step when connecting trees (inverting the parity of the second tree, taking even as odd and vice versa)
+"""
+
+# Nice solution, too bad I didn't write it
+# https://leetcode.com/problems/maximize-the-number-of-target-nodes-after-connecting-trees-ii/solutions/6106420/python3-queue-t-s-99-99/
+class Solution:
+    def maxTargetNodes(self, edges1: List[List[int]], edges2: List[List[int]]) -> List[int]:
+
+        def find_even(edges: list, n: int) -> list:
+            graph = [[] for _ in range(n)]
+            queue = deque([(0, -1, True)])
+            evens = [False] * n
+
+            for u, v in edges:
+                graph[u].append(v)
+                graph[v].append(u)
+
+            while queue:
+                node, parent, is_even = queue.popleft()
+                evens[node] = is_even
+
+                for child in graph[node]:
+                    if child == parent: continue
+                    queue.append((child, node, not is_even))
+
+            return evens
+
+        n1, n2 = len(edges1) + 1, len(edges2) + 1
+        evens1, evens2 = find_even(edges1, n1), find_even(edges2, n2)
+        sm1, sm2 = sum(evens1), sum(evens2)
+
+        mx = max(sm2, n2 - sm2)
+
+        ans = [mx + (sm1 if even else n1 - sm1) for even in evens1]
+
+        return ans
