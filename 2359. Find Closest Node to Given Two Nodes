@@ -1,0 +1,66 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I misunderstood the task, so I spent the first half hour solving the wrong problem, fortunately it was not very different from the correct condition. 
+The task is not very difficult, I went through the entire graph from two nodes and then simply found a common node with the minimum difference in the maximum paths to it from both nodes. 
+It turned out pretty slow, but it was honest work!
+"""
+
+# After refactoring (iterative, no adj_list, simple max check)
+class Solution:
+    def closestMeetingNode(self, edges: List[int], node1: int, node2: int) -> int:
+        def dfs(node, dist_dict, step=0):
+            while node != -1 and dist_dict[node] == math.inf:
+                dist_dict[node] = step
+                node = edges[node]
+                step += 1
+
+        size = len(edges)
+        dist1 = [math.inf] * size
+        dist2 = [math.inf] * size
+
+        dfs(node1, dist1)
+        dfs(node2, dist2)
+
+        min_max_dist = math.inf
+        result = -1
+
+        for i in range(size):
+            current_max = max(dist1[i], dist2[i])
+            if current_max < min_max_dist:
+                min_max_dist = current_max
+                result = i
+            elif current_max == min_max_dist and i < result:
+                result = i
+
+        return result
+
+# Initial Solution
+class Solution:
+    def closestMeetingNode(self, edges: List[int], node1: int, node2: int) -> int:
+        adj_list = defaultdict(list)
+        for start, dest in enumerate(edges):
+            adj_list[start].append(dest)
+
+        def traverse(cur_node, steps, cur_dict):
+            if cur_node == -1 or cur_dict[cur_node] < steps:
+                return
+            cur_dict[cur_node] = steps
+            for child in adj_list[cur_node]:
+                traverse(child, steps + 1, cur_dict)
+
+        node_1_dest = {node: math.inf for node in adj_list.keys()}
+        node_2_dest = {node: math.inf for node in adj_list.keys()}
+        traverse(node1, 0, node_1_dest)
+        traverse(node2, 0, node_2_dest)
+
+        min_dif = (math.inf, None)
+        for key in adj_list.keys():
+            if (node_1_dest[key] != math.inf) and (node_2_dest[key] != math.inf):
+                cur_dif = max(node_1_dest[key], node_2_dest[key])
+                if cur_dif < min_dif[0]:
+                    min_dif = (cur_dif, key)
+                elif cur_dif == min_dif[0]:
+                    min_dif = (min_dif[0], min(key, min_dif[1]))
+        return min_dif[1] if min_dif[0] != math.inf else -1
