@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) and O(n) by space.
+
+I honestly didn't really understand the problem, and all the solutions were mathematical. Of those I looked at, this was the clearest.
+"""
+
+# https://leetcode.com/problems/distribute-candies-among-children-ii/solutions/6800358/step-by-step-video-solution-interview-simulation-beginner-friendly-c-java-python/?envType=daily-question&envId=2025-06-01
+class Solution:
+    def distributeCandies(self, n: int, limit: int) -> int:
+        def count_ways(x):
+            if x < 0:
+                return 0
+            return comb(x + 2, 2)
+    
+        total = count_ways(n)
+        total -= 3 * count_ways(n - (limit + 1))
+        total += 3 * count_ways(n - 2 * (limit + 1))
+        total -= count_ways(n - 3 * (limit + 1))
+        return total
