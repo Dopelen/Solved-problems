@@ -1,0 +1,75 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+
+I sat for two hours with the problem, and solved it myself, I feel good, but tired)
+My solution logic was the following - first of all, you need to process the minimum points, because they set the dimension of all neighbors.
+If you take a high point, we do not know how big it should be, are there 1000 increasing elements on the left? for example.
+But if we take the minimum, we are guaranteed to understand its size (if the neighbor's value is greater, then we can increase the neighbor's value, if less, then do nothing).
+After this, it is enough to only process the intersections, when the values ​​increase from the right and left to one point.
+
+P.S: You can solve it by 2 pass, but im not smart enoght :)
+"""
+
+# After refactoring
+class Solution:
+    def candy(self, ratings: List[int]) -> int:
+        size = len(ratings)
+        heap = [(elem, index) for index, elem in enumerate(ratings)]
+        heapq.heapify(heap)
+        result = [1] * size
+
+        while heap:
+            _, cur_index = heappop(heap)
+            if cur_index > 0 and ratings[cur_index] > ratings[cur_index - 1]:
+                if result[cur_index] <= result[cur_index - 1]:
+                    result[cur_index] = result[cur_index - 1] + 1
+            if cur_index < size - 1 and ratings[cur_index] > ratings[cur_index + 1]:
+                if result[cur_index] <= result[cur_index + 1]:
+                    result[cur_index] = result[cur_index + 1] + 1
+        return sum(result)
+
+# Initial Solution
+class Solution:
+    def candy(self, ratings: List[int]) -> int:
+        size = len(ratings)
+        heap = [(elem, index) for index, elem in enumerate(ratings)]
+        heapq.heapify(heap)
+        result = [0] * size
+        while heap:
+            cur_elem, cur_index = heappop(heap)
+            left = ratings[cur_index - 1] if cur_index - 1 >= 0 else 0
+            right = ratings[cur_index + 1] if cur_index + 1 < size else 0
+
+            if cur_index - 1 >= 0:
+                if cur_elem < left and result[cur_index - 1] == 0:
+                    result[cur_index - 1] += 1
+
+            if cur_index + 1 < size:
+                if cur_elem < right and result[cur_index + 1] == 0:
+                    result[cur_index + 1] += 1
+
+            if cur_index - 1 >= 0 and cur_index + 1 < size:
+                if left < cur_elem and right > cur_elem:
+                    if result[cur_index + 1] <= result[cur_index]:
+                        result[cur_index + 1] = result[cur_index] + 1
+                elif left > cur_elem and right < cur_elem:
+                    if result[cur_index - 1] <= result[cur_index]:
+                        result[cur_index - 1] = result[cur_index] + 1
+
+        return sum(result) + size
+
+# O(n) Solution
+class Solution:
+    def candy(self, ratings: List[int]) -> int:
+        n = len(ratings)
+        candies = [1] * n
+        for i in range(1, n):
+            if ratings[i] > ratings[i-1]:
+                candies[i] = candies[i-1] + 1
+        for i in range(n-2, -1, -1):
+            if ratings[i] > ratings[i+1]:
+                candies[i] = max(candies[i], candies[i+1] + 1)
+        return sum(candies)
+
