@@ -1,0 +1,71 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n + k + c) complexity by time and O(n + k + c) by space.
+
+I wrote out the solution in 20 minutes, but it took me another half an hour to debug and write it. 
+In essence, it's a simple workaround, the only difficulty I encountered was consistently writing the general structure of the solution and eliminating repeated additions of previously added keys/boxes.
+"""
+
+# Initial Solution
+class Solution:
+    def maxCandies(self, status: List[int], candies: List[int], keys: List[List[int]], containedBoxes: List[List[int]], initialBoxes: List[int]) -> int:
+        opened = set()
+        obtained_boxes = set(initialBoxes)
+        can_open_boxes = deque([box for box in initialBoxes if status[box]])
+        total_candies = 0
+
+        while can_open_boxes:
+            cur_box_index = can_open_boxes.popleft()
+            total_candies += candies[cur_box_index]
+            opened.add(cur_box_index)
+            
+            for key in keys[cur_box_index]:
+                if not status[key]:
+                    status[key] = 1
+                    if key in obtained_boxes and key not in opened:
+                        can_open_boxes.append(key)
+            
+            for elem in containedBoxes[cur_box_index]:
+                if elem not in obtained_boxes:
+                    obtained_boxes.add(elem)
+                if status[elem]:
+                    can_open_boxes.append(elem)  
+
+        return total_candies
+
+
+
+# List instead of set
+class Solution:
+    def maxCandies(self, status: List[int], candies: List[int], keys: List[List[int]], containedBoxes: List[List[int]], initialBoxes: List[int]) -> int:
+        n = len(status)
+        obtained = [False] * n
+        can_open = [False] * n
+        total = 0
+        
+        q = deque()
+        for box in initialBoxes:
+            obtained[box] = True
+            if status[box]:
+                can_open[box] = True
+                q.append(box)
+        
+        while q:
+            box = q.popleft()
+            total += candies[box]
+            
+            for key in keys[box]:
+                if not status[key]:
+                    status[key] = 1
+                    if obtained[key] and not can_open[key]:
+                        can_open[key] = True
+                        q.append(key)
+            
+            for inner_box in containedBoxes[box]:
+                if not obtained[inner_box]:
+                    obtained[inner_box] = True
+                    if status[inner_box]:
+                        can_open[inner_box] = True
+                        q.append(inner_box)
+        
+        return total
