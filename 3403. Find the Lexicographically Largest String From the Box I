@@ -1,0 +1,66 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+At first I didn't understand what they wanted from me. 
+Then I wrote a solution through 2 pointers, where I collected all possible pieces of maximum length to get the last one after sorting the pieces.
+But it turned out that 1 letter can be lexically greater than any other string that starts with a smaller letter. 
+I had to rewrite the code, but this time only once!
+New idea is this: find the largest lexicographic letter and the indices where it occurs, then recursively also find the largest "second" letters, and so on until the letters run out or find the border of "words".
+This solution passed (I'm glad about it) but it took 1200 ms instead of the possible 2 ms.
+
+"""
+# Initial Solution
+class Solution:
+    def answerString(self, word: str, numFriends: int) -> str:
+        if numFriends == 1:
+            return word
+        size = len(word)
+        max_chunk_size = size - numFriends + 1
+        all_start_points = []
+        biggest_letter = "a"
+
+        def find_next_biggest(cur_str, all_idx):
+            cur_biggest = "a"
+            passed_idx = []
+            for idx in all_idx:
+                idx += 1
+                if idx < size:
+                    if word[idx] < cur_biggest:
+                        continue
+                    if word[idx] > cur_biggest:
+                        passed_idx = []
+                        cur_biggest = word[idx]
+                    passed_idx.append(idx)
+            if len(passed_idx) == 0 or len(cur_str) >= max_chunk_size:
+                return cur_str
+            else:
+                return find_next_biggest(cur_str + cur_biggest, passed_idx)
+
+
+        for index, symbol in enumerate(word):
+            if symbol < biggest_letter:
+                continue
+            if symbol > biggest_letter:
+                all_start_points = []
+                biggest_letter = symbol
+            all_start_points.append(index)
+
+        answer = find_next_biggest(biggest_letter, all_start_points)
+
+        return answer
+
+# 2ms Solution
+class Solution:
+    def answerString(self, word: str, numFriends: int) -> str:
+        if numFriends == 1:
+            return word
+        
+        window = len(word) - numFriends + 1
+        res = -1
+        maxScore = ""
+        for idx in range(len(word)):
+            if word[idx: idx + window] > maxScore:
+                maxScore = word[idx: idx + window]
+                res = idx
+        return word[res: res + window]
