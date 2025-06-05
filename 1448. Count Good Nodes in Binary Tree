@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I figured out the solution pretty quickly, just walked the tree with maximum support and raised the answer whenever it changed.
+"""
+
+# Initial Solution
+class Solution:
+    def goodNodes(self, root: TreeNode) -> int:
+        answer = 0
+
+        def traverse(r, local_max):
+            nonlocal answer
+            if not r:
+                return
+            
+            if r.val >= local_max:
+                answer += 1
+                print(r.val)
+                local_max = r.val
+            
+            traverse(r.left, local_max)
+            traverse(r.right, local_max)
+
+        traverse(root, -math.inf)
+        return answer
+
+# After refactoring
+class Solution:
+    def goodNodes(self, root: TreeNode) -> int:
+        def dfs(node, current_max):
+            if not node:
+                return 0
+            count = 1 if node.val >= current_max else 0
+            new_max = node.val if count else current_max
+            return count + dfs(node.left, new_max) + dfs(node.right, new_max)
+        
+        return dfs(root, -math.inf)
