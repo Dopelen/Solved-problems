@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space
+
+I understood the problem, but I misunderstood the edge cases, and fiddled with it for a couple of hours, then through the hints I understood a "good" solution.
+It was simpler than anything I wrote, it's a pity that I didn't think of it myself
+"""
+
+class Solution:
+    def robotWithString(self, s: str) -> str:
+        count, current_low, smallest_str, t = Counter(s), 'a', [], []
+        for symbol in s:
+            t += symbol
+            count[symbol] -= 1
+            while current_low < 'z' and count[current_low] == 0:
+                current_low = chr(ord(current_low) + 1)
+            while t and t[-1] <= current_low:
+                smallest_str += t.pop()
+        return "".join(smallest_str)
