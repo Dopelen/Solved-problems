@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The first thing I did this morning was solve the problem. 
+It was quick and I'm pleased with myself. 
+We need a lexicographically smaller answer, so we'll delete the smallest element on the left.
+For this we simply maintain an array of all the indices for each symbol, and delete the right index of the current minimum symbol if * came in. 
+At the end we simply construct a string using the remaining indices from the dictionary.
+"""
+
+class Solution:
+    def clearStars(self, s: str) -> str:
+        cur_smallest = "{"
+        symbol_index = defaultdict(list)
+        char_number = 0
+        for index, symbol in enumerate(s):
+            if symbol == "*":
+                symbol_index[cur_smallest].pop()
+                char_number -= 1
+                if char_number == 0:
+                    cur_smallest = "{"
+                else:
+                    while not symbol_index[cur_smallest]:
+                        cur_smallest = chr(ord(cur_smallest) + 1)
+            else:
+                if symbol < cur_smallest:
+                    cur_smallest = symbol
+                symbol_index[symbol].append(index)
+                char_number += 1
+        
+        result = ["" for _ in range(len(s))]
+        for char, idxs in symbol_index.items():
+            for i in idxs:
+                result[i] = char
+
+        return "".join(result)
