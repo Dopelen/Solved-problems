@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(1) by space.
+
+A simple tree traversal problem.
+You just need to find the insertion point of an element. 
+In a binary search tree, it is either left or right.
+"""
+
+class Solution:
+    def insertIntoBST(self, root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
+        if not root:
+            root = TreeNode(val)
+        elif val < root.val:
+            root.left = self.insertIntoBST(root.left, val)
+        else:
+            root.right = self.insertIntoBST(root.right, val)
+        return root
