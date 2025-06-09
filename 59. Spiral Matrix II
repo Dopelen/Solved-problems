@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n ** 2) by space.
+
+A simple task to sharpen your matrix bypassing skills, if you have bypassed a certain number of matrices, it will not be difficult for you.
+"""
+
+class Solution:
+    def generateMatrix(self, n: int) -> List[List[int]]:
+        matrix = [[None for row in range(n)] for col in range(n)]
+        dest_index, cur_number, final_num = 0, 0, n ** 2
+        dest = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        x = -1
+        y = 0
+        while cur_number != final_num:
+            if (0 <= (y + dest[dest_index][0]) < n) and (0 <= (x + dest[dest_index][1]) < n)\
+                    and (matrix[y + dest[dest_index][0]][x + dest[dest_index][1]] is None):
+                y += dest[dest_index][0]
+                x += dest[dest_index][1]
+                cur_number += 1
+                matrix[y][x] = cur_number
+            else:
+                dest_index = (dest_index + 1) % 4
+        return matrix
+
