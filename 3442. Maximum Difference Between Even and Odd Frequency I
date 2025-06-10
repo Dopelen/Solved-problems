@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+What a holiday, the first simple task in six months.
+We just do what the task asks for without any extra thought
+"""
+
+class Solution:
+    def maxDifference(self, s: str) -> int:
+        max_odd, min_even = 0, math.inf
+        for symbol, fr in Counter(s).items():
+            if fr % 2: max_odd = fr if fr > max_odd else max_odd
+            else: min_even = fr if fr < min_even else min_even
+        return max_odd - min_even
