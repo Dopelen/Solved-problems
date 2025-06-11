@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+
+I solved it in my head pretty quickly for a fixed K, and only when I wrote down the solutions did I notice that it was "at least k" and my solution was no longer suitable for this.
+Unfortunately, I couldn't solve the problem on my own, but it was a lesson to me: with small inputs, it's sometimes faster to just recalculate all the combinations.
+"""
+
+# https://leetcode.com/problems/maximum-difference-between-even-and-odd-frequency-ii/solutions/6359973/python3-sliding-window-by-ye15-uhsi/
+class Solution:
+    def maxDifference(self, s: str, k: int) -> int:
+        max_dif = -math.inf
+        for first_symbol in "01234":
+            for second_symbol in "01234":
+                if first_symbol != second_symbol:
+                    seen = defaultdict(lambda : math.inf)
+                    prefix_first = [0]
+                    prefix_second = [0]
+                    cur_left_border = 0
+                    for idx, char in enumerate(s):
+                        prefix_first.append(prefix_first[-1])
+                        prefix_second.append(prefix_second[-1])
+                        if char == first_symbol: prefix_first[-1] += 1
+                        elif char == second_symbol: prefix_second[-1] += 1
+                        while cur_left_border <= idx-k+1 and prefix_first[cur_left_border] < prefix_first[-1] and prefix_second[cur_left_border] < prefix_second[-1]:
+                            key = (prefix_first[cur_left_border] % 2, prefix_second[cur_left_border] % 2)
+                            diff = prefix_first[cur_left_border] - prefix_second[cur_left_border]
+                            seen[key] = min(seen[key], diff)
+                            cur_left_border += 1
+                        key = (1 - prefix_first[-1] % 2, prefix_second[-1] % 2)
+                        diff = prefix_first[-1] - prefix_second[-1]
+                        max_dif = max(max_dif, diff - seen[key])
+        return max_dif
