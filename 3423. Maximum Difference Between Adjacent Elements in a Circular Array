@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Today was another easy task! A real day off.
+As with other easy tasks, we just do literally what we are asked to do
+"""
+
+# Initial Solutin
+class Solution:
+    def maxAdjacentDistance(self, nums: List[int]) -> int:
+        max_dif = 0
+        for i in range(-1, -len(nums) - 1, -1):
+            min_el, max_el = min(nums[i], nums[i + 1]), max(nums[i], nums[i + 1])
+            max_dif = max(max_dif, abs(max_el - min_el))
+        return max_dif
+
+# Modified by me version from DeepSeek
+class Solution:
+    def maxAdjacentDistance(self, nums: List[int]) -> int:
+        return max(abs(a - b) for a, b in zip(nums, nums[1:] + [nums[0]]))
