@@ -1,0 +1,35 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n * log(n)) complexity by time and O(n) by space.
+
+I reread the conditions 30 times, but still misunderstood the task, and in the end I had to look at the hints.
+A huge problem is to understand what they want from you, but in general the task is solved by reverse logic - selecting an answer using binary search.
+I know this technique, but how to apply it if it is not clear what to look for...
+"""
+
+# https://leetcode.com/problems/minimize-the-maximum-difference-of-pairs/solutions/3883965/100-binary-search-greedy-video-in-on-log-ew8w/
+class Solution:
+    def minimizeMax(self, nums: List[int], p: int) -> int:
+
+        def can_form_pairs(mid):
+            count = 0
+            i = 0
+            while i < len(nums) - 1 and count < p:
+                if nums[i + 1] - nums[i] <= mid:
+                    count += 1
+                    i += 2
+                else:
+                    i += 1
+            return count >= p
+
+        nums.sort()
+        left, right = 0, nums[-1] - nums[0]
+
+        while left < right:
+            mid = (left + right) // 2
+            if can_form_pairs(mid):
+                right = mid
+            else:
+                left = mid + 1
+
+        return left
