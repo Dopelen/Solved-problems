@@ -1,0 +1,48 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+Today is a simple matrix traversal with island selection. Almost a classic task, I saw it in 6 different interviews and just collections of tasks.
+"""
+
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        max_area = 0
+        direct = {(0, 1), (1, 0), (0, -1), (-1, 0)}
+
+        def check_area(y, x):
+            if (0 <= y < rows) and (0 <= x < cols) and grid[y][x] == 1:
+                grid[y][x] = 2
+                cur_area = 1
+                for dy, dx in direct:
+                    cur_area += check_area(y + dy, x + dx)
+                return cur_area
+            return 0
+
+        for row in range(rows):
+            for col in range(cols):
+                if grid[row][col] == 1:
+                    max_area = max(max_area, check_area(row, col))
+
+        return max_area
+
+
+# Alternative
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        max_area = 0
+        
+        def dfs(y, x):
+            if 0 <= y < rows and 0 <= x < cols and grid[y][x] == 1:
+                grid[y][x] = 0
+                return 1 + dfs(y+1, x) + dfs(y-1, x) + dfs(y, x+1) + dfs(y, x-1)
+            return 0
+        
+        for y in range(rows):
+            for x in range(cols):
+                if grid[y][x] == 1:
+                    max_area = max(max_area, dfs(y, x))
+                    
+        return max_area
