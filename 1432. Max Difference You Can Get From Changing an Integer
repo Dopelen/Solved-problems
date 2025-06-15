@@ -1,0 +1,61 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space
+
+At first I thought that I just need to iterate over the string and replace the first element not equal to 9 with 9, 
+and then do the same with replacing the leading element with 1, and if the first is already 1, then the next one with 0, 
+but I thought that maybe I was missing something and wrote a complete enumeration of all possibilities. 
+And it passed, because there are small strings and a small number of characters. In general, the problem is solved greedily.
+"""
+
+# Initial idea (fastest)
+class Solution:
+    def maxDiff(self, num: int) -> int:
+        num_to_str = str(num)
+        for char in num_to_str:
+            if char != '9':
+                max_num = int(num_to_str.replace(char, '9'))
+                break
+            max_num = num
+
+        if num_to_str[0] != '1':
+            min_num = int(num_to_str.replace(num_to_str[0], '1'))
+        else:
+            for char in num_to_str[1:]:
+                if char not in {'0', '1'}:
+                    min_num = int(num_to_str.replace(char, '0'))
+                    break
+                min_num = num
+
+        return max_num - min_num
+
+
+# Initial solution
+class Solution:
+    def maxDiff(self, num: int) -> int:
+        num_to_str = str(num)
+        size = len(num_to_str)
+        possible_nums = set()
+        for i in range(10):
+            for j in range(10):
+                new_str = num_to_str.replace(str(i), str(j))
+                if new_str not in possible_nums and new_str[0] != "0":
+                    possible_nums.add(new_str)
+
+        possible_nums = list(map(int, possible_nums))
+        return max(possible_nums) - min(possible_nums)
+
+
+# Refactored
+class Solution:
+    def maxDiff(self, num: int) -> int:
+        s = str(num)
+        nums = set()
+        for x in '0123456789':
+            for y in '0123456789':
+                t = s.replace(x, y)
+                if t[0] != '0':
+                    nums.add(int(t))
+        return max(nums) - min(nums) if nums else 0
+
+#
