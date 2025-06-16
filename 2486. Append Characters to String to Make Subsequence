@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The worst case scenario is that I need to add the entire t string. 
+We take this as a basis and each corresponding character between t and s in the order they appear in t decreases this counter.
+Problem solved!
+"""
+
+class Solution:
+    def appendCharacters(self, s: str, t: str) -> int:
+        t_size = need_to_add = len(t)
+        s_size = len(s)
+        s_index = t_index = 0
+        while t_index < t_size and s_index < s_size:
+            if s[s_index] == t[t_index]:
+                need_to_add -= 1
+                s_index += 1
+                t_index += 1
+            else:
+                s_index += 1
+        return need_to_add
