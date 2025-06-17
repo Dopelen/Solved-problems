@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+A rather rare example of a task where it is immediately clear what is wanted from you, but it is not at all clear how to get it. 
+It is possible to somehow decompose the task, to understand how many answers we get by choosing the current index as the one that will be equal to the neighboring ones.
+But how to program this requires a serious understanding of combinatorics, and an understanding of how to build the necessary dependence, which I do not have.
+"""
+
+# https://leetcode.com/problems/count-the-number-of-arrays-with-k-matching-adjacent-elements/solutions/6199516/python-easy-and-short-by-lee215-nl2i/
+class Solution:
+    def countGoodArrays(self, n: int, m: int, k: int) -> int:
+        mod = 10 ** 9 + 7
+        return m * pow(m - 1, n - k - 1, mod) * comb(n - 1, k) % mod
