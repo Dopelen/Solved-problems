@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+Leetcode decided to please me with a simple task with the label "medium". 
+If you look closely, the task can be solved greedily. 
+If we sort the list, then we are guaranteed to take specs of 3 elements as close to each other as possible.
+And if at least one of them cannot pass the difference K between the elements, then we are guaranteed not to be able to find a more successful triple for it.
+"""
+
+# Initial Solution
+class Solution:
+    def divideArray(self, nums: List[int], k: int) -> List[List[int]]:
+        nums.sort()
+        answer = []
+        for index in range(0, len(nums), 3):
+            if nums[index + 2] - nums[index] > k:
+                return []
+            else:
+                answer.append(nums[index:index + 3])
+        return answer
