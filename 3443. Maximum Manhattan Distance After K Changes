@@ -1,0 +1,31 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(1).
+
+I thought I understood the problem and would solve it quickly, but in the end I sat with it for three and a half hours, after which I went to the hints, returned to the original solution, changed 2 lines there, and it worked.
+The whole trick is in this line:
+dis = MD + min(2 * k, i + 1 - MD)
+Here we compare the maximum by which we can change the Manhattan distance by changing the passed cells to "correct" ones. 
+i + 1 is how many cells we passed, subtracting the current MD from them we can find out the number of balancing cells. 
+If the number of steps == MD, then we have nothing to change, because the movement goes in one direction. Otherwise, we will have a lot of potential steps that we can spend our K on.
+If there are less than K, we will add all of them, and if there are more, we will add K * 2.
+"""
+
+class Solution:
+    def maxDistance(self, s: str, k: int) -> int:
+        max_dif = 0
+        north = south = east = west = 0
+        for i in range(len(s)):
+            match s[i]:
+                case 'N': north += 1
+                case 'S': south += 1
+                case 'E': east += 1
+                case 'W': west += 1
+
+            x = abs(north - south)
+            y = abs(east - west)
+            MD = x + y
+            dis = MD + min(2 * k, i + 1 - MD)
+            max_dif = max(max_dif, dis)
+
+        return max_dif
