@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+My head hurts, but as if that wasn't a reason to solve such a problem for 4 hours.
+I went down a dark path trying to write a binary search, although the correct solution is not complicated and is solved by simply going through the frequencies of each symbol, 
+since we have about 26 unique symbols, this will not greatly increase our algorithmic complexity
+"""
+
+class Solution:
+    def minimumDeletions(self, word: str, k: int) -> int:
+        freq = Counter(word)
+        freq_values = list(freq.values())
+        min_deletions = math.inf
+
+        for target in set(freq_values):
+            deletions = 0
+            for f in freq_values:
+                if f < target:
+                    deletions += f
+                elif f > target + k:
+                    deletions += f - (target + k)
+            min_deletions = min(min_deletions, deletions)
+
+        return min_deletions
