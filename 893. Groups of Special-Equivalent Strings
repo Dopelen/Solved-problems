@@ -1,0 +1,36 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It took me about twenty minutes to figure out that they weren't asking me for the largest group size, but for the number of groups.
+And I was sure that the solution would be very slow, but it was in the 92nd percentile!
+It wasn't easy to figure out what they wanted from me, but I did it.
+"""
+# Mine
+class Solution:
+    def numSpecialEquivGroups(self, words: List[str]) -> int:
+        all_schemas = []
+        for elem in words:
+            odd_symbols = []
+            even_symbols = []
+            even = True
+            for symbol in elem:
+                if even:
+                    even_symbols.append(symbol)
+                else:
+                    odd_symbols.append(symbol)
+                even = not even
+            odd_symbols.sort()
+            even_symbols.sort()
+            all_schemas.append(tuple([tuple(odd_symbols), tuple(even_symbols)]))
+        return len(Counter(all_schemas))
+
+
+# Anonimus from Leetcode. Same idea, but simpleer and lighter
+class Solution:
+    def numSpecialEquivGroups(self, A: List[str]) -> int:
+        res = set()
+        for s in A:
+            sort_odd_even = ''.join(sorted(s[1::2]) + sorted(s[::2]))
+            res.add(sort_odd_even)
+        return len(res)
