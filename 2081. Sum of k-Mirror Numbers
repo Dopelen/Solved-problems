@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(10 ** 5) (the number of possible palindromes) complexity by time and O(n) by space
+
+I was tormented by this problem, methodically wrote the logic of the solution, then the code, then I realized...
+That I did not take into account all the cases and the construction of the number should occur from the center to the periphery, 
+but this is re-assembling all the lower ranks when raising the higher one. I was tormented for a long time and eventually went to the tips, with realization that I need to improve my skills in writing backtracking.
+"""
+
+class Solution:
+    def kMirror(self, k: int, n: int) -> int:
+        total_sum = 0
+        size = 1
+
+        def is_palindrome(s):
+            return s == s[::-1]
+
+        def generate_palindromes(length):
+            palindromes = []
+            half_length = (length + 1) // 2
+
+            def backtrack(current):
+                if len(current) == half_length:
+                    full = current + (current[::-1] if not length % 2 else current[:-1][::-1])
+                    palindromes.append(full)
+                    return
+
+                start = 1 if len(current) == 0 else 0
+                for d in range(start, k):
+                    backtrack(current + str(d))
+
+            backtrack("")
+            return palindromes
+
+        while n > 0:
+            for pal in generate_palindromes(size):
+                decimal = int(pal, k)
+                if is_palindrome(str(decimal)):
+                    total_sum += decimal
+                    n -= 1
+                    if n == 0:
+                        return total_sum
+            size += 1
+
+        return total_sum
