@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Despite the medium tag, a simple task that can be solved in several ways. The largest one was the fastest, eh...
+"""
+
+# Initial solution and also fastest
+class Solution:
+    def minSteps(self, s: str, t: str) -> int:
+        additions = 0
+        counter_s = Counter(s)
+        counter_t = Counter(t)
+        processed = set()
+        for key, value in counter_s.items():
+            if key not in processed:
+                additions += max(value, counter_t[key]) - min(value, counter_t[key])
+                processed.add(key)
+        for key, value in counter_t.items():
+            if key not in processed:
+                additions += max(value, counter_s[key]) - min(value, counter_s[key])
+        return additions
+
+
+# After THINKING
+class Solution:
+    def minSteps(self, s: str, t: str) -> int:
+        freq = {symbol : 0 for symbol in string.ascii_lowercase}
+
+        def update_dict(word, first=1):
+            for elem in word:
+                freq[elem] += first
+
+        update_dict(s)
+        update_dict(t, -1)
+        return sum(abs(value) for value in freq.values())
+
+
+# After thinking
+class Solution:
+    def minSteps(self, s: str, t: str) -> int:
+        check = [0] * 26
+        for s_elem in s: check[ord(s_elem) - 97] += 1
+        for t_elem in t: check[ord(t_elem) - 97] += -1
+        return sum(abs(value) for value in check)
