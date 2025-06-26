@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I wrote a solution with regular expressions, but it didn't work because it didn't take into account that I needed a subsequence, not a substring.
+So I just greedily added one character from right to left as long as I could, and then added the remaining zeros from the left
+"""
+
+# initial Solution
+class Solution:
+    def longestSubsequence(self, s: str, k: int) -> int:
+        current_substring = ''
+        longest_substring = 0
+        for i in range(len(s) - 1, -1, -1):
+            current_substring = s[i] + current_substring
+            if int(current_substring, 2) <= k:
+                longest_substring += 1
+            else:
+                return s[0:i].count("0") + longest_substring
+        return longest_substring
