@@ -1,0 +1,63 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(26 ** P ∗N) and O(N) by space.
+
+Nice problem, but after 14 hours of work I couldn't solve it without hints.
+"""
+
+# https://leetcode.com/problems/longest-subsequence-repeated-k-times/solutions/6889095/beginner-freindly-java-c-python-js/?envType=daily-question&envId=2025-06-27
+class Solution:
+    def longestSubsequenceRepeatedK(self, s: str, k: int) -> str:
+
+        def is_appear_k_times(pattern: str) -> bool:
+            nonlocal s, k
+            count = i = 0
+            size = len(pattern)
+            for char in s:
+                if i < size and char == pattern[i]:
+                    i += 1
+                    i %= size
+                    count += i == 0
+                    if count == k:
+                        return True
+            return False
+
+        result = ""
+        que = deque([""])
+        while que:
+            current = que.popleft()
+            for ch in map(chr, range(ord('a'), ord('z') + 1)):
+                next_possible_substring = current + ch
+                if is_appear_k_times(next_possible_substring):
+                    result = next_possible_substring
+                    que.append(next_possible_substring)
+        return result
+
+# Fast variation
+class Solution:
+    def longestSubsequenceRepeatedK(self, s: str, k: int) -> str:
+        data = {char: freq for char, freq in Counter(s).items() if freq >= k}
+        queue = deque([("")])
+
+        def check(full, seq):
+            full_iter = iter(full)
+            return all(c in full_iter for c in seq)
+
+        seen = set()
+        result = ""
+
+        while len(queue) > 0:
+            word = queue.popleft()
+            word_counter = Counter(word)
+
+            for key in data.keys():
+                if (word_counter.get(key, 0) + 1) * k <= data[key]:
+                    new_word = word + key
+                    if check(s, new_word * k) and new_word not in seen:
+                        seen.add(new_word)
+                        queue.append(new_word)
+                        if len(new_word) > len(result):
+                            result = new_word
+                        elif len(new_word) == len(result) and new_word > result:
+                            result = new_word
+        return result
