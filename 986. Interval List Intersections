@@ -1,0 +1,62 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+For some reason I had a really hard time putting together a solution to this problem in my head, even though it's not that hard. 
+Half an hour later I wrote a reasonable, but slow and not very beautiful code that solves the problem in linear time.
+"""
+
+# Initial slow Solution (deque)
+class Solution:
+    def intervalIntersection(self, firstList: List[List[int]], secondList: List[List[int]]) -> List[List[int]]:
+        if not firstList or not secondList: return []
+
+        intersection = []
+        first_que = deque(firstList)
+        second_que = deque(secondList)
+
+        current_first = first_que.popleft()
+        current_second = second_que.popleft()
+
+        while any([first_que, current_first]) or any([second_que, current_second]):
+            start_f, end_f = current_first if current_first else first_que.popleft()
+            start_s, end_s = current_second if current_second else second_que.popleft()
+
+            cur_intersection = [max(start_f, start_s), min(end_f, end_s)]
+            if cur_intersection[0] <= cur_intersection[1]:
+                intersection.append(cur_intersection)
+
+            current_first = [max(end_s, start_f), end_f] if end_f > end_s else None
+            current_second = [max(end_f, start_s), end_s] if end_s > end_f else None
+            
+            if (not current_first and not first_que) or (not current_second and not second_que):
+                break
+
+        return intersection
+
+
+# After refactoring (index)
+class Solution:
+    def intervalIntersection(self, firstList: List[List[int]], secondList: List[List[int]]) -> List[List[int]]:
+        if not firstList or not secondList:
+            return []
+
+        result = []
+        first_pointer = second_pointer = 0
+
+        while first_pointer < len(firstList) and second_pointer < len(secondList):
+            start_f, end_f = firstList[first_pointer]
+            start_s, end_s = secondList[second_pointer]
+
+            start = max(start_f, start_s)
+            end = min(end_f, end_s)
+
+            if start <= end:
+                result.append([start, end])
+
+            if end_f < end_s:
+                first_pointer += 1
+            else:
+                second_pointer += 1
+
+        return result
