@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(1) by space.
+
+It was a bit difficult, but I managed with the author's hints.
+The main trick is to use sorting, then all that remains is to resort to two pointers and count the number of subsequences that we can form between these pointers for the answer. 
+And if the second part was clear to me, the main question is, why is it acceptable to use sorting?
+The point is that we need to find subsequences in which the minimum + maximum <= target, 
+which means that the order of the elements is not important to us, since within the specified boundaries, 
+if the conditions min + max <= target are met, then any combination inside will correspond to it.
+"""
+
+class Solution:
+    def numSubseq(self, nums: List[int], target: int) -> int:
+        nums.sort()
+        MOD = 10**9 + 7
+        left, right = 0, len(nums) - 1
+        res = 0
+        while left <= right:
+            if nums[left] + nums[right] <= target:
+                res += pow(2, right - left, MOD)
+                left += 1
+            else:
+                right -= 1
+        return res % MOD
