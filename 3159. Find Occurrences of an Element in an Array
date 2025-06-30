@@ -1,0 +1,13 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Quite a simple task, the complexity of which lies in its description. 
+By the time you understand what they want from you, 20 minutes will have passed, besides, the "queries" array is 1-based, but obviosly in Solution you will be use 0-based.
+Otherwise, the task is simple, beautifully solved with a couple of lines
+"""
+
+class Solution:
+    def occurrencesOfElement(self, nums: List[int], queries: List[int], x: int) -> List[int]:
+        all_x = [i for i in range(len(nums)) if nums[i] == x]
+        return [-1 if index > len(all_x) else all_x[index - 1] for index in queries]
