@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2^(log₂k + 1))  complexity by time and O(k) by space.
+
+An easy task for my birthday!
+If you solve it by enumeration, then it's not difficult, literally in a few operations you can type 500 elements, and not even worry that this is a "head-on" solution.
+"""
+
+# Head on!
+class Solution:
+    def kthCharacter(self, k: int) -> str:
+        initial_word = [97]
+        while len(initial_word) < k:
+            initial_word += [elem + 1 for elem in initial_word]
+        return chr((initial_word[k - 1] - 97) % 26 + 97)
