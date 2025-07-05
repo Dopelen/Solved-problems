@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+Emulating a process is easy, but writing a constant solution is a real challenge! 
+I described the entire concept, but I couldn't completely write the code that comes after converting memory to a cyclic change of operations.
+The number of steps before the program is interrupted is calculated by the sum of the arithmetic progression that we use here, but calculating the remainder in each of the variables is another challenge.
+"""
+
+# https://leetcode.com/problems/incremental-memory-leak/solutions/5457066/python-3-tc-o1-sc-o1-triangle-numbers-qu-9r7d/
+class Solution:
+    def memLeak(self, m1: int, m2: int) -> List[int]:
+        diff = abs(m1-m2)
+        i = int((-1 + sqrt(1+8*diff))/2)
+        
+        if m1 >= m2:
+            m1 -= i*(i+1)//2
+            i += 1
+        else:
+            m2 -= i*(i+1)//2
+            i += 1
+
+            if m2 > m1 and m2 > i:
+                m2 -= i
+                i += 1
+        c = int(min(
+            (-(i-1) + sqrt((i-1)**2 + 4*1*m1))/2,
+            (-i + sqrt(i**2 + 4*1*m2))/2
+        ))
+        m1 -= c*i + (c-1)*c
+        m2 -= c*i + c**2
+        i += 2*c
+        if m1 >= i:
+            m1 -= i
+            i += 1
+
+        return [i, m1, m2]
