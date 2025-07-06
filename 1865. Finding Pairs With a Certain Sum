@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+I initially went for binary search because I thought I could find the entire range of values ​​at once without a linear search, 
+but then I realized that the solution would be simpler and clearer using a dictionary. 
+The task is generally clear, with room for optimization, I liked it.
+"""
+
+class FindSumPairs:
+    def __init__(self, nums1: List[int], nums2: List[int]):
+        self.nums1 = sorted(nums1)
+        self.nums2 = nums2
+        self.num_2_freq = Counter(nums2)
+
+    def add(self, index: int, val: int) -> None:
+        self.num_2_freq[self.nums2[index]] -= 1
+        self.nums2[index] += val
+        self.num_2_freq[self.nums2[index]] += 1
+
+    def count(self, tot: int) -> int:
+        number_of_pairs = 0
+        for elem in self.nums1:
+             target_val = tot - elem
+             if target_val < 0:
+                 break
+             number_of_pairs += self.num_2_freq[target_val]
+        return number_of_pairs   
