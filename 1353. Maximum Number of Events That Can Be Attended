@@ -1,0 +1,31 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+For some reason I thought that I needed to find the maximum possible number of days visited, taking into account that once you come to a meeting, you have to stay there all day. 
+I went into dynamic programming and came back an hour later with the understanding that I needed to solve another problem.
+
+The correct solution involves greedy enumeration with processing of all intervals. 
+We find the maximum possible end date, and then enumerate all possible days before it. 
+On each day, we add to the priority all dates that start earlier than the current one and ends "today" + exclude that already ended. 
+If there is date which start earlier and end "today" we exclude it and increasing answer.
+"""
+
+class Solution:
+    def maxEvents(self, events: List[List[int]]) -> int:
+        size = len(events)
+        max_day = max(event[1] for event in events)
+        events.sort()
+        priority_que = []
+        answer = index = 0
+
+        for i in range(1, max_day + 1):
+            while index < size and events[index][0] <= i:
+                heapq.heappush(priority_que, events[index][1])
+                index += 1
+            while priority_que and priority_que[0] < i:
+                heapq.heappop(priority_que)
+            if priority_que:
+                heapq.heappop(priority_que)
+                answer += 1
+        
+        return answer
