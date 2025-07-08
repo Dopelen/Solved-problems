@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n*k*log(n)) complexity by time and O(n*k) by space.
+
+The week when I can't solve problems normally continues. 
+There is a time to throw stones and there is a time to pick them up... 
+Today's problem is what I tried to solve yesterday initially, when I misunderstood the condition. 
+Unfortunately, I couldn't solve it on my own, although the solution itself is not very difficult, dynamic programming with memoization.
+The code of the solution is very beautiful, I hope I will be able to come to such solutions myself someday. 
+For each event we consider all possible variants of events, between taking it and skipping it, and write down the result, so as not to waste time on repeated calculations.
+When I was solving it in my head, I couldn't build a dynamic programming matrix to store all the results that can be obtained in k steps.
+"""
+
+# https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended-ii/solutions/3496792/maximum-number-of-events-that-can-be-attended-ii/?envType=daily-question&envId=2025-07-08
+class Solution:
+    def maxValue(self, events: List[List[int]], k: int) -> int:
+        events.sort()
+        size = len(events)
+        starts = [start for start, end, value in events]
+        dp = [[-1] * size for _ in range(k + 1)]
+
+        def dfs(cur_index, count):
+            if count == 0 or cur_index == size:
+                return 0
+            if dp[count][cur_index] != -1:
+                return dp[count][cur_index]
+
+            next_index = bisect_right(starts, events[cur_index][1])
+            dp[count][cur_index] = max(dfs(cur_index + 1, count), events[cur_index][2] + dfs(next_index, count - 1))
+            return dp[count][cur_index]
+
+        return dfs(0, k)
