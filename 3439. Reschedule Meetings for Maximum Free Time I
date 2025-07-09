@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(n) by space.
+
+In general, it's a clear task. 
+I solved it greedily, simply calculating the maximum possible sum at each step. 
+A solution without optimization with calculating the maximum at each step led me to TLE, so I had to finish writing a sliding window
+"""
+
+class Solution:
+    def maxFreeTime(self, eventTime: int, k: int, startTime: List[int], endTime: List[int]) -> int:
+        gaps = [startTime[0]] + [startTime[i] - endTime[i - 1] for i in range(1, len(startTime))] + [eventTime - endTime[-1]]
+        absolut_max = current_max = sum(gaps[0:k + 1])
+        for j in range(k + 1, len(gaps)):
+            current_max += gaps[j]
+            current_max -= gaps[j - k - 1]
+            absolut_max = max(current_max, absolut_max)
+        return absolut_max
