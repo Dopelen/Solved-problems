@@ -7,3 +7,27 @@ As a result, I confused myself and made my life more difficult.
 The main task is to move each element to another place and calculate the maximum possible gap that can be obtained.
 """
 
+# https://leetcode.com/problems/reschedule-meetings-for-maximum-free-time-ii/editorial/?envType=daily-question&envId=2025-07-10
+class Solution:
+    def maxFreeTime(self, eventTime: int, startTime: list[int], endTime: list[int]) -> int:
+        size = len(startTime)
+        q = [False] * size
+        t1 = 0
+        t2 = 0
+        for i in range(size):
+            if endTime[i] - startTime[i] <= t1:
+                q[i] = True
+            t1 = max(t1, startTime[i] - (0 if i == 0 else endTime[i - 1]))
+            if endTime[size - i - 1] - startTime[size - i - 1] <= t2:
+                q[size - i - 1] = True
+            t2 = max(t2, (eventTime if i == 0 else startTime[size - i]) - endTime[size - i - 1])
+
+        res = 0
+        for i in range(size):
+            left = 0 if i == 0 else endTime[i - 1]
+            right = eventTime if i == size - 1 else startTime[i + 1]
+            if q[i]:
+                res = max(res, right - left)
+            else:
+                res = max(res, right - left - (endTime[i] - startTime[i]))
+        return res
