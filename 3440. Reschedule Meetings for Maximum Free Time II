@@ -1,0 +1,9 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and O(n) by space.
+
+I started solving a simplified version of yesterday's problem, but it turned out that something completely different was needed. 
+As a result, I confused myself and made my life more difficult. 
+The main task is to move each element to another place and calculate the maximum possible gap that can be obtained.
+"""
+
