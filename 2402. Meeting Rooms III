@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * (log(n))) complexity by time and O(n) by space.
+
+I sat there for over two hours, I struggled for a long time with various complex logic, but it was enough to use one pile to free up occupied rooms and the second to choose the next meeting in the minimum time. 
+I managed to do it almost without any hints, but of course I would have liked to do everything myself.
+"""
+
+class Solution:
+    def mostBooked(self, n: int, meetings: List[List[int]]) -> int:
+        meetings.sort()
+        free_rooms = list(range(n))
+        heapq.heapify(free_rooms)
+        busy_rooms = []
+        meetings_count = [0] * n
+
+        for start, end in meetings:
+            duration = end - start
+
+            while busy_rooms and busy_rooms[0][0] <= start:
+                time, room = heapq.heappop(busy_rooms)
+                heapq.heappush(free_rooms, room)
+
+            if free_rooms:
+                room = heapq.heappop(free_rooms)
+                heapq.heappush(busy_rooms, (start + duration, room))
+            else:
+                time, room = heapq.heappop(busy_rooms)
+                heapq.heappush(busy_rooms, (time + duration, room))
+
+            meetings_count[room] += 1
+
+        return meetings_count.index(max(meetings_count))
