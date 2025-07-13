@@ -1,0 +1,52 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+I solved this problem in the easy section probably a year ago, and overall it was as simple as it was.
+The task is clear, find the number of unique pairs between the elements of the first and second arrays, where the value of the first <= the second.
+"""
+
+# initial Solution (pointer)
+class Solution:
+    def matchPlayersAndTrainers(self, players: List[int], trainers: List[int]) -> int:
+        pairs = index = 0
+        trainers_size = len(trainers)
+        players.sort()
+        trainers.sort()
+        for player in players:
+            while index < trainers_size and player > trainers[index]:
+                index += 1
+            if index != trainers_size:
+                pairs += 1
+                index += 1
+            else:
+                break
+        return pairs
+
+
+# After refactoring
+class Solution:
+    def matchPlayersAndTrainers(self, players: List[int], trainers: List[int]) -> int:
+        index = 0
+        players.sort()
+        trainers.sort()
+        for trainer in trainers:
+            if trainer >= players[index]:
+                index += 1
+                if index == len(players):
+                    break
+        return index
+
+
+# Deque (slower and begger but kinda simplier)
+class Solution:
+    def matchPlayersAndTrainers(self, players: List[int], trainers: List[int]) -> int:
+        players = deque(sorted(players))
+        trainers = deque(sorted(trainers))
+        pairs = 0
+        while players and trainers:
+            if trainers[0] >= players[0]:
+                pairs += 1
+                players.popleft()
+            trainers.popleft()
+        return pairs
