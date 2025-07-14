@@ -1,0 +1,44 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space
+
+Quite a simple task. I initially solved it head-on, it turned out cumbersome, but overall it is understandable.
+"""
+
+# Initial Solution
+class Solution:
+    def findWinners(self, matches: List[List[int]]) -> List[List[int]]:
+        stat_dict = defaultdict(lambda: [0, 0])
+        for winner, loser in matches:
+                stat_dict[winner][0] += 1
+                stat_dict[loser][1] += 1
+
+        answer = [[], []]
+        for player, stat in stat_dict.items():
+            if stat[0] != 0 and stat[1] == 0:
+                answer[0].append(player)
+            elif stat[1] == 1:
+                answer[1].append(player)
+
+        answer[0].sort()
+        answer[1].sort()
+        return answer
+
+
+# Faster version
+class Solution:
+    def findWinners(self, matches: List[List[int]]) -> List[List[int]]:
+        winners = set()
+        losers = set()
+        more_than_once = set()
+        for [w, l] in matches:
+            winners.add(w)
+            if l in losers:
+                more_than_once.add(l)
+            else:
+                losers.add(l)
+        never_lose = list(winners - losers)
+        lose_once = list(losers - more_than_once)
+        never_lose.sort()
+        lose_once.sort()
+        return [never_lose, lose_once]
