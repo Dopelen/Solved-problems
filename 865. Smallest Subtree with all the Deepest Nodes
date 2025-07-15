@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I looked at how I solved this problem a year ago using dictionaries, and it became very funny. 
+Perhaps I remember the principle of solving with bypass since then, so I wrote it down quite quickly this time knowing that the return value doesn't need to be wrapped in tuples, Python will do it for you. :)
+"""
+
+class Solution:
+    def subtreeWithAllDeepest(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        
+        def check_common(r):
+            if not r:
+                return None, 0
+            
+            left, l_depth = check_common(r.left)
+            right, r_depth = check_common(r.right)
+
+            if l_depth > r_depth:
+                return left, l_depth + 1
+            elif l_depth < r_depth:
+                return right, r_depth + 1
+            else:
+                return r, l_depth + 1
+
+        return check_common(root)[0]
