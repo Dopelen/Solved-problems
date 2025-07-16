@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Quite a nice and simple task, if you think about it. 
+We need to find the largest subsequence in which the remainder of the sums from dividing by 2 adjacent elements will be equal to each other. 
+For the condition to be met, there are 3 scenarios: all even, all odd, the remainders alternate. 
+Finding the maximum of these three, you will find the solution!
+"""
+
+# initial Solution
+class Solution:
+    def maximumLength(self, nums: List[int]) -> int:
+        reminders = [elem % 2 for elem in nums]
+        odd_length = reminders.count(1)
+        even_length = reminders.count(0)
+        combine_length = 0
+        odd = not reminders[0]
+
+        for rem in reminders:
+            if rem != odd:
+                combine_length += 1
+                odd = not odd
+
+        return max(odd_length, even_length, combine_length)
+
+# One pass refactored version
+class Solution:
+    def maximumLength(self, nums: List[int]) -> int:
+        combine_length = odd_length = even_length = 0
+        prev_parity = not nums[0] % 2
+        for num in nums:
+            parity = num % 2
+            match parity:
+                case 1: odd_length += 1
+                case 0: even_length += 1
+            if parity != prev_parity:
+                combine_length += 1
+                prev_parity = parity
+
+        return max(odd_length, even_length, combine_length)
