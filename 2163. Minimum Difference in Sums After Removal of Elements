@@ -1,0 +1,73 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+With the author's hints I was able to write a solution, but it got into TLE. I had to optimize it.
+Apparently the problem is that for each index I'm iterating through a heap, and it seems like it's expensive.
+I changed the heap to a simple sorted list, but it still didn't help.
+After thinking a little more, the solution was found in a more optimal heap construction and avoiding calculating the sum (O(n)) at each iteration. 
+When our heap overflows - we can throw away the unnecessary element (the largest for the left part and the smallest for the right), 
+because it is guaranteed not to be useful to us, the heap already has the required elements that are smaller than the largest!
+I liked the task, it is difficult, but doable for my level
+"""
+
+# Correct Solution
+class Solution:
+    def minimumDifference(self, nums: List[int]) -> int:
+        size = len(nums)
+        n = size // 3
+
+        min_heap = []
+        left_sum = [0] * (size + 1)
+        current_sum = 0
+        for i in range(2 * n):
+            num = nums[i]
+            heapq.heappush(min_heap, -num)
+            current_sum += num
+            if len(min_heap) > n:
+                removed = -heapq.heappop(min_heap)
+                current_sum -= removed
+            left_sum[i + 1] = current_sum
+
+        max_heap = []
+        right_sum = [0] * (size + 1)
+        current_sum = 0
+        for i in range(size - 1, n - 1, -1):
+            num = nums[i]
+            heapq.heappush(max_heap, num)
+            current_sum += num
+            if len(max_heap) > n:
+                removed = heapq.heappop(max_heap)
+                current_sum -= removed
+            right_sum[i] = current_sum
+
+        min_diff = float('inf')
+        for i in range(n, 2 * n + 1):
+            diff = left_sum[i] - right_sum[i]
+            if diff < min_diff:
+                min_diff = diff
+
+        return min_diff
+
+# Initial TLE Solution
+class Solution:
+    def minimumDifference(self, nums: List[int]) -> int:
+        smallest_dif = math.inf
+        size = len(nums)
+        n = size // 3
+        min_heap, max_heap = [], []
+        smallest_sum, biggest_sum = [], []
+        heapify(min_heap)
+        heapify(max_heap)
+        for i in range(size):
+            heappush(min_heap, nums[i])
+            smallest_sum.append(sum(heapq.nsmallest(n, min_heap)))
+
+        for j in range(size - 1, -1, -1):
+            heappush(max_heap, -nums[j])
+            biggest_sum.append(-1 * sum(heapq.nsmallest(n, max_heap)))
+        biggest_sum.reverse()
+
+        for p in range(n - 1, size - n):
+            smallest_dif = min(smallest_dif, smallest_sum[p] - biggest_sum[p + 1])
+        return smallest_dif
