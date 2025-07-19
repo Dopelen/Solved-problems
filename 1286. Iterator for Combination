@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+If I were to write it myself, it would be a bit more difficult, but using "combinations" the task comes down to counting the remaining elements in the generator.
+Since during generation we cannot know whether there is something there or not until we use "next". For counting I came up with 3 methods:
+1. The first is to initially calculate the combinations, and then subtract len with each call to next, but this increases memory costs.
+2. The second way is to calculate the number of combinations mathematically, and subtract 1 each time the "next" of that number is called, but I'm not mathematical enough to write it myself, so I prefer not to use such methods unless absolutely necessary.
+3. Still, call the next method during the check and save the element that we will give when it is asked for next time. 
+The last method seemed the most understandable to me, so I took it.
+"""
+
+class CombinationIterator:
+
+    def __init__(self, characters: str, combinationLength: int):
+        self.combinations = combinations(characters, combinationLength)
+        self.prev_combo = None
+        
+
+    def next(self) -> str:
+        if self.prev_combo:
+            res = self.prev_combo
+            self.prev_combo = None
+            return res
+        return "".join(next(self.combinations))
+        
+
+    def hasNext(self) -> bool:
+        if self.prev_combo:
+            return True
+        try:
+            self.prev_combo = "".join(next(self.combinations))
+            return True
+        except StopIteration:
+            return False
+
+
