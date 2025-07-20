@@ -1,0 +1,72 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+The task is really difficult, and if I managed to build the tree, I still couldn't organize a clear solution algorithm in my head.
+The main trick is to organize the paths structurally and correctly, so that you can exclude duplicates without going through the entire tree for each element of the path at the input.
+A solution to this problem could be to form subtree hashes based on the path to them, which would allow us to store them for comparison with other hashes and eliminate duplicates.
+Here comes the part where my strength runs out, namely "how to write it".
+Luckily there are smart people, whom I will join someday, who share their code and explain how to write such things.
+"""
+
+# https://leetcode.com/problems/delete-duplicate-folders-in-system/?envType=daily-question&envId=2025-07-20
+class FolderTree:
+    def __init__(self):
+        self.children = dict()
+        self.is_duplicate = False
+    
+    def add_folder(self, path: List[str]) -> None:
+        node = self
+        for p in path:
+            if p not in node.children:
+                node.children[p] = FolderTree()
+            node = node.children[p]
+   
+    def mark_duplicates(self, seen: dict[int, List['FolderTree']]) -> int:
+        subtree_hashes = []
+        for key, node in self.children.items():
+            h = node.mark_duplicates(seen)
+            subtree_hashes.append(hash((key, h)))
+        subtree_hashes.sort()
+        h = hash(tuple(subtree_hashes))
+        if h == hash(tuple()):
+            return h
+        if h not in seen:
+            seen[h] = [self]
+        else:
+            self.is_duplicate = True
+            if len(seen[h]) == 1:
+                seen[h][0].is_duplicate = True
+            seen[h].append(self)
+        return h
+    
+    def remove_duplicates(self) -> None:
+        remove_keys = []
+        for key, node in self.children.items():
+            if node.is_duplicate:
+                remove_keys.append(key)
+            else:
+                node.remove_duplicates()
+        for key in remove_keys:
+            self.children.pop(key)
+    
+    def list_all(self) -> List[List[str]]:
+        result = []
+        for key, node in self.children.items():
+            subpaths = node.list_all()
+            for subpath in subpaths:
+                result.append([key] + subpath)
+            result.append([key])
+        return result
+
+
+class Solution:
+    def deleteDuplicateFolder(self, paths: List[List[str]]) -> List[List[str]]:
+        tree = FolderTree()
+        for path in paths:
+            tree.add_folder(path)
+        
+        tree.mark_duplicates({})
+        tree.remove_duplicates()
+
+        return tree.list_all()
