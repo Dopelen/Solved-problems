@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * (2 ** n)) complexity by time and O(n) by space.
+
+One of the simplest backtracking tasks you can come up with, but I always have some terrible difficulties with it. 
+I immediately realized that this task was for it, googled how it is written in the general case and was able to apply it to this problem, my brain still hurts.
+"""
+
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        size = len(s)
+        answer = []
+
+        def backtracking(start, local_answer):
+            if start == size:
+                answer.append(local_answer.copy())
+                return
+
+            for end in range(start + 1, size + 1):
+                substring = s[start:end]
+                if substring != substring[::-1]:
+                    continue
+                local_answer.append("".join(substring))
+                backtracking(end, local_answer)
+                local_answer.pop()
+
+        backtracking(0,[])
+        return answer
+
+
+# DP version (not mine)
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        n = len(s)
+        ans = [[] for _ in range(n + 1)]
+        ans[n] = [[]]
+        for i in range(n - 1, -1, -1):
+            for j in range(i + 1, n + 1):
+                val = s[i : j]
+                if val == val[ : : -1 ]:
+                     for k in ans[j]:
+                         res = [val]
+                         res.extend(k)
+                         ans[i].append(res)
+        return ans[0]  
