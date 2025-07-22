@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+I would say that this is essentially a problem of finding the largest sum of a subarray consisting of unique symbols, and the solution that immediately comes to mind is through two pointers.
+The solution is quite simple, from optimization - I added a sum counter so as not to count it every time.
+"""
+
+# Initial Solution
+class Solution:
+    def maximumUniqueSubarray(self, nums: List[int]) -> int:
+        max_sum = current_sum = left = right = 0
+        current_set = set()
+        while right != len(nums):
+            while left != right and nums[right] in current_set:
+                current_sum -= nums[left]
+                current_set.remove(nums[left])
+                left += 1
+            current_set.add(nums[right])
+            current_sum += nums[right]
+            max_sum = max(current_sum, max_sum)
+            right += 1
+        return max_sum
+
+
+# Refactored one
+class Solution:
+    def maximumUniqueSubarray(self, nums: List[int]) -> int:
+        max_sum = current_sum = left = 0
+        num_set = set()
+        for num in nums:
+            if num in num_set:
+                while nums[left] != num:
+                    current_sum -= nums[left]
+                    num_set.remove(nums[left])
+                    left += 1
+                left += 1
+            else:
+                num_set.add(num)
+                current_sum += num
+                if current_sum > max_sum:
+                    max_sum = current_sum
+        return max_sum
