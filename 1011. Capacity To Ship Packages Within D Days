@@ -1,0 +1,31 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+If you know the solution technique, the task is very simple. 
+Our task is to guess the load capacity, we know for sure that it will be in the range between the sum of all boxes and the maximum weight of the box. 
+Then we just need to make a log(n) passes for n elements in order to calculate the minimum we need.
+"""
+
+class Solution:
+    def shipWithinDays(self, weights: List[int], days: int) -> int:
+        left, right = max(weights), sum(weights)
+        
+        def days_needed(capacity: int) -> int:
+            total = 1
+            current = 0
+            for weight in weights:
+                if current + weight > capacity:
+                    total += 1
+                    current = weight
+                else:
+                    current += weight
+            return total
+        
+        while left < right:
+            mid = (left + right) // 2
+            if days_needed(mid) > days:
+                left = mid + 1
+            else:
+                right = mid
+        return left
