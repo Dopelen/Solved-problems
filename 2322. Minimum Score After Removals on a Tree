@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-This program has O(n) complexity by time and O(n) by space.
+This program has O(n ** 2) complexity by time and O(n) by space.
 
 By the time you read the conditions, you'll be tired.
 A classic difficult problem where you need to find solutions based on two topics: graph traversal and bit manipulation. 
