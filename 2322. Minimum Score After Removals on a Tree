@@ -1,0 +1,133 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+By the time you read the conditions, you'll be tired.
+A classic difficult problem where you need to find solutions based on two topics: graph traversal and bit manipulation. 
+Unfortunately, I'm not an expert in either of them.
+It would be nice if I could at least understand the solution when I see it or solve the part with the graph traversal. 
+However, everything rests on the condition of removing the edge, because we cannot remove all possible edges, especially since we need to do it twice. 
+Even with 1000 nodes, we will fly into O(n ** 3) If we don't find a way to precompute XOR and O(n**2) if we find. 
+O(n ** 3) == TLE, so we have to think.
+After struggling with the neural network for a couple of hours, I roughly understood the principle of the solution, at least in parts, but such tasks are still beyond my capabilities
+"""
+
+# Actual Solution with check tree optimization
+# https://leetcode.com/problems/minimum-score-after-removals-on-a-tree/editorial/?envType=daily-question&envId=2025-07-24
+class Solution:
+    def minimumScore(self, nums: List[int], edges: List[List[int]]) -> int:
+        adj = defaultdict(list)
+        for a, b in edges:
+            adj[a].append(b)
+            adj[b].append(a)
+
+        n = len(nums)
+        xor = [0] * n
+        parent = [-1] * n
+        in_time = [0] * n
+        out_time = [0] * n
+        time = 0
+
+        def dfs(u, p):
+            nonlocal time
+            parent[u] = p
+            in_time[u] = time
+            time += 1
+            xor[u] = nums[u]
+            for v in adj[u]:
+                if v != p:
+                    dfs(v, u)
+                    xor[u] ^= xor[v]
+            out_time[u] = time - 1
+
+        dfs(0, -1)
+
+        total_xor = xor[0]
+        min_score = math.inf
+
+        def is_ancestor(u, v):
+            return in_time[u] <= in_time[v] <= out_time[u]
+
+        for i in range(len(edges)):
+            a1, b1 = edges[i]
+            u1 = b1 if parent[b1] == a1 else a1
+            for j in range(i + 1, len(edges)):
+                a2, b2 = edges[j]
+                u2 = b2 if parent[b2] == a2 else a2
+
+                if is_ancestor(u1, u2):
+                    xor1 = xor[u2]
+                    xor2 = xor[u1] ^ xor[u2]
+                    xor3 = total_xor ^ xor[u1]
+                elif is_ancestor(u2, u1):
+                    xor1 = xor[u1]
+                    xor2 = xor[u2] ^ xor[u1]
+                    xor3 = total_xor ^ xor[u2]
+                else:
+                    xor1 = xor[u1]
+                    xor2 = xor[u2]
+                    xor3 = total_xor ^ xor1 ^ xor2
+
+                current_score = max(xor1, xor2, xor3) - min(xor1, xor2, xor3)
+                if current_score < min_score:
+                    min_score = current_score
+
+        return min_score
+
+
+# Me + DeepSeek TLE Solution
+class Solution:
+    def is_ancestor(self, u, v, parent):
+        while v != -1:
+            if v == u:
+                return True
+            v = parent[v]
+        return False
+
+    def minimumScore(self, nums: List[int], edges: List[List[int]]) -> int:
+        adjust_list = defaultdict(list)
+        for a, b in edges:
+            adjust_list[a].append(b)
+            adjust_list[b].append(a)
+
+        size = len(nums)
+        xor = [0] * size
+        parent = [-1] * size
+
+        def dfs(node, p):
+            parent[node] = p
+            xor[node] = nums[node]
+            for v in adjust_list[node]:
+                if v != p:
+                    dfs(v, node)
+                    xor[node] ^= xor[v]
+
+        dfs(0, -1)
+
+        min_score = math.inf
+        total_xor = xor[0]
+
+        for i in range(len(edges)):
+            a1, b1 = edges[i]
+            u1 = b1 if parent[b1] == a1 else a1
+            for j in range(i + 1, len(edges)):
+                a2, b2 = edges[j]
+                u2 = b2 if parent[b2] == a2 else a2
+                if self.is_ancestor(u1, u2, parent):
+                    xor1 = xor[u2]
+                    xor2 = xor[u1] ^ xor[u2]
+                    xor3 = total_xor ^ xor[u1]
+                elif self.is_ancestor(u2, u1, parent):
+                    xor1 = xor[u1]
+                    xor2 = xor[u2] ^ xor[u1]
+                    xor3 = total_xor ^ xor[u2]
+                else:
+                    xor1 = xor[u1]
+                    xor2 = xor[u2]
+                    xor3 = total_xor ^ xor1 ^ xor2
+
+                current_score = max(xor1, xor2, xor3) - min(xor1, xor2, xor3)
+                if current_score < min_score:
+                    min_score = current_score
+
+        return min_score
