@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n).
+
+First look:
+Interestingly, I solved a simplified version of this problem last week in the medium section.
+Using substring memorization, and moving through the array using two pointers
+(There is a difference in that there is a limit of 200 elements, so it might be faster to store the entries as a list instead of hashes.)
+
+Understanding the problem:
+I spent half an hour fiddling around and realized that the problem is more difficult because we can remove not only negative numbers, but also positive ones, 
+in order to preserve the uniqueness of the sequence (and, accordingly, its maximum possible sum)
+The problem is exactly of medium complexity, if the restrictions were stricter.
+
+Insight:
+What a pleasant moment of insight I caught!
+We can delete as many as we want -> we need the maximum sum of unique elements -> then the answer is simply the sum of all unique elements!
+"""
+
+class Solution:
+    def maxSum(self, nums: List[int]) -> int:
+        max_val, unic = -math.inf, set()
+        for num in nums:
+            if num > 0:
+                unic.add(num)
+            max_val = max(max_val, num)
+        return sum(unic) if unic else max_val
