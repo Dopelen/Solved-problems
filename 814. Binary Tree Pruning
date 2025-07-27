@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I remember tinkering with problems like this when I first saw a binary tree, and I'm much better at it now.
+"""
+
+class Solution:
+    def pruneTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if not root:
+            return None
+        
+        root.left = self.pruneTree(root.left)
+        root.right = self.pruneTree(root.right)
+        
+        if not root.left and not root.right and root.val == 0:
+            return
+        
+        return root
