@@ -1,0 +1,35 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+Each number must reach the minimum, on this path it will pass the number_of_numbers_less_than_the_current * frequency_of_the_current_element of operations. 
+This is the whole solution
+"""
+
+# light version after thinking!
+class Solution:
+    def reductionOperations(self, nums: List[int]) -> int:
+        nums.sort()
+        changes = operations = 0
+        cur_elem = nums[0]
+        for elem in nums:
+            if elem != cur_elem:
+                cur_elem = elem
+                changes += 1
+            operations += changes
+        return operations
+
+
+# Initial heavy Solution
+class Solution:
+    def reductionOperations(self, nums: List[int]) -> int:
+        operations = 0
+        elem_freq = Counter(nums)
+        sorted_elem = list(sorted(elem_freq.keys()))
+        total_elements_to_change = len(nums) - elem_freq[sorted_elem[0]]
+
+        for index, elem in enumerate(sorted_elem[1:], start=1):
+            operations += total_elements_to_change
+            total_elements_to_change -= elem_freq[elem]
+
+        return operations
