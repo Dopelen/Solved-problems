@@ -1,0 +1,53 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I mixed up OR and XOR, which made my solution take half an hour longer, but when I figured out the terminology, I was able to solve it myself!
+The solution was slow, but it's mine!
+The point is that by applying OR to a list, we accumulate 1 in each position while iterating through the list to the right.
+Knowing the maximum possible OR and the indices of the positions where the closest 1 is located for each of the bits of the maximum possible OR, 
+we can find the requested length for each of the numbers for feasible O(n) with a hidden constant the size of "the number of bits of the maximum number" (for 10**9 this is 32)
+"""
+
+# Mine
+class Solution:
+    def smallestSubarrays(self, nums: List[int]) -> List[int]:
+        answer = []
+        size = len(nums)
+        max_OR_size = len(bin(reduce(lambda x, y: x | y, nums))) - 2
+        bit_positions = [deque() for _ in range(31)]
+        for index_of_element in range(size):
+            bit_repr = bin(nums[index_of_element])[2:][::-1]
+            nums[index_of_element] = bit_repr
+            for bit_index, bit in enumerate(bit_repr):
+                if bit == '1':
+                    bit_positions[bit_index].append(index_of_element)
+
+        for index, num in enumerate(nums):
+            minimum_length = 0
+            for i in range(max_OR_size):
+                while bit_positions[i] and bit_positions[i][0] < index:
+                    bit_positions[i].popleft()
+                if bit_positions[i]:
+                    next_bit_index = bit_positions[i][0]
+                    minimum_length = max(minimum_length, next_bit_index - index)
+                else:
+                    continue
+            answer.append(minimum_length + 1)
+
+        return answer
+
+# Smart one from leetcode specialist (use same concept but gigasmarter)
+class Solution:
+    def smallestSubarrays(self, nums: List[int]) -> List[int]:
+        length = len(nums)
+        res = [inf] * length
+        for i in range(length):
+            x = nums[i]
+            res[i] = 1
+            j = i - 1
+            while j >= 0 and nums[j] | x != nums[j]:
+                res[j] = i - j + 1
+                nums[j] |= x
+                j -= 1
+        return res
