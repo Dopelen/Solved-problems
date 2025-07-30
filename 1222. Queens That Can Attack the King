@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+If you are going through the matrix for the first time, it is probably quite a difficult task, but if you are struggling with them for the 101st time, then this is a task for relaxation.
+I even use x and y, and the king's coordinates themselves through closure, I can't do that often!
+In essence, we need to go around 8 sides and in each of them we need to make a maximum of 8 steps, while remembering a maximum of 8 positions of the queens, 
+so that under the current conditions the task is constant both in terms of execution time and memory.
+"""
+
+class Solution:
+    def queensAttacktheKing(self, queens: List[List[int]], king: List[int]) -> List[List[int]]:
+        directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+        border = 7
+
+        def find_queen():
+            while 0 <= king_position[0] <= border and 0 <= king_position[1] <= border:
+                king_position[0] += y
+                king_position[1] += x
+                if king_position in queens:
+                    dangerous_queens.append(king_position)
+                    return
+
+        dangerous_queens = []
+        for y, x in directions:
+            king_position = king.copy()
+            find_queen()
+
+        return dangerous_queens
