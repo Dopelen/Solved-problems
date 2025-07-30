@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+In preparation for the interview, I decided to solve additional problems.
+"""
+
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals.sort()
+        non_overlapping = []
+        prev_start, prev_end = intervals[0]
+        for start, end in intervals[1:]:
+            if start <= prev_end:
+                prev_end = max(end, prev_end)
+            else:
+                non_overlapping.append([prev_start, prev_end])
+                prev_start, prev_end = start, end
+        non_overlapping.append([prev_start, prev_end])
+        return non_overlapping
