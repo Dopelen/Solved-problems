@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The concept takes as its basis the trick from the previous task, namely that we are limited to 32 bits at each step, which allows us to avoid the complexity of O(n ** 2) in favor of O(n * 32), which in turn allows us not to catch TLE. 
+All we need to do at each step is to continue ALL POSSIBLE ORs that were obtained at the previous index - with our new element, and write them in the answer!
+"""
+
+class Solution:
+    def subarrayBitwiseORs(self, arr: List[int]) -> int:
+            size = len(arr)
+            ORs_ending_here = {0}
+            total_ORs = set()
+            for i in range(size):
+                cue_el = arr[i]
+                ORs_ending_here = {cue_el | y for y in ORs_ending_here} | {cue_el}
+                total_ORs |= ORs_ending_here
+            return len(total_ORs)
