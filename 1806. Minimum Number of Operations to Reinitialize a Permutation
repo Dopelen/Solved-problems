@@ -1,0 +1,64 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+I tried to find a hard mathematical logic, but I got tired and just emulated the process, because the input data limit is only 1000.
+
+A few observations:
+#1 If you look closely, you can see that if 2 ** k == n, then the answer will be k, it remains to figure out the intermediate values and why this happens.
+#2 If you look closely, you can see that it is enough to follow experience 1, and then you can save a lot of memory.
+"""
+
+# result of observations
+class Solution:
+    def reinitializePermutation(self, n: int) -> int:
+        if (n & (n - 1)) == 0:
+            return int(math.log2(n))
+        
+        res = pos = 1
+        while True:
+            pos = (pos * 2) % (n - 1)
+            if pos == 1:
+                return res
+            res += 1
+
+# memory and speed optimization. answer always < n so in O(n) steps you can finde answer and also use O(1) memory
+class Solution:
+    def reinitializePermutation(self, n: int) -> int:
+        position_of_one = 1
+        operations = 0
+        while True:
+            if position_of_one % 2 == 0:
+                position_of_one = position_of_one // 2
+            else:
+                position_of_one = n // 2 + (position_of_one - 1) // 2
+            operations += 1
+            if position_of_one == 1:
+                return operations
+
+
+# Initial Solution O(n ** 2) time and O(n) space
+class Solution:
+    def reinitializePermutation(self, n: int) -> int:
+        initial_perm = [_ for _ in range(n)]
+        current_perm = initial_perm.copy()
+        operations = 1
+
+        def construct_arr():
+            nonlocal current_perm
+            arr = [None] * len(initial_perm)
+            for i in range(len(initial_perm)):
+                match i % 2:
+                    case 0:
+                        arr[i] = current_perm[i // 2]
+                    case 1:
+                        arr[i] = current_perm[n // 2 + (i - 1) // 2]
+            current_perm = arr
+
+        construct_arr()
+
+        while current_perm != initial_perm:
+            operations += 1
+            construct_arr()
+
+        return operations
