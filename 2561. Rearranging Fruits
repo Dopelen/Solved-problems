@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+A classic weekend challenge.
+It's tough, but I was only able to solve it with hints.
+Generalizations that are key to the solution:
+The input arrays are the same length, and we can only swap an element for another. 
+This means that if there are an odd number of elements, we can never balance two lists, because the lack of one element can be compensated by an additional one, 
+but there cannot be an additional one according to the condition.
+Since we need to understand the imbalance between the lists, we can use one dictionary.
+Simply adding elements from the first list and subtracting from the second, so that we only leave those that need to be supplemented on the other side.
+When forming a merge list, we divide it in half, because we know for sure that there are values that are on one of the sides, and by moving one element to the other side, we compensate for one on our side.
+We have a list of all the elements that need to be moved, to do this there are 2 ways: 
+- either take a light element and a heavy one, and move them at the price of the light one,
+- move it by exchanging it for the cheapest element from the two lists twice!
+We don't even need to know which list the current element in merged is in because we can guarantee that it can be swapped with some element from the opposite list.
+"""
+
+class Solution:
+    def minCost(self, basket1: List[int], basket2: List[int]) -> int:
+        freq = defaultdict(int)
+        total_min = math.inf
+        for first_elem, second_elem in zip(basket1, basket2):
+            freq[first_elem] += 1
+            freq[second_elem] -= 1
+            total_min = min(total_min, first_elem, second_elem)
+
+        merge = []
+        for value, fr in freq.items():
+            if fr % 2 != 0:
+                return -1
+            merge.extend([value] * (abs(fr) // 2))
+
+        if not merge:
+            return 0
+
+        merge.sort()
+
+        return sum(min(2 * total_min, x) for x in merge[: len(merge) // 2])
