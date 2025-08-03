@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n) complexity by time and O(n) by space.
+
+An hour to solve with a full search, which did not pass, another hour to debug it, tired...
+I thought I could make some cool memoization, but it did not work, it turned out to be exponential time.
+The correct solution is simply a greedy algorithm with a search for a range of fruits by binsearch and one potential rotation
+"""
+
+# https://leetcode.com/problems/maximum-fruits-harvested-after-at-most-k-steps/editorial/?envType=daily-question&envId=2025-08-03
+class Solution:
+    def maxTotalFruits(
+        self, fruits: List[List[int]], startPos: int, k: int) -> int:
+        size = len(fruits)
+        pref_sum = [0] * (size + 1)
+        indices = [0] * size
+
+        for i in range(size):
+            pref_sum[i + 1] = pref_sum[i] + fruits[i][1]
+            indices[i] = fruits[i][0]
+
+        max_fruits = 0
+        for x in range(k // 2 + 1):
+            y = k - 2 * x
+            left = startPos - x
+            right = startPos + y
+            start = bisect_left(indices, left)
+            end = bisect_right(indices, right)
+            max_fruits = max(max_fruits, pref_sum[end] - pref_sum[start])
+
+            y = k - 2 * x
+            left = startPos - y
+            right = startPos + x
+            start = bisect_left(indices, left)
+            end = bisect_right(indices, right)
+            max_fruits = max(max_fruits, pref_sum[end] - pref_sum[start])
+
+        return max_fruits
