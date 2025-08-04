@@ -1,0 +1,36 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I quickly understood the concept of the solution, it's basically 2 pointers with a complication, 
+but writing it and the part with the list initialization took an indecently long time, 
+I even thought that this was the ugliest code I wrote, but it went into the 99th percentile in speed, after that I stopped being so strict with it! 
+But I still went to refactor!
+"""
+
+# Refactored one!
+class Solution:
+    def totalFruit(self, fruits: List[int]) -> int:
+        first_type = [None, 0]
+        second_type = [None, 0]
+        prev_elem = None
+        prev_index = max_fruits = 0
+
+        for index, element in enumerate(fruits):
+            if element == first_type[0]:
+                first_type[1] += 1
+            elif element == second_type[0]:
+                second_type[1] += 1
+            else:
+                max_fruits = max(max_fruits, first_type[1] + second_type[1])
+                if prev_elem == first_type[0]:
+                    first_type[1] = index - prev_index
+                    second_type = [element, 1]
+                else:
+                    second_type[1] = index - prev_index
+                    first_type = [element, 1]
+            if element != prev_elem:
+                prev_elem = element
+                prev_index = index
+
+        return max(max_fruits, first_type[1] + second_type[1])
