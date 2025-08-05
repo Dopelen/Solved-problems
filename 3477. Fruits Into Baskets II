@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """You can see the description of the task using the code specified in the title on leetcode.
-So this program has O() complexity by time and O() by space.
+So this program has O(n ** 2) complexity by time and O(1) by space.
 
 A simple task, it is enough to emulate the process described in the conditions. 
 And the time limit is practically insignificant. 
