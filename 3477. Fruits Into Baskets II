@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O() complexity by time and O() by space.
+
+A simple task, it is enough to emulate the process described in the conditions. 
+And the time limit is practically insignificant. 
+I want to somehow optimize.
+But as if for this we need to organize deletion in O(1) from the middle of the list or come up with a new data structure.
+"""
+
+class Solution:
+    def numOfUnplacedFruits(self, fruits: List[int], baskets: List[int]) -> int:
+        size = fruits_left = len(fruits)
+        for i in range(size):
+            cur_fruit = fruits[i]
+            for j in range(size):
+                if cur_fruit <= baskets[j]:
+                    baskets[j] = 0
+                    fruits_left -= 1
+                    break
+        return fruits_left
