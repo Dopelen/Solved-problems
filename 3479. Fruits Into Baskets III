@@ -1,0 +1,94 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(m * sqrt(n)) complexity by time and O(n) by space. 
+
+What I thought about yesterday caught up with me today.
+As I thought, we can't do without an additional data structure here, it's a tree segment.
+I went to do some research on how to build it, but along the way I came across a method that was more understandable to me, which I used
+- splitting the input array into blocks, inside which I will perform the search. 
+This will greatly reduce the search, because I will only need to linearly go through one block + number_of_blocks.
+"""
+
+# Its called sqrt-decomposition!
+class Solution:
+    def numOfUnplacedFruits(self, fruits: List[int], baskets: List[int]) -> int:
+        size = len(baskets)
+        block_size = int(math.sqrt(size))
+        section = (size + block_size - 1) // block_size
+        total_unset = 0
+        max_val_in_section = [0] * section
+
+        for i in range(size):
+            max_val_in_section[i // block_size] = max(max_val_in_section[i // block_size], baskets[i])
+
+        for fruit in fruits:
+            unset = 1
+            for sec in range(section):
+                if max_val_in_section[sec] < fruit:
+                    continue
+                choose = 0
+                max_val_in_section[sec] = 0
+                for i in range(block_size):
+                    pos = sec * block_size + i
+                    if pos < size and baskets[pos] >= fruit and not choose:
+                        baskets[pos] = 0
+                        choose = 1
+                    if pos < size:
+                        max_val_in_section[sec] = max(max_val_in_section[sec], baskets[pos])
+                unset = 0
+                break
+            total_unset += unset
+        return total_unset
+
+# Good Solution. 
+# Although the tree may seem complicated, the idea is quite simple. 
+# We build a perfect binary tree to implement it as an array and maintain the MAXIMUM of child subtrees in the parent node. 
+# And if we delete a value, we restore the tree according to this rule.
+# https://leetcode.com/problems/fruits-into-baskets-iii/solutions/7030238/fruits-into-baskets-iii/?envType=daily-question&envId=2025-08-06
+class SegTree:
+    def __init__(self, baskets):
+        self.baskets_size = len(baskets)
+        tree_size = 2 << (self.baskets_size - 1).bit_length()
+        self.seg = [0] * tree_size
+        self._build(baskets, 1, 0, self.baskets_size - 1)
+
+    def _maintain(self, o):
+        self.seg[o] = max(self.seg[o * 2], self.seg[o * 2 + 1])
+
+    def _build(self, a, o, l, r):
+        if l == r:
+            self.seg[o] = a[l]
+            return
+        m = (l + r) // 2
+        self._build(a, o * 2, l, m)
+        self._build(a, o * 2 + 1, m + 1, r)
+        self._maintain(o)
+
+    def find_first_and_update(self, o, l, r, x):
+        if self.seg[o] < x:
+            return -1
+        if l == r:
+            self.seg[o] = -1
+            return l
+        m = (l + r) // 2
+        i = self.find_first_and_update(o * 2, l, m, x)
+        if i == -1:
+            i = self.find_first_and_update(o * 2 + 1, m + 1, r, x)
+        self._maintain(o)
+        return i
+
+
+class Solution:
+    def numOfUnplacedFruits(self, fruits: List[int], baskets: List[int]) -> int:
+        m = len(baskets)
+        if m == 0:
+            return len(fruits)
+
+        tree = SegTree(baskets)
+        count = 0
+
+        for fruit in fruits:
+            if tree.find_first_and_update(1, 0, m - 1, fruit) == -1:
+                count += 1
+
+        return count
