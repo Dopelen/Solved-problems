@@ -1,0 +1,56 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2 * s) complexity by time and O(n ** 2) by space.
+
+I really liked the problem because the idea itself gives something to think about.
+Due to the limitations in the number of moves, we know for sure that the central child can only move diagonally, and the two neighboring ones cannot cross it, because then they will not have enough time to return. 
+If you implement this without memoization, you can run into TLE. Which is what I did. I was upset, but then I attached the CACHE and everything worked!
+"""
+
+class Solution:
+    def maxCollectedFruits(self, fruits: List[List[int]]) -> int:
+        max_index = len(fruits) - 1
+        changes = {
+            "left": [(-1, 1), (0, 1), (1, 1)],
+            "right": [(1, -1), (1, 0), (1, 1)],
+        }
+
+        @lru_cache(maxsize=None)
+        def traverse(y, x, steps_left, is_left):
+            if y == x and (y, x) != (max_index, max_index):
+                return 0
+
+            if is_left and y <= x:
+                return 0
+            if not is_left and y >= x:
+                return 0
+
+            if steps_left < 0:
+                return 0
+
+            if y == x == max_index:
+                return fruits[y][x]
+
+            max_fruit = 0
+            for dy, dx in changes["left" if is_left else "right"]:
+                ny, nx = y + dy, x + dx
+                if ny > max_index or nx > max_index or ny < 0 or nx < 0:
+                    continue
+                if steps_left - 1 == 0 and (ny != max_index or nx != max_index):
+                    continue
+
+                max_fruit = max(
+                    max_fruit,
+                    traverse(ny, nx, steps_left - 1, is_left)
+                )
+
+            return fruits[y][x] + max_fruit
+
+        n = len(fruits)
+
+        mid = sum(fruits[i][i] for i in range(n - 1))
+        left_down = traverse(max_index, 0, max_index, True)
+        right_up = traverse(0, max_index, max_index, False)
+        last_cell = fruits[max_index][max_index]
+
+        return left_down + right_up + mid + last_cell
