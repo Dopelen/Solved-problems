@@ -1,0 +1,60 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+An extremely difficult problem that requires not only an understanding of statistics, 
+but also knowledge of dynamic programming, 
+combined with the ability to see that the answer to a problem from a certain point does not depend on the input data, 
+and simply cut off from a certain point so as not to fly out of the constraints.
+
+For me, EVERY step of this problem is not obvious. 
+From choosing a 25 ml portion to building a probability calculation via DP.
+"""
+
+# https://leetcode.com/problems/soup-servings/?envType=daily-question&envId=2025-08-08
+class Solution:
+    def soupServings(self, n: int) -> float:
+        m = ceil(n / 25)
+        dp = {}
+
+        def calculate_dp(i, j):
+            return (dp[max(0, i - 4)][j] + dp[max(0, i - 3)][j - 1] +
+                    dp[max(0, i - 2)][max(0, j - 2)]
+                    + dp[i - 1][max(0, j - 3)]) / 4
+
+        dp[0] = {0: 0.5}
+        for k in range(1, m + 1):
+            dp[0][k] = 1
+            dp[k] = {0: 0}
+            for j in range(1, k + 1):
+                dp[j][k] = calculate_dp(j, k)
+                dp[k][j] = calculate_dp(k, j)
+            if dp[k][k] > 1 - 1e-5:
+                return 1
+        return dp[m][m]
+
+
+# Human version
+class Solution:
+    def soupServings(self, n: int) -> float:
+        if n >= 5000:
+            return 1.0
+
+        @lru_cache(None)
+        def dp(a, b):
+            if a <= 0 and b <= 0:
+                return 0.5
+            if a <= 0:
+                return 1.0
+            if b <= 0:
+                return 0.0
+
+            return 0.25 * (
+                dp(a - 4, b) +
+                dp(a - 3, b - 1) +
+                dp(a - 2, b - 2) +
+                dp(a - 1, b - 3)
+            )
+
+        m = (n + 24) // 25
+        return dp(m, m)
