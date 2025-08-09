@@ -1,0 +1,54 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(K∗9!/(9−K)!) complexity by time and O(n) by space.
+
+In essence, it's not a very difficult task, I got a little confused with backtracking and recursion, but figured it out pretty quickly.
+The limitations are minimal, so I wasn't too worried about optimality. It was slow.
+"""
+
+# Refactored solution
+class Solution:
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        def backtrack(start, target, path):
+            if len(path) == k:
+                if target == 0:
+                    res.append(path.copy())
+                return
+            for i in range(start, 10):
+                if i > target:
+                    break
+                path.append(i)
+                backtrack(i + 1, target - i, path)
+                path.pop()
+        
+        res = []
+        backtrack(1, n, [])
+        return res
+
+
+# Initial Solution
+class Solution:
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        all_combinations = set()
+
+        def construct_list(l, cur_sum, used_elements, numbers_left):
+            if numbers_left == 1:
+                last_elem = n - cur_sum
+                if last_elem not in used_elements and (0 < last_elem <= 9):
+                    l.append(last_elem)
+                    all_combinations.add(tuple(sorted(l)))
+                    l.pop()
+            else:
+                for i in range(1, 10):
+                    if i in used_elements:
+                        continue
+                    elif cur_sum + i > n:
+                        break
+                    l.append(i)
+                    construct_list(l, cur_sum + i, used_elements | {i}, numbers_left - 1)
+                    l.pop()
+
+
+        construct_list([], 0, set(), k)
+
+        return list(map(list, all_combinations))
