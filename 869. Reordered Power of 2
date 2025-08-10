@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(k! * k) complexity by time and O(k! * k) by space.
+
+Power of two has only 1 unit in binary representation, the hard part is to calculate the permutations optimally. 
+If you know the libraries it is not a problem, but it is still "number length" factorial
+"""
+
+# My Initial Solution
+class Solution:
+    def reorderedPowerOf2(self, n: int) -> bool:
+        digits = list(str(n))
+        all_permutations = permutations(digits)
+        unique_permutations = set(all_permutations)
+
+        for p in unique_permutations:
+            if p[0] == '0':
+                continue
+            if bin(int(''.join(p))).count("1") == 1:
+                return True
+        return False
+
+
+# Smart one! O(2 ** 32)
+# https://leetcode.com/problems/reordered-power-of-2/solutions/7062566/clever-trick-digit-signature-matching-prime-factorization-hashing/?envType=daily-question&envId=2025-08-10
+
+class Solution:
+    def reorderedPowerOf2(self, n: int) -> bool:
+        def count_digits(x):
+            return ''.join(sorted(str(x)))
+
+        target = count_digits(n)
+        
+        for i in range(31):
+            if count_digits(1 << i) == target:
+                return True
+        return False
