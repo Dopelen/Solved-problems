@@ -1,0 +1,44 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(m * n) complexity by time and O(n).
+
+Initially I struggled trying to understand what the authors wanted. 
+Then I understood, but immediately decided to optimize, without making a completely straightforward solution. 
+To begin with, we need to collect some number from the powers of two, we know for sure that this can be done, and that the powers of two in the binary system are represented by single 1.
+This knowledge allows us to immediately collect all the powers of two that we need, simply by decomposing the given number into the sum of ones!
+As a result, we get powers of two, and if their base is always 2, we can leave just powers, significantly simplifying the final calculation, since for the sum of the segment we will only have one exponentiation!
+
+P.S: It can be further optimized by adding pre-calculation of all possible ranges.
+"""
+
+# After refactoring
+class Solution:
+    def productQueries(self, n: int, queries: List[List[int]]) -> List[int]:
+        MOD = 10 ** 9 + 7
+        binary_n = bin(n)[2:]
+        bin_size = len(binary_n)
+        powers = [bin_size - index - 1 for index, digit in enumerate(binary_n) if digit == "1"]
+        powers.reverse()
+        queries = [2 ** sum(powers[query[0]:query[1] + 1]) % MOD for query in queries]
+        return queries
+
+
+# Initial Solution
+class Solution:
+    def productQueries(self, n: int, queries: List[List[int]]) -> List[int]:
+        MOD = 10 ** 9 + 7
+        binary_n = bin(n)[2:]
+        bin_size = len(binary_n)
+        powers = []
+        for index, digit in enumerate(binary_n):
+            if digit == "1":
+                powers.append(bin_size - index - 1)
+        powers.reverse()
+        queries = [2 ** sum(powers[query[0]:query[1] + 1]) % MOD for query in queries]
+        return queries
+
+
+# One line for unhealthy people
+class Solution:
+    def productQueries(self, n: int, queries: List[List[int]]) -> List[int]:
+        return [2 ** sum(list(reversed([len(bin(n)[2:]) - index - 1 for index, digit in enumerate(bin(n)[2:]) if digit == "1"]))[query[0]:query[1] + 1]) % (10 ** 9 + 7) for query in queries]
