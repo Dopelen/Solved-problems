@@ -1,0 +1,57 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Initially, the condition was not very clear, but I quickly figured it out. 
+Basically, you just need to add the value to the current maximum on the segment. 
+Initially, I made a rough implementation, with two passes, but then refactored it to 1 pass and without additional memory
+"""
+
+# You can even do it with O(1) space
+class Solution:
+    def findPrefixScore(self, nums: List[int]) -> List[int]:
+        cur_max = -math.inf
+        prev_sum = 0
+
+        for i in range(len(nums)):
+            if nums[i] > cur_max:
+                cur_max = nums[i]
+            cur_score = cur_max + nums[i] + prev_sum
+            nums[i] = prev_sum = cur_score
+
+        return nums
+
+# After refactoring (one pass)
+class Solution:
+    def findPrefixScore(self, nums: List[int]) -> List[int]:
+        score_arr = []
+        cur_max = -math.inf
+        prev_sum = 0
+
+        for elem in nums:
+            if elem > cur_max:
+                cur_max = elem
+            cur_score = cur_max + elem + prev_sum
+            prev_sum = cur_score
+            score_arr.append(cur_score)
+
+        return score_arr
+
+
+# Initital Solution
+class Solution:
+    def findPrefixScore(self, nums: List[int]) -> List[int]:
+        prefix_max = []
+        cur_max = -math.inf
+        size = len(nums)
+        score_arr = []
+
+        for elem in nums:
+            if elem > cur_max:
+                cur_max = elem
+            prefix_max.append(cur_max)
+
+        for i in range(size):
+            score_arr.append(nums[i] + prefix_max[i] + (score_arr[i - 1] if i > 0 else 0))
+
+        return score_arr
