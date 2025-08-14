@@ -1,0 +1,33 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The restrictions are not strict, and I solved the problem by simply constructing a new string based on the order and the input string. 
+It seems that it can be done in place, but in terms of time it still seems to take several full passes.
+"""
+
+
+# After refactoring
+class Solution:
+    def customSortString(self, order: str, s: str) -> str:
+        freq = Counter(s)
+        sorted_s = []
+        for element in order:
+            sorted_s += element * freq[element]
+            del freq[element]
+        sorted_s += [key * value for key, value in freq.items()]
+        return "".join(sorted_s)
+
+
+# Initial Solution
+class Solution:
+    def customSortString(self, order: str, s: str) -> str:
+        freq = Counter(s)
+        char_without_order = set(e for e in s)
+        sorted_s = []
+        for element in order:
+            sorted_s += element * freq[element]
+            if element in char_without_order:
+                char_without_order.remove(element)
+        sorted_s += [el * freq[el] for el in char_without_order]
+        return "".join(sorted_s)
