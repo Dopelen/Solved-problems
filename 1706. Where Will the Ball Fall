@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+I just simulated the movement on the matrix, maybe there is a faster solution, but it seems simple and clear.
+Attached a match case to the solution so as not to forget the technology! 
+I wanted to attach a cache, but on test data it rather slows down the solution.
+"""
+
+
+class Solution:
+    def findBall(self, grid: List[List[int]]) -> List[int]:
+        answer = []
+        height, width = len(grid), len(grid[0])
+
+        def fall(x, y=0):
+            if 0 <= x < width and y == height:
+                return x
+
+            match grid[y][x]:
+                case 1 if (x == width - 1) or (grid[y][x + 1] == -1):
+                    return -1
+                case -1 if (x == 0) or (grid[y][x - 1] == 1):
+                    return -1
+            return fall(x + (grid[y][x]), y + 1)
+
+        for i in range(width):
+            answer.append(fall(i))
+
+        return answer
