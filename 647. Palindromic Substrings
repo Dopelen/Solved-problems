@@ -1,0 +1,63 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 3) complexity by time and O(n) by space.
+
+I don't know how this problem got into the middle section (probably an optimized DP solution is assumed). 
+In the current 1000 character limit, it is solved naively by two nested loops
+"""
+
+# Naive Solution
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        size = len(s)
+        poli = size
+        for i in range(size):
+            for j in range(i + 1, size):
+                if s[i:j] == s[j:i:-1]:
+                    poli += 1
+        return poli
+
+
+# Smart O(n ** 2) Solution
+# https://leetcode.com/problems/palindromic-substrings/solutions/6799088/video-there-are-two-types-of-palindromes-ugb3/
+class Solution:
+    def countSubstrings(self, s: str) -> int:        
+        res = 0
+
+        def count_palindrome(s, left, right):
+            count = 0
+            while left >= 0 and right < len(s) and s[left] == s[right]:
+                count += 1
+                left -= 1
+                right += 1
+            
+            return count
+
+        for i in range(len(s)):
+            res += count_palindrome(s, i, i)
+            res += count_palindrome(s, i, i + 1)
+        
+        return res
+
+# MegaSmart O(n) Solution
+# https://leetcode.com/problems/palindromic-substrings/solutions/7011748/count-palindromic-substrings-manachers-a-vwg2/
+
+class Solution:
+    def countSubstrings(self, s: str) -> int:
+        modified = '#'.join('^{}$'.format(s))
+        n = len(modified)
+        P = [0] * n  
+        C = R = 0    
+
+        for i in range(1, n - 1):
+            mirror = 2 * C - i
+            if i < R:
+                P[i] = min(R - i, P[mirror])
+
+            while modified[i + P[i] + 1] == modified[i - P[i] - 1]:
+                P[i] += 1
+
+            if i + P[i] > R:
+                C, R = i, i + P[i]
+
+        return sum((p + 1) // 2 for p in P)
