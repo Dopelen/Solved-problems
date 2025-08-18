@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+Intuition: This seems like a problem I could solve, but not quickly. 
+It's like we need a memoization system where we can see all the remaining numbers we can do things with, based on the number.
+A good way to understand the logic of a solution is to reduce it to simpler ones. What's the answer if the cards are 1, 2, 3..?
+We can group the brackets as we please, so that when we assemble a number we can use any combinations, just without repeating the numbers used. 
+Therefore, the problem comes down to combinatorics. Fortunately, there are few numbers and operations, and we can simply get the result by enumeration.
+
+P.S: I didn't finish it in an hour, so it's not my decision :(
+"""
+
+# https://leetcode.com/problems/24-game/solutions/7093770/24-game-o-1-java-c-c-c-python3-javascript-go/
+class Solution:
+    def judgePoint24(self, cards: List[int]) -> bool:
+        EPS = 1e-6
+
+        def dfs(nums: List[float]) -> bool:
+            if len(nums) == 1:
+                return abs(nums[0] - 24.0) < EPS
+
+            for i in range(len(nums)):
+                for j in range(len(nums)):
+                    if i == j:
+                        continue
+                    next_nums = [nums[k] for k in range(len(nums)) if k != i and k != j]
+                    a, b = nums[i], nums[j]
+                    candidates = [a + b, a - b, b - a, a * b]
+                    if abs(b) > EPS:
+                        candidates.append(a / b)
+                    if abs(a) > EPS:
+                        candidates.append(b / a)
+
+                    for val in candidates:
+                        if dfs(next_nums + [val]):
+                            return True
+            return False
+
+        return dfs([float(x) for x in cards])
