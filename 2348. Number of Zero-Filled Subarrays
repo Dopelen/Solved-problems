@@ -1,0 +1,43 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Quite a simple task. 
+First you look for all continuous ranges of zeros, and then you use the formula to calculate how many combinations you can make from them.
+But if you think about it, we can just update our combinations every time we encounter a zero, this will reduce the amount of processing that needs to be done, and the code will become cleaner and more understandable.
+"""
+
+# After thinking and refactoring! O(n) / O(1)
+class Solution:
+    def zeroFilledSubarray(self, nums: List[int]) -> int:
+        current_subseq = total_subseq = 0
+
+        for num in nums:
+            if num == 0:
+                current_subseq += 1
+                total_subseq += current_subseq
+            else:
+                current_subseq = 0
+
+        return total_subseq
+
+
+# Initial Solution O(n) / O(n)
+class Solution:
+    def zeroFilledSubarray(self, nums: List[int]) -> int:
+        current_subseq = total_subseq = 0
+        size = len(nums)
+        chunks = defaultdict(int)
+        for i in range(size):
+            if nums[i] == 0:
+                current_subseq += 1
+            elif nums[i - 1] == 0:
+                chunks[current_subseq] += 1
+                current_subseq = 0
+        if nums[-1] == 0:
+            chunks[current_subseq] += 1
+
+        for key, value in chunks.items():
+            total_subseq += value * ((key * (key + 1)) // 2)
+
+        return total_subseq
