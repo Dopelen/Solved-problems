@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(1) by space.
+
+A simple task, clearly included in the medium-difficulty tasks by accident. 
+We just need to find the extreme points of the matrix and calculate the area.
+"""
+
+# Initial Solution
+class Solution:
+    def minimumArea(self, grid: List[List[int]]) -> int:
+        height, width = len(grid), len(grid[0])
+        left = right = up = down = None
+        for i in range(height):
+            for j in range(width):
+                if grid[i][j] == 1:
+                    if up is None:
+                        up = i
+                    if left is None or left > j:
+                        left = j
+                    if right is None or right < j:
+                        right = j
+                    if down is None or down < i:
+                        down = i
+        return (right - left + 1) * (down - up + 1)
+
+
+# Compact version
+class Solution:
+    def minimumArea(self, grid: List[List[int]]) -> int:
+        height, width = len(grid), len(grid[0])
+        left = right = up = down = None
+        for i in range(height):
+            for j in range(width):
+                if grid[i][j] == 1:
+                    up = i if up is None else up
+                    left = j if left is None or left > j else left
+                    right = j if right is None or right < j else right
+                    down = i if down is None or down < i else down
+        return (right - left + 1) * (down - up + 1)
