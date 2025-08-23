@@ -1,0 +1,82 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2 * m ** 2) complexity by time and O(n * m) by space.
+
+A more complicated version of the previous task. 
+The 30-element limitation seems to hint that I can simply go through all possible options, all that's left is to write it.
+To do this, we need to take into account several assumptions, namely, to understand the structure of the rectangles' arrangement. 
+If they do not intersect, we run into a finite number of their arrangements above/below/to the left/to the right.
+
+I didn't make it in time, so I had to look at the solution.
+"""
+
+# https://leetcode.com/problems/find-the-minimum-area-to-cover-all-ones-ii/solutions/7102401/find-the-minimum-area-to-cover-all-ones-ii/?envType=daily-question&envId=2025-08-23
+class Solution:
+    def minimumSum2(
+        self, grid: List[List[int]], u: int, d: int, l: int, r: int
+    ) -> int:
+        height = len(grid)
+        max_height = 0
+        width = len(grid[0])
+        max_width = 0
+
+        for i in range(u, d + 1):
+            for j in range(l, r + 1):
+                if grid[i][j] == 1:
+                    height = min(height, i)
+                    width = min(width, j)
+                    max_height = max(max_height, i)
+                    max_width = max(max_width, j)
+
+        return (
+            (max_height - height + 1) * (max_width - width + 1)
+            if height <= max_height
+            else sys.maxsize // 3
+        )
+
+    def rotate(self, vec: List[List[int]]) -> List[List[int]]:
+        n = len(vec)
+        m = len(vec[0]) if n > 0 else 0
+        ret = [[0] * n for _ in range(m)]
+
+        for i in range(n):
+            for j in range(m):
+                ret[m - j - 1][i] = vec[i][j]
+
+        return ret
+
+    def solve(self, grid: List[List[int]]) -> int:
+        n = len(grid)
+        m = len(grid[0]) if n > 0 else 0
+        res = n * m
+
+        for i in range(n - 1):
+            for j in range(m - 1):
+                res = min(
+                    res,
+                    self.minimumSum2(grid, 0, i, 0, m - 1)
+                    + self.minimumSum2(grid, i + 1, n - 1, 0, j)
+                    + self.minimumSum2(grid, i + 1, n - 1, j + 1, m - 1),
+                )
+
+                res = min(
+                    res,
+                    self.minimumSum2(grid, 0, i, 0, j)
+                    + self.minimumSum2(grid, 0, i, j + 1, m - 1)
+                    + self.minimumSum2(grid, i + 1, n - 1, 0, m - 1),
+                )
+
+        for i in range(n - 2):
+            for j in range(i + 1, n - 1):
+                res = min(
+                    res,
+                    self.minimumSum2(grid, 0, i, 0, m - 1)
+                    + self.minimumSum2(grid, i + 1, j, 0, m - 1)
+                    + self.minimumSum2(grid, j + 1, n - 1, 0, m - 1),
+                )
+
+        return res
+
+    def minimumSum(self, grid: List[List[int]]) -> int:
+        right_grid = self.rotate(grid)
+        return min(self.solve(grid), self.solve(right_grid))
