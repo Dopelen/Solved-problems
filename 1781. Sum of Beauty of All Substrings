@@ -1,0 +1,43 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+It can be solved in three iterations, because the constraints are small.
+I did it this way initially, but it's not very good, because if we can maintain the minimums and maximums, we can speed up the solution, but it's harder than it looks.
+"""
+
+# Initial O(n ** 2 * (unic elements))
+class Solution:
+    def beautySum(self, s: str) -> int:
+        size = len(s)
+        total_beauty = 0
+        freq = Counter()
+        for i in range(size):
+            freq[s[i]] += 1
+            for j in range(i + 1, size):
+                freq[s[j]] += 1
+                max_freq = max(freq.values())
+                min_freq = min(freq.values())
+                total_beauty += max_freq - min_freq
+            freq.clear()
+        return total_beauty
+
+
+# Kinda O(n ** 2 * 26) but actually way slower than first one
+class Solution:
+    def beautySum(self, s: str) -> int:
+        size = len(s)
+        total_beauty = 0
+        for i in range(size):
+            freq = [0] * 26
+            max_freq = 0
+            for j in range(i, size):
+                index = ord(s[j]) - 97
+                freq[index] += 1
+                max_freq = max(max_freq, freq[index])
+                min_freq = math.inf
+                for fr in freq:
+                    if fr > 0:
+                        min_freq = min(min_freq, fr)
+                total_beauty += max_freq - min_freq
+        return total_beauty
