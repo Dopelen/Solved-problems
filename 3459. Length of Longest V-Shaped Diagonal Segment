@@ -1,0 +1,83 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+I thought about the solution in my head for 30-40 minutes until I understood what exactly needed to be done, the remaining hour and a half I wrote taking into account the edge cases and the logic of the workaround. 
+In the end, the solution was sent, passed all the tests on the first try and even entered the 90th percentile in terms of speed/ space!
+
+In my solution, I simply calculate the length of all possible diagonals from each of the matrix points, using optimization with mirror recording of results: 
+because if we found a diagonal of length 7 in one direction, then in the other direction it will also be 7 long.
+By pre-calculating the lengths of the diagonals in both directions, we reduce the total number of operations and eliminate unnecessary passes through the matrix.
+"""
+
+# Mine Solution
+class Solution:
+    def lenOfVDiagonal(self, grid: List[List[int]]) -> int:
+        height, width = len(grid), len(grid[0])
+        directions = [(-1, -1), (-1, 1), (1, 1), (1, -1)]
+        segments = [[[None] * 4 for elem in range(width)] for _ in range(height)]
+        cords_of_one = []
+
+
+        def check_diagonals(y, x, from_one):
+            for index, cords in enumerate(directions):
+                dy, dx = cords
+                if segments[y][x][index] is not None:
+                    continue
+                cur_y, cur_x = y, x
+                ny, nx = cur_y + dy, cur_x + dx
+                cur_diagonal = cur_diagonal_mirror = 0
+                if from_one and (0 <= ny < height) and (0 <= nx < width):
+                    if grid[ny][nx] != 2:
+                        segments[cur_y][cur_x][index] = 0
+                        continue
+                    elif grid[ny][nx] == 2 and segments[ny][nx][index] is not None:
+                        segments[cur_y][cur_x][index] = segments[ny][nx][index] + 1
+                        continue
+                while (0 <= ny < height) and (0 <= nx < width) and (grid[ny][nx] not in [grid[cur_y][cur_x], 1]):
+                    if from_one and (segments[ny][nx][index] is not None):
+                        segments[cur_y][cur_x][index] = segments[ny][nx][index] + 1
+                        break
+                    cur_diagonal += 1
+                    cur_y, cur_x = ny, nx
+                    ny += dy
+                    nx += dx
+                mirror_direction_index = (index + 2) % 4
+                mirror_y, mirror_x = directions[mirror_direction_index]
+                while cur_y != y and cur_x != x:
+                    segments[cur_y][cur_x][index] = cur_diagonal_mirror
+                    segments[cur_y][cur_x][mirror_direction_index] = cur_diagonal - from_one
+                    cur_diagonal -= 1
+                    cur_diagonal_mirror += 1
+                    cur_y += mirror_y
+                    cur_x += mirror_x
+                segments[cur_y][cur_x][index] = cur_diagonal_mirror
+
+
+        def find_longest(_y, _x):
+            local_longest = 0
+            for index, cords in enumerate(directions):
+                dy, dx = cords
+                steps = 0
+                cur_y, cur_x = _y, _x
+                while segments[cur_y][cur_x][index] != 0:
+                    local_longest = max(local_longest, steps + segments[cur_y][cur_x][(index + 1) % 4])
+                    steps += 1
+                    cur_y += dy
+                    cur_x += dx
+                local_longest = max(local_longest, steps + segments[cur_y][cur_x][(index + 1) % 4])
+            return local_longest + 1
+
+
+        for i in range(height):
+            for j in range(width):
+                if grid[i][j] == 1:
+                    cords_of_one.append((i ,j))
+                check_diagonals(i, j, grid[i][j] == 1)
+
+        longest_diagonal = 0 if not cords_of_one else 1
+
+        for o_y, o_x in cords_of_one:
+            longest_diagonal = max(find_longest(o_y, o_x), longest_diagonal)
+
+        return longest_diagonal
