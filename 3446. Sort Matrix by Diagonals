@@ -1,0 +1,71 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * n * log(n)) complexity by time and O(n) by space.
+
+I understood the solution right away, but it took me 20 minutes to write it.
+It came out with repetitions, so I'll try to optimize it further to make it shorter and clearer.
+Just collect the diagonals - sort - put in place.
+"""
+
+# After refactoring
+class Solution:
+    def sortMatrix(self, grid: List[List[int]]) -> List[List[int]]:
+        side = len(grid)
+
+        def sort_diagonal(start_row, start_col, reverse=False):
+            diagonal = []
+            y_cord, x_cord = start_row, start_col
+            while y_cord < side and x_cord < side:
+                diagonal.append(grid[y_cord][x_cord])
+                y_cord += 1
+                x_cord += 1
+            diagonal.sort(reverse=reverse)
+
+            y_cord, x_cord = start_row, start_col
+            for val in diagonal:
+                grid[y_cord][x_cord] = val
+                y_cord += 1
+                x_cord += 1
+
+        for row in range(side):
+            sort_diagonal(row, 0, reverse=True)
+
+        for col in range(1, side):
+            sort_diagonal(0, col, reverse=False)
+
+        return grid
+
+
+# Initial Solution
+class Solution:
+    def sortMatrix(self, grid: List[List[int]]) -> List[List[int]]:
+        side = len(grid)
+
+        def custom_sorting(start_coord, below_diagonal=True):
+            if start_coord > side:
+                return
+
+            y_cord = start_coord if below_diagonal else 0
+            x_cord = 0 if below_diagonal else start_coord
+            diagonal = []
+            while y_cord < side and x_cord < side:
+                diagonal.append(grid[y_cord][x_cord])
+                y_cord += 1
+                x_cord += 1
+            diagonal.sort(reverse=True if below_diagonal else False)
+
+            y_cord = start_coord if below_diagonal else 0
+            x_cord = 0 if below_diagonal else start_coord
+            steps, diagonal_size = 0, len(diagonal)
+            while steps != diagonal_size:
+                grid[y_cord][x_cord] = diagonal[steps]
+                steps += 1
+                y_cord += 1
+                x_cord += 1
+
+
+        for start in range(side):
+            custom_sorting(start)
+            custom_sorting(start + 1, False)
+
+        return grid
