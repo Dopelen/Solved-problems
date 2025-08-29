@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+Alice and Bob are still playing games...
+The problem is not difficult, but understanding of the condition comes after 5 readings. 
+Leetcode in this regard really develops patience.
+The game ends when there are no colors left at all, so Alice turn is first -> she wins any game where the sum n + m is odd.
+So the whole problem comes down to finding the number of ways to make an odd number from the numbers in the given ranges.
+"""
+
+# Initial Solution
+class Solution:
+    def flowerGame(self, n: int, m: int) -> int:
+        even_n = n // 2
+        odd_n = n // 2 + n % 2
+        even_m = m // 2
+        odd_m = m // 2 + m % 2
+
+        return even_n * odd_m + odd_n * even_m
+
+
+# If you think about it, we don't even care whether the numbers are even or odd, because the number of combinations is the product of n and m. 
+# If they are both even or odd, the number will be half of their product, and if not, it will be 1 less and integer division will discard 1.
+class Solution:
+    def flowerGame(self, n: int, m: int) -> int:
+        return n * m // 2
