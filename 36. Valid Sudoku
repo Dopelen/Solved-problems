@@ -1,0 +1,64 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(n * m) complexity by time and O(1) by space.
+
+The task is quite simple, you just need to check whether the matrix meets the given conditions. 
+I feel tomorrow they will ask again whether it is solvable...
+Anyway, I wrote the solution in almost one pass, but it still feels cumbersome.
+Could do with some improvement (and I did!)
+"""
+
+# After refactoring
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        rows = [set() for _ in range(9)]
+        cols = [set() for _ in range(9)]
+        boxes = [set() for _ in range(9)]
+        for i in range(9):
+            for j in range(9):
+                val = board[i][j]
+                if val == '.':
+                    continue
+                box_idx = (i // 3) * 3 + (j // 3)
+                if (val in rows[i] or 
+                    val in cols[j] or 
+                    val in boxes[box_idx]):
+                    return False
+                rows[i].add(val)
+                cols[j].add(val)
+                boxes[box_idx].add(val)
+        return True
+
+
+# Initial Solution
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+
+        def check_sub_box(y, x):
+            unic_elements = set()
+            for k in range(3):
+                for p in range(3):
+                    cur_el = board[y + k][x + p]
+                    if cur_el != '.' and cur_el in unic_elements:
+                        return False
+                    unic_elements.add(cur_el)
+
+            return True
+
+        for i in range(9):
+            unic_digits_row = set()
+            unic_digits_col = set()
+            for j in range(9):
+                if not (i % 3) and not (j % 3):
+                    if not check_sub_box(i, j):
+                        return False
+                current_elem_row = board[i][j]
+                current_elem_col = board[j][i]
+                if current_elem_row != '.' and current_elem_row in unic_digits_row:
+                    return False
+                elif current_elem_col != '.' and current_elem_col in unic_digits_col:
+                    return False
+                unic_digits_row.add(current_elem_row)
+                unic_digits_col.add(current_elem_col)
+
+        return True
