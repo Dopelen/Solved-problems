@@ -1,0 +1,43 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * 2 ** n) complexity by time and O(2 * n) by space.
+
+Found a strange problem with 14 comments, where the description and solution through Gray code are very unclear. Learned something new.
+"""
+
+# Initial Solution after reading hints and grey code googling
+class Solution:
+    def circularPermutation(self, n: int, start: int) -> List[int]:
+        if n == 0:
+            return [0]
+
+        codes_str = ['0', '1']
+
+        for i in range(2, n + 1):
+            reflected = codes_str[::-1]
+            first_half = ['0' + code for code in codes_str]
+            second_half = ['1' + code for code in reflected]
+            codes_str = first_half + second_half
+
+        codes_numbers = []
+        for code_str in codes_str:
+            num = 0
+            for char in code_str:
+                num = num * 2 + (1 if char == '1' else 0)
+            codes_numbers.append(num)
+
+        start_index = -1
+        for i, num in enumerate(codes_numbers):
+            if num == start:
+                start_index = i
+                break
+
+        return codes_numbers[start_index:] + codes_numbers[:start_index]
+
+
+# Version for those familiar with gray code and bit operations
+class Solution:
+    def circularPermutation(self, n: int, start: int) -> List[int]:
+        p = [i ^ (i >> 1) for i in range(1 << n)]
+        i = p.index(start)
+        return p[i:] + p[:i]
