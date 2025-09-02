@@ -1,0 +1,45 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 3) complexity by time and O(n) by space.
+
+When I was solving the problem, I started with the assumption that any point can have either 1 or 0 points that satisfy the rule described in the condition. 
+But because the edges of the constructed rectangle are not considered lines, in fact, any point can have from 0 to 3 points!
+After rewriting the solution, I realized that the problem does not assume that the rectangles should not intersect, the condition only says that there should be no other points inside them. 
+This means that I will need to rewrite the solution once more.
+
+I wrote a O(n ** 3) solution that checks for each pair of coordinates whether there are any other coordinates inside, and I'm sure it can be done faster.
+"""
+
+# After refactoring with sorting and min O(n ** 2)
+class Solution:
+    def numberOfPairs(self, points: List[List[int]]) -> int:
+        points.sort(key=lambda p: (p[0], -p[1]))
+        size = len(points)
+        pairs = 0
+        for i in range(size):
+            x1, y1 = points[i]
+            min_y = -math.inf
+
+            for j in range(i + 1, size):
+                x2, y2 = points[j]
+
+                if y2 <= y1 and y2 > min_y:
+                    pairs += 1
+                    min_y = y2
+        return pairs
+
+
+# Initial Solution O(n ** 3)
+class Solution:
+    def numberOfPairs(self, points: List[List[int]]) -> int:
+        pairs = 0
+
+        for left_x, left_y in points:
+            for right_x, right_y in points:
+                if left_x == right_x and left_y == right_y:
+                    continue
+                if right_x >= left_x and right_y <= left_y:
+                    pairs += not any((x_d, y_d) not in [(left_x, left_y), (right_x, right_y)] 
+                                     and (left_x <= x_d <= right_x) 
+                                     and (right_y <= y_d <= left_y) 
+                                     for x_d, y_d in points)
+        return pairs
