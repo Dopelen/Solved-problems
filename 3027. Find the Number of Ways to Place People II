@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+My optimized solution from yesterday turned out to be today's solution!
+"""
+
+class Solution:
+    def numberOfPairs(self, points: List[List[int]]) -> int:
+        points.sort(key=lambda p: (p[0], -p[1]))
+        size = len(points)
+        pairs = 0
+
+        for i in range(size):
+            x1, y1 = points[i]
+            min_y = -math.inf
+
+            for j in range(i + 1, size):
+                x2, y2 = points[j]
+
+                if y2 <= y1 and y2 > min_y:
+                    pairs += 1
+                    min_y = y2
+
+        return pairs
