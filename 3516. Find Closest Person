@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+This is probably the one of the simplest leetcode task I've ever encountered!
+"""
+
+class Solution:
+    def findClosest(self, x: int, y: int, z: int) -> int:
+        return 1 if abs(x - z) < abs(y - z) else 2 if abs(y - z) < abs(x-z) else 0
+        
