@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(1).
+
+The limitations are large, so we can't just roughly recalculate all the operations.
+Hints recommend that we use logarithms for calculation, since the number of operations on 1 number is the logarithm of the number, but then we need to calculate the sum of logarithms in the range using the formula.
+I googled it, exponents and integrals are used for this, and you can also use the number system based on base 4, and since I'm not very strong in this, I went to look for another, more understandable way. 
+A good solution that I hadn't thought of is through bit representation. 
+Division by 4 is literally a shift by 2 bits. 
+Knowing this fact, we can optimize our search for operations.
+"""
+
+# Idea not mine so tat the source  
+# https://leetcode.com/problems/minimum-operations-to-make-array-elements-zero/editorial/?envType=daily-question&envId=2025-09-06
+class Solution:
+    def get(self, num: int) -> int:
+        i = 1
+        base = 1
+        cnt = 0
+        while base <= num:
+            cnt += ((i + 1) // 2) * (min(base * 2 - 1, num) - base + 1)
+            i += 1
+            base *= 2
+        return cnt
+
+    def minOperations(self, queries: List[List[int]]) -> int:
+        result = 0
+        for q in queries:
+            result += (self.get(q[1]) - self.get(q[0] - 1) + 1) // 2
+        return result
