@@ -1,0 +1,41 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(1) by space.
+
+The task itself is not very difficult, you just need to transform the matrix. 
+The only thing that can be difficult is probably figuring out how to do it in place. 
+I used additional values, which I replaced at the end with a second pass, so as not to store a second matrix.
+"""
+
+# Initial Solution (I looked at other users' solutions and everyone generally used this approach)
+class Solution:
+    def gameOfLife(self, board: List[List[int]]) -> None:
+        # 2 -> was 0 become 1
+        # 3 -> was 1 become 0
+        height, width = len(board), len(board[0])
+        neighbors = {(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)}
+
+        def change_cell(y, x):
+            live_cells = 0
+            for dy, dx in neighbors:
+                ny, nx = y + dy, x + dx
+                if 0 <= ny < height and 0 <= nx < width:
+                    if board[ny][nx] in [1, 3]:
+                        live_cells += 1
+            if board[y][x] == 1:
+                if live_cells < 2 or live_cells > 3:
+                    board[y][x] = 3
+            else:
+                if live_cells == 3:
+                    board[y][x] = 2
+
+        for row in range(height):
+            for col in range(width):
+                change_cell(row, col)
+
+        for row in range(height):
+            for col in range(width):
+                if board[row][col] == 3:
+                    board[row][col] = 0
+                if board[row][col] == 2:
+                    board[row][col] = 1
