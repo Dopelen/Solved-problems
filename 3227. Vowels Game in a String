@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+For some reason this problem is considered medium level, although it requires very little thinking. 
+I wrote the solution and the logic of the solution in literally 2 minutes, and then spent another 20 thinking, what's the catch here, maybe I didn't take into account some boundary case?
+But it turned out that everything is as simple as it seemed. 
+We always delete substrings with vowels, so the presence of consonants does not bother us at all. 
+Now the second feature, if we found a vowel, there may be an even or odd number of them in the end. 
+- If there are even ones, we will take the odd part, the odd part will remain, Bob will be able to take only 0 -> we win
+- If there are odd ones -> we win
+So we just need to find at least one vowel for Alice to win.
+
+P.S: Here you can enjoy one "feature" in all its beauty. 
+The one-pass solution is slower than the multi-pass solution using the count method, because it is written in C and optimized for these types of problems.
+Code below faster than mine Solution!
+class Solution:
+    def doesAliceWin(self, s: str) -> bool:
+        count = s.count('a') + s.count('e') + s.count('i') + s.count('o') + s.count('u')
+        if count == 0: return False
+        else: return True
+"""
+
+class Solution:
+    def doesAliceWin(self, s: str) -> bool:
+        for symbol in s:
+            if symbol in {"a", "e", "i", "o", "u"}:
+                return True
+        return False
