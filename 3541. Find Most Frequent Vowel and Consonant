@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(1) by space.
+
+It's been over a year since I last solved all the simple problems on leetcode, and new ones are already appearing that I haven't seen yet. 
+They are solved quite simply
+"""
+
+class Solution:
+    def maxFreqSum(self, s: str) -> int:
+        freq_counter = defaultdict(int)
+        max_vowel = max_consonant = 0
+        for symbol in s:
+            freq_counter[symbol] += 1
+            if symbol in {'a', 'e', 'i', 'o', 'u'}:
+                max_vowel = max(max_vowel, freq_counter[symbol])
+            else:
+                max_consonant = max(max_consonant, freq_counter[symbol])
+        return max_vowel + max_consonant
