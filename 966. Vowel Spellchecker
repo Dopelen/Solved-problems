@@ -1,0 +1,45 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * l + q * l) complexity by time and same by space, where n is the number of words in wordlist, q is are number of queries and l average length of word.
+
+Some not very difficult, but very murky task. Solved using cache.
+But in general, you can not use the cache and optimize a couple of things, but the principle will remain the same.
+"""
+
+class Solution:
+    def spellchecker(self, wordlist: List[str], queries: List[str]) -> List[str]:
+        all_words = set(word for word in wordlist)
+        all_capitalization = defaultdict(list)
+        all_schemas = defaultdict(list)
+        result = []
+
+        @cache
+        def schema_convertor(w):
+            initial_word = [symbol for symbol in w]
+            for i, s in enumerate(initial_word):
+                if s in {'a', 'e', 'i', 'o', 'u', "A", "E", "I", "O", "U"}:
+                    initial_word[i] = '*'
+                else:
+                    initial_word[i] = initial_word[i].lower()
+            return "".join(initial_word)
+
+
+        for w in wordlist:
+            if w not in all_capitalization:
+                all_capitalization[w.lower()].append(w)
+            schema = schema_convertor(w)
+            if schema not in all_schemas:
+                all_schemas[schema].append(w)
+
+        for q in queries:
+            query_result = ""
+            if q in all_words:
+                query_result = q
+            elif q.lower() in all_capitalization:
+                query_result = all_capitalization[q.lower()][0]
+            elif schema_convertor(q) in all_schemas:
+                query_result = all_schemas[schema_convertor(q)][0]
+            result.append(query_result)
+
+        return result
+
