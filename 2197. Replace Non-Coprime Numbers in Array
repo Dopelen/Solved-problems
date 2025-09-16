@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+Surprisingly, a problem that can be solved with hints.
+If you google a little about the Euclidean algorithm and methods for finding the largest factor, you can write a solution that will work fine.
+Once you realize that you only need to compare the elements from the top of the stack with the current one, the solution just comes together in your head.
+"""
+
+# Initial Solution
+class Solution:
+    def replaceNonCoprimes(self, nums: List[int]) -> List[int]:
+        processed_elements = [nums[0]]
+
+        def is_non_coprime(x, y):
+            return math.gcd(x, y) > 1
+
+        def lcm(a, b):
+            return abs(a * b) // math.gcd(a, b) if a != 0 and b != 0 else 0
+
+        for elem in nums[1:]:
+            current_elem = elem
+            while processed_elements and is_non_coprime(current_elem, processed_elements[-1]):
+                current_elem = lcm(current_elem, processed_elements[-1])
+                processed_elements.pop()
+            processed_elements.append(current_elem)
+
+        return processed_elements
