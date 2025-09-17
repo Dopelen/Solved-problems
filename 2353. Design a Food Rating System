@@ -1,0 +1,93 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+I made a rough implementation and was not surprised when it did not pass in time, although in general it was working.
+
+Below you can find a cool, correct solution with manual heap comparison settings, as well as a cool trick to avoid deleting and searching for an element in the heap. 
+We store current rating states in a dictionary, and when we need to get the highest rating for a cuisine, we retrieve it from the heap and compare it with the dictionary's one. 
+If the values ​​differ, the resulting one is outdated, we simply delete it at the time of the request, not at the time of the change. 
+It turns out that we will have extra records, but we will never give them to the user by mistake without checking, and we will delete them at the first request that will affect them, thereby saving a lot of time.
+"""
+
+# After thinking! (still slow)
+class FoodRatings:
+    def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
+        self.cuisine_to_foods = defaultdict(list)
+        self.food_info = {}
+
+        for food, cuisine, rating in zip(foods, cuisines, ratings):
+            item = (-rating, food)
+            bisect.insort_right(self.cuisine_to_foods[cuisine], item)
+            self.food_info[food] = (cuisine, rating)
+
+    def changeRating(self, food: str, newRating: int) -> None:
+        cuisine, old_rating = self.food_info[food]
+        old_item = (-old_rating, food)
+        idx = bisect.bisect_left(self.cuisine_to_foods[cuisine], old_item)
+        del self.cuisine_to_foods[cuisine][idx]
+
+        new_item = (-newRating, food)
+        bisect.insort_right(self.cuisine_to_foods[cuisine], new_item)
+        self.food_info[food] = (cuisine, newRating)
+
+    def highestRated(self, cuisine: str) -> str:
+        return self.cuisine_to_foods[cuisine][0][1]
+
+
+# Initial TLE Solution
+class FoodRatings:
+    def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
+        self.cuisines_to_rating_and_food = defaultdict(list)
+        self.foods_to_cuisines = defaultdict(str)
+        for food, cuisine, rating in zip(foods, cuisines, ratings):
+            bisect.insort_right(self.cuisines_to_rating_and_food[cuisine], (rating, food), key=lambda x: (-x[0], x[1]))
+            self.foods_to_cuisines[food] = cuisine
+
+    def changeRating(self, food: str, newRating: int) -> None:
+        cuisine = self.foods_to_cuisines[food]
+        for index in range(len(self.cuisines_to_rating_and_food[cuisine])):
+            if self.cuisines_to_rating_and_food[cuisine][index][1] == food:
+                self.cuisines_to_rating_and_food[cuisine].pop(index)
+                break
+        bisect.insort_right(self.cuisines_to_rating_and_food[cuisine], (newRating, food), key=lambda x: (-x[0], x[1]))
+
+    def highestRated(self, cuisine: str) -> str:
+        return self.cuisines_to_rating_and_food[cuisine][0][1]
+
+
+# O(log(n))
+# https://leetcode.com/problems/design-a-food-rating-system/submissions/1773346226/?envType=daily-question&envId=2025-09-17
+class Food:
+    def __init__(self, food_rating, food_name):
+        self.food_rating = food_rating
+        self.food_name = food_name
+
+    def __lt__(self, other):
+        if self.food_rating == other.food_rating:
+            return self.food_name < other.food_name
+        return self.food_rating > other.food_rating
+
+class FoodRatings:
+    def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
+        self.food_rating_map = {}
+        self.food_cuisine_map = {}
+        self.cuisine_food_map = defaultdict(list)
+
+        for i in range(len(foods)):
+            self.food_rating_map[foods[i]] = ratings[i]
+            self.food_cuisine_map[foods[i]] = cuisines[i]
+            heapq.heappush(self.cuisine_food_map[cuisines[i]], Food(ratings[i], foods[i]))
+
+    def changeRating(self, food: str, newRating: int) -> None:
+        self.food_rating_map[food] = newRating
+        cuisineName = self.food_cuisine_map[food]
+        heapq.heappush(self.cuisine_food_map[cuisineName], Food(newRating, food))
+
+    def highestRated(self, cuisine: str) -> str:
+        highest_rated = self.cuisine_food_map[cuisine][0]
+        while self.food_rating_map[highest_rated.food_name] != highest_rated.food_rating:
+            heapq.heappop(self.cuisine_food_map[cuisine])
+            highest_rated = self.cuisine_food_map[cuisine][0]
+
+        return highest_rated.food_name
