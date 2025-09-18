@@ -1,0 +1,41 @@
+!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(n) by space.
+
+A variation of yesterday's problem with a million edge cases; I spent half an hour debugging it. 
+The main trick is still the same: don't access the heap when deleting an element, but simply perform validity checks when popping an element from the heap.
+P.S: You can replace the dictionaries with "version" field, which will store the task version, and perform checks through it, but the logic of the solution will remain the same, so I don't see much point.
+"""
+
+class TaskManager:
+
+    def __init__(self, tasks: List[List[int]]):
+        self.rating_heap = []
+        self.tasks_to_rating = defaultdict(int)
+        self.tasks_to_user = defaultdict(int)
+        for userId, taskId, priority in tasks:
+            self.rating_heap.append((-priority, -taskId, userId))
+            self.tasks_to_rating[taskId] = priority
+            self.tasks_to_user[taskId] = userId
+        heapify(self.rating_heap)
+
+    def add(self, userId: int, taskId: int, priority: int) -> None:
+        heappush(self.rating_heap, (-priority, -taskId, userId))
+        self.tasks_to_rating[taskId] = priority
+        self.tasks_to_user[taskId] = userId
+
+    def edit(self, taskId: int, newPriority: int) -> None:
+        self.tasks_to_rating[taskId] = newPriority
+        heappush(self.rating_heap, (-newPriority, -taskId, self.tasks_to_user[taskId]))
+
+    def rmv(self, taskId: int) -> None:
+        self.tasks_to_rating[taskId] = self.tasks_to_user[taskId] = None
+
+    def execTop(self) -> int:
+        while self.rating_heap:
+            neg_priority, neg_taskId, userId = heapq.heappop(self.rating_heap)
+            taskId = -neg_taskId
+            if (self.tasks_to_rating[taskId] == -neg_priority) and (self.tasks_to_user[taskId] == userId):
+                self.tasks_to_rating[taskId] = self.tasks_to_user[taskId] = None
+                return userId
+        return -1
