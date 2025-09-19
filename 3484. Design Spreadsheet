@@ -1,0 +1,65 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) space.
+
+A fairly simple task to construct a table. 
+I did it using a dictionary, but it might have been even faster to use a matrix.
+"""
+
+# Initial Solution 
+class Spreadsheet:
+
+    def __init__(self, rows: int):
+        self.table = {}
+        for symbol in string.ascii_uppercase:
+            self.table[symbol] = [0] * rows
+
+    def setCell(self, cell: str, value: int) -> None:
+        self.table[cell[0]][int(cell[1::]) - 1] = value
+
+    def resetCell(self, cell: str) -> None:
+        self.table[cell[0]][int(cell[1::]) - 1] = 0
+
+    def getValue(self, formula: str) -> int:
+        x, y = formula[1:].split("+")
+        if not x.isdigit():
+            x = self.table[x[0]][int(x[1::]) - 1]
+        if not y.isdigit():
+            y = self.table[y[0]][int(y[1::]) - 1]
+        return int(x) + int(y)
+
+
+# Faster version (At first, I didn't realize that it wasn't necessary to do everything as a literal table, and that you could simply write down the cell name as the entire key (this has been corrected in the version below))
+class Spreadsheet:
+
+    def __init__(self, rows: int):
+        self.sheet = {}
+
+    def setCell(self, cell: str, value: int) -> None:
+        self.sheet[cell] = value
+
+    def resetCell(self, cell: str) -> None:
+        self.sheet[cell] = 0
+
+    def getValue(self, formula: str) -> int:
+        x,y = formula[1:].split('+')
+
+        
+        if x in self.sheet:
+            x_val = self.sheet[x]
+        else:
+            if x.isdigit():
+                x_val = int(x)
+            else:
+                x_val = 0
+
+                
+        if y in self.sheet:
+            y_val = self.sheet[y]
+        else:
+            if y.isdigit():
+                y_val = int(y)
+            else:
+                y_val = 0
+
+        return x_val + y_val
