@@ -1,0 +1,54 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has complexity by time:
+__init__: O(1)
+addPacket: O(k) k - elements in bigest destination
+forwardPacket: O(k)
+getCount: O(log k)  
+
+complexity by space: 
+total: O(n) where n = memoryLimit
+current_queue: O(n)
+current_packets: O(n)
+dest_times: O(n × d) d = unic destinations
+
+Let's continue constructing classes! 
+This time, instead of a heap, we have a queue and a trick for removing the outermost elements, because we know they'll arrive in ascending order!
+For the first time in my life, I got an output overflow error in leetcode because I forgot to remove debug prints.
+"""
+
+class Router:
+
+    def __init__(self, memoryLimit: int):
+        self.current_packets = set()
+        self.current_queue = deque()
+        self.limit = memoryLimit
+        self.dest_times = defaultdict(list)
+
+    def addPacket(self, source: int, destination: int, timestamp: int) -> bool:
+        element_to_add = (source, destination, timestamp)
+        if element_to_add in self.current_packets:
+            return False
+        if len(self.current_queue) == self.limit:
+            elem_to_delete = self.current_queue.popleft()
+            self.current_packets.discard(elem_to_delete)
+            self.dest_times[elem_to_delete[1]].pop(0)
+        self.current_queue.append(element_to_add)
+        self.current_packets.add(element_to_add)
+        self.dest_times[destination].append(timestamp)
+        return True
+
+    def forwardPacket(self) -> List[int]:
+        if not self.current_queue:
+            return []
+        cur_element = self.current_queue.popleft()
+        self.current_packets.discard(cur_element)
+        self.dest_times[cur_element[1]].pop(0)
+        return list(cur_element)
+
+    def getCount(self, destination: int, startTime: int, endTime: int) -> int:
+        times = self.dest_times[destination]
+        start_pos = bisect.bisect_left(times, startTime)
+        end_pos = bisect.bisect_right(times, endTime)
+        result = end_pos - start_pos
+        return result
