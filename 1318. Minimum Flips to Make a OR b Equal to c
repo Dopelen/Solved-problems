@@ -1,0 +1,44 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The basic observation is that the bitwise "OR" bits in a and b must equal c. 
+If this isn't the case, we need to do one or two flips:
+Two if the bit in c == "0", and in a and b it's "1", and one otherwise.
+I'm sure this could be written very elegantly and concisely using bitwise operations, but out of habit, I did it using strings.
+"""
+
+# Bit version
+class Solution:
+    def minFlips(self, a: int, b: int, c: int) -> int:
+        flips = 0
+        for i in range(32):
+            bit_a = (a >> i) & 1
+            bit_b = (b >> i) & 1
+            bit_c = (c >> i) & 1
+            if (bit_a | bit_b) != bit_c:
+                if bit_c == 1:
+                    flips += 1
+                else:
+                    flips += bit_a + bit_b
+        return flips
+
+# String version
+class Solution:
+    def minFlips(self, a: int, b: int, c: int) -> int:
+        a, b, c = bin(a)[2:], bin(b)[2:], bin(c)[2:]
+        max_len = max(len(a), len(b), len(c))
+        a, b, c = a.zfill(max_len), b.zfill(max_len), c.zfill(max_len)
+        flips = 0
+        for bit_a, bit_b, bit_c in zip(a, b, c):
+            or_result = (bit_a == "1" or bit_b == "1")
+            if or_result and bit_c == "0":
+                flips += (bit_a == "1") + (bit_b == "1")
+            elif not or_result and bit_c == "1":
+                flips += 1
+        return flips
+
+# One-line
+class Solution:
+    def minFlips(self, a: int, b: int, c: int) -> int:
+        return ((a | b) ^ c).bit_count() + ((a & b) & ~c).bit_count()
