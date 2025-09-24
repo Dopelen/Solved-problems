@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A thorny problem of implementing division in code.
+When I looked at the implementation, it seemed pretty clear, but when I tried to put it together in my head, it was just a jumble of a million "ifs."
+The logic is as follows:
+1. Check that the numerator is not zero
+2. Check if the number is negative
+3. Introduce a system for finding the remainder period (this is where I ran out of time)
+"""
+
+# https://leetcode.com/problems/fraction-to-recurring-decimal/
+class Solution:
+    def fractionToDecimal(self, numerator: int, denominator: int) -> str:
+        if numerator == 0:
+            return "0"
+
+        fraction = []
+        if (numerator < 0) ^ (denominator < 0):
+            fraction.append("-")
+
+        dividend = abs(numerator)
+        divisor = abs(denominator)
+        fraction.append(str(dividend // divisor))
+        remainder = dividend % divisor
+        if remainder == 0:
+            return "".join(fraction)
+
+        fraction.append(".")
+        map_dict = {}
+        while remainder != 0:
+            if remainder in map_dict:
+                fraction.insert(map_dict[remainder], "(")
+                fraction.append(")")
+                break
+            map_dict[remainder] = len(fraction)
+            remainder *= 10
+            fraction.append(str(remainder // divisor))
+            remainder %= divisor
+
+        return "".join(fraction)
