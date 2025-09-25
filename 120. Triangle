@@ -1,0 +1,60 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has:
+DP version: O(n ** 2) complexity by time and O(n) by space.
+Iterative: O(n), O(1)
+
+I wrote a quick solution with a recursive traversal, but it didn't work, and I had to think hard.
+And then I realized that at each level I was descending recursion down (h + 1, i) and to the right(h + 1, i + 1), and my cell "at the bottom" was the "right" cell of the previous query. 
+These are two paths to this cell. But if I don't remember the minimum value for reaching this cell, I'll continue making recursive calls, even if I arrived there via a longer path.
+By introducing memoization, I cut off these calls, but the average execution time is still 3500ms with the best on leetcode being 0ms...
+
+
+"""
+
+# Smart One (I'm proud!):
+class Solution:
+    def minimumTotal(self, triangle: List[List[int]]) -> int:
+        height = len(triangle)
+        for row in range(1, height):
+            for elem in range(row + 1):
+                if elem == 0:
+                    minimum_parent = triangle[row - 1][0]
+                elif elem == row:
+                    minimum_parent = triangle[row - 1][elem - 1]
+                else:
+                    minimum_parent = min(triangle[row - 1][elem - 1], triangle[row - 1][elem])
+
+                triangle[row][elem] += minimum_parent
+        return min(triangle[-1])
+
+# You can also make it shorter
+#         for row in range(1, height):
+#             triangle[row][0] += triangle[row - 1][0] # for first elem
+#             for elem in range(1, row):
+#                 triangle[row][elem] += min(triangle[row - 1][elem - 1], triangle[row - 1][elem])
+#             triangle[row][row] += triangle[row - 1][row - 1] # for last elem
+
+
+# Initial solid solution (DP + Memoization)
+class Solution:
+    def minimumTotal(self, triangle: List[List[int]]) -> int:
+        height = len(triangle)
+        min_sum = math.inf
+        min_triangle = [[math.inf] * (h + 1) for h in range(height)]
+
+        def traverse(h, i, cur_sum):
+            nonlocal min_sum
+            if h >= height:
+                min_sum = min(min_sum, cur_sum)
+                return
+            new_sum = cur_sum + triangle[h][i]
+            if min_triangle[h][i] <= new_sum:
+                return
+            else:
+                min_triangle[h][i] = new_sum
+            traverse(h + 1, i, new_sum)
+            traverse(h + 1, i + 1, new_sum)
+
+        traverse(0, 0, 0)
+        return min_sum
