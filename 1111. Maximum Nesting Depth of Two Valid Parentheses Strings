@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The description of the problem evokes forbidden thoughts. The problem is somehow forced and unnatural even by the standards of abstract mathematical problems.
+Essentially, we simply need to divide the parentheses into groups so that the maximum nesting of two groups is minimal. 
+To do this, we alternate the distribution so that groups with even depth go into one group, and those with odd depth go into the other.
+"""
+
+class Solution:
+    def maxDepthAfterSplit(self, seq: str) -> List[int]:
+        result = []
+        previous = 1
+        for elem in seq:
+            if elem == '(':
+                if previous == 0:
+                    result.append(1)
+                else:
+                    result.append(0)
+            else:
+                result.append(previous)
+            previous = 1 if previous == 0 else 0
+
+        return result 
