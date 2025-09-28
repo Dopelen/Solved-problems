@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+If I hadn't googled what "pancake sorting" was after seeing it mentioned in the comments, it could have taken 10 hours at best instead of 20 minutes.
+
+P.S: The description says that this is a 0-index array, but all test cases and the answer are made for 1-index.
+"""
+
+class Solution:
+    def pancakeSort(self, arr: List[int]) -> List[int]:
+        end = len(arr) - 1
+        flips = []
+
+        while end != 0:
+            max_val = max(arr[:end + 1])
+            max_index = arr.index(max_val)
+            arr[:max_index + 1] = arr[max_index::-1]
+            flips.append(max_index + 1)
+            arr[:end + 1] = arr[end::-1]
+            flips.append(end + 1)
+            end -= 1
+
+        return flips
