@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * k * log(k)) complexity by time and O(n) by space.
+
+Today I came across a simple problem marked as medium difficulty.
+The solution comes down to how you determine the number of letters in a word and group them.
+I decided to sort the letters and put them into tuples as keys for a dictionary, but then I changed the tuples to strings.
+"""
+
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        all_anagrams = defaultdict(list)
+        for word in strs:
+            divided_word = ''.join(sorted(word))
+            all_anagrams[divided_word].append(word)
+        return list(all_anagrams.values())
+
