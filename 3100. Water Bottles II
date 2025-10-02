@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+If you look closely, it's immediately clear that we're dealing with the sum of an arithmetic progression.
+When it becomes greater than our number of bottles, we can simply return the previous sum plus the remaining bottles.
+
+But with the 100-element limit, I decided it would be clearer and simpler to do this iteratively in a loop.
+"""
+
+class Solution:
+    def maxBottlesDrunk(self, numBottles: int, numExchange: int) -> int:
+        empty_bottles = 0
+        while numBottles >= numExchange:
+            numBottles -= numExchange - 1
+            empty_bottles += numExchange
+            numExchange += 1
+        return empty_bottles + numBottles
