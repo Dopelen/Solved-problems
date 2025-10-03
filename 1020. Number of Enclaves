@@ -1,0 +1,37 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(recursion depth) by space.
+
+It feels like the problem could be solved in a hundred different ways. 
+I decided to go around all the islands and, if it borders on a matrix wasteland, simply ignore it, while simultaneously resetting the islands I've already passed to save memory and avoid unnecessary trips.
+
+In principle, it is possible to reset the islands that touch the border, and then simply count the number of 1s that remain.
+"""
+
+# Initial Solution
+class Solution:
+    def numEnclaves(self, grid: List[List[int]]) -> int:
+        height, width = len(grid), len(grid[0])
+        result = 0
+
+        def traverse(y, x):
+            nonlocal current_island, fall_from_grid
+            current_island += 1
+            grid[y][x] = 0
+            for ny, nx in [(y - 1, x), (y, x + 1), (y + 1, x), (y, x - 1)]:
+                if ny < 0 or ny == height or nx < 0 or nx == width:
+                   fall_from_grid = True
+                else:
+                    if grid[ny][nx] == 1:
+                        traverse(ny, nx)
+
+        for i in range(height):
+            for j in range(width):
+                if grid[i][j] == 1:
+                    current_island = 0
+                    fall_from_grid = False
+                    traverse(i, j)
+                    if not fall_from_grid:
+                        result += current_island
+
+        return result
