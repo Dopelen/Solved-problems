@@ -1,0 +1,54 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n)  complexity by time and O(n) by space.
+
+I had terrible insomnia, and at 4 a.m. I spent about two hours thinking about this problem lying in bed, trying to make the complexity better than quadratic, and I figured it out!
+
+1. Starting from the very beginning, we try all the values, maintaining the maximum we had and skipping all the others.
+2. For each number greater than the previous one, we start a second iteration from the end to the found value, until we find a number greater than our first.
+3. Because going from left to right, we guarantee that an earlier, higher value will yield a better result than any smaller value to the right.
+4. The same logic applies when working from the end: finding a number greater than the starting one maximizes the area. The potential area can only decrease if we continue to the left.
+
+I felt really smart! Then I submitted my solution, and it passed, but just barely.
+I had to think some more.
+Overall, it turned out to be the same quadratic complexity, just with a couple of heuristics. 
+I was a little disappointed, but still proud of myself; the correct solution uses the same two pointers, but a little differently.
+I actually liked the problem; it requires some "thinking," in a good way.
+"""
+
+# O(n) Beautiful!
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        pointer_1, pointer_2 = 0, len(height) - 1
+        max_area = 0
+        while pointer_2 != pointer_1:
+            area = (pointer_2 - pointer_1) * min(height[pointer_1], height[pointer_2])
+            max_area = max(max_area, area)
+            if height[pointer_1] <= height[pointer_2]:
+                pointer_1 += 1
+            else:
+                pointer_2 -= 1
+
+        return max_area
+
+
+# O(n ** 2) which passed!
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        size = len(height) - 1
+        prev_max = -math.inf
+        max_area = 0
+        for pointer_1, elem in enumerate(height):
+            if elem <= prev_max:
+                continue
+            prev_max = elem
+            pointer_2 = size
+
+            while pointer_2 != pointer_1:
+                area = (pointer_2 - pointer_1) * min(elem, height[pointer_2])
+                max_area = max(max_area, area)
+                if height[pointer_2] > prev_max:
+                    break
+                pointer_2 -= 1
+
+        return max_area
