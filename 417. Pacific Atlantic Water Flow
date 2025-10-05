@@ -1,0 +1,43 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and same by space.
+
+I'm struggling with this problem; it's not difficult, I just got stuck.
+At first, I wrote a recursive traversal of all cells, but it:
+1. It iterated over all cells instead of those that could potentially help us.
+2. It had a nasty "equal neighbors" error, where if the first neighbor had access to two oceans, the second one wouldn't go there because that cell had already been checked before, but it itself didn't have access to both oceans.
+Because of this, I simply wrote a traversal of all cells bordering an ocean, interrupting the check to block repeated checks and considering only those cells that are accessible from both oceans.
+
+In general, I'm glad that I struggled so much, because the final solution turned out to be cleaner and clearer.
+"""
+
+class Solution:
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        height, width = len(heights), len(heights[0])
+        ways = [[0 for cell in range(width)] for line in range(height)]
+        results = []
+
+        def find_path(y, x, ocean_marker):
+            if (ocean_marker == ways[y][x]) or (ways[y][x] == 3):
+                return
+            elif ocean_marker == -ways[y][x]:
+                ways[y][x] = 3
+                results.append([y, x])
+            elif ways[y][x] == 0:
+                ways[y][x] = ocean_marker
+
+
+            for dy, dx in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
+                ny, nx = y + dy, x + dx
+                if (0 <= ny < height) and (0 <= nx < width) and (heights[ny][nx] >= heights[y][x]):
+                    find_path(ny, nx, ocean_marker)
+
+        for i in range(height):
+            find_path(i, 0, 1)
+            find_path(i, width - 1, -1)
+
+        for j in range(width):
+            find_path(0, j, 1)
+            find_path(height - 1, j, -1)
+
+        return results
