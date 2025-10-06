@@ -1,0 +1,66 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n ** 2) complexity by time and O(n ** 2).
+
+
+Like any self-respecting person, when I try to fall asleep, I don't count sheep, but rather repeat graph traversal algorithms. 
+Just the other day, in my insomnia, I was remembering the dijkstra. It hadn't even been two days, and it came in handy.
+
+The solution is beautiful and clear. 
+We maintain a matrix that keeps track of the minimum possible cell visit time and a min heap where we store "movements." 
+Each element of the heap represents an attempt to move from a given cell to all adjacent cells at the current time. 
+The heap helps process the fastest movements, so when we reach the last cell, we can immediately return to it, since all the others would take longer.
+
+I'm pleased with myself and my solution.
+
+The only thing is that I initially used a matrix of visits time rather than just visits. 
+However, the dijkstra itself guarantees that we arrive at a point as early as possible, so we can replace the time matrix with a simple boolean visit tracking matrix.
+"""
+
+# Refactored One
+class Solution:
+    def swimInWater(self, grid: List[List[int]]) -> int:
+        size = len(grid)
+        visited = [[False] * size for _ in range(size)]
+        directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+        heap = [(grid[0][0], 0, 0)]
+        visited[0][0] = True
+
+        while heap:
+            time, y, x = heapq.heappop(heap)
+            if y == size - 1 and x == size - 1:
+                return time
+
+            for dy, dx in directions:
+                ny, nx = y + dy, x + dx
+                if (0 <= ny < size) and (0 <= nx < size) and (not visited[ny][nx]):
+                    new_time = max(time, grid[ny][nx])
+                    heapq.heappush(heap, (new_time, ny, nx))
+                    visited[ny][nx] = True
+
+
+# Initial Solution
+class Solution:
+    def swimInWater(self, grid: List[List[int]]) -> int:
+        side_size = len(grid)
+        min_time_grid = [[math.inf] * side_size for _ in range(side_size)]
+        directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+        heap = [(grid[0][0], 0, 0)]
+        min_time_grid[0][0] = grid[0][0]
+        
+        if side_size == 1:
+            return grid[0][0]
+
+        while heap:
+            current_time, y, x = heappop(heap)
+            if min_time_grid[y][x] < current_time:
+                continue
+            for dy, dx in directions:
+                ny, nx = y + dy, x + dx
+                if (0 <= ny < side_size and 0 <= nx < side_size):
+                    min_possible_time = current_time if (current_time >= grid[ny][nx]) else grid[ny][nx]
+                    if (min_time_grid[ny][nx] == math.inf) or (min_possible_time < min_time_grid[ny][nx]):
+                        heappush(heap, (min_possible_time, ny, nx))
+                        min_time_grid[ny][nx] = min_possible_time
+                    if ny == nx == side_size - 1:
+                        return min_possible_time
