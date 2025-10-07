@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+Extra problem from the audience!
+I recently mastered the "don't clean the heap until you need it" technique, and it came in handy here.
+Smart people say it can be solved in linear time, but I couldn't figure it out right away. 
+So, using two pointers, we take the heap's top at most, and if the top has an index lower than our left boundary, we discard it until it's acceptable.
+"""
+
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        size = len(nums)
+        pointer_1, pointer_2 = 0, k
+        current_slice = [(-el, index) for index, el in enumerate(nums[:pointer_2])]
+        heapify(current_slice)
+        result = [-current_slice[0][0]]
+
+        while pointer_2 != size:
+            pointer_1 += 1
+            pointer_2 += 1
+            while current_slice and current_slice[0][1] < pointer_1:
+                heappop(current_slice)
+            heappush(current_slice, (-nums[pointer_2 - 1], pointer_2 - 1))
+            result.append(-current_slice[0][0])
+
+        return result
