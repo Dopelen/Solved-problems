@@ -1,0 +1,31 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+This problem seems like it should have a simple and elegant solution, but I kept getting lost in the weeds and eventually had to resort to hints.
+
+The idea is to store a sorted array of lake cleanup days and iterate through the list of rain events.
+When we detect a possible flood, we delete the closest left index from the lake cleanup days array, if any.
+But I still don't like the operation of deleting cleanup days; it seems a bit slow.
+"""
+
+class Solution:
+    def avoidFlood(self, rains: List[int]) -> List[int]:
+        size = len(rains)
+        result = [1] * size
+        dry_lake_days = SortedList()
+        last_rain_day = {}
+
+        for index, rain in enumerate(rains):
+            if rain == 0:
+                dry_lake_days.add(index)
+            else:
+                result[index] = -1
+                if rain in last_rain_day:
+                    closest_dry_day = dry_lake_days.bisect(last_rain_day[rain])
+                    if closest_dry_day == len(dry_lake_days):
+                        return []
+                    result[dry_lake_days[closest_dry_day]] = rain
+                    dry_lake_days.discard(dry_lake_days[closest_dry_day])
+                last_rain_day[rain] = index
+        return result
