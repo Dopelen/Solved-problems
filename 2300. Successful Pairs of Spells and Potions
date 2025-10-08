@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n *log(n)) complexity by time and O(1) by space.
+
+You figured it out quickly and wrote it just as quickly!
+We sort the array of potions and use binary search to find the point at which the product is greater than the given value. 
+The number of elements to the right of this point is the answer for the index.
+The main thing to remember is that if there is no remainder from division, we must take the bisect left, otherwise, the bisect right.
+
+P.S: I learned a formula for rounding up beautifully!
+(a + b - 1) // b
+"""
+
+# Initial solution
+class Solution:
+    def successfulPairs(self, spells: List[int], potions: List[int], success: int) -> List[int]:
+        size_of_potions = len(potions)
+        size_of_spells = len(spells)
+        potions.sort()
+        for i in range(size_of_spells):
+            target_val = success // spells[i]
+            insertion_point = bisect_right(potions, target_val) if (success % spells[i]) else bisect_left(potions, target_val)
+            spells[i] = size_of_potions - insertion_point
+        return spells
+
+# Short version
+class Solution:
+    def successfulPairs(self, spells: List[int], potions: List[int], success: int) -> List[int]:
+        potions.sort()
+        n = len(potions)
+        return [n - bisect_left(potions, (success + spell - 1) // spell) 
+                for spell in spells]
