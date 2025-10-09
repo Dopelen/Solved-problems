@@ -1,0 +1,66 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+So this program has O(len(mana) * len(skill) ** 2) complexity by time and O(n) by space.
+
+I racked my brain while writing a brute force solution, but it still didn’t pass the time limit, so I had to optimize it.
+
+Although my solution ultimately worked, it wasn't very good.
+I tried optimizing it, and a better solution involves calculating the last element and then returning to the beginning, decreasing the time spent.
+"""
+
+# "Correct" Solution O(n * m)
+class Solution:
+    def minTime(self, skill: List[int], mana: List[int]) -> int:
+        skill_size, mana_size = len(skill), len(mana)
+        times = [0] * skill_size
+        for j in range(mana_size):
+            cur_time = 0
+            for i in range(skill_size):
+                cur_time = max(cur_time, times[i]) + skill[i] * mana[j]
+            times[skill_size - 1] = cur_time
+            for i in range(skill_size - 2, -1, -1):
+                times[i] = times[i + 1] - skill[i + 1] * mana[j]
+        return times[skill_size - 1]
+
+
+# Brute-force with optimization
+class Solution:
+    def minTime(self, skill: List[int], mana: List[int]) -> int:
+        end_time = [0] * len(skill)
+
+        for m in range(len(mana)):
+            sum_dif = [0] * len(skill)
+            for s in range(len(skill)):
+                start_time = end_time[s]
+                time_to_brew = skill[s] * mana[m]
+                if m == 0:
+                    end_time[s] = time_to_brew + (end_time[s - 1] if s > 0 else 0)
+                else:
+                    if s == 0:
+                        end_time[s] += time_to_brew
+                    else:
+                        dif = 0
+                        if end_time[s - 1] < start_time:
+                            dif = start_time - end_time[s - 1]
+                            sum_dif[s] += dif
+                        end_time[s] = end_time[s - 1] + dif + time_to_brew
+            total_dif = sum(sum_dif)
+            if total_dif:
+                for i, e in enumerate(sum_dif):
+                    total_dif -= e
+                    end_time[i] += total_dif
+
+        return end_time[-1]
+
+
+# Genius Solution (from answers)
+from numpy import array, append
+
+class Solution:
+    def minTime(self, skill: List[int], mana: List[int]) -> int:
+        ans = sum(skill) * mana[-1]
+        acc = array(list(accumulate(skill)))
+        offset = append(0, acc[:-1])
+        for m1, m2 in pairwise(mana):
+            ans+= int((acc * m1 - offset * m2).max())
+        return ans
