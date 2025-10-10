@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Before bed, I looked at the problem and immediately figured out the solution. 
+The next morning, it turned out to be a bit more complicated, but I still figured it out quickly.
+
+If we look closely, we see that we have a total of K potential sequences, each with k elements. 
+From now on, we simply need to find the substring with the maximum sum.
+"""
+
+# Initial Solution
+class Solution:
+    def maximumEnergy(self, energy: List[int], k: int) -> int:
+        energy_storage = defaultdict(list)
+        total_max = -math.inf
+
+        for index, elem in enumerate(energy):
+            energy_storage[index % k].append(elem)
+
+        for values in energy_storage.values():
+            current_max = 0
+            for elem in values[::-1]:
+                current_max += elem
+                total_max = max(total_max, current_max)
+
+        return total_max
+
+
+# Optimal Solution
+class Solution:
+    def maximumEnergy(self, energy: List[int], k: int) -> int:
+        n = len(energy)
+        dp = energy.copy()
+        
+        for i in range(n - k - 1, -1, -1):
+            dp[i] += dp[i + k]
+        
+        return max(dp)
