@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+The problem is clearly solvable using dynamic programming, and I kind of wrote it down, but I simply used all possible numbers in my first solution, so it didn't pass the memory limit. 
+I had to think about optimization.
+Optimization was found in reducing all possible numbers in the range to unique values.
+"""
+
+class Solution:
+    def maximumTotalDamage(self, power: List[int]) -> int:
+        cnt = Counter(power)
+        uniq = sorted(cnt.keys())
+        size = len(uniq)
+        if size == 0:
+            return 0
+
+        dp = [0] * size
+        for i, val in enumerate(uniq):
+            damage = cnt[val] * val
+            j = bisect_right(uniq, val - 3) - 1
+            take = damage + (dp[j] if j >= 0 else 0)
+            not_take = dp[i - 1] if i > 0 else 0
+            dp[i] = max(not_take, take)
+
+        return dp[-1]
