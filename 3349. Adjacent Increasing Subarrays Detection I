@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+The problem is simple, and I'm generally happy with my linear-time solution.
+Essentially, we need to handle two scenarios:
+First, we have one large increasing sequence -> As soon as it reaches 2 * k in size, we can return the result. 
+Second, we have two adjacent increasing sequences, and we only need to keep track of the lengths of the adjacent sequences. As soon as two sequences are greater than or equal to K, we can return the result
+"""
+
+class Solution:
+    def hasIncreasingSubarrays(self, nums: List[int], k: int) -> bool:
+        size = len(nums)
+        ascending_length = prev_ascending_length = index = 1
+        while index < size:
+            if nums[index] > nums[index - 1]:
+                ascending_length += 1
+                if (ascending_length == k * 2) or (ascending_length == k and prev_ascending_length >= k):
+                    return True
+            else:
+                prev_ascending_length = ascending_length
+                ascending_length = 1
+            index += 1
+
+        return ascending_length == k and prev_ascending_length >= k
