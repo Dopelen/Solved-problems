@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Since I solved yesterday's problem super-optimally, I didn't have to come up with anything new for today's problem. 
+I simply replaced one check with a calculation of the maximum K based on the length of the current sequence and the previous one, and here's another beautiful solution.
+
+P.S: Cool trick! 
+If you add an element to the end that is guaranteed to break the loop, you can remove the final max-k check before returning the answer.
+nums.append(float('-inf'))
+"""
+
+# Initial Solution
+class Solution:
+    def maxIncreasingSubarrays(self, nums: List[int]) -> int:
+        size = len(nums)
+        ascending_length = prev_ascending_length = index = 1
+        max_k = 1
+        while index < size:
+            if nums[index] > nums[index - 1]:
+                ascending_length += 1
+            else:
+                max_k = max(ascending_length // 2, min(ascending_length, prev_ascending_length), max_k)
+                prev_ascending_length = ascending_length
+                ascending_length = 1
+            index += 1
+        max_k = max(ascending_length // 2, min(ascending_length, prev_ascending_length), max_k)
+        return max_k
+
