@@ -1,0 +1,84 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(value) by space.
+
+To write a beautiful solution, I first had to write an ugly one.
+First of all, the problem boils down to finding an index up to which we can construct an increasing sequence with a step of 1, with the restriction that we can only change the given numbers with a value step.
+For some reason, I didn't realize that we can not only pull up values ​​from negative ones, but also decrease large values.
+Once I figured it out, the solution came naturally:
+- Sort our sheet
+- Create a dictionary of remainders from division by value
+- Remove any of the indices
+
+P.S.: While I was writing, I realized that it doesn't matter which index we take within the remainder, because they are all completely interchangeable. I corrected it, it significantly sped up the solution!
+
+P.P.S: But I wasn't satisfied with the fact that there were faster solutions, so I continued thinking HARD.
+And I realized that we don't even have to sort.
+We have numbers that can occupy each remainder of the division, and the final length will simply be the minimum of all these remainders values in dict multiplied by the value!
+"""
+
+# Final one :)
+class Solution:
+    def findSmallestInteger(self, nums: List[int], value: int) -> int:
+        remainder_count = [0] * value
+        
+        for num in nums:
+            remainder_count[num % value] += 1
+        
+        min_count = min(remainder_count)
+        min_index = remainder_count.index(min_count)
+        
+        return min_count * value + min_index
+
+
+#Third version
+class Solution:
+    def findSmallestInteger(self, nums: List[int], value: int) -> int:
+        candidates_for_position = {el : 0 for el in range(value)}
+
+        for num in nums:
+            candidates_for_position[abs(num % value)] += 1
+
+        current_minimum_repeat = math.inf
+        current_minimum_key = math.inf
+
+        for k, v in candidates_for_position.items():
+            if v < current_minimum_repeat:
+                current_minimum_repeat = v
+                current_minimum_key = k
+        return current_minimum_repeat * value + current_minimum_key
+
+
+# Second version
+class Solution:
+    def findSmallestInteger(self, nums: List[int], value: int) -> int:
+        nums.sort()
+        candidates_for_position = defaultdict(int)
+        for num in nums:
+            candidates_for_position[abs(num % value)] += 1
+        minimum_value = 0
+        current_step = minimum_value % value
+        while candidates_for_position[current_step]:
+            candidates_for_position[current_step] -= 1
+            minimum_value += 1
+            current_step = minimum_value % value
+        return minimum_value
+
+
+# First version
+class Solution:
+    def findSmallestInteger(self, nums: List[int], value: int) -> int:
+        nums.sort()
+        candidates_for_position = defaultdict(deque)
+        for num in nums:
+            candidates_for_position[abs(num % value)].append(num)
+        minimum_value = 0
+        current_step = minimum_value % value
+        while candidates_for_position[current_step]:
+            if candidates_for_position[current_step][0] <= minimum_value:
+                candidates_for_position[current_step].popleft()
+            else:
+                candidates_for_position[current_step].pop()
+            minimum_value += 1
+            current_step = minimum_value % value
+        return minimum_value
