@@ -1,0 +1,61 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+An incredibly complex problem for me, both in terms of the solution logic and in terms of implementation via bit masks.
+Counting letters with a mask is cool. 
+We essentially maintain a bit mask, each position of which represents the presence or absence of a letter in the segment: 0 means there wasn't one, and 1 means there was one. 
+It's like a set, but cooler.
+
+For each position, we look at what happens to the outermost segment to the left and right of the position to determine whether changing the letter will create a new segment or break an existing one.
+"""
+
+# Not mine
+# https://leetcode.com/problems/maximize-the-number-of-partitions-after-operations/editorial/?envType=daily-question&envId=2025-10-17
+class Solution:
+    def maxPartitionsAfterOperations(self, s: str, k: int) -> int:
+        n = len(s)
+        left = [[0] * 3 for _ in range(n)]
+        right = [[0] * 3 for _ in range(n)]
+
+        num, mask, count = 0, 0, 0
+        for i in range(n - 1):
+            binary = 1 << (ord(s[i]) - ord("a"))
+            if not (mask & binary):
+                count += 1
+                if count <= k:
+                    mask |= binary
+                else:
+                    num += 1
+                    mask = binary
+                    count = 1
+            left[i + 1][0] = num
+            left[i + 1][1] = mask
+            left[i + 1][2] = count
+
+        num, mask, count = 0, 0, 0
+        for i in range(n - 1, 0, -1):
+            binary = 1 << (ord(s[i]) - ord("a"))
+            if not (mask & binary):
+                count += 1
+                if count <= k:
+                    mask |= binary
+                else:
+                    num += 1
+                    mask = binary
+                    count = 1
+            right[i - 1][0] = num
+            right[i - 1][1] = mask
+            right[i - 1][2] = count
+
+        max_val = 0
+        for i in range(n):
+            seg = left[i][0] + right[i][0] + 2
+            tot_mask = left[i][1] | right[i][1]
+            tot_count = bin(tot_mask).count("1")
+            if left[i][2] == k and right[i][2] == k and tot_count < 26:
+                seg += 1
+            elif min(tot_count + 1, 26) <= k:
+                seg -= 1
+            max_val = max(max_val, seg)
+        return max_val
