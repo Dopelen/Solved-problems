@@ -1,0 +1,26 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(1) by space.
+
+It turned out to be a fun problem for me.
+I spent a long time wondering if it could be solved optimally without sorting, and it seemed impossible.
+
+The idea is simple. We sort our array and then move from left to right. 
+If there's a difference between the elements, we simply shift the low boundary; if not, we calculate whether we can shift the boundary.
+Initially, I was changing the elements in the array, but then I realized that introducing one additional variable — the previous element — was enough.
+"""
+
+class Solution:
+    def maxDistinctElements(self, nums: List[int], k: int) -> int:
+        unic_counter = 1
+        nums.sort()
+        previous_elem = nums[0] - k
+        for i in range(1, len(nums)):
+            lower_limit = nums[i] - k
+            if lower_limit > previous_elem:
+                previous_elem = lower_limit
+                unic_counter += 1
+            elif previous_elem + 1 <= nums[i] + k:
+                previous_elem += 1
+                unic_counter += 1
+        return unic_counter
