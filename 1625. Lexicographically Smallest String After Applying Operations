@@ -1,0 +1,35 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * n) complexity by time and O(n) by space.
+
+What a terrible day! 
+I figured out how to solve this problem using brute force in 5 minutes, then spent 2 hours looking for a "beautiful solution", failed at that -> 
+so be it -> I went to write a brute force solution, was stuck for a whole hour, and in the end the solution still hasn't worked.
+"""
+
+# Correct Solution
+class Solution:
+    def findLexSmallestString(self, s: str, a: int, b: int) -> str:
+        seen = set()
+        queue = deque([s])
+        smallest = s
+
+        while queue:
+            cur = queue.popleft()
+            if cur in seen:
+                continue
+            seen.add(cur)
+            smallest = min(smallest, cur)
+
+            chars = list(cur)
+            for i in range(1, len(chars), 2):
+                chars[i] = str((int(chars[i]) + a) % 10)
+            added = ''.join(chars)
+            if added not in seen:
+                queue.append(added)
+
+            shifted = cur[-b:] + cur[:-b]
+            if shifted not in seen:
+                queue.append(shifted)
+
+        return smallest
