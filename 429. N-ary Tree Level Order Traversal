@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n)  complexity by time and O(n) by space.
+
+I'm making a simple traversal through a queue for a strange task.
+"""
+
+class Solution:
+    def levelOrder(self, root: 'Node') -> List[List[int]]:
+        if not root:
+            return []
+        result = []
+        queue = deque()
+        queue.append(root)
+        while queue:
+            current_level = []
+            for _ in range(len(queue)):
+                node = queue.popleft()
+                current_level.append(node.val)
+                for i in node.children:
+                    queue.append(i)
+            result.append(current_level)
+        return result
