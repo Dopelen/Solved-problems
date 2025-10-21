@@ -1,0 +1,49 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(10 ** 5) complexity by time and O(10 ** 5) by space.
+
+I tried 4 different approaches, heaps, arrays, dictionaries, counters, interval intersection, but in the end I had to go back to the first one because it was closest to the truth but not optimal in terms of time.
+"""
+
+# initial Solution
+class Solution:
+    def maxFrequency(self, nums: List[int], k: int, numOperations: int) -> int:
+        max_freq = 1
+        min_val, max_val = math.inf, -math.inf
+        all_freq = [0] * (10 ** 5 + 1)
+        for elem in nums:
+            all_freq[elem] += 1
+            min_val = min(elem, min_val)
+            max_val = max(elem, max_val)
+
+        for val in range(len(all_freq)):
+            all_freq[val] += all_freq[val - 1]
+
+        for num in range(min_val, max_val + 1):
+            prev_freq = all_freq[num - 1]
+            cur_freq = all_freq[num] - prev_freq
+            possible_freq_left = prev_freq - all_freq[max(0, num - k - 1)]
+            possible_freq_right = all_freq[min(len(all_freq) - 1, num + k)] - all_freq[num]
+            freq_from_operations = min(numOperations, possible_freq_left + possible_freq_right)
+            max_freq = max(max_freq, cur_freq + freq_from_operations)
+        return max_freq
+
+# The correct solution, which I could not write to make it work correctly
+class Solution:
+    def maxFrequency(self, nums: List[int], k: int, numOperations: int) -> int:
+        max_value = max(nums)
+        prev_values = [0] * (max_value + 1)
+        previous = answer = 0
+        for elem in nums:
+            prev_values [elem] += 1
+        current_freq = sum(prev_values[:k])
+        for num in range(max_value + 1):
+            current_freq -= prev_values[num]
+            if num + k <= max_value:
+                current_freq += prev_values[num + k]
+            if num > 0:
+                previous += prev_values[num - 1]
+            if num > k + 1:
+                previous -= prev_values[num - k - 1]
+            answer = max(answer, prev_values[num] + min(numOperations, previous + current_freq))
+        return answer
