@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+Solving this problem iteratively is no big deal, but finding a solution in linear time is a completely different matter. 
+I didn't come up with a quick linear solution, but I did write a simple iterative one.
+"""
+
+# Mine
+class Solution:
+    def hasSameDigits(self, s: str) -> bool:
+        line = list(map(int, s))
+        while len(line) != 2:
+            new_s = []
+            for a, b in pairwise(line):
+                new_s.append((a + b) % 10)
+            line = new_s
+        return line[0] == line[-1]
+
+
+# Math O(n)
+# https://leetcode.com/problems/check-if-digits-are-equal-in-string-after-operations-i/solutions/7293347/from-brute-force-to-o-n-3-solutions-with-gradual-optimizations/
+class Solution:
+    def hasSameDigits(self, s: str) -> bool:
+        s = [int(digits) for digits in s]
+        n = len(s)
+        binomial_coeff = [1] * (n - 1)
+        # recursive definition of the coefficients
+        for i in range(1, n - 1):
+            binomial_coeff[i] = binomial_coeff[i-1] * (n-2-i+1) // i
+        
+        left = sum([digit*coeff for digit, coeff in zip(s[:-1], binomial_coeff)]) % 10
+        right = sum([digit*coeff for digit, coeff in zip(s[1:], binomial_coeff)]) % 10
+        return left == right
