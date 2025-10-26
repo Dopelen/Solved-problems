@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(requests) complexity by time and O(balance) by space.
+
+I remember when I first started programming, such tasks would baffle me because it wasn't entirely clear how to work with classes. 
+Now it doesn't even seem like a task, more like just work.
+
+I added a zero to the beginning of the balance array to avoid the hassle of shifting indexes and introduced additional verification functions so that they could be managed flexibly.
+"""
+
+class Bank:
+
+    def __init__(self, balance: List[int]):
+        self.balance = [0] + balance
+        self.max_num = len(balance)
+
+    def check_valid_num(self, account_num: int):
+        return 1 <= account_num <= self.max_num
+
+    def check_valid_balance(self, account_num: int, money: int):
+        if self.check_valid_num(account_num):
+            return self.balance[account_num] >= money
+        return False 
+
+    def transfer(self, account1: int, account2: int, money: int) -> bool:
+        if self.check_valid_balance(account1, money) and self.check_valid_num(account2):
+            self.balance[account2] += money
+            self.balance[account1] -= money
+            return True
+        return False
+            
+    def deposit(self, account: int, money: int) -> bool:
+        if self.check_valid_num(account):
+            self.balance[account] += money
+            return True
+        return False
+        
+    def withdraw(self, account: int, money: int) -> bool:
+        if self.check_valid_balance(account, money):
+            self.balance[account] -= money
+            return True
+        return False
