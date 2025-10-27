@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Looking at the input data, it immediately becomes clear that we won't be able to enumerate all possible triples in 10 ** 5, so we'll have to use bitwise magic.
+Looking closely at the condition, you'll notice that we don't need to calculate all combinations, because the XOP is cumulative. 
+If the XOP of two numbers yields 1, then one of the numbers also contains 1, which means there's an index K in the array that contains 1 at that position, which ultimately reduces the problem to simply finding the XOP between all the numbers.
+"""
+
+class Solution:
+    def xorBeauty(self, nums: List[int]) -> int:
+        return reduce(xor, nums)
