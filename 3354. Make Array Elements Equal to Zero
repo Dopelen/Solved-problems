@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I started writing an emulation, but then decided to give it some thought. 
+The problem is long, so it's hard to wrap my head around it right away, but if you think about it, we're being offered a ping-pong game, 
+and the correct choice can only be made if the total sum of the elements to the left of zero equals the sum to the right. This allows the problem to be solved in linear time.
+
+Let's not forget the option where the difference between the amounts is equal to 1, which means we can get a valid movement, but only in one direction.
+"""
+
+class Solution:
+    def countValidSelections(self, nums: List[int]) -> int:
+        valid_selections = 0
+        left_sum, right_sum = 0, sum(nums)
+
+        for index, element in enumerate(nums):
+            if element != 0:
+                left_sum += element
+                right_sum -= element
+            else:
+                if abs(left_sum - right_sum) == 1:
+                    valid_selections += 1
+                elif left_sum == right_sum:
+                    valid_selections += 2
+
+        return valid_selections
