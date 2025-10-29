@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+A very simple task, I usually do bitwise operations through strings, but here everything is so elementary that you can do it in a human way.
+"""
+
+# Bit version
+class Solution:
+    def smallestNumber(self, n: int) -> int:
+        return (1 << n.bit_length()) - 1
+
+
+# Str version
+class Solution:
+    def smallestNumber(self, n: int) -> int:
+        bit_str = bin(n)[2:]
+        bit_str = bit_str.replace("0", "1")
+        return int(bit_str, 2)
