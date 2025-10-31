@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It's a simple problem, and two classic approaches immediately come to mind: creating an array to maintain the number of occurrences if there are few elements, and creating a set. 
+I initially tried it with a list, thinking it would be faster, but it seems there are some specific test cases and internal optimizations that make the list slower.
+
+P.S: I tested different implementations, it turned out that the problem is not in the array or the set, they show identical results, the slowdown is caused by the premature exit from the loop.
+"""
+
+class Solution:
+    def getSneakyNumbers(self, nums: List[int]) -> List[int]:
+        seen = set()
+        duplicates = []
+        for num in nums:
+            if num in seen:
+                duplicates.append(num)
+                if len(duplicates) > 1:
+                    break
+            seen.add(num)
+        
+        return duplicates
