@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) for every call.
+
+This is probably the second time I've seen a threading task on Leetcode. And, like last time, most of the time was spent thinking about "how the platform will react to imports and Python library operations."
+"""
+
+class FooBar:
+    def __init__(self, n):
+        from threading import Event
+        self.n = n
+        self.foo_turn = Event()
+        self.bar_turn = Event()
+        self.foo_turn.set()
+
+
+    def foo(self, printFoo: 'Callable[[], None]') -> None:
+        
+        for i in range(self.n):
+            self.foo_turn.wait()
+            printFoo()
+            self.foo_turn.clear()
+            self.bar_turn.set()
+
+
+    def bar(self, printBar: 'Callable[[], None]') -> None:
+        
+        for i in range(self.n):
+            self.bar_turn.wait()
+            printBar()
+            self.bar_turn.clear()
+            self.foo_turn.set() 
