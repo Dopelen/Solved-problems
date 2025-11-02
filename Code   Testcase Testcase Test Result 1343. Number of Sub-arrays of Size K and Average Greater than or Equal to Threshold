@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I wrote the solution in 5 minutes and spent another 40 debugging the edge cases. 
+Then I tweaked the loop a bit and everything worked. 
+It was a normal problem, I just got confused with the indexes for no apparent reason.
+"""
+
+class Solution:
+    def numOfSubarrays(self, arr: List[int], k: int, threshold: int) -> int:
+        size = len(arr)
+        current_sum = sum(arr[:k])
+        answer = 0
+        if current_sum / k >= threshold:
+            answer += 1
+
+        for right in range(k, size):
+            current_sum += arr[right] - arr[right - k]
+            if current_sum // k >= threshold:
+                answer += 1
+        return answer
