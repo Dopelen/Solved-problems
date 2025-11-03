@@ -1,0 +1,54 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I always feel a certain sense of relief when I see a problem that can be solved greedily!
+For each group of identical balls, simply take the time it took to remove them—the maximum time that occurred in that sequence.
+
+P.S: About add "!":
+We need to break the loop to process the last group of elements before exiting the loop. 
+We can either duplicate the logic outside the loop or add a separator that guarantees the loop will break on the last element. 
+I choose the second option.
+
+P.P.S: OR you can just add check for last group outside the loop!
+"""
+
+
+# Good version
+class Solution:
+    def minCost(self, colors: str, neededTime: List[int]) -> int:
+        total = 0
+        group_sum = group_max = neededTime[0]
+
+        for i in range(1, len(colors)):
+            if colors[i] == colors[i - 1]:
+                group_sum += neededTime[i]
+                group_max = max(group_max, neededTime[i])
+            else:
+                total += group_sum - group_max
+                group_sum = group_max = neededTime[i]
+
+        total += group_sum - group_max
+        return total
+
+
+# Initial version
+class Solution:
+    def minCost(self, colors: str, neededTime: List[int]) -> int:
+        colors += '!'
+        neededTime.append(0)
+
+        time_to_fix_total = 0
+        prev_color = colors[0]
+        cur_max = time_to_fix_cur = neededTime[0]
+
+        for index in range(1, len(colors)):
+            if prev_color != colors[index]:
+                time_to_fix_total += time_to_fix_cur - cur_max
+                time_to_fix_cur = cur_max = neededTime[index]
+            else:
+                cur_max = max(cur_max, neededTime[index])
+                time_to_fix_cur += neededTime[index]
+            prev_color = colors[index]
+
+        return time_to_fix_total
