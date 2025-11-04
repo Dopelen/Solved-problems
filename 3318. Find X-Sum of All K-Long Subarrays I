@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+Simulating the process is not difficult, but tomorrow they will ask for the same problem with input data a thousand times larger, and this is the problem I am thinking about.
+"""
+
+# Naive Solution
+class Solution:
+    def findXSum(self, nums: List[int], k: int, x: int) -> List[int]:
+
+        def calculate_max(freq: dict) -> int:
+            sorted_tuples = sorted(freq.items(), key=lambda item: (item[1], item[0]))
+            x_sum = sum(val[0] * val[1] for val in sorted_tuples[-x:])
+            return x_sum
+
+        window = Counter(nums[:k])
+        answer = [calculate_max(window)]
+
+        for i in range(k, len(nums)):
+            window[nums[i]] += 1
+            window[nums[i - k]] -= 1
+            if window[nums[i - k]] == 0:
+                del window[nums[i - k]]
+            answer.append(calculate_max(window))
+
+        return answer
