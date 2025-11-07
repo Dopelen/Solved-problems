@@ -1,0 +1,54 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n))  complexity by time and O(n) by space.
+
+I thought very hard and found a solution, but to a different problem :(
+Since I was running out of time, I had to give up.
+
+The problem itself is solved by "guessing" the minimum that can be achieved through a binary search. 
+And the stations are set greedily:
+If we see that achieving the minimum is impossible, we set the stations at index i + r 
+because all the stations up to this point have already reached the required minimum, and for the subsequent ones the maximum range can be achieved by placing them as far away as possible.
+
+I really liked this problem, it's a pity I couldn't solve it myself
+"""
+
+# https://leetcode.com/problems/maximize-the-minimum-powered-city/description/?envType=daily-question&envId=2025-11-07
+class Solution:
+    def maxPower(self, stations: List[int], r: int, k: int) -> int:
+        size = len(stations)
+        cnt = [0] * (size + 1)
+
+        for i in range(size):
+            left = max(0, i - r)
+            right = min(size, i + r + 1)
+            cnt[left] += stations[i]
+            cnt[right] -= stations[i]
+
+        def check(val: int) -> bool:
+            diff = cnt.copy()
+            total = 0
+            remaining = k
+
+            for i in range(size):
+                total += diff[i]
+                if total < val:
+                    add = val - total
+                    if remaining < add:
+                        return False
+                    remaining -= add
+                    end = min(size, i + 2 * r + 1)
+                    diff[end] -= add
+                    total += add
+            return True
+
+        lo, hi = min(stations), sum(stations) + k
+        res = 0
+        while lo <= hi:
+            mid = (lo + hi) // 2
+            if check(mid):
+                res = mid
+                lo = mid + 1
+            else:
+                hi = mid - 1
+        return res
