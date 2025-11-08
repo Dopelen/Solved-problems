@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log ** 2(n)) complexity by time and O(log(n)) by space.
+
+The task is truly challenging, but doable.
+The first part, I simply observed the patterns that emerged as I simulated the process.
+The trick is that, by the nature of the operations we're given, when transforming a power of two, we'll cycle through all states from that power of two to the next power of two.
+So, for the number 4, say, the answer is 15.
+But what about the rest? 
+I initially thought we could reduce the transformation to going from right to left, transforming the pieces with 1s into 0s, but if you think about it, that would increase the number of steps rather than reduce it!
+Because the given number, as it's transformed, will cycle through all possible numbers up to the next power of two! 
+So if we get a bit value of 1010 it is closer to 0 than 1000 because 1010 is some state on the way to converting 1000 to 0, 
+i.e. the number of steps to convert NOT to a power of two is less than the number of steps to convert the previous power of two!
+"""
+
+class Solution:
+    def minimumOneBitOperations(self, n: int) -> int:
+        if n == 0:
+            return 0
+        
+        k = 0
+        curr = 1
+        while (curr * 2) <= n:
+            curr *= 2
+            k += 1
+
+        return 2 ** (k + 1) - 1 - self.minimumOneBitOperations(n ^ curr)
