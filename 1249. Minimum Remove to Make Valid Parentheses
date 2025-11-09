@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I solved the problem greedily, using the stack.
+I noticed it was a bit slow, and then I realized I was checking for entry through a list, not a set. 
+I fixed it, and everything was fine.
+"""
+
+class Solution:
+    def minRemoveToMakeValid(self, s: str) -> str:
+        parentheses = []
+        idx_to_delete = set()
+        for index, elem in enumerate(s):
+            if elem == "(":
+                parentheses.append(index)
+            elif elem == ")":
+                if not parentheses:
+                    idx_to_delete.add(index)
+                else:
+                    parentheses.pop()
+        idx_to_delete |= set(parentheses)
+        return "".join([e for i, e in enumerate(s) if i not in idx_to_delete])
