@@ -1,0 +1,47 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) by speed and O(n) by space.
+
+I had to rack my brain over the problem, even knowing that I needed to use a monotonic stack (which I'm not exactly familiar with) it wasn't entirely obvious how to solve it.
+The main trick is to count the value fluctuations, and it took me a while to figure it out. 
+Every time we encounter a value less than the current maximum, we have to discard the previous maximums, because they will be cut off during the operations.
+Overall, the logic behind the solution is quite complex, and I think it's quite difficult to figure it out on my own.
+"""
+
+# Correct Solution
+class Solution:
+    def minOperations(self, nums: List[int]) -> int:
+        stack = [0]
+        ops = 0
+        for num in nums:
+            while stack and stack[-1] > num:
+                stack.pop()
+
+            if stack[-1] < num:
+                stack.append(num)
+                ops += 1
+
+        return ops
+
+
+# Initial TLE solution
+class Solution:
+    def minOperations(self, nums: List[int]) -> int:
+        sorted_values = sorted(set(nums) - {0})
+        if not sorted_values:
+            return 0
+
+        ops = 0
+        n = len(nums)
+
+        for val in sorted_values:
+            prev_idx = -1
+            i = 0
+            while i < n:
+                if nums[i] == val:
+                    if prev_idx == -1 or any(nums[j] < val for j in range(prev_idx+1, i)):
+                        ops += 1
+                    prev_idx = i
+                i += 1
+
+        return ops
