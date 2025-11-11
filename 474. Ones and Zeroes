@@ -1,0 +1,19 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(L + K * m * n) complexity by time and O(m * n) by space.
+
+I started solving the problem greedily, but realized I needed dynamic programming.
+The idea is to take or not take elements while maintaining the maximum number of rows in our dp array for the given m and n.
+"""
+
+class Solution:
+    def findMaxForm(self, strs, m, n):
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+        for s in strs:
+            zeros = s.count('0')
+            ones = s.count('1')
+            for i in range(m, zeros - 1, -1):
+                for j in range(n, ones - 1, -1):
+                    dp[i][j] = max(dp[i][j], dp[i - zeros][j - ones] + 1)
+        return dp[m][n]
