@@ -1,0 +1,43 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I quickly figured out the main trick, and then, as usual, spent ages fine-tuning the solution.
+The idea is to maximize the number of operations, but we don't have multiple ways to do this because we always shift as far to the right as possible to the next 1. 
+So we simply move the 1 to the next 1, and then move the array of values ​​one by one, meaning we add the number of previously encountered 1s to the operations, because each previously encountered 1 requires an additional operation.
+"""
+
+# Refactored One
+class Solution:
+    def maxOperations(self, s: str) -> int:
+        operations = size = 0
+        prev_one = -1
+        for i, ch in enumerate(s):
+            if ch == '1':
+                if i - prev_one > 1:
+                    operations += size
+                size += 1
+                prev_one = i
+        if prev_one != len(s) - 1 and prev_one != -1:
+            operations += size
+
+        return operations
+
+
+# Initial Solution
+class Solution:
+    def maxOperations(self, s: str) -> int:
+        ones_idx = [idx for idx in range(len(s)) if s[idx] == "1"]
+        if not ones_idx:
+            return 0
+        operations = 0
+        size = 0
+        prev_idx = ones_idx[0]
+        for idx in ones_idx:
+            if idx - prev_idx > 1:
+                operations += size
+            size += 1
+            prev_idx = idx
+        operations += size if idx != len(s) - 1 else 0
+
+        return operations
