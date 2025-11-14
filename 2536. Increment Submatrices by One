@@ -1,0 +1,68 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m + q) complexity by time and O(n * m) by space.
+
+I tried iteratively, thinking I'd get it down to 500 elements, but it didn't work. 
+I had to think hard. 
+My intuition told me to solve it using interval intersections, but I couldn't think of an implementation.
+I saw a tip about the 2D Difference Array technique and went to implement it. 
+It's a shame I couldn't come up with it myself :(
+"""
+
+# Correct Solution
+class Solution:
+    def rangeAddQueries(self, n: int, queries: List[List[int]]) -> List[List[int]]:
+        dif_matrix = [[0] * (n + 2) for _ in range(n + 2)]
+
+        for y_start, x_start, y_end, x_end in queries:
+            dif_matrix[y_start + 1][x_start + 1] += 1
+            dif_matrix[y_start + 1][x_end + 2] -= 1
+            dif_matrix[y_end + 2][x_start + 1] -= 1
+            dif_matrix[y_end + 2][x_end + 2] += 1
+
+        matrix = [[0] * n for _ in range(n)]
+        for i in range(n):
+            for j in range(n):
+                dif_matrix[i + 1][j + 1] += dif_matrix[i][j + 1] + dif_matrix[i + 1][j] - dif_matrix[i][j]
+                matrix[i][j] = dif_matrix[i + 1][j + 1]
+
+        return matrix
+
+# MvP solution
+class Solution:
+    def rangeAddQueries(self, n: int, queries: List[List[int]]) -> List[List[int]]:
+        res = [[0] * n for _ in range(n)]
+        for r1, c1, r2, c2 in queries:
+            r2 += 1; c2 += 1
+            res[r1][c1] += 1
+            if c2 < n:
+                res[r1][c2] -= 1
+            if r2 < n:
+                res[r2][c1] -= 1
+                if c2 < n:
+                    res[r2][c2] += 1
+        
+        delta = [0] * n
+        for i, row in enumerate(res):
+            acc = 0
+            for j, x in enumerate(row):
+                delta[j] += x
+                acc += delta[j]
+                res[i][j] = acc 
+
+        return res
+
+
+# Naive TLE
+class Solution:
+    def rangeAddQueries(self, n: int, queries: List[List[int]]) -> List[List[int]]:
+        matrix = [[0] * n for _ in range(n)]
+
+        def increase_range(y_start, x_start, y_end, x_end):
+            for y in range(y_start, y_end + 1):
+                for x in range(x_start, x_end + 1):
+                    matrix[y][x] += 1
+
+        for y_s, x_s, y_e, x_e in queries:
+            increase_range(y_s, x_s, y_e, x_e)
+
+        return matrix
