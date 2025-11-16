@@ -1,0 +1,58 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I confess, I'm guilty.
+Instead of mathematically deriving the rule, I simply iterated over a string of lengths from 1 to n consisting entirely of ones, saw the pattern of the sum of the progression, and used it to solve it.
+Then I added a cache (although the operations don't seem to be that expensive), and it worked quickly.
+
+P.S: 0 added to take into account the last sequence of ones before exiting the loop, otherwise you will have to duplicate the check in the loop outside.
+"""
+
+# Initial one
+class Solution:
+    def numSub(self, s: str) -> int:
+        MOD = 10 ** 9 + 7
+        total_substrings = cur_len = 0
+        s = s + "0"
+
+        @lru_cache
+        def calculate_number_of_substring(l):
+            return ((1 + l) / 2) * l
+
+        for elem in s:
+            if elem == "1":
+                cur_len += 1
+            else:
+                total_substrings = (total_substrings + calculate_number_of_substring(cur_len)) % MOD
+                cur_len = 0
+
+        return int(total_substrings)
+
+
+# Refactored version
+class Solution:
+    def numSub(self, s: str) -> int:
+        MOD = 10**9 + 7
+        total = cur = 0
+
+        for ch in s:
+            if ch == "1":
+                cur += 1
+            else:
+                total += cur * (cur + 1) // 2
+                cur = 0
+
+        total += cur * (cur + 1) // 2
+        return total % MOD
+
+
+# Optimal one (If we divide each piece in half, it is the same as dividing the final sum, so we can save on this operation by leaving one division at the end.)
+class Solution:
+    def numSub(self, s: str) -> int:
+        cnt = 0
+        for part in s.split('0'):
+            n = len(part)
+            cnt += n*(n+1)
+
+        return (cnt // 2) % (10**9 + 7)
