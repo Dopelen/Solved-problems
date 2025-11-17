@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+Basically, we just need to check that each element of the first sequence is less than or greater than each corresponding element of the other sequence.
+"""
+
+# Initial Solution
+class Solution:
+    def checkIfCanBreak(self, s1: str, s2: str) -> bool:
+        one_beat_two = two_beat_one = True
+        for element_1, element_2 in zip(sorted(s1), sorted(s2)):
+            if element_2 > element_1:
+                one_beat_two = False
+            elif element_2 < element_1:
+                two_beat_one = False
+        return one_beat_two or two_beat_one
+
+# Fast version with counter
+class Solution:
+    def checkIfCanBreak(self, s1: str, s2: str) -> bool:
+        count1, count2 = 0, 0
+        test = 0
+        for i in 'abcdefghijklmnopqrstuvwxyz':
+            count1 += s1.count(i)
+            count2 += s2.count(i)
+            if (count1-count2)*test < 0: return False
+            if test == 0 and count1-count2 != 0:
+                test = (count1-count2)//abs(count1-count2)
+        return True
