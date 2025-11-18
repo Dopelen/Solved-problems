@@ -1,0 +1,31 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n ** 2) by space.
+
+The input data is small, so brute-force is a viable solution.
+But using hashes seems somehow clearer.
+I used a counter to immediately account for both the hash of our tuples and their frequency, which helps avoid repeated iterations of the matrix.
+
+P.S.: I keep forgetting this matrix transposition trick with zip(*matrix) and have to remember it again and again.
+"""
+
+# Clear version
+class Solution:
+    def equalPairs(self, grid: List[List[int]]) -> int:
+        transparent = Counter(tuple(elem) for elem in zip(*grid))
+        equals = 0
+        for r in grid:
+            tuple_for_comparison = tuple(r)
+            if tuple_for_comparison in transparent:
+                equals += transparent[tuple_for_comparison]
+        return equals
+
+
+# Short one
+class Solution:
+    def equalPairs(self, grid: List[List[int]]) -> int:
+        transparent = Counter(tuple(elem) for elem in zip(*grid))
+        equals = 0
+        for r in grid:
+            equals += transparent[tuple(r)]
+        return equals
