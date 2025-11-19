@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I spent an indecently long time thinking about it and got completely confused while doing a simple ascending traversal. 
+Luckily, I figured it out in the end. 
+Being sick isn't cool.
+"""
+
+class Solution:
+    def convertBST(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        self.total = 0
+
+        def helper(r) -> int:
+            if not r:
+                return
+            helper(r.right)
+            self.total += r.val
+            r.val = self.total
+            helper(r.left)
+            return r.val
+
+        helper(root)
+        return root
