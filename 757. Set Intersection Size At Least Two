@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(1) by space.
+
+A fairly simple solution for a complex problem, but I had a hard time getting to the logic of sorting and taking intervals into account. 
+I sketched it out roughly, and then spent quite a long time debugging it.
+We sort by the ends of the intervals, and then by their beginnings, greedily selecting intervals, checking them for intersection with our last and penultimate numbers.
+"""
+
+# After THINKING O(1) by space
+class Solution:
+    def intersectionSizeTwo(self, intervals: List[List[int]]) -> int:
+        intervals.sort(key = lambda x: (x[1], -x[0]))
+        size = 0
+        smaller = bigger = -1
+        for start, end in intervals:
+            if start > bigger:
+                smaller = end - 1
+                bigger = end
+                size += 2
+            elif start > smaller:
+                smaller = bigger
+                bigger = end
+                size += 1
+        return size
+
+
+# Initial O(n) space
+class Solution: 
+    def intersectionSizeTwo(self, intervals: List[List[int]]) -> int: 
+        intervals.sort(key = lambda x: (x[1], -x[0])) 
+        nums = [intervals[0][1] - 1, intervals[0][1]] 
+        for start, end in intervals[1:]: 
+            if start <= nums[-2]: 
+                continue
+            elif start <= nums[-1]: 
+                nums.append(end)
+            else:
+                nums.extend([end - 1, end]) 
+        return len(nums)
