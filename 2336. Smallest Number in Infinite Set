@@ -1,0 +1,54 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has lazy / heap:
+- O(1) / O(1) for init
+- O(n) / O(log(n)) for pop 
+- O(1) / O(1) for add,  
+complexity by time and O(n) by space.
+
+I made a rather lazy implementation, but it's generally functional.
+The deletion iteration is somewhat expensive; I think it could be done using a heap.
+"""
+
+# Fast version with heap
+class SmallestInfiniteSet:
+
+    def __init__(self):
+        self.heap = []
+        self.current = 1
+        self.addedBack = set()
+
+    def popSmallest(self) -> int:
+        if self.heap:
+            smallest = heapq.heappop(self.heap)
+            self.addedBack.remove(smallest)
+        else:
+            smallest = self.current
+            self.current += 1
+        return smallest
+        
+
+    def addBack(self, num: int) -> None:
+        if num < self.current and num not in self.addedBack:
+            self.addedBack.add(num)
+            heapq.heappush(self.heap, num)
+        return
+
+#Lazy initial variation
+class SmallestInfiniteSet:
+
+    def __init__(self):
+        self.cur_smallest = 1
+        self.popped = set()
+        
+    def popSmallest(self) -> int:
+        smallest = self.cur_smallest
+        self.popped.add(self.cur_smallest)
+        while self.cur_smallest in self.popped:
+            self.cur_smallest += 1
+        return smallest
+        
+
+    def addBack(self, num: int) -> None:
+        self.cur_smallest = min(self.cur_smallest, num)
+        self.popped.discard(num)
