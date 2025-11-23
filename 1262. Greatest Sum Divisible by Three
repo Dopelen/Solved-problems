@@ -1,0 +1,60 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n * log(n)) complexity by time and O(n).
+
+It was a challenging task. 
+I initially tried to think of a way to do it using dynamic programming, but I didn't succeed. 
+But I couldn't shake the feeling that there was another way. 
+And then it dawned on me that I could simply take the sum of the entire array, sort it, and then take the two smallest integers with a remainder of 1 and the two smallest integers with a remainder of 2.
+This led me to a not very beautiful, but greedy and quick solution to the problem.
+"""
+
+# After refactoring (I was able to write a function that prevents the last blocks of code from being duplicated, but it seemed so terribly unintuitive that I abandoned the idea.)
+class Solution:
+    def maxSumDivThree(self, nums: List[int]) -> int:
+        total_sum = sum(nums)
+        mod = total_sum % 3
+        if not mod:
+            return total_sum
+
+        nums.sort()
+        smallest_remainders = {1: [], 2: []}
+
+        for elem in nums:
+            cur_remainder = elem % 3
+            if cur_remainder and len(smallest_remainders[cur_remainder]) < 2:
+                smallest_remainders[cur_remainder].append(elem)
+            if len(smallest_remainders[1]) == len(smallest_remainders[2]) == 2:
+                break
+
+        subtrahend = total_sum
+        reminders_1 = len(smallest_remainders[1])
+        reminders_2 = len(smallest_remainders[2]) 
+        
+        if mod == 1:
+            if reminders_1 == 0:
+                subtrahend = sum(smallest_remainders[2])
+            else:
+                subtrahend = min(smallest_remainders[1][0], sum(smallest_remainders[2])) if (reminders_2 > 1) else smallest_remainders[1][0]
+
+        elif mod == 2:
+            if reminders_2 == 0:
+                subtrahend = sum(smallest_remainders[1])
+            else:
+                subtrahend = min(sum(smallest_remainders[1]), smallest_remainders[2][0]) if (reminders_1 > 1) else smallest_remainders[2][0]
+
+        total_sum -= subtrahend
+        return total_sum
+
+
+# Smart DP version from Solutions
+# https://leetcode.com/problems/greatest-sum-divisible-by-three/solutions/7360649/greatest-sum-divisible-by-three-by-leetc-agnx/?envType=daily-question&envId=2025-11-23
+class Solution:
+    def maxSumDivThree(self, nums: List[int]) -> int:
+        f = [0, -float("inf"), -float("inf")]
+        for num in nums:
+            g = f[:]
+            for i in range(3):
+                g[(i + num % 3) % 3] = max(g[(i + num % 3) % 3], f[i] + num)
+            f = g
+        return f[0]
