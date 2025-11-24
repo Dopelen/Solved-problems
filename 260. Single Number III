@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Good problem. 
+I understood the concept myself (XOR all to find XOR of 2 unic numbers), but I couldn't figure out how to write a grouping for the numbers by bits.
+The tips helped me.
+We find the bit where the first two numbers diverge (and there will definitely be one), and we divide all the numbers relative to this bit. 
+The XOP of all the numbers with the bit set will return us the first number we are looking for, and accordingly, with the bit not set, the second.
+"""
+
+class Solution:
+    def singleNumber(self, nums: List[int]) -> List[int]:
+        total_xor = functools.reduce(operator.xor, nums)
+        group_one_xor = group_two_xor = 0
+        bit_pos_dif = 0
+
+        while (total_xor >> bit_pos_dif) & 1 != 1:
+            bit_pos_dif += 1
+            
+        for num in nums:
+            if (num >> bit_pos_dif) & 1 == 1:
+                group_one_xor ^= num
+            else:
+                group_two_xor ^= num
+
+        return [group_one_xor, group_two_xor]
