@@ -1,0 +1,67 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m * k) complexity by time and O(n * m * k) by space.
+
+Yesterday I spent a long time figuring out a medium-sized problem, and today I'm tackling a tough one!
+The (*wrong) solution concept came to me pretty quickly: we can maintain an array of suffix sums and use it to calculate the sums on each path, because each movement along X, for example, subtracts the sum of the column we're leaving. 
+The only problem is how to cache it so we don't have to calculate everything hundreds of times.
+I was kind of hoping the naive solution would work, but it didn't.
+It turns out exponential calculations are too expensive, and I'm forced to write dynamic programming.
+"""
+
+# After thinking, watching hints + comments and refactoring
+class Solution:
+    def numberOfPaths(self, grid: List[List[int]], k: int) -> int:
+        MOD = 10**9 + 7
+        rows, cols = len(grid), len(grid[0])
+        dp = [[0] * k for _ in range(cols)]
+        dp[0][grid[0][0] % k] = 1
+
+        for r in range(rows):
+            new_dp = [[0] * k for _ in range(cols)]
+            for c in range(cols):
+                val = grid[r][c]
+                if r == 0 and c == 0:
+                    new_dp[c][val % k] = 1
+                    continue
+                if r > 0:
+                    for mod in range(k):
+                        if dp[c][mod]:
+                            new_dp_mod = (mod + val) % k
+                            new_dp[c][new_dp_mod] = (new_dp[c][new_dp_mod] + dp[c][mod]) % MOD
+                if c > 0:
+                    for mod in range(k):
+                        if new_dp[c - 1][mod]:
+                            new_dp_mod = (mod + val) % k
+                            new_dp[c][new_dp_mod] = (new_dp[c][new_dp_mod] + new_dp[c - 1][mod]) % MOD
+            dp = new_dp
+        return dp[-1][0] % MOD
+
+
+
+# Initial row TLE solution
+class Solution:
+    def numberOfPaths(self, grid: List[List[int]], k: int) -> int:
+        MOD = 10 ** 9 + 7
+        number_of_paths = 0
+        rows, cols = len(grid), len(grid[0])
+        total_sum = 0
+        prefix_sum_row = [[0 for _ in range(cols)] for _ in range(rows)]
+        prefix_sum_col = [[0 for _ in range(cols)] for _ in range(rows)]
+        for r in range(rows):
+            for c in range(cols):
+                total_sum += grid[r][c]
+                prefix_sum_row[r][c] = prefix_sum_row[r][c - 1] + grid[r][c]
+                prefix_sum_col[r][c] = prefix_sum_col[r - 1][c] + grid[r][c]
+
+        queue = deque([(0, 0, total_sum)])
+        while queue:
+            y, x, cur_sum = queue.pop()
+
+            if (y == rows - 1) or (x == cols - 1):
+                number_of_paths += not (cur_sum % k)
+            else:
+                queue.append((y + 1, x, cur_sum - (prefix_sum_row[y][-1] - prefix_sum_row[y][x])))
+                queue.append((y, x + 1, cur_sum - (prefix_sum_col[-1][x] - prefix_sum_col[y][x])))
+
+        return number_of_paths % MOD
