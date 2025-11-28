@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I just spent two hours tinkering with a difficult problem I've already solved before, so I'm forced to look for a new one. Thankfully, I found a very simple one.
+It's just an iterative search for integer divisors of a number. I don't know why I forgot this problem in the middle section.
+"""
+
+class Solution(object):
+    def kthFactor(self, n, k):
+        count = 0
+        for i in range(1, n + 1):
+            if n % i == 0:
+                count += 1
+                if count == k: return i
+        return -1
