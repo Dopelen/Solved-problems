@@ -43,3 +43,41 @@ class Solution:
             if len(bound[parent]) == 1:
                 leaves.add(parent)
         return answer
+
+
+# 28.11.2025 Solution I forgot that I had already done this task and was struggling again :)
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I usually give myself an hour to complete a task, but here I spent a little over an hour and a half because I knew I just needed to endure the worksheet processing debugging. 
+I did it methodically, and the code passed on the first try. I'm proud of myself, even if it wasn't very elegant.
+I move up the tree from the bottom up, using a greedy strategy: if a leaf's sum is a multiple of K, we can prune it; if not, we pass its value to the parent. 
+We have to wait until the parent's subtrees are processed before we check the parent itself - so we don't add the parent to the queue until it has 1 adjacent node left.
+"""
+
+# Initial Solution
+class Solution:
+    def maxKDivisibleComponents(self, n: int, edges: List[List[int]], values: List[int], k: int) -> int:
+        components = 1
+        adj_list = defaultdict(set)
+        for node_1, node_2 in edges:
+            adj_list[node_1].add(node_2)
+            adj_list[node_2].add(node_1)
+
+        leafs = deque(key for key, value in adj_list.items() if len(value) == 1)
+
+        while leafs:
+            cur_leaf = leafs.popleft()
+            cur_val = values[cur_leaf]
+            if not adj_list[cur_leaf]:
+                break
+            parent = adj_list[cur_leaf].pop()
+            if not cur_val % k:
+                components += 1
+            else:
+                values[parent] += cur_val
+            adj_list[parent].discard(cur_leaf)
+            if len(adj_list[parent]) == 1:
+                leafs.append(parent)
+
+        return components
