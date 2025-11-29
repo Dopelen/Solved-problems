@@ -1,0 +1,12 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+Leetcode is being kind today. 
+He gave me a problem that I solved in 15 seconds.
+"""
+
+class Solution:
+    def minOperations(self, nums: List[int], k: int) -> int:
+        return sum(nums) % k
+        
