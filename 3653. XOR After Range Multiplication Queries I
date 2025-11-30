@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(1) by space.
+
+The limit on operations is 10 ** 3, so it can be solved iteratively, although we lose some clever optimization logic in this case.
+The correct solution is quite complex, using grouping and prefix products, I don't think I would have managed it in an hour.
+"""
+
+class Solution:
+    def xorAfterQueries(self, nums: List[int], queries: List[List[int]]) -> int:
+        for start, end, step, multiplier in queries:
+            while start <= end < len(nums):
+                nums[start] = nums[start] * multiplier % (10 ** 9 + 7)
+                start += step
+        return reduce(operator.xor, nums)
