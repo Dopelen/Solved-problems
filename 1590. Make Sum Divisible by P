@@ -8,6 +8,8 @@ Essentially, we calculate the remainder from dividing a given prefix sum by a gi
 we calculate the length of the segment we need, through the difference in indices where the same remainder was encountered earlier.
 
 I'm sure that this is not the end of the story, I have many more prefix sums and suffering with them waiting for me.
+
+P.S: 30.11.2025 A year later, I figured it out. Great solution!
 """
 
 class Solution:
