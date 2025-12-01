@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+Advent of Code has begun, and I'm faced with a difficult problem. Luckily, I thought of a solution this afternoon.
+The binary search part is clear—we're trying to guess the time—but the question remains: how do you check if the batteries last for the specified time?
+The answer is to calculate the total contribution of the batteries. 
+If it is more than required, we will be able to redistribute the batteries, but if not, then it will not work.
+"""
+
+# Initial Solution
+class Solution:
+    def maxRunTime(self, n: int, batteries: List[int]) -> int:
+
+        def can_run(t):
+            return sum(min(b, t) for b in batteries) >= n * t
+
+        left, right = 0, sum(batteries) // n
+        while left < right:
+            mid = (left + right + 1) // 2
+            if can_run(mid):
+                left = mid
+            else:
+                right = mid - 1
+        return left
+
+
+# Smart one (not mine)
+    def maxRunTime(self, n: int, batteries: List[int]) -> int:
+        m = len(batteries)
+        if n==m:
+            return min(batteries)
+        if m < n:
+            return 0
+        batteries.sort()
+        S = sum(batteries[:-n])
+        L = batteries[-n:] 
+        for i in range(n-1):
+            if S < (i+1) * (L[i+1] - L[i]):
+                return L[i] + S // (i+1)
+            S -= (i+1) * (L[i+1] - L[i])
+        return L[-1] + S // n
