@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n ** 2) complexity by time and O(n) by space.
+
+I almost immediately realized that I needed to divide the points by their y-coordinates and use a dictionary to count their combinations, but the main question was how to count the final number of combinations.
+I couldn't derive it myself, but the neural network helped me.
+The idea is that we take all possible combinations of all possible levels, then subtract the sum of the squares at each level (because we can't construct trapezoids at level 1), 
+and then divide by 2, because each level was counted twice in the overall multiplication.
+"""
+
+class Solution:
+    def countTrapezoids(self, points: List[List[int]]) -> int:
+        MOD = 10 ** 9 + 7
+        dots_on_y = defaultdict(set)
+        for x, level in points:
+            dots_on_y[level].add(x)
+
+        combinations_on_y = {}
+        for level, dots in dots_on_y.items():
+            dots_on_lvl = len(dots)
+            combinations_on_y[level] = math.comb(dots_on_lvl, 2) if dots_on_lvl >= 2 else 0
+
+        unic_dots = sum(combinations_on_y.values())
+        total = (unic_dots * unic_dots - sum(v * v for v in combinations_on_y.values())) // 2 
+        return total % MOD
