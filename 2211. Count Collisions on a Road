@@ -1,0 +1,61 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I thought the problem was simple while solving it in my head on the subway, but when I sat down to write it, I was overwhelmed by the number of ways it could be done.
+But after thinking about it for half an hour, I came to a common understanding that allowed me to write a clear solution, without unnecessary arrays, simply using two points for each type of movement.
+"""
+
+
+# After refactoring
+class Solution:
+    def countCollisions(self, directions: str) -> int:
+        size = len(directions)
+        mirror_directions = list(reversed(directions))
+        collisions = 0
+
+        def find_first_last(char):
+            if char in directions:
+                return (directions.index(f"{char}"), size - mirror_directions.index(f"{char}"))
+            return None
+
+        first_last_l = find_first_last("L")
+        first_last_s = find_first_last("S")
+        first_last_r = find_first_last("R")
+
+        for j in range(size):
+            match directions[j]:
+                case "L": collisions += bool(first_last_r and first_last_r[0] < j) or bool(first_last_s and first_last_s[0] < j)
+                case "R": collisions += bool(first_last_l and first_last_l[-1] > j) or bool(first_last_s and first_last_s[-1] > j)
+
+        return collisions
+
+
+# Initial Solution
+class Solution:
+    def countCollisions(self, directions: str) -> int:
+        size = len(directions)
+        collisions = 0
+        all_l = []
+        all_s = []
+        all_r = []
+        for i in range(size):
+            match directions[i]:
+                case "L": all_l.append(i)
+                case "S": all_s.append(i)
+                case "R": all_r.append(i)
+
+        for j in range(size):
+            match directions[j]:
+                case "L": collisions += bool(all_r and all_r[0] < j) or bool(all_s and all_s[0] < j)
+                case "R": collisions += bool(all_l and all_l[-1] > j) or bool(all_s and all_s[-1] > j)
+                # case "S": pass
+
+        return collisions
+
+
+# Genius one
+class Solution:
+    def countCollisions(self, directions: str) -> int:
+        directions = directions.lstrip('L').rstrip('R')
+        return len(directions) - directions.count('S')
