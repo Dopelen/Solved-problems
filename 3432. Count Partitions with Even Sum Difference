@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode. 
+This programm has O(n) complexity by time and O(1) by space.
+
+A fairly simple problem that can be solved with just one pointer and working with the sum.
+"""
+
+# My initial solution
+class Solution:
+    def countPartitions(self, nums: List[int]) -> int:
+        left_sum = 0
+        right_sum = sum(nums)
+        number_of_partitions = 0
+        for i in range(len(nums) - 1):
+            left_sum += nums[i]
+            right_sum -= nums[i]
+            number_of_partitions += not ((left_sum - right_sum) % 2)
+        return number_of_partitions
+
+
+# Shocking math version with proofs
+# https://leetcode.com/problems/count-partitions-with-even-sum-difference/solutions/7392459/solution-by-la_castille-0zwu/?envType=daily-question&envId=2025-12-05
+class Solution:
+    def countPartitions(self, nums: List[int]) -> int:
+        return (len(nums) - 1) * (~sum(nums) & 1)
