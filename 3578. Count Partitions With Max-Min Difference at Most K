@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I barely managed to cope with the significant hints, a difficult task
+"""
+
+# https://leetcode.com/problems/count-partitions-with-max-min-difference-at-most-k/solutions/7384429/count-partitions-with-max-min-difference-95ht/?envType=daily-question&envId=2025-12-06
+class Solution:
+    def countPartitions(self, nums: List[int], k: int) -> int:
+        MOD = 10 ** 9 + 7
+        size = len(nums)
+        dp = [0] * (size + 1)
+        pref = [0] * (size + 2)
+        dp[0] = 1
+        pref[1] = 1
+
+        deque_min = deque()
+        deque_max = deque()
+        left_pointer = 0
+
+        for i in range(size):
+            while deque_min and nums[deque_min[-1]] > nums[i]:
+                deque_min.pop()
+            deque_min.append(i)
+
+            while deque_max and nums[deque_max[-1]] < nums[i]:
+                deque_max.pop()
+            deque_max.append(i)
+
+            while nums[deque_max[0]] - nums[deque_min[0]] > k:
+                if deque_min[0] == left_pointer:
+                    deque_min.popleft()
+                if deque_max[0] == left_pointer:
+                    deque_max.popleft()
+                left_pointer += 1
+
+            dp[i + 1] = (pref[i + 1] - pref[left_pointer]) % MOD
+            pref[i + 2] = (pref[i + 1] + dp[i + 1]) % MOD
+        return dp[size]
