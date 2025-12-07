@@ -1,0 +1,84 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It's a bit cumbersome, and the debugger says the code is very slow, but the key is simply a sliding window. 
+I'm tracking the maximum window in which there are K or fewer opposite symbols.
+"""
+
+
+# After refactoring
+class Solution:
+    def maxConsecutiveAnswers(self, answerKey: str, k: int) -> int:
+
+        def longest_with_char(target: str) -> int:
+            left = 0
+            wrong_char = 0
+            biggest_window = 0
+            for right in range(len(answerKey)):
+                if answerKey[right] != target:
+                    wrong_char += 1
+
+                while wrong_char > k:
+                    if answerKey[left] != target:
+                        wrong_char -= 1
+                    left += 1
+
+                biggest_window = max(biggest_window, right - left + 1)
+            return biggest_window
+
+        return max(longest_with_char('T'), longest_with_char('F'))
+
+
+# Initial Solution
+class Solution:
+    def maxConsecutiveAnswers(self, answerKey: str, k: int) -> int:
+
+        def find_max_window(char: str) -> int:
+            max_window = 1
+            window_size = 1
+            left_pointer = 0
+            right_pointer = 1
+            opposite_char = not answerKey[0] == char
+            while right_pointer < len(answerKey):
+
+                while right_pointer < len(answerKey):
+                    if opposite_char + (not answerKey[right_pointer] == char) > k:
+                        break
+                    opposite_char += not answerKey[right_pointer] == char
+                    window_size += 1
+                    max_window = max(max_window, window_size)
+                    right_pointer += 1
+
+                while left_pointer != right_pointer and opposite_char >= k:
+                    opposite_char -= not answerKey[left_pointer] == char
+                    window_size -= 1
+                    left_pointer += 1
+
+            return max_window
+
+        return max(find_max_window("T"), find_max_window("F"))
+
+
+# smartest man alive (from "solution" section)
+class Solution:
+    def maxConsecutiveAnswers(self, answerKey: str, k: int) -> int:
+        cnt_T = 0
+        cnt_F = 0
+        left = 0
+        max_num = 0
+        for right in range(len(answerKey)):
+            if answerKey[right] == "T":
+                cnt_T += 1
+            else:
+                cnt_F += 1
+            if cnt_T > k and cnt_F > k:
+                max_num = max(max_num, right-left)
+                while cnt_T > k and cnt_F > k:
+                    if answerKey[left] == "T":
+                        cnt_T -= 1
+                    else:
+                        cnt_F -= 1
+                    left += 1
+        max_num = max(max_num, right-left+1)
+        return max_num
