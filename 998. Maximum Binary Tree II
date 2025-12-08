@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This code has O(n) complexity by time and same be space.
+
+The task didn't seem very clear to me, that's why I came up with this solution.
+"""
+
+# Initial Solution (O(n))
+class Solution:
+    def constructMaximumBinaryTree(self, nums: List[int]) -> Optional[TreeNode]:
+        if not nums: 
+            return None
+        return TreeNode(max(nums), self.constructMaximumBinaryTree(nums[:nums.index(max(nums))]), self.constructMaximumBinaryTree(nums[nums.index(max(nums)) + 1:]))
+    
+    def insertIntoMaxTree(self, root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
+        original_array = []
+        
+        def inorder(r):
+            if not r:
+                return
+            inorder(r.left)
+            original_array.append(r.val)
+            inorder(r.right)
+        
+        inorder(root)
+        original_array.append(val)
+        return self.constructMaximumBinaryTree(original_array)
+
+
+# Smart Solution O(h)
+class Solution:
+    def insertIntoMaxTree(self, root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
+        if root is None:
+            return TreeNode(val)
+        elif val > root.val:
+            return TreeNode(val, root)
+        else:
+            root.right = self.insertIntoMaxTree(root.right, val)
+            return root
