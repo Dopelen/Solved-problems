@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I solved the problem in my head while driving to work this morning.
+At home, I wrote the solution in 5 minutes, and everything worked right away. A rare, pleasant feeling!
+
+Essentially, we're iterating over the array and increasing the number of combinations based on the number of elements we need on the left and right.
+Dictionaries give us access for a constant, so the entire solution takes linear time.
+"""
+
+class Solution:
+    def specialTriplets(self, nums: List[int]) -> int:
+        MOD = 10 ** 9 + 7
+        special_triplets = 0
+        left_dict = Counter()
+        right_dict = Counter(nums)
+
+        for elem in nums:
+            right_dict[elem] -= 1
+            if left_dict[elem * 2] > 0 and right_dict[elem * 2] > 0:
+                special_triplets += left_dict[elem * 2] * right_dict[elem * 2]
+            left_dict[elem] += 1
+            
+        return special_triplets % MOD
