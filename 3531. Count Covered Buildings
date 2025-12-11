@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+I was solving this in my head again on the way to the subway.
+We place our buildings on the matrix lines, then sort them and use binary search to find the number of points surrounded by other points (excluding ourselves).
+"""
+
+class Solution:
+    def countCoveredBuildings(self, n: int, buildings: List[List[int]]) -> int:
+        covered_buildings = 0
+        horizontal_buildings = defaultdict(list)
+        vertical_buildings = defaultdict(list)
+
+        for y, x in buildings:
+            horizontal_buildings[y].append(x)
+            vertical_buildings[x].append(y)
+
+        for value_1 in vertical_buildings.values():
+            value_1.sort()
+        
+        for value_2 in  horizontal_buildings.values():
+            value_2.sort()
+
+        for b_y, b_x in buildings:
+            vert_idx = bisect_right(horizontal_buildings[b_y], b_x)
+            horizontal_idx = bisect_right(vertical_buildings[b_x], b_y)
+            if ((0 < vert_idx < len(horizontal_buildings[b_y]) and (vert_idx - 1 > 0)) and (
+                    (0 < horizontal_idx < len(vertical_buildings[b_x])) and (horizontal_idx - 1 > 0))):
+                covered_buildings += 1
+
+        return covered_buildings
