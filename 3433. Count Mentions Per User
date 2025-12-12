@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(commands * users) complexity by time and same by space.
+
+A tedious task, with unpleasant edge cases and not very clear implementation.
+But I learned a cool trick for sorting with flexible priority!
+events.sort(key=lambda x: (x[1], 0 if x[0] == 'OFFLINE' else 1))
+
+In general, I simply sorted the array of events and went through it like a timeline, simply setting the time when users would wake up and recalculating if necessary.
+"""
+
+class Solution:
+    def countMentions(self, numberOfUsers: int, events: List[List[str]]) -> List[int]:
+        Users = {i : [0, 0] for i in range(numberOfUsers)}
+        for event in events:
+            event[1] = int(event[1])
+            if event[2] not in ['HERE', 'ALL']:
+                event[2] = [int(user[2:]) if user[:2] == 'id' else int(user) for user in event[2].split()]
+
+        events.sort(key=lambda x: (x[1], 0 if x[0] == 'OFFLINE' else 1))
+
+        for msg, time, users in events:
+            if msg == 'OFFLINE':
+                Users[users[0]][0] = time + 60
+            else:
+                if users == 'ALL':
+                    for user_info in Users.values():
+                        user_info[1] += 1
+                elif users == 'HERE':
+                    for user_info in Users.values():
+                        user_info[1] += time >= user_info[0]
+                else:
+                    for i in users:
+                        Users[i][1] += 1
+
+        answer = [0] * numberOfUsers
+        for user, data in Users.items():
+            answer[user] += data[1]
+        return answer
