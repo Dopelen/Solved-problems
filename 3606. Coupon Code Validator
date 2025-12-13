@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n(log(n))) complexity by time and O(n) by space.
+
+It's a rather tedious task for an easy category, and it involves regular expressions and sorting by multiple bases. It's not that complicated, but somehow it can't be solved right away.
+"""
+
+class Solution:
+    def validateCoupons(self, code: List[str], businessLine: List[str], isActive: List[bool]) -> List[str]:
+        valid_coupons = []
+        priority = {
+            "electronics": 0,
+            "grocery": 1,
+            "pharmacy": 2,
+            "restaurant": 3,
+        }
+        for cod, line, status in zip(code, businessLine, isActive):
+            if bool(re.match(r'^[a-zA-Z0-9_]+$', cod)) and (line in ["electronics", "grocery", "pharmacy", "restaurant"]) and status:
+                valid_coupons.append((line, cod))
+        valid_coupons.sort(key = lambda x : (priority[x[0]], x[1]))
+        return [coupon[1] for coupon in valid_coupons]
