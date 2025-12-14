@@ -1,0 +1,63 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I completed the task without any prompting in half an hour, and I'm pleased with myself.
+I wouldn't say the problem is particularly difficult, but it does force me to think.
+The point is that we have constraints that greatly assist in formulating a solution strategy:
+Each segment can only contain two chairs (one with sharpened peaks...). 
+When selecting a new segment, our intuition tells us that the new segment can be combined with all previous segments, adding a factor to the total number of possible divisions.
+This reduces the task to calculating the distances between segments (possible divisions) and multiplying them together.
+"""
+
+# Initial Solution
+class Solution:
+    def numberOfWays(self, corridor: str) -> int:
+        seats = corridor.count("S")
+        if seats % 2 or seats <= 2:
+            return int(seats == 2)
+        MOD = 10 ** 9 + 7
+        spaces = []
+        seats = 0
+        current_plants = 0
+
+        for idx, elem in enumerate(corridor):
+            if seats == 2:
+                if elem == 'P':
+                    current_plants += 1
+                else:
+                    seats = 1
+                    spaces.append(current_plants + 1)
+            elif elem == 'S':
+                seats += 1
+                current_plants = 0
+
+        divide_variants = reduce(operator.mul, spaces, 1)
+        return divide_variants % MOD
+
+
+# Refactored version (O(1) by space)
+class Solution:
+    def numberOfWays(self, corridor: str) -> int:
+        MOD = 10**9 + 7
+        seats = corridor.count('S')
+        if seats % 2 or seats < 2:
+            return 0
+        if seats == 2:
+            return 1
+
+        ways = 1
+        s = p = 0
+
+        for c in corridor:
+            if c == 'S':
+                s += 1
+                if s == 3:
+                    ways = ways * (p + 1) % MOD
+                    s = 1
+                    p = 0
+            else:
+                if s == 2:
+                    p += 1
+
+        return ways
