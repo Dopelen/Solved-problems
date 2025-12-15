@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+This time, I quickly understood what was going on.
+We need uniformly decreasing segments with a step of 1, each of which can be divided into even smaller segments.
+After looking at a couple of examples, it becomes clear that with each new element, we increase the number of partitions by 1 for each element in the sequence, and this fits the structure of an arithmetic progression.
+"""
+
+class Solution:
+    def getDescentPeriods(self, prices: List[int]) -> int:
+        current_period = 1
+        number_of_periods = 0
+        prices.append(math.inf)
+        for idx in range(1, len(prices)):
+            if prices[idx] + 1 == prices[idx - 1]:
+                current_period += 1
+            else:
+                number_of_periods += current_period * (current_period + 1) // 2
+                current_period = 1
+        return number_of_periods
