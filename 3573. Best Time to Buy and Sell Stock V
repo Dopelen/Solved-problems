@@ -1,0 +1,38 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * k) complexity by time and O(n * k) by space.
+
+At first, I thought it was complicated.
+Then I realized that it didn't matter what order the records were in — we could sort them and solve the problem in five lines. 
+But then I realized we couldn't start a transaction without completing the previous one, which meant only one thing: we'd have to write dynamic programming.
+Unfortunately, I didn't think of it in the allotted time.
+"""
+
+# https://leetcode.com/problems/best-time-to-buy-and-sell-stock-v/solutions/7416797/best-time-to-buy-and-sell-stock-v-by-lee-e1te/?envType=daily-question&envId=2025-12-17
+class Solution:
+    def maximumProfit(self, prices: List[int], k: int) -> int:
+        size = len(prices)
+
+        @cache
+        def dfs(i, j, state):
+            if j == 0:
+                return 0
+            if i == 0:
+                return (
+                    0 if state == 0 else -prices[0] if state == 1 else prices[0]
+                )
+            p = prices[i]
+            if state == 0:
+                res = max(
+                    dfs(i - 1, j, 0), dfs(i - 1, j, 1) + p, dfs(i - 1, j, 2) - p
+                )
+            elif state == 1:
+                res = max(dfs(i - 1, j, 1), dfs(i - 1, j - 1, 0) - p)
+            else:
+                res = max(dfs(i - 1, j, 2), dfs(i - 1, j - 1, 0) + p)
+
+            return res
+
+        ans = dfs(size - 1, k, 0)
+        dfs.cache_clear()
+        return ans
