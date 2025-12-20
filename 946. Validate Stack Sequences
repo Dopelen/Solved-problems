@@ -1,0 +1,39 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I don't think this is medium difficulty problem.
+We simply simulated the process, and here's the result in linear time.
+I was tempted to convert it to doubly linked lists and popleft it, but I decided to save memory and simply use pointers to the elements.
+"""
+
+
+# After refactoring
+class Solution:
+    def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
+        stack = []
+        pop_idx = 0
+        for x in pushed:
+            stack.append(x)
+            while stack and stack[-1] == popped[pop_idx]:
+                stack.pop()
+                pop_idx += 1
+        return not stack
+
+
+# Initial Solution
+class Solution:
+    def validateStackSequences(self, pushed: List[int], popped: List[int]) -> bool:
+        stack = []
+        pushed_idx = popped_idx = 0
+        size = len(pushed)
+        while (popped_idx != size) or (pushed_idx != size):
+            if stack and stack[-1] == popped[popped_idx]:
+                stack.pop()
+                popped_idx += 1
+            elif pushed_idx == size:
+                return False
+            else:
+                stack.append(pushed[pushed_idx])
+                pushed_idx += 1
+        return popped_idx == size
