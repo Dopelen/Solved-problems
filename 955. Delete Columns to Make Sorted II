@@ -1,0 +1,52 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+The problem seemed manageable, then complicated, then manageable again. 
+And then so many edge cases popped up that I spent two hours debugging them.
+Duplicates, triplicates, duplicates that are fine in one case, but in another, a column needs to be deleted, forcing me to recalculate previous duplicates that were already fine. 
+It's a living nightmare.
+"""
+
+class Solution:
+    def minDeletionSize(self, strs: List[str]) -> int:
+        number_of_str = len(strs)
+        symbols_in_str = len(strs[0])
+        deletions = 0
+        groups = [list(range(number_of_str))]
+
+        for col in range(symbols_in_str):
+            new_groups = []
+            need_delete = False
+            for group in groups:
+                current_max = 'A'
+                duplicates = []
+                curr_dup = []
+                for i in group:
+                    ch = strs[i][col]
+                    if ch < current_max:
+                        need_delete = True
+                        break
+                    if ch == current_max:
+                        if not curr_dup:
+                            curr_dup = [prev_i]
+                        curr_dup.append(i)
+                    else:
+                        if curr_dup:
+                            duplicates.append(curr_dup)
+                            curr_dup = []
+                    current_max = ch
+                    prev_i = i
+                if curr_dup:
+                    duplicates.append(curr_dup)
+                if need_delete:
+                    break
+                new_groups.extend(duplicates)
+            if need_delete:
+                deletions += 1
+            else:
+                groups = new_groups
+                if not groups:
+                    break
+
+        return deletions
