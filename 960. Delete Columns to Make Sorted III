@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * w ** 2) complexity by time and O(w) by space.
+
+Instead of leetcode, there's been some kind of tiltcode for the last two weeks.
+The difficult tasks come one after another, and I can barely cope with them. A lot of dynamic programming.
+
+The main trick is to find which elements to keep - essentially, it's finding the largest increasing subsequence.
+"""
+
+# A beautiful and elegant solution, it's a pity it's not mine.
+# https://leetcode.com/problems/delete-columns-to-make-sorted-iii/editorial/?envType=daily-question&envId=2025-12-22
+class Solution(object):
+    def minDeletionSize(self, strs):
+        symbols_in_str = len(strs[0])
+        dp = [1] * symbols_in_str
+        for i in range(symbols_in_str-2, -1, -1):
+            for j in range(i+1, symbols_in_str):
+                if all(row[i] <= row[j] for row in strs):
+                    dp[i] = max(dp[i], 1 + dp[j])
+
+        return symbols_in_str - max(dp)
