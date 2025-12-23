@@ -1,0 +1,73 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+How many more Roman numeral problems do I have to solve...
+I tried to figure them out again.
+It was quite tedious, but I managed.
+I'm going through the digits, recursively decreasing each digit.
+I found out the optimal solution to this problem, which is also nice.
+"""
+
+# Initial Solution
+class Solution:
+    def intToRoman(self, num: int) -> str:
+        result = []
+        int_to_ROMINT = {1 : 'I', 5 : 'V', 10 : 'X', 50 : 'L', 100 : 'C', 500 : 'D', 1000: 'M'}
+        subtrahend = [1, 5, 10, 50, 100, 500, 1000]
+        rank_to_rom_4 = {0 : ['I', 'V'], 1: ['X', 'L'], 2: ['C', 'D']}
+        rank_to_rom_9 = {0 : ['I', 'X'], 1: ['X', 'C'], 2: ['C', 'M']}
+
+        def convert_to_romanian(cur_number, rank):
+            if not cur_number:
+                return
+            digit_val = int(str(cur_number)[0])
+            if digit_val in [4, 9]:
+                actual_dict = rank_to_rom_4 if digit_val == 4 else rank_to_rom_9
+                result.extend(actual_dict[rank])
+            else:
+                for n in subtrahend[::-1]:
+                    if n <= cur_number:
+                        result.append(int_to_ROMINT[n])
+                        cur_number -= n
+                        convert_to_romanian(cur_number, rank - (cur_number < n))
+                        break
+
+        rank = len(str(num)) - 1
+        cur_rank = 10 ** rank
+        while num:
+            convert_to_romanian(num // cur_rank * cur_rank, rank)
+            num %= cur_rank
+            cur_rank //= 10
+            rank -= 1
+
+        return ''.join(result)
+
+
+
+# After refactoring
+class Solution:
+    def intToRoman(self, num: int) -> str:
+        values = [
+            (1000, "M"),
+            (900, "CM"),
+            (500, "D"),
+            (400, "CD"),
+            (100, "C"),
+            (90, "XC"),
+            (50, "L"),
+            (40, "XL"),
+            (10, "X"),
+            (9, "IX"),
+            (5, "V"),
+            (4, "IV"),
+            (1, "I"),
+        ]
+
+        res = []
+        for value, symbol in values:
+            while num >= value:
+                res.append(symbol)
+                num -= value
+
+        return "".join(res)
