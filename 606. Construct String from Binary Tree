@@ -1,0 +1,44 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Today, finally, no terribly difficult tasks. Just tree traversal.
+"""
+
+# Before refactoring
+class Solution:
+    def tree2str(self, root: Optional[TreeNode]) -> str:
+        result = []
+        
+        def helper(r):
+            result.append(str(r.val))
+            if r.left:
+                result.append('(')
+                helper(r.left)
+                result.append(')')
+            if r.right:
+                if not r.left:
+                    result.append('()')
+                result.append('(')
+                helper(r.right)
+                result.append(')')
+
+        helper(root)
+        return "".join(result)
+
+
+# After refactoring
+class Solution:
+    def tree2str(self, root: Optional[TreeNode]) -> str:
+        if not root:
+            return ""
+        
+        result = str(root.val)
+        
+        if root.left or root.right:
+            result += "(" + self.tree2str(root.left) + ")"
+        
+        if root.right:
+            result += "(" + self.tree2str(root.right) + ")"
+        
+        return result
