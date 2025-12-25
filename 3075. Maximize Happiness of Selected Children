@@ -1,0 +1,18 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+A suspiciously simple problem.
+I immediately intuitively came up with the solution, although people in the comments were struggling.
+Choosing any number reduces all other numbers, so we can simply sort our array and greedily take from largest to smallest, because the cost per step is the same for everyone -> we need to take the largest one each iteration.
+"""
+
+class Solution:
+    def maximumHappinessSum(self, happiness: List[int], k: int) -> int:
+        max_sum = 0
+        for index, elem in enumerate(sorted(happiness, reverse=True)[:k]):
+            cur_val = elem - index
+            if cur_val <= 0:
+                break
+            max_sum += cur_val
+        return max_sum
