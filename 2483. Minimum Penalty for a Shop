@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+It's solved through prefixes and suffixes, I got a little stuck with defining the boundary, and it wasn't at all obvious that 0 hour closing is before the entire array, but overall I figured it out.
+"""
+
+class Solution:
+    def bestClosingTime(self, customers: str) -> int:
+        n_from_left = 0
+        y_from_right = customers.count('Y')
+        earliest_hour = 0
+        max_penalty = n_from_left + y_from_right
+        for index, elem in enumerate(customers):
+            y_from_right -= elem == 'Y'
+            penalty = n_from_left + y_from_right
+            n_from_left += elem == 'N'
+            if penalty < max_penalty:
+                max_penalty = penalty
+                earliest_hour = index + 1
+        return earliest_hour
