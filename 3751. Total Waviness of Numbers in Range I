@@ -1,0 +1,17 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(num_2 - num_1 * len(num_2 - num_1) complexity by time and O(1) by space.
+
+The hints suggest using brute force, but it seems possible to do it without iteration, calculating all possible states depending on the states of the neighbors for each digit, but this immediately becomes a hard-level task in this case.
+"""
+
+class Solution:
+    def totalWaviness(self, num1: int, num2: int) -> int:
+        total_waviness = 0
+
+        for num in range(num1, num2 + 1):
+            n = [int(digit) for digit in str(num)]
+            for i in range(1, len(n)):
+                total_waviness += (n[i - 1] < n[i] > n[i + 1]) or (n[i - 1] > n[i] < n[i + 1])
+                
+        return total_waviness
