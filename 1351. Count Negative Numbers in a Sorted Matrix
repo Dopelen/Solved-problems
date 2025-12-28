@@ -4,8 +4,21 @@ This program has O(m + n) complexity by time and O(1) by space.
 
 Even though it's a matrix, I like the solution, it has linear complexity, and the interval-cutting heuristics make it even faster!
 
+P.S: I looked at my solution from last year and realized that for large matrices it’s possible to solve it more easily, using binary search.
 """
 
+# 2026 version
+class Solution:
+    def countNegatives(self, grid: List[List[int]]) -> int:
+        width = len(grid[0]) - 1
+        answer = 0
+        for row in grid:
+            insertion_idx = bisect_right(row, 0, key= lambda x: -x)
+            answer += width - insertion_idx + 1
+        return answer
+
+
+# Initial Solution
 class Solution:
     def countNegatives(self, grid: List[List[int]]) -> int:
         height = len(grid) - 1
