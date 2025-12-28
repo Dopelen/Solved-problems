@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+You can solve this problem without dynamic programming by simply selling greedily at the first price that exceeds the purchase price.
+"""
+
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        profit = 0
+
+        for i in range(1, len(prices)):
+            if prices[i] > prices[i - 1]:
+                profit += prices[i] - prices[i - 1]
+
+        return profit
