@@ -1,0 +1,71 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n!) complexity by time and O(n!) by space.
+
+1. Remembered about Pairwise in InterTool. 
+2. Take all the symbols in pairs, then check all the possible symbols they could bring to the next level. 
+3. Check each level for correctness and process the shortest ones first. 
+4. Came up with this solution in about an hour; it was naive, but with a couple of optimizations.
+"""
+
+# Initial Solution
+class Solution:
+    def pyramidTransition(self, bottom: str, allowed: List[str]) -> bool:
+        potential_valid_seq = deque([bottom])
+        possible_pairs = defaultdict(list)
+        for s in allowed:
+            possible_pairs[s[:2]].append(s[2])
+
+        @cache
+        def check_seq(seq):
+            return all([''.join(pair) in possible_pairs for pair in itertools.pairwise(seq)])
+
+        def construct_new_seq(to_process, processed):
+            if len(to_process) == 1:
+                potential_valid_seq.appendleft(processed)
+                return
+            cur_pair = to_process[:2]
+            for variant in possible_pairs[cur_pair]:
+                construct_new_seq(to_process[1::], processed + variant)
+
+        while potential_valid_seq:
+            cur_seq = potential_valid_seq.popleft()
+            if check_seq(cur_seq):
+                if len(cur_seq) == 2:
+                    return True
+                else:
+                    construct_new_seq(cur_seq, "")
+
+        return False
+
+
+# Beautiful correct solution
+class Solution:
+    def pyramidTransition(self, bottom: str, allowed: List[str]) -> bool:
+        possible_transition = defaultdict(list)
+        for a in allowed:
+            possible_transition[(a[0], a[1])].append(a[2])
+
+        @lru_cache(None)
+        def dfs(row: str) -> bool:
+            if len(row) == 1:
+                return True
+
+            def build(i, cur):
+                if i == len(row) - 1:
+                    return dfs("".join(cur))
+
+                pair = (row[i], row[i+1])
+                if pair not in possible_transition:
+                    return False
+
+                for c in possible_transition[pair]:
+                    cur.append(c)
+                    if build(i + 1, cur):
+                        return True
+                    cur.pop()
+                return False
+
+            return build(0, [])
+
+        return dfs(bottom)
