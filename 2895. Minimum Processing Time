@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+A rather simple and enjoyable task.
+We sort the tasks and organize the processors in a heap (you can also use a sorted list; I initially forgot that a processor can only be used once, so I used a heap).
+Since the tasks are sorted, we don't even have to search for the maximum; we simply take the task time at the current index and advance the pointer by 4 for the next processor.
+"""
+
+
+# After refactoring
+class Solution:
+    def minProcessingTime(self, processorTime: List[int], tasks: List[int]) -> int:
+        processorTime.sort()
+        tasks.sort(reverse=True)
+        finish_time = -math.inf
+        for idx in range(len(processorTime)):
+            finish_time = max(finish_time, processorTime[idx] + tasks[idx * 4])
+        return finish_time
+
+
+# Initial Solution
+class Solution:
+    def minProcessingTime(self, processorTime: List[int], tasks: List[int]) -> int:
+        heapify(processorTime)
+        tasks.sort(reverse=True)
+        finish_time = -math.inf
+        for idx in range(0, len(tasks), 4):
+            cur_time = heappop(processorTime)
+            finish_time = max(finish_time, cur_time + tasks[idx])
+
+        return finish_time
