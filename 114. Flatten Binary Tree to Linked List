@@ -1,0 +1,23 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A rather difficult task for rebuilding the tree in place. 
+This task caused a bit of pain. 
+I rewrote everything three times to properly handle the residual right subtree.
+"""
+
+class Solution:
+    def flatten(self, root: Optional[TreeNode]) -> None:
+        if not root:
+            return
+        left = root.left
+        right = root.right
+        self.flatten(left)
+        self.flatten(right)
+        root.left = None
+        root.right = left
+        cur = root
+        while cur.right:
+            cur = cur.right
+        cur.right = right
