@@ -1,0 +1,22 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+A complex yet simple task.
+We only have two patterns we can use: ABC and ABA, where the letters are different colors. 
+Only in this configuration can we obtain a matrix without overlapping colors.
+For the ABA pattern, when adding a row, we have two ways to add a row with the ABC pattern and two ways to complete the ABA pattern.
+For the ABC pattern, there are two ABA pattern and three ABC pattern.
+
+This is a rare case where a complex problem isn't difficult to program, but rather the main difficulty lies in constructing the mathematical logic behind the solution.
+I couldn't write it beautifully; I simply figured it out with the hints after struggling with the problem for an hour.
+"""
+
+# https://leetcode.com/problems/number-of-ways-to-paint-n-3-grid/solutions/7460522/clean-code-time-on-space-o1-explained-by-fgmb/?envType=daily-question&envId=2026-01-03
+class Solution(object):
+    def numOfWays(self, n):
+        MOD = 10**9 + 7
+        pattern_1 = pattern_2 = 6
+        for _ in range(2, n + 1):
+            pattern_1, pattern_2 = (2*pattern_1 + 2*pattern_2) % MOD, (2*pattern_1 + 3*pattern_2) % MOD
+        return (pattern_1 + pattern_2) % MOD
