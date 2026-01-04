@@ -1,0 +1,31 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * sqrt(m) complexity by time and O(1) by space.
+
+There's a complicated mathematical solution to finding numbers that have EXACTLY 4 divisors, but I decided to do it the easy way: just go up to the square root of the number and then add it to the answer if there are 4 divisors.
+"""
+
+class Solution:
+    def sumFourDivisors(self, nums: List[int]) -> int:
+        sum_of_divisors = 0
+
+        def finding_four_divisors(n):
+            sum_of_divisors = 1 + n
+            count_of_divisors = 2
+            i = 2
+            while i * i <= n:
+                if n % i == 0:
+                    sum_of_divisors += i
+                    count_of_divisors += 1
+                    if i != n // i:
+                        sum_of_divisors += n // i
+                        count_of_divisors += 1
+                i += 1
+                if count_of_divisors > 4:
+                    return 0
+            return sum_of_divisors if count_of_divisors == 4 else 0
+
+        for num in nums:
+            sum_of_divisors += finding_four_divisors(num)
+
+        return sum_of_divisors
