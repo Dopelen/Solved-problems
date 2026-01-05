@@ -1,0 +1,51 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * n) complexity by time and O(n) by space.
+
+The classic problem of identifying a connected section of a graph. Whether you want to write dfs or bfs, it's solved by a simple traversal.
+"""
+
+# After refactoring
+# I removed the adjacency list because I check each row only once, and it's not needed here.
+# Changed the set to list for entry checking 
+
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        n = len(isConnected)
+        visited = [False] * n
+        provinces = 0
+        for i in range(n):
+            if visited[i]:
+                continue
+            provinces += 1
+            stack = [i]
+            while stack:
+                node = stack.pop()
+                for j in range(n):
+                    if isConnected[node][j] == 1 and not visited[j]:
+                        visited[j] = True
+                        stack.append(j)
+        return provinces
+
+
+# Inirial Solution
+
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        visited = set()
+        total_provinces = 0
+        adj_list = [[c for c in range(len(isConnected[0])) if (isConnected[r][c] == 1 and c != r)] for r in range(len(isConnected))]
+        for row in range(len(isConnected)):
+            if row in visited:
+                continue
+            total_provinces += 1
+            prov_to_check = [row]
+            while prov_to_check:
+                cur_node = prov_to_check.pop()
+                for prov in adj_list[cur_node]:
+                    if prov in visited:
+                        continue
+                    prov_to_check.append(prov)
+                visited.add(cur_node)
+        return total_provinces
+
