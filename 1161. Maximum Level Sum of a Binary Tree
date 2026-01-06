@@ -1,0 +1,58 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(log(n)) by space.
+
+Again, a fairly simple traversal.
+We maintain the sum of all levels in the dictionary, and then calculate it by iterating the dictionary.
+It could be written more simply if the values ​​weren't negative.
+"""
+
+# Initial solution DFS
+class Solution:
+    def maxLevelSum(self, root: Optional[TreeNode]) -> int:
+        sum_of_lvl = defaultdict(int)
+
+        def traverse(r, lvl):
+            if not r:
+                return
+            sum_of_lvl[lvl] += r.val
+            traverse(r.left, lvl + 1)
+            traverse(r.right, lvl + 1)
+
+        traverse(root, 1)
+        max_sum = -math.inf
+        min_lvl = math.inf
+        for level, cur_sum in sum_of_lvl.items():
+            if cur_sum >= max_sum:
+                min_lvl = level if (cur_sum > max_sum) else min(level, min_lvl)
+                max_sum = cur_sum
+        return min_lvl
+
+
+# Smart BFS version
+class Solution:
+    def maxLevelSum(self, root: Optional[TreeNode]) -> int:
+        from collections import deque
+
+        q = deque([root])
+        level = 1
+        best_level = 1
+        best_sum = -float('inf')
+
+        while q:
+            cur_sum = 0
+            for _ in range(len(q)):
+                node = q.popleft()
+                cur_sum += node.val
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+
+            if cur_sum > best_sum:
+                best_sum = cur_sum
+                best_level = level
+
+            level += 1
+
+        return best_level
