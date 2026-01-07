@@ -1,0 +1,61 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I pretty quickly figured out how to solve this, but the question immediately arose of how to properly cache the calculations. 
+Recalculating all the child subtrees each time is pointless, and caching a function that takes a tree as input is also somehow wrong. 
+I can't change the node class structure either. 
+I decided on the cache and went reading about how to do it optimally.
+"""
+
+# Correct solution after thinking and refactoring
+class Solution:
+    def maxProduct(self, root: Optional[TreeNode]) -> int:
+        MOD = 10 ** 9 + 7
+        max_prod = 0 
+
+        def calculate_total_sum(r):
+            if not r:
+                return 0
+            return r.val + calculate_total_sum(r.left) + calculate_total_sum(r.right)
+
+        def dfs(r):
+            nonlocal max_prod
+            if not r:
+                return 0
+            left_sum  = dfs(r.left)
+            right_sum = dfs(r.right)
+            subtree_sum = r.val + left_sum + right_sum
+            max_prod = max(max_prod, (total_sum - subtree_sum) * subtree_sum)
+            return subtree_sum
+
+        total_sum = calculate_total_sum(root)
+        dfs(root)
+        return max_prod % MOD
+
+
+# Initial (bad) Solution. 
+# The current solution is bad, the cache smooths out the complexity to a linear level, but in reality it's still an unnecessary job when recalculating.
+class Solution:
+    def maxProduct(self, root: Optional[TreeNode]) -> int:
+        MOD = 10 ** 9 + 7
+        max_prod = 0
+
+        @cache
+        def calculate_total_sum(r):
+            if not r:
+                return 0
+            return r.val + calculate_total_sum(r.left) + calculate_total_sum(r.right)
+
+        def calculate_max_prod(r):
+            nonlocal max_prod, total_sum
+            if not r:
+                return
+            subtree_sum = calculate_total_sum(r)
+            max_prod = max(max_prod, (total_sum - subtree_sum) * subtree_sum)
+            calculate_max_prod(r.left)
+            calculate_max_prod(r.right)
+        
+        total_sum = calculate_total_sum(root)
+        calculate_max_prod(root)
+        return max_prod % MOD
