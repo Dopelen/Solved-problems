@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I'm still writing recursive traversals. 
+I could have done it without nonlocal variables, iterating through the stack or recursively through a single function, but I couldn't think of anything right off the bat, so it turned out this way.
+"""
+
+class Solution:    
+    def sumNumbers(self, root: Optional[TreeNode]) -> int:
+        total_sum = 0
+
+        def calculate_sum(r, current_sum):
+            nonlocal total_sum
+            if not r:
+                return
+            current_sum = current_sum * 10 + r.val
+            if not r.left and not r.right:
+                total_sum += current_sum
+            else:
+                calculate_sum(r.left, current_sum)
+                calculate_sum(r.right, current_sum)
+
+        calculate_sum(root, 0)
+        return total_sum
