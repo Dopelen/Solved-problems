@@ -1,0 +1,75 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * w) complexity by time and O(n * w) by space.
+
+I solved it using brute force with some optimizations.
+I created a matrix that indicates the number of "1"s to the right of the current one and below it.
+Then I iterated, calculating the maximum area based on the values ​​calculated in the matrix helper.
+Initially, I went through all the 1s, but then optimized the approach to reduce the complexity from O(H ** 2 * W) to O(H * W)
+"""
+
+# Refactored Solution
+class Solution:
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+        if not matrix or not matrix[0]:
+            return 0
+        height = len(matrix)
+        width = len(matrix[0])
+        heights = [0] * width
+        max_area = 0
+        for row in matrix:
+            for i in range(width):
+                if row[i] == '1':
+                    heights[i] += 1
+                else:
+                    heights[i] = 0
+            stack = []
+            for i in range(width + 1):
+                cur_h = heights[i] if i < width else 0
+                while stack and heights[stack[-1]] > cur_h:
+                    h = heights[stack.pop()]
+                    left = stack[-1] if stack else -1
+                    w = i - left - 1
+                    max_area = max(max_area, h * w)
+                stack.append(i)
+        return max_area
+
+
+
+# Initial Solution
+class Solution:
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+        height, width = len(matrix), len(matrix[0])
+        prefix_matrix = [[[0, 0] for _ in range(width)] for _ in range(height)]
+        for idx_col in range(width - 1, -1, -1):
+            for idx_row in range(height - 1, -1, -1):
+                if matrix[idx_row][idx_col] == '1':
+                    if idx_col == width - 1:
+                        pref_hor = 1
+                    else:
+                        pref_hor = prefix_matrix[idx_row][idx_col + 1][1] + 1
+                    if idx_row == height - 1:
+                        pref_vert = 1
+                    else:
+                        pref_vert = prefix_matrix[idx_row + 1][idx_col][0] + 1
+                else:
+                    pref_hor = pref_vert = 0
+                prefix_matrix[idx_row][idx_col] = [pref_vert, pref_hor]
+
+        def check_square(y_i, x_i):
+            max_height = prefix_matrix[y_i][x_i][0]
+            min_width = prefix_matrix[y_i][x_i][1]
+            square = max(min_width, max_height)
+            for i in range(max_height):
+                if prefix_matrix[y_i + i][x_i][1] < min_width:
+                    square = max(min_width * i, square)
+                    min_width = prefix_matrix[y_i + i][x_i][1]
+            return max(min_width * max_height, square)
+
+        max_square = 0
+        for y in range(height):
+            for x in range(width):
+                if matrix[y][x] == '1':
+                    max_square = max(check_square(y, x), max_square)
+
+        return max_square
