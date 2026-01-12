@@ -1,0 +1,11 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Probably one of the simplest medium-level problems.
+It's easy to guess that the number of segments with a unique beginning will be equal to the number of unique letters in the string.
+"""
+
+class Solution:
+    def maxDistinct(self, s: str) -> int:
+        return sum(letter in s for letter in string.ascii_letters)
