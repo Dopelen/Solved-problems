@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(1) by space.
+
+I know this trick for finding a value using binary search, but I haven't tried it with floating-point numbers. 
+The logic is exactly the same as with simple guessing, you just have to remember to shift to the "lowest matching coordinate" and slightly transform the check inside the function to calculate the difference.
+"""
+
+class Solution:
+    def separateSquares(self, squares: List[List[int]]) -> float:
+
+        def calculate_area(separator):
+            area_below = 0
+            for x, y, l in squares:
+                if y < separator < y + l:
+                    area_below += (separator - y) * l
+                elif y + l <= separator:
+                    area_below += l * l
+
+            diff = area_below * 2 - total_area
+            if abs(diff) < 1e-6:
+                return 0
+            return 1 if diff < 0 else -1
+
+        total_area = high = mid = 0
+        low = float('inf')
+        for x, y, l in squares:
+            total_area += l * l
+            low = min(low, y)
+            high = max(high, y + l)
+
+        while high - low > 1e-5:
+            mid = (high + low) / 2
+            result = calculate_area(mid)
+            match result:
+                case 0: high = mid
+                case -1: high = mid
+                case 1: low = mid
+
+        return (high + low) / 2
