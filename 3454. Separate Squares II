@@ -1,0 +1,80 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+The binary search part remains the same, but calculating the non-overlapping area is infinitely more complex than before and is solved using a line sweep technique (I wasn't familiar with it, and it's quite difficult to understand).
+So I couldn't handle that problem.
+
+It doesn't work with binary search, so in the end you have to rewrite the whole solution in order to get away from it O(N * log(n) * log(precision))
+"""
+
+# https://leetcode.com/problems/separate-squares-ii/editorial/?envType=daily-question&envId=2026-01-14
+class Solution:
+    def separateSquares(self, squares: List[List[int]]) -> float:
+        events = []
+        xs = set()
+
+        for x, y, l in squares:
+            events.append((y, 1, x, x + l))
+            events.append((y + l, -1, x, x + l))
+            xs.add(x)
+            xs.add(x + l)
+
+        xs = sorted(xs)
+        x_id = {v: i for i, v in enumerate(xs)}
+
+        events.sort()
+        n = len(xs)
+
+        count = [0] * (n * 4)
+        length = [0] * (n * 4)
+
+        def push_up(node, l, r):
+            if count[node] > 0:
+                length[node] = xs[r] - xs[l]
+            elif l + 1 == r:
+                length[node] = 0
+            else:
+                length[node] = length[node * 2] + length[node * 2 + 1]
+
+        def update(node, l, r, ql, qr, val):
+            if qr <= l or r <= ql:
+                return
+            if ql <= l and r <= qr:
+                count[node] += val
+                push_up(node, l, r)
+                return
+            mid = (l + r) // 2
+            update(node * 2, l, mid, ql, qr, val)
+            update(node * 2 + 1, mid, r, ql, qr, val)
+            push_up(node, l, r)
+
+        total_area = 0.0
+        prev_y = events[0][0]
+
+        for y, typ, x1, x2 in events:
+            dy = y - prev_y
+            total_area += dy * length[1]
+            update(1, 0, n - 1, x_id[x1], x_id[x2], typ)
+            prev_y = y
+
+        half = total_area / 2
+
+        count = [0] * (n * 4)
+        length = [0] * (n * 4)
+
+        area = 0.0
+        prev_y = events[0][0]
+
+        for y, typ, x1, x2 in events:
+            dy = y - prev_y
+            next_area = area + dy * length[1]
+
+            if next_area >= half:
+                return prev_y + (half - area) / length[1]
+
+            area = next_area
+            update(1, 0, n - 1, x_id[x1], x_id[x2], typ)
+            prev_y = y
+
+        return prev_y
