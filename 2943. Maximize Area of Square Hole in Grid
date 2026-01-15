@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(1) by space.
+
+I really enjoyed this problem; it offers plenty of room for thought, and the edge cases with indexing add complexity, but once you grasp the concept, everything falls into place.
+In the matrix, all horizontal boundaries intersect vertical ones, so the question arises: how do we find the largest square?
+Each consecutive boundary that we can remove in any plane adds +1 to our possible side of the square. 
+But we need an intersection with another plane! 
+Therefore, the side of the square is the minimum of the maximum lengths of a monotonically increasing sequence along each plane.
+"""
+
+class Solution:
+    def maximizeSquareHoleArea(self, n: int, m: int, hBars: List[int], vBars: List[int]) -> int:
+        hBars.sort()
+        vBars.sort()
+
+        def longest_increasing_subseq(l: List[int]) -> int:
+            cur_subarray = longest_subarray = 1
+            for i in range(1, len(l)):
+                if l[i] == l[i - 1] + 1:
+                    cur_subarray += 1
+                else:
+                    longest_subarray = max(longest_subarray, cur_subarray)
+                    cur_subarray = 1
+            return max(longest_subarray, cur_subarray)
+
+        return (min(longest_increasing_subseq(hBars), longest_increasing_subseq(vBars)) + 1) ** 2
