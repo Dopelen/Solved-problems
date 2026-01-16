@@ -1,0 +1,29 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+Just as enjoyable a challenge as yesterday. 
+I thought it through and won!
+The logic is as follows: given the partitions, if I keep the current one, what possible ranges can I form given the other partitions? 
+Having formed the possible ranges for the vertical and horizontal, our square is the maximum square, the largest matching range along two axes! 
+Because we can remove all the other partitions that get in the way.
+"""
+
+class Solution:
+    def maximizeSquareArea(self, m: int, n: int, hFences: List[int], vFences: List[int]) -> int:
+        MOD = 10 ** 9 + 7
+
+        def find_possible_ranges(l: List[int]) -> set[int]:
+            possible_ranges = set()
+            for i in range(len(l)):
+                for j in range(i + 1, len(l)):
+                    possible_ranges.add(l[j] - l[i])
+            return possible_ranges
+
+        hFences += [1, m]
+        vFences += [1, n]
+        hFences.sort()
+        vFences.sort()
+
+        common_elements = find_possible_ranges(hFences) & find_possible_ranges(vFences)
+        return (max(common_elements) ** 2) % MOD if common_elements else -1
