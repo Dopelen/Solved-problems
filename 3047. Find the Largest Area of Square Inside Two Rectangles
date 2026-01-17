@@ -1,0 +1,35 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(1) by space.
+
+I'm starting to get tired of geometry problems... This time, I needed hints to clearly describe the intersection criteria.
+Thankfully, the restrictions aren't very strict, and everything can be solved by simply trying all the pairs, but finding a way to accurately determine that two rectangles don't intersect without going crazy is a real headache.
+"""
+
+class Solution:
+    def largestSquareArea(self, bottomLeft: List[List[int]], topRight: List[List[int]]) -> int:
+        max_square_side = 0
+        size = len(bottomLeft)
+
+        def calculate_area(idx: int) -> int:
+            local_max = 0
+
+            bot_x_1, bot_y_1 = bottomLeft[idx]
+            top_x_1, top_y_1 = topRight[idx]
+            for j in range(idx + 1, size):
+                bot_x_2, bot_y_2 = bottomLeft[j]
+                top_x_2, top_y_2 = topRight[j]
+
+                if (bot_x_1 > top_x_2 or bot_x_2 > top_x_1) or (bot_y_1 > top_y_2 or bot_y_2 > top_y_1):
+                    continue
+                else:
+                    width = min(top_x_1, top_x_2) - max(bot_x_1, bot_x_2)
+                    height = min(top_y_1, top_y_2) - max(bot_y_1, bot_y_2)
+                    local_max = max(local_max, min(width, height))
+            return local_max
+
+
+        for i in range(size):
+            max_square_side = max(max_square_side, calculate_area(i))
+
+        return max_square_side * max_square_side
