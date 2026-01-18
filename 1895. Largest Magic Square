@@ -1,0 +1,77 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 3) complexity by time and O(n) by space.
+
+You just need to brute-force the verification process. 
+I did that, but it was a pain.
+I feel like there's definitely an optimization, but I can't figure it out myself. 
+We're clearly using prefix sums multiple times during the calculations. 
+We could put them in a separate matrix for faster calculations, but it's still kind of slow.
+"""
+
+# Initial SOlution
+class Solution:
+    def largestMagicSquare(self, grid: List[List[int]]) -> int:
+        height = len(grid)
+        width = len(grid[0])
+        max_side = min(height, width) + 1
+
+        def find_valid_square(y, x, side):
+            cur_sum = sum(grid[y][x:x + side])
+            for d in range(side):
+                if sum(grid[y + d][x:x + side]) != cur_sum:
+                    return False
+                if sum(grid[y + dy][x + d] for dy in range(side)) != cur_sum:
+                    return False
+            if sum(grid[y + first_diagonal][x + first_diagonal] for first_diagonal in range(side)) != cur_sum:
+                return False
+            if sum(grid[y + side - 1 - second_diagonal][x + second_diagonal] for second_diagonal in range(side)) != cur_sum:
+                return False
+            return True
+
+        while max_side != 1:
+            for y in range(height - max_side + 1):
+                for x in range(width - max_side + 1):
+                    if find_valid_square(y, x, max_side):
+                        return max_side
+            max_side -= 1
+        return max_side
+
+
+
+# Prefix version
+
+class Solution:
+    def largestMagicSquare(self, grid: List[List[int]]) -> int:
+        h, w = len(grid), len(grid[0])
+        row = [[0]*(w+1) for _ in range(h)]
+        col = [[0]*w for _ in range(h+1)]
+        d1  = [[0]*(w+1) for _ in range(h+1)]
+        d2  = [[0]*(w+1) for _ in range(h+1)]
+
+        for i in range(h):
+            for j in range(w):
+                row[i][j+1] = row[i][j] + grid[i][j]
+                col[i+1][j] = col[i][j] + grid[i][j]
+                d1[i+1][j+1] = d1[i][j] + grid[i][j]
+                d2[i+1][j] = d2[i][j+1] + grid[i][j]
+
+        def is_magic(y, x, k):
+            target = row[y][x+k] - row[y][x]
+            for i in range(k):
+                if row[y+i][x+k] - row[y+i][x] != target:
+                    return False
+                if col[y+k][x+i] - col[y][x+i] != target:
+                    return False
+            if d1[y+k][x+k] - d1[y][x] != target:
+                return False
+            if d2[y+k][x] - d2[y][x+k] != target:
+                return False
+            return True
+
+        for k in range(min(h, w), 1, -1):
+            for y in range(h - k + 1):
+                for x in range(w - k + 1):
+                    if is_magic(y, x, k):
+                        return k
+        return 1
