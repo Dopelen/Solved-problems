@@ -1,0 +1,34 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 3) complexity by time and O(n ** 2) by space.
+
+Squares again...
+I wrote a binary search to find the side and got TLE. I had to write an optimization that calculated the sum inside a square using prefix sums.
+"""
+
+class Solution:
+    def maxSideLength(self, mat: List[List[int]], threshold: int) -> int:
+        height, width = len(mat), len(mat[0])
+
+        prefix = [[0] * (width + 1) for _ in range(height + 1)]
+        for y in range(height):
+            for x in range(width):
+                prefix[y + 1][x + 1] = mat[y][x] + prefix[y][x + 1] + prefix[y + 1][x] - prefix[y][x]
+
+        def is_square_valid(side):
+            for y in range(height - side + 1):
+                for x in range(width - side + 1):
+                    total = prefix[y + side][x + side] - prefix[y + side][x] - prefix[y][x + side] + prefix[y][x]
+                    if total <= threshold:
+                        return True
+            return False
+
+        l, h = 0, min(height, width) + 1
+        while l < h:
+            mid = (l + h) // 2
+            if is_square_valid(mid):
+                l = mid + 1
+            else:
+                h = mid
+
+        return l - 1
