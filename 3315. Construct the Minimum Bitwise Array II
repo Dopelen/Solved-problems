@@ -1,0 +1,32 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+As intended, today we're not trying to find the rightmost 0, but constructing it.
+n | (n + 1) finds the rightmost 0, turns it into a 1,
+and sets all the bits to the right of it to 1.
+Therefore, the result always results in a tail of 1s.
+To obtain a given number nums, this tail of 1s must already be present.
+To minimize n, we:
+select the leftmost 1 in this tail,
+make it 0 (to create a carry),
+set all the bits to the right to 0, because they will become 1 after the OR anyway.
+"""
+
+class Solution:
+    def minBitwiseArray(self, nums: List[int]) -> List[int]:
+        res = []
+
+        for num in nums:
+            if num == 2:
+                res.append(-1)
+                continue
+            cnt = 0
+            x = num
+            while x & 1:
+                cnt += 1
+                x >>= 1
+
+            res.append(num - (1 << (cnt - 1)))
+
+        return res
