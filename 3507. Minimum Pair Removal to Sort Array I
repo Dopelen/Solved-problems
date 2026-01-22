@@ -1,0 +1,44 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 3) complexity by time and O(n) by space.
+
+I was tired after a long day, so I wrote the laziest iterative solution possible. 
+I have a feeling the best solution here would be O(n ** 2) complexity instead of O(n ** 3).
+"""
+
+# O(n ** 3)
+class Solution:
+    def minimumPairRemoval(self, nums: List[int]) -> int:
+        operations = 0
+        while nums != sorted(nums):
+            list_of_nums = [nums[i] + nums[i + 1] for i in range(len(nums) - 1)]
+            min_idx = list_of_nums.index(min(list_of_nums))
+            min_sum = list_of_nums[min_idx]
+            nums[min_idx] = min_sum
+            nums.pop(min_idx + 1)
+            operations += 1
+        return operations
+
+# O(n ** 2)
+class Solution:
+    def minimumPairRemoval(self, nums: List[int]) -> int:
+        operations = 0
+
+        def is_sorted(arr):
+            return all(arr[i] <= arr[i + 1] for i in range(len(arr) - 1))
+
+        while not is_sorted(nums):
+            min_sum = float("inf")
+            min_idx = 0
+
+            for i in range(len(nums) - 1):
+                s = nums[i] + nums[i + 1]
+                if s < min_sum:
+                    min_sum = s
+                    min_idx = i
+
+            nums[min_idx] = min_sum
+            nums.pop(min_idx + 1)
+            operations += 1
+
+        return operations
