@@ -1,0 +1,67 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+As expected, today I had to create an optimized version of yesterday's problem. It's actually quite complex, but not fatally so. However, I couldn't do it myself.
+I had to optimize the search and summation by introducing pointers and using the heap—a very painstaking task.
+"""
+
+# https://leetcode.com/problems/minimum-pair-removal-to-sort-array-ii/editorial/?envType=daily-question&envId=2026-01-23
+class Solution:
+    def minimumPairRemoval(self, nums: List[int]) -> int:
+        size = len(nums)
+        if size <= 1:
+            return 0
+
+        prev = [-1] * size
+        next = [-1] * size
+        alive = [True] * size
+
+        for i in range(size):
+            if i > 0:
+                prev[i] = i - 1
+            if i < size - 1:
+                next[i] = i + 1
+
+        heap = []
+        for i in range(size - 1):
+            heapq.heappush(heap, (nums[i] + nums[i + 1], i))
+
+        bad = 0
+        for i in range(size - 1):
+            if nums[i] > nums[i + 1]:
+                bad += 1
+
+        ops = 0
+        while bad > 0:
+            s, i = heapq.heappop(heap)
+            j = next[i]
+            if (
+                    j == -1
+                    or not alive[i]
+                    or not alive[j]
+                    or s != nums[i] + nums[j]
+            ):
+                continue
+            if prev[i] != -1 and nums[prev[i]] > nums[i]:
+                bad -= 1
+            if nums[i] > nums[j]:
+                bad -= 1
+            if next[j] != -1 and nums[j] > nums[next[j]]:
+                bad -= 1
+            nums[i] += nums[j]
+            alive[j] = False
+            next[i] = next[j]
+            if next[j] != -1:
+                prev[next[j]] = i
+            if prev[i] != -1 and nums[prev[i]] > nums[i]:
+                bad += 1
+            if next[i] != -1 and nums[i] > nums[next[i]]:
+                bad += 1
+            if prev[i] != -1:
+                heapq.heappush(heap, (nums[prev[i]] + nums[i], prev[i]))
+            if next[i] != -1:
+                heapq.heappush(heap, (nums[i] + nums[next[i]], i))
+            ops += 1
+
+        return ops
