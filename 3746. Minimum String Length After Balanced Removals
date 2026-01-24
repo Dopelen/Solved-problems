@@ -1,0 +1,14 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+If only A and B are in a string, they will inevitably be adjacent to each other. 
+We can delete any two adjacent A and B. 
+There is no limit on the number of operations — the length of the string after all deletions will be the number of characters that didn't find a pair to be deleted.
+So the solution is simply the absolute difference in their frequencies.
+"""
+
+class Solution:
+    def minLengthAfterRemovals(self, s: str) -> int:
+        return abs(s.count('a') - s.count('b'))
+
