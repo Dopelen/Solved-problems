@@ -1,0 +1,28 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+We simply need to remove the prefix so that the remaining portion is strictly ascending. 
+The prefix always starts with the first element, so the answer will be the total length of the array — the length of the strictly ascending substring ending at the end of our array.
+"""
+
+# Initial solution
+class Solution:
+    def minimumPrefixLength(self, nums: List[int]) -> int:
+        size = len(nums)
+        for i in range(size - 1, 0, -1):
+            if nums[i] <= nums[i - 1]:
+                break
+        return 0 if size == 1 else i - (nums[i] > nums[i - 1])
+
+
+# After refactoring
+class Solution:
+    def minimumPrefixLength(self, nums: List[int]) -> int:
+        size = len(nums)
+        if size <= 1:
+            return 0
+        i = size - 1
+        while i > 0 and nums[i] > nums[i - 1]:
+            i -= 1
+        return i
