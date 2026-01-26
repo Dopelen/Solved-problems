@@ -3,7 +3,8 @@
 This program has O(log(n)) complexity by time and O(1) by space.
 
 A typical problem is finding a common ancestor.
-Since we have a search tree, we can simply return the node at the moment when the minimum desired number is in the left subtree and the maximum in the right, or one of them.
+Since we have a search tree, we can simply return the node at the moment when the minimum desired number is in the left subtree and the maximum in the right, 
+or one of them is the value of the current node.
 """
 
 # Initial Solution
