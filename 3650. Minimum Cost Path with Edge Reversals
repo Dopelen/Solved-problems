@@ -1,0 +1,82 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+At first, I understood what was going on, but after an hour, I was completely lost among all the dictionaries I created...
+
+I had to concentrate!
+An hour later, I realized I'd misread the assignment and went to correct it.
+It turns out you can change direction as many times as you like, just by one node at a time...
+In the end, I solved it, but I solved a different problem...
+"""
+
+# Correct solution
+class Solution:
+    def minCost(self, n: int, edges: List[List[int]]) -> int:
+        cost_to_reach = [[] for _ in range(n)]
+        for start, dest, weight in edges:
+            cost_to_reach[start].append((dest, weight))
+            cost_to_reach[dest].append((start, 2 * weight))
+
+        dist = [math.inf] * n
+        visited = [False] * n
+        dist[0] = 0
+        heap = [(0, 0)]
+
+        while heap:
+            cur_dist, cur_node = heapq.heappop(heap)
+
+            if cur_node == n - 1:
+                return cur_dist
+
+            if visited[cur_node]:
+                continue
+            visited[cur_node] = True
+
+            for dest, weight in cost_to_reach[cur_node]:
+                new_dist = cur_dist + weight
+                if new_dist < dist[dest]:
+                    dist[dest] = new_dist
+                    heapq.heappush(heap, (new_dist, dest))
+
+        return -1
+
+
+
+# Initial Solutin (Only 1 switch)
+class Solution:
+    def minCost(self, n: int, edges: List[List[int]]) -> int:
+        heap = []
+        adj_list_incoming = defaultdict(list)
+        adj_list_outgoing = defaultdict(list)
+        adj_list_cost = {}
+        current_min_cost_to_reach = defaultdict(lambda: [math.inf, math.inf])
+        for start, dest, weight in edges:
+            adj_list_incoming[dest].append(start)
+            adj_list_outgoing[start].append(dest)
+            adj_list_cost[(start, dest)] = weight
+
+        heappush(heap, (0, 0, False))
+
+        while heap:
+            cost, cur_node, switched = heappop(heap)
+            if current_min_cost_to_reach.get(cur_node):
+                if (not switched and current_min_cost_to_reach[cur_node][0] < cost) or (switched and current_min_cost_to_reach[cur_node][1] < cost):
+                    continue
+
+            if not switched:
+                current_min_cost_to_reach[cur_node][0] = cost
+            else:
+                current_min_cost_to_reach[cur_node][1] = cost
+
+            if cur_node == n - 1:
+                return cost
+
+            for neighbor in adj_list_outgoing[cur_node]:
+                heappush(heap, (cost + adj_list_cost[(cur_node, neighbor)], neighbor, switched))
+
+            if not switched:
+                for node in adj_list_incoming[cur_node]:
+                    heappush(heap, (cost + adj_list_cost[(node, cur_node)] * 2, node, True))
+
+        return -1
