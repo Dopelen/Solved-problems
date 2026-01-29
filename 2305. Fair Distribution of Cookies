@@ -1,0 +1,30 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(k ** n) complexity by time and O(n) by space.
+
+It seems like a simple dynamic programming problem, but I got really stuck on it because it was dynamic programming + backtracking + I had a hard day.
+Just check every possible distribution.
+"""
+
+class Solution:
+    def distributeCookies(self, cookies: List[int], k: int) -> int:
+        unfairness = [0] * k
+        size = len(cookies)
+
+        def dfs(cocky_index, zero_count):
+            if size - cocky_index < zero_count:
+                return float('inf')
+            if cocky_index == size:
+                return max(unfairness)
+            answer = float('inf')
+            for j in range(k):
+                zero_count -= int(unfairness[j] == 0)
+                unfairness[j] += cookies[cocky_index]
+                answer = min(answer, dfs(cocky_index + 1, zero_count))
+
+                unfairness[j] -= cookies[cocky_index]
+                zero_count += int(unfairness[j] == 0)
+
+            return answer
+
+        return dfs(0, k)
