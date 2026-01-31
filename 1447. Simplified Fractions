@@ -1,0 +1,53 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2 * log(n)) complexity by time and O(n ** 2) by space.
+
+The problem can be roughly divided into two parts:
+1. Constructing numerator-denominator pairs
+2. Eliminating repeating fractions
+I wrote a naive solution with O(n ** 3) complexity, but there's definitely a way to simplify it, so I started thinking about it.
+For each fraction, I added an extra procedure to construct possible fractions up to the upper bound to block their addition, which sped up the execution by about 125 times, from 6200ms to 50.
+Thinking made today's decisions faster, glory to thinking!
+"""
+
+# After thinking x2 (add gcd check)
+class Solution:
+    def simplifiedFractions(self, limit: int) -> List[str]:
+        unic_pairs = set()
+        for d in range(2, limit + 1):
+            for n in range(1, d):
+                if math.gcd(n , d) == 1:
+                    unic_pairs.add((n, d))
+        return [f'{n_}/{d_}' for n_, d_ in unic_pairs]
+
+
+# After thinking x1
+class Solution:
+    def simplifiedFractions(self, limit: int) -> List[str]:
+        unic_pairs = set()
+        blocked = set()
+        for d in range(2, limit + 1):
+            for n in range(1, d):
+                for multiplier in range(2, limit):
+                    if d * multiplier > limit:
+                        break
+                    blocked.add((n * multiplier, d * multiplier))
+                if (n, d) not in blocked:
+                    unic_pairs.add((n, d))
+        return [f'{n_}/{d_}' for n_, d_ in unic_pairs]
+
+
+# Initial O(n ** 3)
+class Solution:
+    def simplifiedFractions(self, n: int) -> List[str]:
+        unic_pairs = set()
+        for d in range(2, n + 1):
+            for n in range(1, d):
+                duplicate = False
+                for num, denum in unic_pairs:
+                    if n / num == d / denum:
+                        duplicate = True
+                        break
+                if not duplicate:
+                    unic_pairs.add((n, d))
+        return [f'{n_}/{d_}' for n_, d_ in unic_pairs]
