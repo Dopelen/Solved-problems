@@ -1,0 +1,72 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(k)) complexity by time and O(n) by space.
+
+I nearly lost my mind synchronizing the clearing of the first heap, the second heap, and the index checking set. 
+The problem is generally good, but understanding the conditions and following what they wanted from me was a challenge.
+Once you understand that you need to find k minima on a sliding window, half the solution is already done; 
+all that remains is to write the processing of elements from one data structure to another during the iteration and their clearing.
+"""
+
+
+class Solution:
+    def minimumCost(self, nums: List[int], k: int, dist: int) -> int:
+        size = len(nums)
+        need = k - 1
+
+        window_min_heap = []
+        val_min_heap = []
+        min_idx_set = set()
+
+        def clean_window(left):
+            while window_min_heap and window_min_heap[0][1] < left:
+                heappop(window_min_heap)
+
+        def clean_val(left):
+            while val_min_heap and val_min_heap[0][1] < left:
+                heappop(val_min_heap)
+
+        def init_window():
+            for i in range(1, dist + 2):
+                heappush(window_min_heap, (nums[i], i))
+            cur_sum = 0
+            for _ in range(need):
+                v, i = heappop(window_min_heap)
+                cur_sum += v
+                min_idx_set.add(i)
+                heappush(val_min_heap, (-v, i))
+            return cur_sum
+
+        current_sum = init_window()
+        total_min_sum = current_sum
+
+        for left in range(2, size - dist):
+            heappush(window_min_heap, (nums[left + dist], left + dist))
+            if left - 1 in min_idx_set:
+                min_idx_set.remove(left - 1)
+                current_sum -= nums[left - 1]
+            clean_window(left)
+            clean_val(left)
+
+            if len(min_idx_set) < need:
+                v, i = heappop(window_min_heap)
+                min_idx_set.add(i)
+                heappush(val_min_heap, (-v, i))
+                current_sum += v
+            clean_window(left)
+            clean_val(left)
+
+            if window_min_heap and val_min_heap:
+                if window_min_heap[0][0] < -val_min_heap[0][0]:
+                    neg_v, idx = heappop(val_min_heap)
+                    min_idx_set.remove(idx)
+                    current_sum += neg_v
+                    heappush(window_min_heap, (-neg_v, idx))
+
+                    v, i = heappop(window_min_heap)
+                    min_idx_set.add(i)
+                    heappush(val_min_heap, (-v, i))
+                    current_sum += v
+            total_min_sum = min(total_min_sum, current_sum)
+
+        return total_min_sum + nums[0]
