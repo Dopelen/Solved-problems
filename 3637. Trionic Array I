@@ -1,0 +1,27 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I quickly sketched out the optimal solution and then started improving readability.
+But it can't be improved much, even if you put it into a function, it doesn't turn out very well
+"""
+
+# Initial Solution
+class Solution:
+    def isTrionic(self, nums: List[int]) -> bool:
+        size = len(nums)
+        idx = check_idx = 0
+        
+        while idx < size - 1 and nums[idx] < nums[idx + 1]:
+            idx += 1
+        if idx == check_idx: return False
+        check_idx = idx
+
+        while idx < size - 1 and nums[idx] > nums[idx + 1]:
+            idx += 1
+        if idx == check_idx: return False
+        check_idx = idx
+
+        while idx < size - 1 and nums[idx] < nums[idx + 1]:
+            idx += 1
+        return (idx == size - 1) and (idx != check_idx)
