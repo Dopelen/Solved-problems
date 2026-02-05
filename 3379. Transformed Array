@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It's a cyclic array, so we'll use the remainder from the division.
+Fortunately, we can reduce everything to a single check, because negative numbers will naturally be subtracted before taking the remainder, and positive numbers will be added.
+A simple task, glad for a rest day after yesterday's difficult one.
+"""
+
+class Solution:
+    def constructTransformedArray(self, nums: List[int]) -> List[int]:
+        size = len(nums)
+        answer = [0] * size
+        for idx, elem in enumerate(nums):
+            answer[idx] = nums[(idx + elem) % size] if elem != 0 else 0
+        return answer
