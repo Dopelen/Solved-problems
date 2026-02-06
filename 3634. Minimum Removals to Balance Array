@@ -8,17 +8,28 @@ Then I remembered that when sorting, the next minimum is simply the next number.
 I experienced a slight brain lag, but even with that, the task took me 10 minutes.
 """
 
+# Mine initial Solution
 class Solution:
     def minRemoval(self, nums: List[int], k: int) -> int:
         size = len(nums)
         nums.sort()
         l = r = max_balanced = 0
-
         while r < size:
             if nums[l] * k >= nums[r]:
                 r += 1
                 max_balanced = max(max_balanced, r - l)
             else:
                 l += 1
-
         return size - max_balanced
+
+
+# Beautiful Solution
+# Skipping elements that fit into a window and deleting those that are blocked by larger ones will give us the number of elements that will need to be deleted.
+class Solution:
+    def minRemoval(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        l = 0
+        for r in range(len(nums)):
+            if nums[r] > nums[l] * k:
+                l += 1
+        return l
