@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(1) by space.
+
+It occurred to me that I could simply use a sliding window sort. 
+Then I thought about how I'd get to the minimum — I'd have to write two heaps. 
+Then I remembered that when sorting, the next minimum is simply the next number.
+I experienced a slight brain lag, but even with that, the task took me 10 minutes.
+"""
+
+class Solution:
+    def minRemoval(self, nums: List[int], k: int) -> int:
+        size = len(nums)
+        nums.sort()
+        l = r = max_balanced = 0
+
+        while r < size:
+            if nums[l] * k >= nums[r]:
+                r += 1
+                max_balanced = max(max_balanced, r - l)
+            else:
+                l += 1
+
+        return size - max_balanced
