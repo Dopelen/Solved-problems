@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The challenge is enjoyable because two years ago, I would have used 50 hacks to solve it, but today I understand that the nature of the graph traversal guarantees you the correct result with literally three lines of code.
+"""
+
+# from python 3.7 dict save order of insertion so we return it right away without sort by depth
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        values_for_lvl = {}
+        
+        def dfs(r, depth):
+            if not r:
+                return
+            values_for_lvl[depth] = r.val
+            dfs(r.left, depth + 1)
+            dfs(r.right, depth + 1)
+            
+        dfs(root, 0)
+        return [value for value in values_for_lvl.values()]
