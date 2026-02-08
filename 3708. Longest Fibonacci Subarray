@@ -1,0 +1,20 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I'm just iterating through sequences. 
+Some easy problems are more difficult than this one.
+
+P.S: For some reason I always iterate through while instead of for, I need to break this habit!
+"""
+
+class Solution:
+    def longestSubarray(self, nums: List[int]) -> int:
+        left = 0
+        max_fib_len = 2
+        for right in range(2, len(nums)):
+            if nums[right] != nums[right - 1] + nums[right - 2]:
+                max_fib_len = max(max_fib_len, right - left)
+                left = right - 1
+            right += 1
+        return max(max_fib_len, right - left)
