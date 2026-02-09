@@ -1,0 +1,15 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+A simple and enjoyable task, where instead of a tree, like a hierarchical graph, we write a simple traversal with the only difference that our class is called "Employee" and not "Node"
+"""
+
+class Solution:
+    def getImportance(self, employees: List['Employee'], id: int) -> int:
+        hierarchy = {e.id: e for e in employees}
+
+        def calculate_importance(cur_id):
+            return hierarchy[cur_id].importance + sum(calculate_importance(s) for s in hierarchy[cur_id].subordinates)
+
+        return calculate_importance(id)
