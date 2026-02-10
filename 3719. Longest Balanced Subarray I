@@ -1,0 +1,25 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n ** 2) complexity by time and O(n).
+
+I figured that with the 1500 number constraints, even O(n ** 2) would work, so I wrote a straightforward solution before thinking about optimization.
+I knew from the start that there would be recalculations, and that I needed to create a dictionary (elements and frequencies "before me" and "after me") for each inlex, I was just too lazy to write it...
+"""
+
+# Initial O(n ** 2) solution
+class Solution:
+    def longestBalanced(self, nums: List[int]) -> int:
+        size = len(nums)
+        max_len = 0
+
+        for i in range(size):
+            visited_odds, visited_even = set(), set()
+            for j in range(i, size):
+                if nums[j] % 2:
+                    visited_odds.add(nums[j])
+                else:
+                    visited_even.add(nums[j])
+                if len(visited_odds) == len(visited_even):
+                    max_len = max(max_len, j - i + 1)
+
+        return max_len
