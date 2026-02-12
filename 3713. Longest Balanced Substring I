@@ -1,0 +1,50 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n ** 2) complexity by time and O(n).
+
+I quickly figured out how to solve it. 
+We maintain a frequency dictionary and a dictionary of elements with each frequency, so we can catch the moment when all frequencies are the same.
+I'm looking forward (nooooooo...pls...) to the second part tomorrow, where I'll need to optimize the calculations to fit in faster than O(n ** 2)
+"""
+
+# Initial Solution
+class Solution:
+    def longestBalanced(self, s: str) -> int:
+        size = len(s)
+        max_len = -math.inf
+        for l in range(size):
+            symbol_counter = defaultdict(int)
+            freq_counter = defaultdict(set)
+            for r in range(l, size):
+                symbol_counter[s[r]] += 1
+                cur_freq = symbol_counter[s[r]]
+                freq_counter[cur_freq].add(s[r])
+                if cur_freq > 1:
+                    freq_counter[cur_freq - 1].discard(s[r])
+                    if not freq_counter[cur_freq - 1]:
+                        del freq_counter[cur_freq - 1]
+                if len(freq_counter) == 1:
+                    max_len = max(max_len, r - l + 1)
+            if size - l <= max_len:
+                break
+        return max_len
+
+
+# Refactored one (change set to simple min/max variable)
+class Solution:
+    def longestBalanced(self, s: str) -> int:
+        n = len(s)
+        ans = 0
+        for l in range(n):
+            counter = defaultdict(int)
+            min_freq = float('inf')
+            max_freq = 0
+            for r in range(l, n):
+                counter[s[r]] += 1
+                freq = counter[s[r]]
+                max_freq = max(max_freq, freq)
+                min_freq = min(counter.values())
+                if min_freq == max_freq:
+                    ans = max(ans, r - l + 1)
+            if n - l <= ans:
+                break
+        return ans
