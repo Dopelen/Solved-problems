@@ -1,0 +1,17 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+I refreshed my memory on regular expressions and generally solved the problem without any particular difficulties.
+"""
+
+class Solution:
+    def evaluate(self, s: str, knowledge: List[List[str]]) -> str:
+        knowledge = {key: value for key, value in knowledge}
+
+        def replace_match(match):
+            key = match.group(1)
+            return knowledge.get(key, "?")
+
+        pattern = r'\((.*?)\)'
+        result = re.sub(pattern, replace_match, s)
+        return result
