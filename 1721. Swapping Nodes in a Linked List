@@ -1,0 +1,36 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(1).
+
+I wrote a slightly lazy solution, with each node held constant. It's memory-heavy, but generally understandable.
+You could also iterate through the array of values ​​and then change the values ​​in a second pass. It would be asymptotically the same, but not as memory-heavy.
+P.S: Or use two pointers and, when you reach index k, start the second one. 
+Then, when the first one reaches the end, the second one will be at the value that's kth from the end!
+"""
+
+# After thinking O(1) space (love it!)
+class Solution:
+    def swapNodes(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        first = head
+        for _ in range(k - 1):
+            first = first.next
+        kth_from_start = first
+        second = head
+        while first.next:
+            first = first.next
+            second = second.next
+        kth_from_start.val, second.val = second.val, kth_from_start.val
+        return head
+
+
+# Initial O(n) space solution
+class Solution:
+    def swapNodes(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        cheat_list = []
+        initial_list = head
+        while head:
+            cheat_list.append(head)
+            head = head.next
+        forward_idx, backward_idx = k - 1, len(cheat_list) - k
+        if forward_idx != backward_idx:
+            cheat_list[forward_idx].val, cheat_list[backward_idx].val = cheat_list[backward_idx].val, cheat_list[forward_idx].val
+        return initial_list
