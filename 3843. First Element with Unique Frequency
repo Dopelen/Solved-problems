@@ -1,0 +1,35 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+The main complication in this problem is the need to maintain two data structures: one for the order of occurrence and one for frequency uniqueness. 
+Otherwise, it's quite simple.
+"""
+
+
+# After Refactoring (simplify)
+class Solution:
+    def firstUniqueFreq(self, nums: List[int]) -> int:
+        freq = Counter(nums)
+        freq_count = Counter(freq.values())
+        for x in nums:
+            if freq_count[freq[x]] == 1:
+                return x
+        return -1
+
+
+# Initial Solution
+class Solution:
+    def firstUniqueFreq(self, nums: List[int]) -> int:
+        elems_to_freq = Counter(nums)
+        freq_to_elems = defaultdict(set)
+        for k, v in elems_to_freq.items():
+            freq_to_elems[v].add(k)
+        unic = set()
+        for fr, e in freq_to_elems.items():
+            if len(e) == 1:
+                unic |= e
+        if not unic: 
+            return -1
+        for elem in nums:
+            if elem in unic:
+                return elem
