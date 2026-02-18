@@ -1,0 +1,48 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+I decided to challenge myself, and ended up spending an hour writing a recursive version, incorrectly filling in the ends of words and, for some reason, also storing additional values ​​in the nodes themselves. 
+Overall, it turned out very crooked, but then I thought about it and rewrote it iteratively and beautifully.
+"""
+
+class Trie:
+    def __init__(self, chields=None, end=None):
+        self.chields = {}
+        self.end = False
+
+
+    def insert(self, word: str) -> None:
+        node = self
+        for symbol in word:
+            if symbol not in node.chields:
+                node.chields[symbol] = Trie()
+            node = node.chields[symbol]
+        node.end = True
+
+
+    def search(self, word: str) -> bool:
+        node = self
+        for symbol_to_check in word:
+            if symbol_to_check in node.chields:
+                node = node.chields[symbol_to_check]
+            else:
+                return False
+        return node.end
+
+
+    def startsWith(self, prefix: str) -> bool:
+        node = self
+        for symbol_to_check in prefix:
+            if symbol_to_check in node.chields:
+                node = node.chields[symbol_to_check]
+            else:
+                return False
+        return True
+       
+
+
+# Your Trie object will be instantiated and called as such:
+# obj = Trie()
+# obj.insert(word)
+# param_2 = obj.search(word)
+# param_3 = obj.startsWith(prefix)
