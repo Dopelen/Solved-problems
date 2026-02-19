@@ -1,0 +1,42 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O((n + k) * log(n)) complexity by time and O(n + k).
+
+An obvious solution came to mind, and I implemented it. Although I can't shake the feeling that it could have been done faster.
+And then I add PQ solution! We put into heap the smallest fraction for each numerator and end up with a nice and beautifull solution.
+
+P.S: You also can solve it by binsearch But I didn't think of it at first
+"""
+
+# After thinking! PQ
+class Solution:
+    def kthSmallestPrimeFraction(self, arr, k):
+        pq = []
+
+        for i in range(len(arr) - 1):
+            heapq.heappush(pq, ((arr[i] / arr[-1]), i, len(arr) - 1))
+
+        for _ in range(k - 1):
+            cur = heapq.heappop(pq)
+            numerator_index = cur[1]
+            denominator_index = cur[2] - 1
+            if denominator_index > numerator_index:
+                heapq.heappush(pq, (
+                    (arr[numerator_index] / arr[denominator_index]),
+                    numerator_index,
+                    denominator_index
+                ))
+
+        result = heapq.heappop(pq)
+        return [arr[result[1]], arr[result[2]]]
+
+
+# Initial Solution O(n ** 2 * log(n)) complexity by time and O(n ** 2).
+class Solution:
+    def kthSmallestPrimeFraction(self, arr: List[int], k: int) -> List[int]:
+        size = len(arr)
+        possible_pairs = []
+        for i in range(size):
+            for j in range(i + 1, size):
+                possible_pairs.append((arr[i], arr[j], arr[i]/arr[j]))
+        possible_pairs.sort(key=lambda x: x[2])
+        return list(possible_pairs[k - 1][:2])
