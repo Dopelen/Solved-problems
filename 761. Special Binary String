@@ -1,0 +1,25 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n ** 2 * log(n)) complexity by time and O(n).
+
+Not critical, but a challenging task that I couldn't solve by Friday evening.
+The main concept is divide and conquer: we split the string into as many special substrings as possible, then shuffle them if they are parts larger than the substring. 
+This way, we form the largest possible lexical segments for the final answer.
+
+P.S: Very nice solution (sad not mine)
+"""
+
+# https://leetcode.com/problems/special-binary-string/solutions/7593016/recursive-divide-conquer-sort-balanced-c-drb6/
+class Solution:
+    def makeLargestSpecial(self, s: str) -> str:
+        count = 0
+        i = 0
+        res = []
+
+        for j in range(len(s)):
+            count += 1 if s[j] == '1' else -1
+            if count == 0:
+                res.append('1' + self.makeLargestSpecial(s[i + 1:j]) + '0')
+                i = j + 1
+
+        res.sort(reverse=True)
+        return ''.join(res)
