@@ -1,0 +1,21 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+A simple tree traversal with the maintenance of some data in an additional structure, in general, could have shoved this amount into the class.
+But it seems like it will still be necessary to perform a comparison operation on these classes, so in general it is clearer to just use a dictionary in the general scope through a closure.
+"""
+
+class Solution:
+    def findFrequentTreeSum(self, root: Optional[TreeNode]) -> List[int]:
+        freq = defaultdict(int)
+
+        def dfs(r):
+            if not r:
+                return 0
+            cur_val = dfs(r.left) + dfs(r.right) + r.val
+            freq[cur_val] += 1
+            return cur_val
+
+        dfs(root)
+        max_freq = max(freq.values())
+        return [k for k, v in freq.items() if v == max_freq]
