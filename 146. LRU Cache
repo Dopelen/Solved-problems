@@ -1,0 +1,61 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(1) complexity by time and O(1).
+
+I implemented a LRU cache within the system design quest. 
+It turns out they overlap with the leetcode tasks, so I'll add them here.
+The main challenge was maintaining write priority and avoiding memory leaks, but overall I got the hang of it and am happy with the result.
+"""
+
+# The GPT chat said that the implementation is fragile due to the processing of holes via "while" and that a priority queue should be used, but I'm not ready to rewrite it yet.
+class LRUCache:
+
+    def __init__(self, capacity: int):
+        self.max_size = capacity
+        self.min_prio = 0
+        self.prio = 0
+        self.storage = {}
+        self.prio_to_val = {}
+
+    def get(self, key: int) -> int:
+        if key not in self.storage:
+            return -1
+        old_prio = self.storage[key][0]
+        self.storage[key][0] = self.prio
+        self.prio_to_val[self.prio] = key
+        del self.prio_to_val[old_prio]
+        self.prio += 1
+        return self.storage[key][1]
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.storage:
+            del self.prio_to_val[self.storage[key][0]]
+        elif len(self.storage) == self.max_size:
+            while self.min_prio not in self.prio_to_val:
+                self.min_prio += 1
+            val_to_del = self.prio_to_val[self.min_prio]
+            del self.prio_to_val[self.min_prio]
+            self.min_prio += 1
+            del self.storage[val_to_del]
+        self.storage[key] = [self.prio, value]
+        self.prio_to_val[self.prio] = key
+        self.prio += 1
+
+
+# OrderedDict realisation
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cache = OrderedDict()
+        self.capacity = capacity
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        self.cache.move_to_end(key)
+        return self.cache[key]
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self.cache.move_to_end(key)
+        self.cache[key] = value
+        if len(self.cache) > self.capacity:
+            self.cache.popitem(last=False)
