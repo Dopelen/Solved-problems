@@ -1,0 +1,28 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+Once again, I created test cases for memory and time limits. They passed in the test run, but they didn't pass when I submitted the assignment. Why this can't be fixed in leetcode, I don't know...
+"""
+
+# Smart correct solution! (TY Hints) (We don't generate all possible strings, but simply check that the number of unique substrings we have is equal to the number of possible bit strings (2 to the power k))
+class Solution:
+    def hasAllCodes(self, s: str, k: int) -> bool:
+        return len(set(s[i:i + k] for i in range(len(s) - k + 1))) == 2 ** k
+
+
+# Space limit solution (bc of 2 ** k)
+class Solution:
+    def hasAllCodes(self, s: str, k: int) -> bool:
+        all_bit_substrings = set()
+        all_substrings = set(s[i:i + k] for i in range(len(s) - k + 1))
+
+        def construct_substrings(cur_s, k_left):
+            if k_left:
+                construct_substrings(cur_s + ["1"], k_left - 1)
+                construct_substrings(cur_s + ["0"], k_left - 1)
+            else:
+                all_bit_substrings.add("".join(cur_s))
+
+        construct_substrings([], k)
+        return all(elem in all_substrings for elem in all_bit_substrings)
+
