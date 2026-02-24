@@ -1,0 +1,30 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(m * n * k * k * log(k * k) complexity by time and O(n ** 2).
+
+I approached the solution rather lazily. 
+The limit is 30 elements, so you can safely iterate through them without even bothering with different dictionaries to avoid counting all k ** 2 elements each time, only k for each shift.
+But I preferred to avoid this optimization and decided to go head-on!
+"""
+
+class Solution:
+    def minAbsDiff(self, grid: List[List[int]], k: int) -> List[List[int]]:
+        height, width = len(grid), len(grid[0])
+
+        def calculate_dif(y, x):
+            cur_vals_set = set(grid[c_y][c_x] for c_x in range(x, x + k) for c_y in range(y, y + k))
+            cur_vals_list = sorted(list(cur_vals_set))
+            cur_min = math.inf if len(cur_vals_list) > 1 else 0
+            for i in range(len(cur_vals_list) - 1):
+                cur_min = min(cur_min, abs(cur_vals_list[i] - cur_vals_list[i + 1]))
+                if cur_min == 0:
+                    return 0
+            return cur_min
+
+        answer = []
+        for r in range(height - k + 1):
+            cur_line = []
+            for c in range(width - k + 1):
+                cur_line.append(calculate_dif(r, c))
+            answer.append(cur_line)
+
+        return answer
