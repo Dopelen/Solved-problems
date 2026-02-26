@@ -1,0 +1,20 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(1).
+
+I was fiddling around and somehow simulating bits, although I just needed to go through the number of operations, and I clearly spent more effort than necessary.
+If the number is odd, processing a bit requires a total of two operations: one to shift it to make the number even, and one to remove it later. 
+For even numbers, we simply remove it.
+"""
+
+class Solution:
+    def numSteps(self, s: str) -> int:
+        steps = 0
+        carry = 0
+        for i in range(len(s) - 1, 0, -1):
+            bit = int(s[i])
+            if bit + carry == 1:
+                steps += 2
+                carry = 1
+            else:
+                steps += 1
+        return steps + carry
