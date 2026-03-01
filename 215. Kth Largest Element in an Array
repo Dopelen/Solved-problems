@@ -1,0 +1,17 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n * log(n)) complexity by time and O(n).
+
+They said to do it without sorting, but the solutions offered three approaches:
+1. Sorting (which shouldn't be done)
+2. Heaps, which are essentially just heap sort
+3. The Quick Select algorithm, which is also essentially sorting...
+So I was dissatisfied; they could have simply written "don't use the built-in sort."
+"""
+
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        heap =[-elem for elem in nums]
+        heapify(heap)
+        for i in range(k):
+            cur_elem = -heappop(heap)
+        return cur_elem
