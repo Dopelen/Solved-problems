@@ -1,0 +1,36 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n ** 2) complexity by time and O(n).
+
+The first trick is to understand that the rightmost 1 in each row is essentially all we care about. 
+This reduces the solution to working with rows, not individual cells.
+Next, we just need to figure out how to move them optimally. 
+Basically, we're looking for the closest value that satisfies each index. 
+The constraints become weaker each step (we need fewer and fewer zeros on the right), and if multiple rows are suitable, it's advantageous to take the closest one
+Because we'll save moves, and all subsequent checks will be simpler, and if they pass the current check, the subsequent ones will pass as well.
+
+Cool problem!
+"""
+
+class Solution:
+    def minSwaps(self, grid: List[List[int]]) -> int:
+        size = len(grid)
+        tail = [-1] * size
+        for r in range(size):
+            for c in range(size - 1, -1, -1):
+                if grid[r][c] == 1:
+                    tail[r] = c
+                    break
+        steps = 0
+        for i in range(size):
+            k = -1
+            for j in range(i, size):
+                if tail[j] <= i:
+                    steps += j - i
+                    k = j
+                    break
+            if k != -1:
+                for l in range(k, i, -1):
+                    tail[l], tail[l - 1] = tail[l - 1], tail[l]
+            else:
+                return -1
+        return steps
