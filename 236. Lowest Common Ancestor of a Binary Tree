@@ -1,0 +1,46 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(1).
+
+It's clearly taken me longer than I've been able to admit, but I'm a slowpoke this week.
+
+P.S: I really liked the second version. 
+If we find the node we need, we have two options: the second node below it and the one we found now is the closest common ancestor, 
+or it's in a different subtree, and we'll return the current node to the top either way.
+"""
+
+# After refactoring
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if not root:
+            return None
+        if root == p or root == q:
+            return root
+        found_in_left = self.lowestCommonAncestor(root.left, p, q)
+        found_in_right = self.lowestCommonAncestor(root.right, p, q)
+        if found_in_left and found_in_right:
+            return root
+        return found_in_left or found_in_right
+
+
+# Initial Solution
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        answer = None
+
+        def dfs(r):
+            nonlocal answer
+            if not r:
+                return
+            found_in_left = dfs(r.left)
+            found_in_right = dfs(r.right)
+            if found_in_left and found_in_right:
+                answer = r
+            elif r.val in (p.val, q.val):
+                if any([found_in_right, found_in_left]):
+                    answer = r
+                return True
+            elif any([found_in_right, found_in_left]):
+                return True
+          
+        dfs(root)
+        return answer
