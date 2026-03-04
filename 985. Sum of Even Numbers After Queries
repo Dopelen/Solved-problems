@@ -1,0 +1,39 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+It's actually a pretty simple task. 
+The only trick is to calculate the amounts by subtracting the previous number, rather than recalculating everything each time.
+But that's not a trick, it's more common sense.
+"""
+
+# After refactorng
+class Solution:
+    def sumEvenAfterQueries(self, nums: List[int], queries: List[List[int]]) -> List[int]:
+        s = sum(x for x in nums if x % 2 == 0)
+        answer = []
+        for val, idx in queries:
+            old = nums[idx]
+            new = old + val
+            if old % 2 == 0:
+                s -= old
+            if new % 2 == 0:
+                s += new
+            nums[idx] = new
+            answer.append(s)            
+        return answer
+
+#  Initial solution
+class Solution:
+    def sumEvenAfterQueries(self, nums: List[int], queries: List[List[int]]) -> List[int]:
+        s = sum(num for num in nums if not num % 2)
+        answer = []
+        for val, idx in queries:
+            new_num = nums[idx] + val
+            if nums[idx] % 2:
+                if val % 2:
+                    s += new_num
+            else:
+                s += val if not val % 2 else -nums[idx]
+            nums[idx] = new_num
+            answer.append(s)
+        return answer
