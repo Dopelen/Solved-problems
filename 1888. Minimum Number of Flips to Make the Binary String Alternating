@@ -1,0 +1,33 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+Unfortunately, it's quite a difficult task. 
+I feel like it's time to take a course in dynamic programming, because I often run into problems that block me for precisely this reason. 
+And quite a few of them are among the most difficult mid-tier problems.
+
+But you can approach it in a different, more understandable way - look at all the versions of possible movements (by s + s trick), 
+and check each of them for the number of necessary changes based on the pattern 101 and 010
+"""
+
+# https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating/solutions/7631254/aot-beats-100-see-it-in-action-by-nandin-t6i0/
+class Solution:
+    def minFlips(self, s: str) -> int:
+        size = len(s)
+        double_string = s + s
+        ans = size
+        mis0 = 0
+
+        for i in range(2 * size):
+            expected0 = '0' if i % 2 == 0 else '1'
+            if double_string[i] != expected0:
+                mis0 += 1
+
+            if i >= size:
+                left = i - size
+                if double_string[left] != ('0' if left % 2 == 0 else '1'):
+                    mis0 -= 1
+
+            if i >= size - 1:
+                ans = min(ans, min(mis0, size - mis0))
+
+        return ans
