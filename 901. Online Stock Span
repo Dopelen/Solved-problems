@@ -1,0 +1,36 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n ** 2) complexity by time and O(n).
+
+My greedy solution worked, but it's 1000 times slower than the fastest one, which doesn't suit me.
+I can't recalculate the tail over and over, but I can remove tail elements by counting them once!
+"""
+
+# After THINKING
+class StockSpanner:
+
+    def __init__(self):
+        self.stack = []
+
+    def next(self, price: int) -> int:
+        span = 1
+        while self.stack and self.stack[-1][0] <= price:
+            span += self.stack.pop()[1]
+        self.stack.append((price, span))
+        return span
+
+
+# Initial Solution O(n ** 2)
+class StockSpanner:
+
+    def __init__(self):
+        self.history = []        
+
+    def next(self, price: int) -> int:
+        cur_span = 1
+        for elem in reversed(self.history):
+            if elem <= price:
+                cur_span += 1
+            else:
+                break
+        self.history.append(price)
+        return cur_span
