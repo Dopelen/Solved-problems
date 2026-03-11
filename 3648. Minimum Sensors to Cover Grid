@@ -1,0 +1,15 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(1) complexity by time and O(1).
+
+A fairly simple problem, after solving it and looking at the "hints," I found the complete solution.
+Each sensor covers k cells on each side + the line where it's positioned, so the number of vertical and horizontal sensors will be 2 * k + 1; 
+all that's left to do is multiply them.
+"""
+
+class Solution:
+    def minSensors(self, n: int, m: int, k: int) -> int:
+        if k == 0:
+            return n * m
+        cover_vert = ceil(n / (2 * k + 1))
+        cover_horizontal = ceil(m / (2 * k + 1))
+        return cover_vert * cover_horizontal
