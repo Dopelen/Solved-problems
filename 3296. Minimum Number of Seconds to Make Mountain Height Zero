@@ -1,0 +1,46 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n * log(n)) complexity by time and O(n).
+
+I spent an hour struggling with the problem. 
+It was clear from the start that it was a heap, but the edge cases turned out to be quite tricky.
+Luckily, I found them all and was able to submit the correct solution on the first try.
+The basic idea is that we should always take the worker that gives the minimum possible time. 
+Initially, I solved it by built heap around smallest current step, then the minimum time, but both approaches yield errors.
+Therefore, it is necessary to build a heap based on the aggregate variable "minimum time after worker use" and update it at each step.
+
+P.S: There is a solution through binary search, even faster, and I even thought about it, but I chose my path
+"""
+
+
+# After refactoring
+class Solution:
+    def minNumberOfSeconds(self, mountainHeight: int, workerTimes: List[int]) -> int:
+        heap = [(time, time, 1) for time in workerTimes]
+        heapify(heap)
+        min_timer = 0
+
+        for _ in range(mountainHeight):
+            next_min_time, original_cost, steps = heappop(heap)
+            min_timer = max(next_min_time, min_timer)
+            steps += 1
+            next_min_time += original_cost * steps
+            heappush(heap, (next_min_time, original_cost, steps))
+        return min_timer
+
+
+# Initial solution
+class Solution:
+    def minNumberOfSeconds(self, mountainHeight: int, workerTimes: List[int]) -> int:
+        heap = [(time, time, 0, time) for time in workerTimes]
+        heapify(heap)
+        min_timer = 0
+
+        while mountainHeight:
+            next_min_time, cur_cost, prev_time, original_cost = heappop(heap)
+            min_timer = max(next_min_time, min_timer)
+            prev_time += cur_cost
+            cur_cost += original_cost
+            next_min_time = prev_time + cur_cost
+            mountainHeight -= 1
+            heappush(heap, (next_min_time, cur_cost, prev_time, original_cost))
+        return min_timer
