@@ -1,0 +1,35 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n * m) complexity by time and O(n * m).
+
+I loved playing it as a kid.
+It's cool how easy it is to program. 
+The instructions are very clear and understandable, and programming with them isn't difficult. 
+A couple of tricks to more easily navigate the matrix, and you're done.
+"""
+
+class Solution:
+    def updateBoard(self, board: List[List[str]], click: List[int]) -> List[List[str]]:
+        d = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+        size_r, size_c = len(board), len(board[0])
+
+        def check(y, x):
+            if board[y][x] != 'E':
+                return
+
+            mine_counter = sum(board[y + dy][x + dx] == 'M' for dy, dx in d if (0 <= y + dy < size_r) and (0 <= x + dx < size_c))
+            if mine_counter != 0:
+                board[y][x] = str(mine_counter)
+                return
+
+            board[y][x] = "B"
+            for dy, dx in d:
+                ny, nx = y + dy, x + dx
+                if (0 <= ny < size_r) and (0 <= nx < size_c):
+                    check(ny, nx)
+
+
+        if board[click[0]][click[1]] == 'M':
+                board[click[0]][click[1]] = 'X'
+        check(click[0], click[1])
+
+        return board
