@@ -1,0 +1,71 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+The logic of the task is simple, the only problem is the time constraints. 
+We can't fully calculate all the operations every time, so my naive solution (even with a cache) didn't work.
+The answer lies in affine transformations and inverse modular arithmetic, which I hadn't heard of, so I'm not too upset about failing.
+
+We represent all operations as mul * x + add and maintain these states as we add operations. Since all operations are compositions of linear functions,
+the composition of two such functions always remains the same.
+Therefore, we can store only the coefficients (that's what the analysis of the solution tells us, and I don't even know what the inverse modular function is).
+"""
+
+# Not mine, right solution
+class Fancy:
+
+    def __init__(self):
+        self.MOD = 10**9 + 7
+        self.values = []
+        self.mul = 1
+        self.add = 0
+
+    def append(self, val: int) -> None:
+        val = (val - self.add) % self.MOD
+        val = val * pow(self.mul, -1, self.MOD) % self.MOD
+        self.values.append(val)
+
+    def addAll(self, inc: int) -> None:
+        self.add = (self.add + inc) % self.MOD
+
+    def multAll(self, m: int) -> None:
+        self.mul = self.mul * m % self.MOD
+        self.add = self.add * m % self.MOD
+
+    def getIndex(self, idx: int) -> int:
+        if idx >= len(self.values):
+            return -1
+        return (self.values[idx] * self.mul + self.add) % self.MOD
+
+
+# Initial TLE solution 
+class Fancy:
+
+    def __init__(self):
+        self.MOD = 10 ** 9 + 7
+        self.values = []
+        self.operations = []
+
+    def append(self, val: int) -> None:
+        self.values.append([val, len(self.operations)])
+
+    def addAll(self, inc: int) -> None:
+        self.operations.append((0, inc))
+
+    def multAll(self, m: int) -> None:
+        self.operations.append((1, m))
+
+    def getIndex(self, idx: int) -> int:
+        if idx >= len(self.values):
+            return -1
+
+        cur_val, op_idx = self.values[idx]
+
+        for op, val in self.operations[op_idx:]:
+            if op == 0:
+                cur_val = (cur_val + val) % self.MOD
+            else:
+                cur_val = (cur_val * val) % self.MOD
+
+        self.values[idx] = [cur_val, len(self.operations)]
+
+        return cur_val
