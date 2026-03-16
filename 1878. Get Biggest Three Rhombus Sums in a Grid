@@ -1,0 +1,27 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n ** 3) complexity by time and O(n ** 3).
+
+The task is strictly about meticulous coding.
+If I were at the interview, I would have gone for prefix sums, but since my energy is limited, I just went with a brute-force approach. 
+We traverse all possible rhombus from each point, and then find the three unique largest sums.
+"""
+
+class Solution:
+    def getBiggestThree(self, grid: List[List[int]]) -> List[int]:
+        d = [(1, 1), (1, -1), (-1, -1), (-1, 1)]
+        rows, cols = len(grid), len(grid[0])
+        res = set()
+        for y in range(rows):
+            for x in range(cols):
+                res.add(grid[y][x])
+                max_side = min(y, rows - 1 - y, x, cols - 1 - x)
+                for i in range(1, max_side + 1):
+                    c_sum = 0
+                    i_y, i_x = y - i, x
+                    for dy, dx in d:
+                        for _ in range(i):
+                            c_sum += grid[i_y][i_x]
+                            i_y += dy
+                            i_x += dx
+                    res.add(c_sum)
+        return sorted(res, reverse=True)[:3]
