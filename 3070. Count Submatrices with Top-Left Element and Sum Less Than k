@@ -1,0 +1,23 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n * m) complexity by time and O(n * m).
+
+Where was this problem when I was solving a similar one about finding all possible areas? It would be a nice help.
+Knowing the technique, it's quite easy to write: we calculate the prefix sum with one trick:
+taking the top and left values ​​as the basis – we must subtract from the resulting sum the fragment of their intersection 
+- the value that appears on the diagonal to the left of our prefix matrix.
+"""
+
+class Solution:
+    def countSubmatrices(self, grid: List[List[int]], k: int) -> int:
+        rows, cols = len(grid), len(grid[0])
+        prefix_grid = copy.deepcopy(grid)
+        result = 0
+        for y in range(rows):
+            for x in range(cols):
+                prefix_col = prefix_grid[y][x - 1] if x > 0 else 0
+                prefix_row = prefix_grid[y - 1][x] if y > 0 else 0
+                cur_sum = prefix_col + prefix_row + grid[y][x] - (prefix_grid[y - 1][x - 1] if (y > 0 and x > 0) else 0)
+                if cur_sum <= k:
+                    result += 1
+                prefix_grid[y][x] = cur_sum
+        return result
