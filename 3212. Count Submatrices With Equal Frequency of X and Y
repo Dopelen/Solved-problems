@@ -1,0 +1,40 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n * m) complexity by time and O(n * m).
+
+I tried yesterday's solution using prefixes, but I got a TLE.
+I need to think about optimization.
+It turns out that dictionaries are very heavyweight and, in fact, adding them together is not O(1), even if there are 3 keys. 
+I rewrote it using arrays and tuples, and everything seems to work.
+"""
+
+# without Counter
+class Solution:
+    def numberOfSubmatrices(self, grid: List[List[str]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        result = 0
+        prefix_grid = [[(0, 0)] * (cols + 1) for _ in range(rows + 1)]
+        for y in range(1, rows + 1):
+            for x in range(1, cols + 1):
+                prev_col_y, prev_col_x = prefix_grid[y][x - 1]
+                prev_row_y, prev_row_x = prefix_grid[y - 1][x]
+                overlap_y, overlap_x = prefix_grid[y - 1][x - 1]
+                cur_y = prev_row_y + prev_col_y - overlap_y + (grid[y - 1][x - 1] == "Y")
+                cur_x = prev_row_x + prev_col_x - overlap_x + (grid[y - 1][x - 1] == "X")
+                result += cur_x == cur_y and cur_x > 0
+                prefix_grid[y][x] = (cur_y, cur_x)
+        return result
+
+
+# Initial TLE solution
+class Solution:
+    def numberOfSubmatrices(self, grid: List[List[str]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        result = 0
+        for y in range(rows):
+            for x in range(cols):
+                counter_col = grid[y][x - 1] if x > 0 else Counter()
+                counter_row = grid[y - 1][x] if y > 0 else Counter()
+                counter = Counter(grid[y][x]) + counter_col + counter_row - (grid[y - 1][x - 1] if (y > 0 and x > 0) else Counter())
+                result += (counter["X"] == counter["Y"] and counter["X"] > 0)
+                grid[y][x] = counter
+        return result
