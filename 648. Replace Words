@@ -1,0 +1,42 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n * m ** 2) complexity by time and O(n * m).
+
+As usual, I started with a solution that doesn't run in time. 
+It's quite lazy, and I'm not surprised that I can't keep up even with small constraints. 
+Regular expressions are very expensive, and at such large scales, the quadratic complexity can be prohibitive.
+
+An important part I initially missed, which prompted me to start writing a solution using regular expressions, 
+is that the root is always the beginning of a word. 
+So, we can safely use dictionary-based word checking, which would be optimal.
+"""
+
+# Right solution! (but still slow, for best perfomance use Trie!)
+class Solution:
+    def replaceWords(self, dictionary: List[str], sentence: str) -> str:
+        sentence = sentence.split()
+        dict_set = set(dictionary)
+
+        def shortest_root(word, dict_set):
+            for i in range(len(word)):
+                root = word[0:i]
+                if root in dict_set:
+                    return root
+            return word
+
+        for idx in range(len(sentence)):
+            sentence[idx] = shortest_root(sentence[idx], dict_set)
+
+        return " ".join(sentence)
+
+
+# Initial TLE solution
+class Solution:
+    def replaceWords(self, dictionary: List[str], sentence: str) -> str:
+        sentence = sentence.split()
+        dictionary.sort(key = lambda x: len(x))
+        for i in range(len(sentence)):
+            for j in range(len(dictionary)):
+                if re.match(f'{dictionary[j]}', sentence[i]):
+                    sentence[i] = dictionary[j]
+                    break
+        return " ".join(sentence)
