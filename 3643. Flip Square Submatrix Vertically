@@ -4,6 +4,9 @@
 The problem can be solved in 5 minutes by simply redefining the matrix segments. 
 I decided to write it directly using a for loop, but got confused with the edge cases. 
 I rewrote it using a while loop, and then rewrote it again using a for loop, but with understanding!
+
+P.S: The author praised the horizontal Y coordinate, but the vertical X...
+I almost lost my mind.
 """
 
 
