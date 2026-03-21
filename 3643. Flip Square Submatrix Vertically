@@ -1,0 +1,28 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n * m) complexity by time and O(k).
+
+The problem can be solved in 5 minutes by simply redefining the matrix segments. 
+I decided to write it directly using a for loop, but got confused with the edge cases. 
+I rewrote it using a while loop, and then rewrote it again using a for loop, but with understanding!
+"""
+
+
+# For
+class Solution:
+    def reverseSubmatrix(self, grid: List[List[int]], x: int, y: int, k: int) -> List[List[int]]:
+        for i in range(k // 2):
+            top = x + i
+            bottom = x + k - 1 - i
+            grid[top][y:y + k], grid[bottom][y:y + k] = grid[bottom][y:y + k], grid[top][y:y + k]
+        return grid
+
+
+# While
+class Solution:
+    def reverseSubmatrix(self, grid: List[List[int]], x: int, y: int, k: int) -> List[List[int]]:
+        first, last = x, x + k - 1
+        while first < last:
+            grid[first][y:y + k], grid[last][y:y + k] = grid[last][y:y + k], grid[first][y:y + k]
+            first += 1
+            last -= 1
+        return grid
