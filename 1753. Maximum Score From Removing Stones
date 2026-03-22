@@ -1,0 +1,30 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(1) complexity by time and O(1).
+
+I have written a simple iterative solution, but it is not taken seriously because it is clear from the very beginning that the solution can be derived mathematically.
+"""
+
+# Real solution
+class Solution:
+    def maximumScore(self, a: int, b: int, c: int) -> int:
+        a, b, c = sorted((a, b, c))
+        if a + b < c: return a + b
+        return (a + b + c)//2
+
+
+# Simple solution
+class Solution:
+    def maximumScore(self, a: int, b: int, c: int) -> int:
+        heap = [-a, -b, -c]
+        heapify(heap)
+        operations = 0
+        while len(heap) > 1:
+            first = heappop(heap) + 1
+            second = heappop(heap) + 1
+            if first < 0:
+                heappush(heap, first)
+            if second < 0:
+                heappush(heap, second)
+            operations += 1
+        return operations + (abs(heap[0]) if len(heap) > 1 else 0)
+
