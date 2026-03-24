@@ -1,0 +1,27 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n * m) complexity by time and O(n * m).
+
+Simply taking the entire product and dividing it by the current cell failed, as expected for a mid-level problem.
+The difficulty lies in the complexity of the division due to the size of the number: 10^5 * 10^9, which yields 10^(900000), which, even with division optimization, 
+becomes an expensive operation.
+However, you can simply unfold the matrix into a list and iterate through the prefixes.
+"""
+
+# I got confused twice while writing how to assemble a matrix from an array...
+class Solution:
+    def constructProductMatrix(self, grid: List[List[int]]) -> List[List[int]]:
+        MOD = 12345
+        grid_to_arr = [elem for row in grid for elem in row]
+        rows, cols = len(grid), len(grid[0])
+        size = len(grid_to_arr)
+        res = [1] * size
+        pref = 1
+        for i in range(size):
+            res[i] = pref
+            pref = (pref * grid_to_arr[i]) % MOD
+        suff = 1
+        for i in range(size - 1, -1, -1):
+            res[i] = (res[i] * suff) % MOD
+            suff = (suff * grid_to_arr[i]) % MOD
+
+        return [res[idx :idx + cols] for idx in range(0, rows, cols)]
