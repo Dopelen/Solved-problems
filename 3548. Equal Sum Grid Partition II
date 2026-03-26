@@ -1,0 +1,94 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n * m) complexity by time and O(n * m).
+
+The problem is very similar to yesterday's, but now with some complications. 
+One is the need to maintain number frequencies for deletion checking, and the second is to keep the sections connected.
+We have a function to check if the required differential exists, and a unified function to perform a cut along and across, so as not to duplicate logic.
+"""
+
+# I spied a couple of solutions, so it would be more honest to leave a link to the analysis here.
+# https://leetcode.com/problems/equal-sum-grid-partition-ii/editorial/?envType=daily-question&envId=2026-03-26
+class Solution:
+    def canPartitionGrid(self, grid: List[List[int]]) -> bool:
+        rows, cols = len(grid), len(grid[0])
+        total = sum(map(sum, grid))
+        
+
+        def check(cnt, r_len, c_len, corners, diff):
+            if r_len * c_len == 1:
+                return False
+            if r_len == 1 or c_len == 1:
+                return diff in corners
+            return cnt.get(diff, 0) > 0
+
+
+        def process(split_rows: bool) -> bool:
+            cnt1 = Counter()  # top / left
+            cnt2 = Counter(v for row in grid for v in row)  # bottom / right
+
+            cur_sum = 0
+
+            outer = rows if split_rows else cols
+            inner = cols if split_rows else rows
+
+            for o in range(outer - 1):
+                for i in range(inner):
+                    r, c = (o, i) if split_rows else (i, o)
+                    val = grid[r][c]
+
+                    cur_sum += val
+                    cnt1[val] += 1
+                    cnt2[val] -= 1
+
+                    if cnt2[val] == 0:
+                        del cnt2[val]
+
+                other_sum = total - cur_sum
+
+                if cur_sum == other_sum:
+                    return True
+
+                diff = abs(cur_sum - other_sum)
+
+                if split_rows:
+                    if cur_sum > other_sum:
+                        if check(
+                                cnt1,
+                                o + 1,
+                                cols,
+                                {grid[0][0], grid[o][0], grid[0][cols - 1], grid[o][cols - 1]},
+                                diff,
+                        ):
+                            return True
+                    else:
+                        if check(
+                                cnt2,
+                                rows - o - 1,
+                                cols,
+                                {grid[o + 1][0], grid[rows - 1][0], grid[o + 1][cols - 1], grid[rows - 1][cols - 1]},
+                                diff,
+                        ):
+                            return True
+                else:
+                    if cur_sum > other_sum:
+                        if check(
+                                cnt1,
+                                rows,
+                                o + 1,
+                                {grid[0][0], grid[0][o], grid[rows - 1][0], grid[rows - 1][o]},
+                                diff,
+                        ):
+                            return True
+                    else:
+                        if check(
+                                cnt2,
+                                rows,
+                                cols - o - 1,
+                                {grid[0][o + 1], grid[0][cols - 1], grid[rows - 1][o + 1], grid[rows - 1][cols - 1]},
+                                diff,
+                        ):
+                            return True
+
+            return False
+
+        return process(True) or process(False)
