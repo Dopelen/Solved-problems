@@ -1,0 +1,26 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+A tricky problem, the hard part for me was constructing a correct recursion without going crazy.
+Each traversal gives us a bit of information: one about parents and children, and the second about the sizes of the tree branches on each side. 
+By combining them, we can recreate the original tree. 
+As a bonus, we create a dqueue to make pop(0) more optimal.
+"""
+
+class Solution:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        mapping = {}
+        for i in range(len(inorder)):
+            mapping[inorder[i]] = i
+        preorder = deque(preorder)
+
+        def build(start, end):
+            if start > end:
+                return None
+            root = TreeNode(preorder.popleft())
+            mid = mapping[root.val]
+            root.left = build(start, mid - 1)
+            root.right = build(mid + 1, end)
+            return root
+
+        return build(0, len(preorder) - 1)
