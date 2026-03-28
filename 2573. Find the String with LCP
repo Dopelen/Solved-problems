@@ -1,0 +1,47 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n ** 2) complexity by time and O(n ** 2).
+
+Reading the conditions and understanding what they want from you is already a big challenge.
+We need to construct a row from the matrix that will correspond to the cascade of conditions described in the matrix — 
+each row of the matrix is ​​a construction condition, describing the general pattern of the final row, which elements should be repeated and in what segments.
+With 1,000 elements, a complete enumeration of options won't work, and I don't know how to construct the pattern.
+
+With hints this task becomes much easier.
+Our safest step is to construct the string from left to right, taking the smallest unoccupied character each time.
+This guarantees lexically minimal results.
+
+It turns out to be a beautiful dynamic programming exercise, and a succinct solution.
+Unfortunately, I couldn't get through the second part myself.
+"""
+
+# https://leetcode.com/problems/find-the-string-with-lcp/editorial/?envType=daily-question&envId=2026-03-28
+class Solution:
+    def findTheString(self, lcp: List[List[int]]) -> str:
+        size = len(lcp)
+        word = [""] * size
+        current = ord("a")
+
+        for i in range(size):
+            if not word[i]:
+                if current > ord("z"):
+                    return ""
+                word[i] = chr(current)
+                for j in range(i + 1, size):
+                    if lcp[i][j]:
+                        word[j] = word[i]
+                current += 1
+
+        for i in range(size - 1, -1, -1):
+            for j in range(size - 1, -1, -1):
+                if word[i] != word[j]:
+                    if lcp[i][j]:
+                        return ""
+                else:
+                    if i == size - 1 or j == size - 1:
+                        if lcp[i][j] != 1:
+                            return ""
+                    else:
+                        if lcp[i][j] != lcp[i + 1][j + 1] + 1:
+                            return ""
+
+        return "".join(word)
