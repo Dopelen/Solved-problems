@@ -1,0 +1,50 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n * log(n)) complexity by time and O(n).
+
+A rather enjoyable task, but one that wasn't entirely easy for me. 
+The first snag is finding a greedy step for constructing groups; you just need to sort them and write a group generator. 
+The second is finding a rule by which they will be combined. 
+All of this is doable, but I can't stop wondering what could be done more optimally!
+"""
+
+
+# Cool O(sqrt(n)) solution
+# The main trick is that if we sort the elements, and the number of elements in a group increases with each group, then the sum will also increase 
+# if we form them from smallest to largest, so we don’t even need to sort them, it’s enough to answer the question of whether we can split the array into K groups, that’s all!
+class Solution:
+    def maximumGroups(self, grades: List[int]) -> int:
+        n = len(grades)
+        k = 0
+        
+        while (k + 1) * (k + 2) // 2 <= n:
+            k += 1
+            
+        return k
+
+
+# Or even (8 is formed from the solution of a quadratic equation)
+class Solution:
+    def maximumGroups(self, grades: List[int]) -> int:
+        n = len(grades)
+        return int((math.sqrt(8 * n + 1) - 1) // 2)
+
+
+# Naive initial solution
+class Solution:
+    def maximumGroups(self, grades: List[int]) -> int:
+        grades.sort()
+        groups = []
+        start = 0
+        group_size = 1
+
+        while start < len(grades):
+            end = min(start + group_size, len(grades))
+            groups.append(grades[start:end])
+            start = end
+            group_size += 1
+
+        while len(groups) > 1 and (sum(groups[-1]) <= sum(groups[-2]) or len(groups[-2]) >= len(groups[-1])):
+            groups[-2] += groups[-1]
+            groups.pop()
+
+        return len(groups)
