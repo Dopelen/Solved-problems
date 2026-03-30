@@ -1,0 +1,31 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(1).
+
+At first, I thought I needed to flip the numbers between the lines, but experience forced me to reread the problem ten times. 
+Eventually, it just suddenly dawned on me. 
+I didn't like it because I didn't understand how it happened; 
+I just suddenly realized that all I had to do was count the frequencies at the even and odd positions and compare them. 
+But the moment of insight was too sudden.
+"""
+
+# I really wanted to add a lambda function, although it's even better without it. (create_zero_array = lambda: [0] * 28; even_1, odd_1, even_2, odd_2 = create_zero_array()...)
+class Solution:
+    def checkStrings(self, s1: str, s2: str) -> bool:
+        even = True
+        even_1, odd_1, even_2, odd_2 = ([0] * 28 for _ in range(4))
+        for elem_1, elem_2 in zip(s1, s2):
+            if even:
+                even_1[ord(elem_1) - 97] += 1
+                even_2[ord(elem_2) - 97] += 1
+            else:
+                odd_1[ord(elem_1) - 97] += 1
+                odd_2[ord(elem_2) - 97] += 1
+            even = not even
+        return even_1 == even_2 and odd_1 == odd_2
+
+
+# or you can write it this way (it's even faster)
+class Solution:
+    def checkStrings(self, s1: str, s2: str) -> bool:
+        return Counter(s1[::2]) == Counter(s2[::2]) and \
+               Counter(s1[1::2]) == Counter(s2[1::2])
