@@ -1,0 +1,35 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(m * n) complexity by time and O(m + n).
+
+I initially thought that if F was the substring, it could be anything, and that would have greatly simplified the problem. 
+But then I reread it and realized it had to be DIFFERENT from string_2.
+And with each iteration of my thinking, the problem becomes more and more difficult.
+
+It took me a long time to think about it, but I got the basic concept: first we go through T, then through F, 
+and try to change the rightmost letter for each substring if it is equal to the original, and if it is not equal, we do nothing.
+"""
+
+class Solution:
+    def generateString(self, str1: str, str2: str) -> str:
+        size_1, size_2 = len(str1), len(str2)
+        final_string = ["a"] * (size_1 + size_2 - 1)
+        fixed = [False] * (size_1 + size_2 - 1)
+
+        for idx, char in enumerate(str1):
+            if char == "T":
+                for i, c in enumerate(str2, idx):
+                    if fixed[i] and final_string[i] != c:
+                        return ""
+                    final_string[i], fixed[i] = c, True
+
+        for idx, char in enumerate(str1):
+            if char == "F":
+                if any(str2[j - idx] != final_string[j] for j in range(idx, idx + size_2)):
+                    continue
+                for i in range(idx + size_2 - 1, idx - 1, -1):
+                    if not fixed[i]:
+                        final_string[i] = "b"
+                        break
+                else:
+                    return ""
+        return "".join(final_string)
