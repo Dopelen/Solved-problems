@@ -1,0 +1,18 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+ This program has O(n) complexity by time and O(n).
+
+A challenging problem, the correct solution to which lies in understanding that count[cur_sum - goal] is the number of previous "starts" that can yield a goal when subtracted. 
+Using this logic, we can calculate the data we need in linear time.
+"""
+
+class Solution:
+    def numSubarraysWithSum(self, nums: List[int], goal: int) -> int:
+        count = defaultdict(int)
+        count[0] = 1
+        cur_sum = 0
+        result = 0
+        for num in nums:
+            cur_sum += num
+            result += count[cur_sum - goal]
+            count[cur_sum] += 1
+        return result
