@@ -1,0 +1,31 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(m * n) complexity by time and O(m * n).
+
+Every time I write a non-working, non-dynamic solution -> suffer.
+The main trick is to remember the meaning depending on how many negative elements we have already removed.
+I'm tired of writing dynamic programming again... It can be solved beautifully if you come up with the right structure.
+"""
+
+class Solution:
+    def maximumAmount(self, coins: List[List[int]]) -> int:
+        rows, cols = len(coins), len(coins[0])
+        dp = [[[-math.inf] * 3 for _ in range(cols)] for _ in range(rows)]
+        start = coins[0][0]
+        if start >= 0:
+            dp[0][0][0] = start
+        else:
+            dp[0][0][0] = start
+            dp[0][0][1] = 0
+        for y in range(rows):
+            for x in range(cols):
+                for k in range(3):
+                    if dp[y][x][k] == -math.inf:
+                        continue
+                    for ny, nx in [(y + 1, x), (y, x + 1)]:
+                        if ny >= rows or nx >= cols:
+                            continue
+                        val = coins[ny][nx]
+                        dp[ny][nx][k] = max(dp[ny][nx][k], dp[y][x][k] + val)
+                        if val < 0 and k < 2:
+                            dp[ny][nx][k + 1] = max(dp[ny][nx][k + 1], dp[y][x][k])
+        return max(dp[-1][-1])
