@@ -1,0 +1,49 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n) + m * log(m)) complexity by time and O(n * log(n) + m * log(m)).
+
+In general, the task was feasible, but I didn’t complete it in time.
+We count how much we can destroy on the left, how much we can destroy on the right, and how many walls are covered by the robot on the left (since we are going from left to right).
+Keeping in mind that the bullet can be limited by another robot.
+The hardest part is writing transitions in DP, which is where I actually got stuck.
+"""
+
+# https://leetcode.com/problems/maximum-walls-destroyed-by-robots/editorial/?envType=daily-question&envId=2026-04-03
+class Solution:
+    def maxWalls(self, robots: List[int], distance: List[int], walls: List[int]) -> int:
+        size = len(robots)
+        left = [0] * size
+        right = [0] * size
+        num = [0] * size
+        robots_to_distance = {}
+        for i in range(size):
+            robots_to_distance[robots[i]] = distance[i]
+        robots.sort()
+        walls.sort()
+        for i in range(size):
+            pos1 = bisect.bisect_right(walls, robots[i])
+            if i >= 1:
+                left_bound = max(robots[i] - robots_to_distance[robots[i]], robots[i - 1] + 1)
+                left_pos = bisect.bisect_left(walls, left_bound)
+            else:
+                left_pos = bisect.bisect_left(walls, robots[i] - robots_to_distance[robots[i]])
+            left[i] = pos1 - left_pos
+            if i < size - 1:
+                right_bound = min(robots[i] + robots_to_distance[robots[i]], robots[i + 1] - 1)
+                right_pos = bisect.bisect_right(walls, right_bound)
+            else:
+                right_pos = bisect.bisect_right(walls, robots[i] + robots_to_distance[robots[i]])
+            pos2 = bisect.bisect_left(walls, robots[i])
+            right[i] = right_pos - pos2
+            if i == 0:
+                continue
+            pos3 = bisect.bisect_left(walls, robots[i - 1])
+            num[i] = pos1 - pos3
+        sub_left, sub_right = left[0], right[0]
+        for i in range(1, size):
+            current_left = max(
+                sub_left + left[i],
+                sub_right - right[i - 1] + min(left[i] + right[i - 1], num[i]),
+            )
+            current_right = max(sub_left + right[i], sub_right + right[i])
+            sub_left, sub_right = current_left, current_right
+        return max(sub_left, sub_right)
