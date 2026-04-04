@@ -1,0 +1,21 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m).
+
+The main difficulty for me was to understand how to distinguish spaces from line breaks within the matrix and organize an interrupt to remove trailing spaces. 
+Otherwise, I simply constructed a matrix and walked diagonally.
+"""
+
+class Solution:
+    def decodeCiphertext(self, encodedText: str, rows: int) -> str:
+        if rows == 0 or len(encodedText) == 0:
+            return ""
+        cols = len(encodedText) // rows
+        matrix = [encodedText[i:i + cols] for i in range(0, len(encodedText), cols)]
+        original = []
+        for start_col in range(cols):
+            r, c = 0, start_col
+            while r < rows and c < cols:
+                original.append(matrix[r][c])
+                r += 1
+                c += 1
+        return "".join(original).rstrip()
