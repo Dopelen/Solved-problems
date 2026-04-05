@@ -1,0 +1,38 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n).
+
+I was trying to figure out how to implement it using a monotonic stack, got tired, and started writing a search with a hidden constant of 100 for each operation 
+(because there aren't that many temperatures). 
+I decided it would be cool to optimize for a single pass. 
+And ended up spending half an hour debugging the reverse index pass, and it turned out to be monstrously slow. 
+I started rewriting it using monostack.
+In which we store days for which we have not found a warmer one, and as soon as we find one, we immediately process it.
+"""
+
+# Right and beautifull solution
+class Solution:
+    def dailyTemperatures(self, temperatures):
+        res = [0] * len(temperatures)
+        stack = []
+        for i, t in enumerate(temperatures):
+            while stack and temperatures[stack[-1]] < t:
+                prev = stack.pop()
+                res[prev] = i - prev
+            stack.append(i)
+        return res
+
+
+# Initial slow solution
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        size = len(temperatures)
+        temperature_to_idx = defaultdict(list)
+        answer = [math.inf] * size
+        for i, t in enumerate(temperatures[::-1]):
+            for next_t in range(t + 1, 101):
+                if temperature_to_idx.get(next_t):
+                    answer[size - i - 1] = min(answer[size - i - 1], temperature_to_idx[next_t][-1] - (size - 1 - i))
+            if answer[size - i - 1] == math.inf:
+                answer[size - i - 1] = 0
+            temperature_to_idx[t].append(size - i - 1)
+        return answer
