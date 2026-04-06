@@ -1,0 +1,65 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+I solved it head-on with quadratic complexity.
+Essentially, it's just iteration with rules, but there's a more optimal solution I've already spotted. 
+My intuition told me it was possible, but I couldn't write it myself.
+
+KMP = Knuth–Morris–Pratt algorithm with LPS (Longest Prefix Suffix) helps here. 
+By finding test fragments where the prefix matches the suffix, 
+we establish points from which we can begin a new traversal if an error occurs, 
+rather than having to traverse the entire string again.
+"""
+
+# Naive intial Solution
+class Solution:
+    def countMatchingSubarrays(self, nums: List[int], pattern: List[int]) -> int:
+        size, size_pattern = len(nums), len(pattern)
+        start_idx = 0
+        matched_substrings = 0
+        while start_idx + len(pattern) < size:
+            pattern_correct = True
+            for idx, (a, b) in enumerate(pairwise(nums[start_idx:start_idx + size_pattern + 1])):
+                if any([pattern[idx] == 1 and a >= b, pattern[idx] == 0 and a != b, pattern[idx] == -1 and b >= a]):
+                    pattern_correct = False
+                    break
+            matched_substrings += pattern_correct
+            start_idx += 1
+        return matched_substrings
+
+
+# Correct smart solution 
+class Solution:
+    def countMatchingSubarrays(self, nums: List[int], pattern: List[int]) -> int:
+        diff = []
+        for i in range(len(nums) - 1):
+            if nums[i] < nums[i + 1]:
+                diff.append(1)
+            elif nums[i] == nums[i + 1]:
+                diff.append(0)
+            else:
+                diff.append(-1)
+
+        def build_lps(p):
+            lps = [0] * len(p)
+            j = 0
+            for i in range(1, len(p)):
+                while j > 0 and p[i] != p[j]:
+                    j = lps[j - 1]
+                if p[i] == p[j]:
+                    j += 1
+                    lps[i] = j
+            return lps
+
+        lps = build_lps(pattern)
+        j = 0
+        count = 0
+        for i in range(len(diff)):
+            while j > 0 and diff[i] != pattern[j]:
+                j = lps[j - 1]
+            if diff[i] == pattern[j]:
+                j += 1
+            if j == len(pattern):
+                count += 1
+                j = lps[j - 1]
+        return count
