@@ -1,0 +1,101 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It seems like a simple iterative problem, but the percentage of correct solutions is 39%. 
+I suspected something was wrong, wrote a naive solution, and then realized that the number of steps could be enormous, which would require writing an optimization.
+
+Since the robot only bumps into walls, I immediately figured out that we could replace our matrix with a simple array
+and return the coordinates based on which part of the array it's in.
+Then we could calculate its new position in O(1) and return cur_position with the same complexity.
+
+I enjoyed the problem—thinking about it, but not writing a solution. 
+The coordinates are stated in an unusual way, the date and module boundaries are confusing as always, 
+there are several edge cases, a full circle if it hasn't moved yet, and so on—it's rather boring to write out.
+
+But in the end I'm happy with myself
+"""
+
+# After THINKING
+class Robot:
+
+    def __init__(self, width: int, height: int):
+        self.rows = height
+        self.cols = width
+        self.cur_pos = 0
+        self.total_path = 2 * (self.rows + self.cols) - 4
+        self.moved = False
+
+    def step(self, num: int) -> None:
+        if self.total_path == 0:
+            return
+        self.cur_pos = (self.cur_pos + num) % self.total_path
+        self.moved = True
+
+    def getPos(self) -> List[int]:
+        p = self.cur_pos
+        if p < self.cols - 1:
+            x = p
+            y = 0
+            return [x, y]
+        p -= (self.cols - 1)
+        if p < self.rows - 1:
+            x = self.cols - 1
+            y = p
+            return [x, y]
+        p -= (self.rows - 1)
+        if p < self.cols - 1:
+            x = self.cols - 1 - p
+            y = self.rows - 1
+            return [x, y]
+        p -= (self.cols - 1)
+        x = 0
+        y = self.rows - 1 - p
+        return [x, y]
+
+    def getDir(self) -> str:
+        if not self.moved:
+            return "East"
+        if self.cur_pos == 0:
+            return "South"
+        p = self.cur_pos
+        if p <= self.cols - 1:
+            return "East"
+        p -= (self.cols - 1)
+        if p <= self.rows - 1:
+            return "North"
+        p -= (self.rows - 1)
+        if p <= self.cols - 1:
+            return "West"
+        return "South"
+
+
+# Naive TLE approach
+class Robot:
+
+    def __init__(self, width: int, height: int):
+        self.rows = height
+        self.cols = width
+        self.cur_y = height - 1
+        self.cur_x = 0
+        self.direction_map = [("North", (-1, 0)), ("West", (0, -1)), ("South", (1, 0)), ("East", (0, 1))]
+        self.current_dir_idx = 3
+        
+
+    def step(self, num: int) -> None:
+        dy, dx = self.direction_map[self.current_dir_idx][1]
+        while num:
+            if 0 <= self.cur_y + dy < self.rows and 0 <= self.cur_x  + dx < self.cols:
+                num -= 1
+                self.cur_y += dy
+                self.cur_x += dx
+            else:
+                self.current_dir_idx = (self.current_dir_idx + 1) % 4
+                dy, dx = self.direction_map[self.current_dir_idx][1]
+        
+
+    def getPos(self) -> List[int]:
+        return [self.cur_x, self.rows - 1 - self.cur_y]
+        
+
+    def getDir(self) -> str:
+        return self.direction_map[self.current_dir_idx][0]
