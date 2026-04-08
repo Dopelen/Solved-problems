@@ -1,0 +1,18 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It's a surprisingly simple problem to program, but surprisingly difficult to figure out the solution principle and why it's solved this way.
+I thought about it for a long time and, with some hints, found two approaches that were completely clear to me.
+
+1. Exactly half of the people should end up in A. 
+We can simply greedily move half of them there, with the smallest possible difference between price A and price B, to get the optimal answer.
+
+2. We can send everyone to A and pay (total_a) price, and then greedily move half of the people, those who will bring the greatest savings (whose B cost is lower than A's cost).
+"""
+
+class Solution:
+    def twoCitySchedCost(self, costs: List[List[int]]) -> int:
+        costs.sort(key=lambda x: x[0] - x[1])
+        size = len(costs)
+        result = sum(cost[0] for cost in costs[:size // 2]) + sum(cost[1] for cost in costs[size // 2:])
+        return result
