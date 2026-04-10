@@ -1,0 +1,20 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and  O(n) by space.
+
+Like most simple tasks, all you have to do is just write the code according to the condition.
+That's what I thought, and then the AI ​​gave me 2 more solutions that were more optimal than mine.
+"""
+
+class Solution:
+    def minimumDistance(self, nums: List[int]) -> int:
+        num_to_idx = defaultdict(list)
+        minimum = math.inf
+        for idx, num in enumerate(nums):
+            num_to_idx[num].append(idx)
+        for key, indexes in num_to_idx.items():
+            if len(indexes) < 3:
+                continue
+            for i in range(0,len(indexes) - 2):
+                first, second, third = indexes[i:i + 3]
+                minimum = min(minimum, abs(first - second) + abs(second - third) + abs(third - first))
+        return minimum if minimum != math.inf else -1
