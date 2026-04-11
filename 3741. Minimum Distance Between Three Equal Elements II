@@ -1,0 +1,19 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and  O(n) by space.
+
+The same problem as yesterday, with stricter bounds. 
+We just need to use iteration more optimally, collapse the condition to two elements for each unique number.
+Since we are only interested in the first and last index for the answer, we can store the two previous ones for each number, and if a new one comes in, update the answer.
+Which generally makes our operations significantly faster.
+"""
+
+class Solution:
+    def minimumDistance(self, nums: List[int]) -> int:
+        last = defaultdict(lambda: [-1, -1])
+        minimum = math.inf
+        for i, num in enumerate(nums):
+            prev2, prev1 = last[num]
+            if prev2 != -1:
+                minimum = min(minimum, 2 * (i - prev2))
+            last[num] = [prev1, i]
+        return minimum if minimum != math.inf else -1
