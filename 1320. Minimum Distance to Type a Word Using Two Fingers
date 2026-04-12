@@ -1,0 +1,39 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and  O(n) by space.
+
+Again, extremely difficult to construct DP for my brain.
+Again, the DP is extremely complex for my brain to construct.
+But when analyzed with AI, the concept becomes quite clear. 
+At each step, we simply choose whether it's cheaper to move the previous finger from its previous position to write a new letter, 
+or to use another one from those we'd previously calculated.
+"""
+
+# https://leetcode.com/problems/minimum-distance-to-type-a-word-using-two-fingers/?envType=daily-question&envId=2026-04-12
+class Solution:
+    def minimumDistance(self, word: str) -> int:
+        size = len(word)
+        big = 2**30
+        dp = [[[big] * 26 for x in range(26)] for y in range(size)]
+        for i in range(26):
+            dp[0][i][ord(word[0]) - 65] = 0
+            dp[0][ord(word[0]) - 65][i] = 0
+
+        def getDistance(p, q):
+            x1, y1 = p // 6, p % 6
+            x2, y2 = q // 6, q % 6
+            return abs(x1 - x2) + abs(y1 - y2)
+
+        for i in range(1, size):
+            cur, prev = ord(word[i]) - 65, ord(word[i - 1]) - 65
+            d = getDistance(prev, cur)
+            for j in range(26):
+                dp[i][cur][j] = min(dp[i][cur][j], dp[i - 1][prev][j] + d)
+                dp[i][j][cur] = min(dp[i][j][cur], dp[i - 1][j][prev] + d)
+                if prev == j:
+                    for k in range(26):
+                        d0 = getDistance(k, cur)
+                        dp[i][cur][j] = min(dp[i][cur][j], dp[i - 1][k][j] + d0)
+                        dp[i][j][cur] = min(dp[i][j][cur], dp[i - 1][j][k] + d0)
+
+        ans = min(min(dp[size - 1][x]) for x in range(26))
+        return ans
