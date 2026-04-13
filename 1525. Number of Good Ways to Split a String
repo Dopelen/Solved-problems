@@ -1,0 +1,39 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and  O(n) by space.
+
+A fairly simple problem involving suffixes and prefixes.
+I did it the simple way, then optimized it a bit from memory.
+"""
+
+# Initital Solution
+class Solution:
+    def numSplits(self, s: str) -> int:
+        prefix, sufix = [], []
+        prefix_dict, sufix_dict = Counter(), Counter()
+        good_splits = 0
+        for elem in s:
+            prefix_dict[elem] += 1
+            prefix.append(len(prefix_dict))
+        for el in s[::-1]:
+            sufix_dict[el] += 1
+            sufix.append(len(sufix_dict))
+        for i in range(len(prefix) - 1):
+            good_splits += prefix[i] == sufix[-i - 2]
+        return good_splits
+
+
+# After refactoring
+class Solution:
+    def numSplits(self, s: str) -> int:
+        right = Counter(s)
+        left = set()
+        good_splits = 0
+        for i in range(len(s) - 1):
+            char = s[i]
+            left.add(char)
+            right[char] -= 1
+            if right[char] == 0:
+                del right[char]
+            if len(left) == len(right):
+                good_splits += 1
+        return good_splits
