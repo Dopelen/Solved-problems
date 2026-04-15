@@ -9,6 +9,17 @@ but to collect these indices, you still have to go through all the elements.
 We'll just shorten the constant a little.
 """
 
+# I came to solve the problem 2 years later!
+class Solution:
+    def closestTarget(self, words: List[str], target: str, startIndex: int) -> int:
+        size = len(words)
+        for i in range(size):
+            if words[(startIndex + i) % size] == target or words[(startIndex - i) % size] == target:
+                return i
+        return -1
+
+
+# Initial Solution
 class Solution:
     def closetTarget(self, words: List[str], target: str, startIndex: int) -> int:
         if target not in words: return -1
