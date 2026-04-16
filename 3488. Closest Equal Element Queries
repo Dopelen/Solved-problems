@@ -1,0 +1,55 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+At first I understood it correctly, then I thought that I understood it incorrectly and redid it, and it turned out that it was correct initially... 
+Now I have 2 correct solutions for 2 different problems.
+"""
+
+# The real solution is to search for neighbors for each index using binsearch.
+class Solution:
+    def solveQueries(self, nums: List[int], queries: List[int]) -> List[int]:
+        size_num = len(nums)
+        answer = []
+        num_to_idx = defaultdict(list)
+
+        for idx, elem in enumerate(nums):
+            num_to_idx[elem].append(idx)
+
+        for q in queries:
+            cur_val = nums[q]
+            if len(num_to_idx[cur_val]) < 2:
+                answer.append(-1)
+                continue
+            cur_pos = bisect.bisect_left(num_to_idx[cur_val], q)
+            distance_left = (q - num_to_idx[cur_val][cur_pos - 1]) if (cur_pos != 0) else (q + size_num - num_to_idx[cur_val][-1])
+            distance_right = (num_to_idx[cur_val][0] + (size_num - q)) if (cur_pos + 1 == len(num_to_idx[cur_val])) else (num_to_idx[cur_val][cur_pos + 1] - q)
+            answer.append(min(distance_left, distance_right))
+
+        return answer
+
+
+# Initial miss understanding (find min for every num)
+# class Solution:
+#     def solveQueries(self, nums: List[int], queries: List[int]) -> List[int]:
+#         size_num, size_q = len(nums), len(queries)
+#         answer = [-1] * size_q
+#         num_to_idx = defaultdict(list)
+#         num_to_min = {}
+#
+#         for idx, elem in enumerate(nums):
+#             num_to_idx[elem].append(idx)
+#
+#         for i, q in enumerate(queries):
+#             cur_val = nums[q]
+#             if not num_to_min.get(cur_val):
+#                 if len(num_to_idx[cur_val]) == 1:
+#                     cur_min = -1
+#                 else:
+#                     cur_min = num_to_idx[cur_val][0] + (size_num - num_to_idx[cur_val][-1])
+#                     for a, b in pairwise(num_to_idx[cur_val]):
+#                         dist = b - a
+#                         cur_min = min(cur_min, dist)
+#                 num_to_min[cur_val] = cur_min
+#             answer[i] = num_to_min[cur_val]
+#         return answer
