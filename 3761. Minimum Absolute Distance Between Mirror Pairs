@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It was hard to think today, but somehow I managed to get on track and quickly jot down a solution.
+
+The gist is this: the value being reversed must be lower in index, so we simply go from right to left, 
+see if we've previously visited the mirror value of the current one. 
+If so, we calculate the difference, and in any case, we add our value to the dictionary of visited ones 
+(if same val already been visited, we'll overwrite it idx, but that's a good thing, because the new one will be closer relative to the potential next value from the left).
+"""
+
+class Solution:
+    def minMirrorPairDistance(self, nums: List[int]) -> int:
+        size = len(nums)
+        total_min = math.inf
+        processed = defaultdict(int)
+        for i, e in enumerate(nums[::-1]):
+            reversed_val = str(int(str(e)[::-1]))
+            if processed.get(reversed_val):
+                total_min = min(total_min, (processed[reversed_val]) - (size - i))
+            processed[str(e)] = size - i
+
+        return -1 if total_min == math.inf else total_min
