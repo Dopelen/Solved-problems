@@ -1,0 +1,36 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) / O(n) complexity by time and O(n)/ O(1) by space.
+
+The limit is 10 ** 5, so I figured a binary search would work, and that's exactly what happened. 
+The only thing is that the bisect is designed for increasing arrays, so I converted it through negative numbers, 
+and then we just do the required calculations based on the distance. 
+But it could be done faster, in linear time, using two pointers.
+"""
+
+# Initial Solution
+class Solution:
+    def maxDistance(self, nums1: List[int], nums2: List[int]) -> int:
+        nums1 = [-el for el in nums1]
+        nums2 = [-e for e in nums2]
+        total_max = 0
+        for i in range(len(nums1)):
+            cur_element = nums1[i]
+            position = bisect.bisect_right(nums2, cur_element)
+            if position > i:
+                total_max = max(total_max, position - i - 1)
+        return total_max
+
+
+# Two pointers
+class Solution:
+    def maxDistance(self, nums1: List[int], nums2: List[int]) -> int:
+        i = j = 0
+        ans = 0
+        while i < len(nums1) and j < len(nums2):
+            if nums1[i] <= nums2[j]:
+                ans = max(ans, j - i)
+                j += 1
+            else:
+                i += 1
+        return ans
