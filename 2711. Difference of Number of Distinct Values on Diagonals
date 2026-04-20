@@ -1,0 +1,49 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2 * m) complexity by time and O(n * m) by space.
+
+The basic solution is literally a repetition of the condition, the only thing I got stuck on was the diagonals, trying to fit everything into one list compression.
+"""
+
+# initial Solution
+class Solution:
+    def differenceOfDistinctValues(self, grid: List[List[int]]) -> List[List[int]]:
+        rows, cols = len(grid), len(grid[0])
+        answer = []
+        for r in range(rows):
+            row = []
+            for c in range(cols):
+                top_left = {grid[i][j] for i, j in zip(range(r-1, -1, -1), range(c-1, -1, -1))}
+                bot_right = {grid[i][j] for i, j in zip(range(r+1, rows), range(c+1, cols))}
+                row.append(abs(len(top_left) - len(bot_right)))
+            answer.append(row)
+        return answer
+
+
+# Optimized solution O(n* m)
+# The trick is that all cells on one diagonal have the same r - c
+class Solution:
+    def differenceOfDistinctValues(self, grid: List[List[int]]) -> List[List[int]]:
+        rows, cols = len(grid), len(grid[0])
+        ans = [[0] * cols for _ in range(rows)]
+        for d in range(-(cols - 1), rows):
+            diag = []
+            coords = []
+            for r in range(rows):
+                c = r - d
+                if 0 <= c < cols:
+                    diag.append(grid[r][c])
+                    coords.append((r, c))
+            left = []
+            seen = set()
+            for x in diag:
+                left.append(len(seen))
+                seen.add(x)
+            right = [0] * len(diag)
+            seen.clear()
+            for i in range(len(diag) - 1, -1, -1):
+                right[i] = len(seen)
+                seen.add(diag[i])
+            for i, (r, c) in enumerate(coords):
+                ans[r][c] = abs(left[i] - right[i])
+        return ans
