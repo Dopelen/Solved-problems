@@ -1,0 +1,40 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n + m) complexity by time and O(n + m) by space.
+
+I immediately grasped the concept of the solution, but writing it was pure torture.
+The idea is simple: you perform a recursive traversal, form groups, then compare the number of divergent elements by index within each group—that's the answer. 
+But set unions aren't yet in my head, so I struggled with one solution after another.
+(How glad I was when I overcame myself and finished writing)
+"""
+
+class Solution:
+    def minimumHammingDistance(self, source: List[int], target: List[int], allowedSwaps: List[List[int]]) -> int:
+        adj_list = defaultdict(list)
+        for a, b in allowedSwaps:
+            adj_list[a].append(b)
+            adj_list[b].append(a)
+        hamming_distance = 0
+        processed = set()
+        for key, value in adj_list.items():
+            if key in processed:
+                continue
+            cur_component = set()
+            nodes_to_check = [key]
+
+            while nodes_to_check:
+                cur_elem = nodes_to_check.pop()
+                if cur_elem in cur_component:
+                    continue
+                cur_component.add(cur_elem)
+                nodes_to_check.extend(adj_list[cur_elem])
+            source_dict = Counter(source[i] for i in cur_component)
+            target_dict = Counter(target[i] for i in cur_component)
+            hamming_distance += sum((source_dict - target_dict).values())
+            processed |= cur_component
+
+        for i in range(len(source)):
+            if i not in processed and source[i] != target[i]:
+                hamming_distance += 1
+
+        return hamming_distance
