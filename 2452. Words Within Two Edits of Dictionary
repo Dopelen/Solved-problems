@@ -1,0 +1,21 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+I was actually thinking about some kind of clever optimal solution, but I tried to solve it head-on, and it worked.
+Just emulated the process.
+"""
+
+class Solution:
+    def twoEditWords(self, queries: List[str], dictionary: List[str]) -> List[str]:
+        answer = []
+        for w1 in queries:
+            for w2 in dictionary:
+                missmatch = 0
+                for symbol1, symbol2 in zip(w1, w2):
+                    missmatch += symbol1 != symbol2
+                    if missmatch == 3:
+                        break
+                if missmatch < 3:
+                    answer.append(w1)
+                    break
+        return answer
