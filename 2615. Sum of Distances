@@ -1,0 +1,23 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+This time it was really tough, and I had to resort to hints. 
+It wasn't at all obvious that I needed to use prefix sums, and I actually couldn't figure out this optimization myself, 
+let alone prove it would work, even though it's not that difficult to write.
+"""
+
+class Solution:
+    def distance(self, nums: list[int]) -> list[int]:
+        size = len(nums)
+        val_to_idx = defaultdict(list)
+        for i, v in enumerate(nums):
+            val_to_idx[v].append(i)
+        answer = [0] * size
+        for group in val_to_idx.values():
+            total = sum(group)
+            prefix_total = 0
+            size_group = len(group)
+            for i, idx in enumerate(group):
+                answer[idx] = total - prefix_total * 2 + idx * (2 * i - size_group)
+                prefix_total += idx
+        return answer
