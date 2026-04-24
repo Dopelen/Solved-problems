@@ -1,0 +1,21 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Yesterday's problem, although solved differently, somehow refocused my thinking, 
+so I solved this one in literally 5 minutes, plus another 10 to figure out how to write the boundaries correctly. 
+Initially, I was creating an array of prefixes, but then I realized I could get by with just one variable.
+Even though the problem isn't particularly difficult, I'm pleased with myself.
+"""
+
+class Solution:
+    def getSumAbsoluteDifferences(self, nums: List[int]) -> List[int]:
+        size = len(nums)
+        answer = [0] * size
+        prefix = 0
+        total_sum = sum(nums)
+        for idx, elem in enumerate(nums):
+            left_side = (nums[idx] * idx) - prefix
+            right_side = (total_sum - prefix) - (nums[idx] * (size - idx))
+            prefix += elem
+            answer[idx] = left_side + right_side
+        return answer
