@@ -1,0 +1,33 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+A simple traversal problem that I quickly solved (preventing return to the parent + locking the loop whenever a previously traversed cell is encountered)
+I asked AI to offer alternative solutions, and they wrote me 10 pages explaining why my code was incorrect and didn't work (spoiler: it was correct and it worked).
+"""
+
+class Solution:
+    def containsCycle(self, grid: List[List[str]]) -> bool:
+        rows, cols = len(grid), len(grid[0])
+        processed = set()
+        directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+
+        def traversal(letter, cur_y, cur_x, d):
+            nonlocal processed
+            if (cur_y, cur_x) in processed:
+                return True
+            for i, (dy, dx) in enumerate(directions):
+                if d is not None and i == (d + 2) % 4:
+                    continue
+                ny, nx = cur_y + dy, cur_x + dx
+                if 0 <= ny < rows and 0 <= nx < cols and grid[ny][nx] == letter:
+                    processed.add((cur_y, cur_x))
+                    if traversal(letter, ny, nx, i):
+                        return True
+            processed.add((cur_y, cur_x))
+
+        for r in range(rows):
+            for c in range(cols):
+                if (r, c) not in processed and traversal(grid[r][c], r, c, None):
+                    return True
+
+        return False
