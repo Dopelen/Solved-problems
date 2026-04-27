@@ -1,0 +1,44 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+An incredibly simple problem to understand, but incredibly difficult to write.
+It seems we need to perform a simple matrix traversal, but to do this, we need to know where we're coming from, where we're going, 
+and if there's also a 4 at the starting point, we need to traverse both directions to check the validity of each.
+I honestly couldn't handle it in an hour, so I'm honestly throwing out a version from the answers.
+"""
+
+# https://leetcode.com/problems/check-if-there-is-a-valid-path-in-a-grid/solutions/8100772/bfs-video-solution-available-by-vkram4-ty63/
+class Solution:
+    def hasValidPath(self, grid: List[List[int]]) -> bool:
+        rows, cols = len(grid), len(grid[0])
+
+        d = {
+            1: [(0,-1),(0,1)],
+            2: [(-1,0),(1,0)],
+            3: [(0,-1),(1,0)],
+            4: [(0,1),(1,0)],
+            5: [(0,-1),(-1,0)],
+            6: [(0,1),(-1,0)]
+        }
+
+        visited = [[False] * cols for _ in range(rows)]
+        q = deque([(0,0)])
+        visited[0][0] = True
+
+        while q:
+            y, x = q.popleft()
+
+            if y == rows - 1 and x == cols - 1:
+                return True
+
+            for dr, dc in d[grid[y][x]]:
+                nr, nc = y + dr, x + dc
+                if nr < 0 or nc < 0 or nr >= rows or nc >= cols or visited[nr][nc]:
+                    continue
+
+                for bdr, bdc in d[grid[nr][nc]]:
+                    if nr + bdr == y and nc + bdc == x:
+                        visited[nr][nc] = True
+                        q.append((nr, nc))
+        return False
+
