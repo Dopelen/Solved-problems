@@ -1,0 +1,48 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * d) complexity by time and O(n * d) by space.
+
+The problem is fairly straightforward. We traverse to the leaves, constructing a path, and then check for a palindrome. 
+Since we can use any permutations, we're only interested in ensuring that the frequencies of the numbers contain no more than one odd frequency, 
+so we can place it at the center of the palindrome.
+
+I used list instead of dictionaries to save memory, and decided to solve iteratively rather than recursively.
+"""
+
+class Solution:
+    def pseudoPalindromicPaths (self, root: Optional[TreeNode]) -> int:
+        paths = [[[0] * 9, root]]
+        answer = 0
+        
+        while paths:
+            values, cur_node = paths.pop()
+            values[cur_node.val - 1] += 1
+            if cur_node.left:
+                paths.append([values.copy(), cur_node.left])
+            if cur_node.right:
+                paths.append([values.copy(), cur_node.right])
+            if not cur_node.left and not cur_node.right:
+                answer += sum(fr % 2 for fr in values) <= 1
+
+        return answer
+
+
+# I found a trick online using a bit mask. 
+# This way we can reduce memory. 
+# We're only interested in odd/even values, so we can store a bit string and switch the bit mask whenever we encounter a new digit.
+class Solution:
+    def pseudoPalindromicPaths(self, root: Optional[TreeNode]) -> int:
+        stack = [(root, 0)]
+        ans = 0
+        while stack:
+            node, mask = stack.pop()
+            mask ^= (1 << node.val)
+            if not node.left and not node.right:
+                if mask & (mask - 1) == 0:
+                    ans += 1
+                continue
+            if node.left:
+                stack.append((node.left, mask))
+            if node.right:
+                stack.append((node.right, mask))
+        return ans
+
