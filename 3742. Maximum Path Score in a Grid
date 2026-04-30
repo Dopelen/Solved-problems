@@ -1,0 +1,54 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m * k) complexity by time and O(n * m * k) by space.
+
+A naive solution won't work due to the limitations. 
+We need to write dynamic programming. 
+The only problem is that we're not greedy enough, because sometimes we can afford more expensive steps, 
+which leads us to introducing an additional array inside the dp. 
+The problem itself isn't very difficult, but this last step wasn't entirely familiar to me, so I had to look at the hints.
+"""
+
+# DP solution
+class Solution:
+    def maxPathScore(self, grid, k):
+        rows, cols = len(grid), len(grid[0])
+        dp = [[[-math.inf] * (k + 1) for _ in range(cols)] for _ in range(rows)]
+        dp[0][0][0] = 0
+        for y in range(rows):
+            for x in range(cols):
+                for c in range(k + 1):
+                    if dp[y][x][c] == -math.inf:
+                        continue
+                    if y + 1 < rows:
+                        val = grid[y + 1][x]
+                        cost = 0 if val == 0 else 1
+                        if c + cost <= k:
+                            dp[y + 1][x][c + cost] = max(dp[y + 1][x][c + cost], dp[y][x][c] + val)
+                    if x + 1 < cols:
+                        val = grid[y][x + 1]
+                        cost = 0 if val == 0 else 1
+                        if c + cost <= k:
+                            dp[y][x + 1][c + cost] = max(dp[y][x + 1][c + cost], dp[y][x][c] + val)
+        answer = max(dp[rows - 1][cols - 1])
+        return -1 if answer < 0 else answer
+
+
+# TLE naive solution
+class Solution:
+    def maxPathScore(self, grid: List[List[int]], k: int) -> int:
+        rows, cols = len(grid), len(grid[0])
+        paths = [(0, 0, 0, 0)]
+        max_score = -1
+        while paths:
+            cur_y, cur_x, points, cost = paths.pop()
+            points += grid[cur_y][cur_x]
+            cost += 0 if grid[cur_y][cur_x] == 0 else 1
+            if cost > k:
+                continue
+            if cur_y == rows - 1 and cur_x == cols - 1:
+                max_score = max(max_score, points)
+            if cur_y + 1 < rows:
+                paths.append((cur_y + 1, cur_x, points, cost))
+            if cur_x + 1 < cols:
+                paths.append((cur_y, cur_x + 1, points, cost))
+        return max_score
