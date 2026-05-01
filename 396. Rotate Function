@@ -1,0 +1,25 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I really enjoyed the problem, but the negative numbers made it a bit more challenging. 
+I still managed to come up with an equation for it, which was very satisfying. 
+
+The key idea is that the total sum doesn't change, but the factors do. 
+We can think of the shift as (each element of our sum has lost one multiplication operation, which corresponds to the sum of the array if we consider all the operations
+, but the last element has shifted (the one that was first, with a factor of 0, has become last, with a factor of "array size")).
+
+Fun fact: most solutions are based on "with each step, each element gains 1 to its multiplier," but mine is the opposite: 
+"it loses 1 multiplier." 
+The solution is valid, just a rotation in the other direction. 
+It turns out I'm a divergent!
+"""
+
+class Solution:
+    def maxRotateFunction(self, nums: List[int]) -> int:
+        size = len(nums)
+        window_sum = sum(nums)
+        biggest_sum = prev_sum = sum(elem * idx for idx, elem in enumerate(nums))
+        for i in range(1, size):
+            prev_sum = prev_sum - window_sum + size * nums[i - 1]
+            biggest_sum = max(biggest_sum, prev_sum)
+        return biggest_sum
