@@ -1,0 +1,17 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A fairly simple problem, I solved it iteratively, 
+although in general we can calculate using combinatorics how many numbers we will have without certain digits 
+and with the presence of certain digits, which will give us the desired answer for the constant.
+"""
+
+# Naive solution
+class Solution:
+    def rotatedDigits(self, n: int) -> int:
+        good_nums = 0
+        mirror = {"0": "0", "1": "1", "8": "8", "2" : "5", "5": "2", "6": "9", "9": "6", "3": "X", "4": "X", "7": "X"}
+        for num in range(n + 1):
+            new_num = "".join(mirror[digit] for digit in str(num))
+            good_nums += (new_num != str(num) and "X" not in new_num)
+        return good_nums
