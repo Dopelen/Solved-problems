@@ -1,0 +1,20 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The problem can be solved beautifully using a stack. But it requires some thought.
+"""
+
+class Solution:
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
+        size = len(nums)
+        answer = [-1] * size
+        stack = []
+
+        for i in range(2 * size):
+            while stack and nums[stack[-1]] < nums[i % size]:
+                idx = stack.pop()
+                answer[idx] = nums[i % size]
+            if i < size:
+                stack.append(i)
+
+        return answer
