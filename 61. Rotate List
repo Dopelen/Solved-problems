@@ -1,0 +1,70 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Remembering how much I struggled with these lists before, I was delighted to discover today that, while reading the problem, I immediately understood how to solve it.
+Aside from some extremely unpleasant edge cases, the basic shift scenario is quite easy to write. You just remember the breakpoints.
+"""
+
+# initial solutioin
+class Solution:
+    def rotateRight(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        if not head:
+            return head
+
+        pointer = head
+        size = 0
+        
+        while head:
+            head = head.next
+            size += 1
+
+        k = k % size
+        if k == 0:
+            return pointer
+
+        tail = pointer
+
+        for _ in range(size - k - 1):
+            tail = tail.next
+
+        new_head = tail.next
+        tail.next = None
+
+        cur = new_head
+        while cur.next:
+            cur = cur.next
+
+        cur.next = pointer
+
+        return new_head
+
+
+# Ouroboros solution!
+
+class Solution:
+    def rotateRight(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        if not head or not head.next:
+            return head
+
+        size = 1
+        tail = head
+        while tail.next:
+            tail = tail.next
+            size += 1
+
+        k %= size
+        if k == 0:
+            return head
+
+        tail.next = head
+
+        steps = size - k
+        new_tail = head
+        for _ in range(steps - 1):
+            new_tail = new_tail.next
+
+        new_head = new_tail.next
+        new_tail.next = None
+
+        return new_head
