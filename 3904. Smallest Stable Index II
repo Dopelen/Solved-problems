@@ -1,0 +1,42 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I wrote a solution using three passes. We form a max prefix and min suffix, and then simply iterate from start to finish, looking for our first stable index.
+"""
+
+# After refactoring
+class Solution:
+    def firstStableIndex(self, nums: list[int], k: int) -> int:
+        size = len(nums)
+        suffix_min = [0] * size
+        suffix_min[-1] = nums[-1]
+        for i in range(size - 2, -1, -1):
+            suffix_min[i] = min(nums[i], suffix_min[i + 1])
+        prefix_max = -math.inf
+        for i, x in enumerate(nums):
+            prefix_max = max(prefix_max, x)
+            if prefix_max - suffix_min[i] <= k:
+                return i
+        return -1
+
+
+# Initial solution
+class Solution:
+    def firstStableIndex(self, nums: list[int], k: int) -> int:
+        size = len(nums)
+        max_for_idx = [0] * size
+        min_for_idx = [0] * size
+        max_for_idx[0] = nums[0]
+        min_for_idx[-1] = nums[-1]
+
+        for i in range(1, size):
+            max_for_idx[i] = max(max_for_idx[i - 1], nums[i])
+            min_for_idx[-i - 1] = min(min_for_idx[-i], nums[-i - 1])
+
+        for idx, (ma, mi) in enumerate(zip(max_for_idx, min_for_idx)):
+            instability_score = ma - mi
+            if instability_score <= k:
+                return idx
+
+        return -1
