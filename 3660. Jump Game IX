@@ -1,0 +1,24 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I couldn't figure it out for a while, but then it dawned on me that I could jump to the right at any time 
+to the smaller one in order to access all the larger ones to the left of the index I had jumped to.
+"""
+
+class Solution:
+    def maxValue(self, nums: List[int]) -> List[int]:
+        size = len(nums)
+        answer = [0] * size
+        prefix_max = [0] * size
+        prefix_max[0] = nums[0]
+        suffix_min = math.inf
+        for i in range(1, size):
+            prefix_max[i] = max(prefix_max[i - 1], nums[i])
+        for i in range(size - 1, -1, -1):
+            if prefix_max[i] > suffix_min:
+                answer[i] = answer[i + 1]
+            else:
+                answer[i] = prefix_max[i]
+            suffix_min = min(suffix_min, nums[i])
+        return answer
