@@ -1,0 +1,76 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+Like most matrix problems, they're not particularly difficult to understand, but they're quite tricky to write concisely and beautifully (often there's no way).
+You can factor out an additional function and reduce the memory footprint a bit, but overall, you'll end up with the same iterative solution, just a bit faster.
+The first solution is where I simply crawl the cursor over the matrix, and the second is where I iterate over the calculated boundary coordinates.
+"""
+
+# Initial Solution
+class Solution:
+    def rotateGrid(self, grid: List[List[int]], k: int) -> List[List[int]]:
+        rows, cols = len(grid), len(grid[0])
+        layers = min (rows//2, cols//2)
+        d = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+
+        def iterate_layer(start):
+            nonlocal k
+            cur_k = k
+            cur_y = cur_x = start
+            flatten_layer = [grid[cur_y][cur_x]]
+            y_border, x_border = rows - start, cols - start
+
+            for dy, dx in d:
+                ny, nx = cur_y + dy, cur_x + dx
+                while (start <= ny < y_border) and (start <= nx < x_border):
+                    flatten_layer.append(grid[ny][nx])
+                    cur_y, cur_x = ny, nx
+                    ny += dy
+                    nx += dx
+            flatten_layer.pop()
+            cur_k %= len(flatten_layer)
+            flatten_layer = flatten_layer[cur_k:] + flatten_layer[:cur_k]
+            grid[cur_y][cur_x] = flatten_layer[0]
+            flatten_idx = 1
+
+            for dy, dx in d:
+                ny, nx = cur_y + dy, cur_x + dx
+                while (start <= ny < y_border) and (start <= nx < x_border) and  flatten_idx < len(flatten_layer):
+                    grid[ny][nx] = flatten_layer[flatten_idx]
+                    cur_y, cur_x = ny, nx
+                    ny += dy
+                    nx += dx
+                    flatten_idx += 1
+
+        for i in range(layers):
+            iterate_layer(i)
+
+        return grid
+
+
+# After refactoring (clear one!)
+class Solution:
+    def rotateGrid(self, grid: List[List[int]], k: int) -> List[List[int]]:
+        rows, cols = len(grid), len(grid[0])
+        for layer in range(min(rows, cols) // 2):
+            coords = []
+            top = layer
+            bottom = rows - layer - 1
+            left = layer
+            right = cols - layer - 1
+            for c in range(left, right):
+                coords.append((top, c))
+            for r in range(top, bottom):
+                coords.append((r, right))
+            for c in range(right, left, -1):
+                coords.append((bottom, c))
+            for r in range(bottom, top, -1):
+                coords.append((r, left))
+            values = [grid[r][c] for r, c in coords]
+            shift = k % len(values)
+            values = values[shift:] + values[:shift]
+            for (r, c), val in zip(coords, values):
+                grid[r][c] = val
+
+        return grid
