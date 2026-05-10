@@ -1,0 +1,77 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+Finally, a dynamic programming problem I can solve.
+Initially, I created a naive O(n ** 2) algorithm, but it broke down on edge cases, 
+so I implemented a heap-based solution to reduce the number of passes. 
+Then I created a version with generators, which passed, but it was clearly overengineered, 
+and I realized my original solution was simply missing one check to reduce the number of checks... 
+I reverted it, and everything worked 10 times easier than everything I wrote after it.
+"""
+
+# Correct simple DP solution
+class Solution:
+    def maximumJumps(self, nums: List[int], target: int) -> int:
+        size = len(nums)
+        dp = [-1] * len(nums)
+        dp[0] = 0
+        for i in range(size):
+            if dp[i] == -1:
+                continue
+            for j in range(i + 1, size):
+                if (abs(nums[j] - nums[i]) <= target):
+                    dp[j] = max(dp[i] + 1, dp[j])
+        return dp[-1]
+
+
+# madskills with generators (I think its my first ever solution with generator!)
+class Solution:
+    def maximumJumps(self, nums: List[int], target: int) -> int:
+        size = len(nums)
+        dp = [-1] * size
+        dp[0] = 0
+
+        def process_idx(idx):
+            for j in range(idx + 1, size):
+                if abs(nums[j] - nums[idx]) <= target:
+                    if dp[idx] + 1 > dp[j]:
+                        dp[j] = dp[idx] + 1
+                        yield j
+
+        heap = []
+        start_gen = process_idx(0)
+        heappush(heap, (-dp[0], 0, start_gen))
+        while heap:
+            neg_steps, idx, gen = heappop(heap)
+            try:
+                nxt = next(gen)
+                heappush(heap, (neg_steps, idx, gen))
+                new_gen = process_idx(nxt)
+                heappush(heap, (-dp[nxt], nxt, new_gen))
+            except StopIteration:
+                pass
+        return dp[-1]
+
+
+# Naive TLE solution with heap
+class Solution:
+    def maximumJumps(self, nums: List[int], target: int) -> int:
+        size = len(nums)
+        dp = [-1] * len(nums)
+        dp[0] = 0
+        heap = [(0, 0)]
+        heapify(heap)
+
+        def process_idx(steps, idx):
+            for j in range(idx + 1, size):
+                if (-target <= nums[j] - nums[idx] <= target) and (dp[idx] + 1 > dp[j]):
+                    dp[j] = dp[idx] + 1
+                    heappush(heap, ((steps - 1), j))
+
+        while heap:
+            steps, index = heappop(heap)
+            if dp[index] >= -steps:
+                process_idx(steps, index)
+
+        return dp[-1]
