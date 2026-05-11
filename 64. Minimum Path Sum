@@ -1,0 +1,49 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(m) by space.
+
+Probably one of the simplest dynamic programming problems is the cheapest two-way traversal of a matrix.
+I first wrote it without any complications, as clearly as possible, and then began trying to make the check more concise.
+"""
+
+# With memory optimization
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        cols = len(grid[0])
+        dp = [math.inf] * (cols + 1)
+        dp[1] = 0
+        for row in grid:
+            for c in range(1, cols + 1):
+                dp[c] = min(dp[c], dp[c - 1]) + row[c - 1]
+        return dp[-1]
+
+
+# After refactoring(add border)
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        dp = [[math.inf] * (cols + 1) for _ in range(rows + 1)]
+        dp[0][1] = 0
+        for r in range(1, rows + 1):
+            for c in range(1, cols + 1):
+                dp[r][c] = min(dp[r - 1][c], dp[r][c - 1]) + grid[r - 1][c - 1]
+        return dp[rows][cols]
+
+
+# Initial solution
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        dp = [[math.inf] * cols for _ in range(rows)]
+        dp[0][0] = grid[0][0]
+        for r in range(rows):
+            for c in range(cols):
+                if r == 0 and c == 0:
+                    continue
+                elif r == 0:
+                    dp[r][c] = dp[r][c - 1] + grid[r][c]
+                elif c == 0:
+                    dp[r][c] = dp[r - 1][c] + grid[r][c]
+                else:
+                    dp[r][c] = min(dp[r][c - 1], dp[r - 1][c]) + grid[r][c]
+        return dp[-1][-1]
