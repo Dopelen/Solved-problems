@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+The task is stated as difficult, but it can be solved with a greedy algorithm; you just need to select a sorting basis. 
+For us, this is the "excess" energy left over after the task. 
+The sooner we process such tasks, the more excess energy we'll have left over, which we can reuse.
+"""
+
+class Solution:
+    def minimumEffort(self, tasks: List[List[int]]) -> int:
+        current_energy = answer = 0
+        tasks.sort(key=lambda x: x[1] - x[0], reverse=True)
+
+        for actual, minimum in tasks:
+            if current_energy < minimum:
+                answer += minimum - current_energy
+                current_energy = minimum
+            current_energy -= actual
+        
+        return answer
