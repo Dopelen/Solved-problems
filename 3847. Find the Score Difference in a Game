@@ -1,0 +1,41 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+Not a difficult task, solved by simple emulation.
+"""
+
+# After refactoring
+class Solution:
+    def scoreDifference(self, nums: List[int]) -> int:
+        active = counter = 0
+        score_board = [0, 0]
+        for score in nums:
+            active += score % 2
+            if counter == 5:
+                active += 1
+                counter = -1
+            active %= 2
+            score_board[active] += score
+            counter += 1
+        return score_board[0] - score_board[1]
+
+
+# Initial Solution
+class Solution:
+    def scoreDifference(self, nums: List[int]) -> int:
+        even = True
+        score_1 = score_2 = counter = 0
+
+        for i, e in enumerate(nums):
+            if e % 2:
+                even = not even
+            if counter == 5:
+                even = not even
+                counter = -1
+            if even:
+                score_1 += e
+            else:
+                score_2 += e
+            counter += 1
+
+        return score_1 - score_2
