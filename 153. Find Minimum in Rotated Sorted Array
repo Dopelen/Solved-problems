@@ -1,0 +1,21 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(1) by space.
+
+I really enjoyed thinking about this problem; the problem is simple, and you immediately realize the answer is hidden right there.
+Essentially, I just needed to adapt binary search so that if, when checking an element, we see that the current element is greater than the element to the right, 
+then the gap (and therefore the smallest element) lies to the right!
+Then, it's just a matter of fiddling with the search intervals for about 20 minutes, and the problem is solved!
+"""
+
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        size = len(nums)
+        left = 0
+        right = size - 1
+        while left < right:
+            m = (left + right) // 2
+            if nums[m] > nums[right]:
+                left = m + 1
+            else:
+                right = m
+        return nums[left]
