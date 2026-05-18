@@ -1,0 +1,54 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I wrote a "naive" solution and it works in O(n ** 2), but we have stricter restrictions.
+The correct solution is a bit more complicated and involves going through layers by BFS, so that we know for sure that we have arrived at the current point AS EARLY AS WE COULD
+"""
+
+# Correct Solution
+class Solution:
+    def minJumps(self, arr: List[int]) -> int:
+        queue = deque([(0, 0)])
+        visited = {0}
+        adj_list = defaultdict(list)
+        for idx, elem in enumerate(arr):
+            adj_list[elem].append(idx)
+
+        while queue:
+            cur_idx, cur_score = queue.popleft()
+            if cur_idx == len(arr) - 1:
+                return cur_score
+            neighbors = adj_list[arr[cur_idx]]
+            if cur_idx > 0:
+                neighbors.append(cur_idx - 1)
+            if cur_idx < len(arr) - 1:
+                neighbors.append(cur_idx + 1)
+            for jump in neighbors:
+                if jump not in visited:
+                    visited.add(jump)
+                    queue.append((jump, cur_score + 1))
+            adj_list[arr[cur_idx]].clear()
+
+
+# TLE O(n ** 2)
+class Solution:
+    def minJumps(self, arr: List[int]) -> int:
+        dp = [math.inf for _ in range(len(arr))]
+        bfs = deque([(0, 0)])
+        adj_list = defaultdict(list)
+        for idx, elem in enumerate(arr):
+            adj_list[elem].append(idx)
+
+        while bfs:
+            cur_idx, cur_score = bfs.popleft()
+            if cur_score > dp[cur_idx]:
+                continue
+            for jump in adj_list[arr[cur_idx]]:
+                bfs.append((jump, cur_score + 1))
+            if cur_idx > 0:
+                bfs.append((cur_idx - 1, cur_score + 1))
+            if cur_idx < len(arr) - 1:
+                bfs.append((cur_idx + 1, cur_score + 1))
+
+        return dp[-1]
