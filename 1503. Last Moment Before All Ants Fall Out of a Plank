@@ -1,0 +1,16 @@
+#!/usr/bin/python
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+A cool Dunker-type problem, but not really about programming. For some reason, I decided the ants were sorted.
+Since a collision rotates the ants, their movement essentially doesn't change. Once you understand this, you have your answer.
+"""
+
+class Solution:
+    def getLastMoment(self, n: int, left: List[int], right: List[int]) -> int:
+        answer = 0
+        if left:
+            answer = max(answer, max(left))
+        if right:
+            answer = max(answer, n - min(right))
+        return answer
