@@ -1,0 +1,42 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Essentially, it's just an preorder traversal with a recording of the walkthrough by levels.
+"""
+
+
+# Recursive
+class Solution:
+    def levelOrderBottom(self, root: Optional[TreeNode]) -> List[List[int]]:
+        levels = defaultdict(list)
+        
+        def preorder(r, lvl):
+            if not r:
+                return
+            levels[lvl].append(r.val)
+            preorder(r.left, lvl + 1)
+            preorder(r.right, lvl + 1)
+
+        preorder(root, 0)
+        depth = len(levels)
+        return [levels[l] for l in range(depth - 1, -1, -1)]
+
+
+# Iterative version
+class Solution:
+    def levelOrderBottom(self, root: Optional[TreeNode]) -> List[List[int]]:
+        if not root:
+            return []
+        q = deque([root])
+        res = []
+        while q:
+            level = []
+            for _ in range(len(q)):
+                node = q.popleft()
+                level.append(node.val)
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+            res.append(level)
+        return res[::-1]
