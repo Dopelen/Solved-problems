@@ -1,0 +1,24 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n) + n * log(m)) complexity by time and O(n * log(n) + n * log(m)) by space.
+
+Same as 1552. Magnetic Force Between Two Balls/
+We simply use binary search to greedily search for the most profitable set.
+"""
+
+class Solution:
+    def maximumTastiness(self, price: List[int], k: int) -> int:
+        price.sort()
+        left, right = 0, price[-1] - price[0]
+        while left < right:
+            pairs = 1
+            prev = price[0]
+            mid = (left + right + 1) // 2
+            for elem in price[1:]:
+                if elem - prev >= mid:
+                    pairs += 1
+                    prev = elem
+            if pairs >= k:
+                left = mid
+            else:
+                right = mid - 1
+        return left
