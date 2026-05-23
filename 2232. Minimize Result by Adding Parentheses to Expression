@@ -1,0 +1,43 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+I had a choice between writing my own counting functions from string or using Python's Eval for the second time in my life.
+"""
+
+# Non eval version
+class Solution:
+    def minimizeResult(self, expression: str) -> str:
+        left, right = expression.split("+")
+        best = math.inf
+        ans = ""
+        for i in range(len(left)):
+            for j in range(1, len(right) + 1):
+                a = int(left[:i]) if i > 0 else 1
+                b = int(left[i:])
+                c = int(right[:j])
+                d = int(right[j:]) if j < len(right) else 1
+                val = a * (b + c) * d
+                if val < best:
+                    best = val
+                    ans = (left[:i] + "(" + left[i:] + "+" + right[:j] + ")" + right[j:])
+        return ans
+
+# Initial Solution
+class Solution:
+    def minimizeResult(self, expression: str) -> str:
+        min_val = math.inf
+        min_expression = ""
+        left, right = expression.split("+")
+        for i in range(len(left)):
+            invariant_left = left[0:i] + ("*" if (0 < i < len(left)) else "") + "(" + left[i:]
+            for j in range(len(right) + 1):
+                invariant_right = right[0:j] + ")" + ("*" if (0 < j < len(right)) else "") + right[j:]
+                new_expression = invariant_left + "+" + invariant_right
+                try:
+                    result = eval(new_expression)
+                    if min_val > result:
+                        min_val = result
+                        min_expression = new_expression.replace("*", "")
+                except SyntaxError:
+                    continue
+        return min_expression
