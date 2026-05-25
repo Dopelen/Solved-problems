@@ -1,0 +1,63 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+What a challenging task! I thought about it for a few days, and by evening it had come together in my head (I struggled with the bounds, but I wrote it up pretty quickly).
+I store the indices in a heap so 
+I can process them left to right, and when processing, 
+I start from the right bound and work my way to the left! 
+This way, I don't double-check previously covered ranges, significantly speeding things up!
+"""
+
+# Faster version
+class Solution:
+    def canReach(self, s: str, minJump: int, maxJump: int) -> bool:
+        size = len(s)
+        queue = deque([0])
+        visited = [False] * size
+        visited[0] = True
+        farthest = 0
+        while queue:
+            i = queue.popleft()
+            start = max(i + minJump, farthest + 1)
+            end = min(i + maxJump, size - 1)
+            for j in range(start, end + 1):
+                if s[j] == "0" and not visited[j]:
+                    if j == size - 1:
+                        return True
+                    visited[j] = True
+                    queue.append(j)
+            farthest = end
+        return size == 1
+
+
+# Initial solution
+class Solution:
+    def canReach(self, s: str, minJump: int, maxJump: int) -> bool:
+        if s[-1] == "1":
+            return False
+        size = len(s)
+        zero_idx = [i for i in range(size) if s[i] == "0"]
+        visited = [0 for _ in range(size)]
+        visited[0] = 1
+        heap = [0]
+        heapify(heap)
+        while heap:
+            cur_idx = heappop(heap)
+            right_border = min(size - 1, cur_idx + maxJump)
+            right_pointer = bisect_right(zero_idx, right_border) - 1
+            left_border = cur_idx + minJump
+            left_pointer = bisect_left(zero_idx, left_border)
+            if left_border >= size:
+                continue
+            
+            while right_pointer >= left_pointer and left_border <= zero_idx[right_pointer] <= right_border:
+                dest_idx = zero_idx[right_pointer]
+                if visited[dest_idx]:
+                    break
+                visited[dest_idx] = 1
+                if dest_idx == size - 1:
+                    return True
+                heappush(heap, dest_idx)
+                right_pointer -= 1
+
+        return False
