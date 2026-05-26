@@ -1,0 +1,37 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 3) complexity by time and O(n ** 3) by space.
+
+A relatively simple problem with a very tricky condition and a slight optimization requirement. Solvable, not completely crazy, but unpleasant.
+I tried the stack solution, it came out to 50 ** 50 so I had to optimize it through DP.
+"""
+
+# DP solution
+class Solution:
+    def minPathCost(self, grid: List[List[int]], moveCost: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        dp = [[math.inf] * cols for _ in range(rows)]
+        for x in range(cols):
+            dp[0][x] = grid[0][x]
+        for y in range(rows - 1):
+            for x in range(cols):
+                cur = grid[y][x]
+                for nx in range(cols):
+                    dp[y + 1][nx] = min(dp[y + 1][nx], dp[y][x] + moveCost[cur][nx] + grid[y + 1][nx])
+        return min(dp[-1])
+
+
+# TLE Solution
+class Solution:
+    def minPathCost(self, grid: List[List[int]], moveCost: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        total_min = math.inf
+        stack = [(0, i, grid[0][i]) for i in range(cols)]
+        while stack:
+            cur_y, cur_x, score = stack.pop()
+            if cur_y != rows - 1:
+                for dx in range(cols):
+                    cost = moveCost[grid[cur_y][cur_x]][dx]
+                    stack.append((cur_y + 1, dx, score + cost + grid[cur_y + 1][dx]))
+            else:
+                total_min = min(total_min, score)
+        return total_min
