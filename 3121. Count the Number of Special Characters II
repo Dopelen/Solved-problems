@@ -1,0 +1,21 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+A pleasant and not very difficult task.
+If you read the condition carefully, all we need to do is check that the last lowercase character index comes before the first uppercase character index.
+"""
+
+class Solution:
+    def numberOfSpecialChars(self, word: str) -> int:
+        special = 0
+        symbol_to_idx = {}
+        for index, symbol in enumerate(word):
+            if symbol.isupper():
+                if symbol_to_idx.get(symbol) is None:
+                    symbol_to_idx[symbol] = index
+            else:
+                symbol_to_idx[symbol] = index
+        for s_low in string.ascii_lowercase:
+            upper = s_low.upper()
+            special += int(s_low in symbol_to_idx and upper in symbol_to_idx and symbol_to_idx[s_low] < symbol_to_idx[upper])
+        return special
