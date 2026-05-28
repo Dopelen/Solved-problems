@@ -1,0 +1,45 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I'm proud of myself for understanding the idea correctly and writing the solution concept, but I couldn't write fully working code myself in an hour.
+The idea is to build a prefix tree for reversed words, storing the early index, and then traverse our tree to find the longest trajectory.
+"""
+
+
+# https://leetcode.com/problems/longest-common-suffix-queries/editorial/?envType=daily-question&envId=2026-05-28
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.best_idx = -1
+
+
+class Solution:
+    def stringIndices(self, wordsContainer: List[str], wordsQuery: List[str]) -> List[int]:
+        root = TrieNode()
+
+        def better(i, j):
+            if j == -1:
+                return True
+            if len(wordsContainer[i]) != len(wordsContainer[j]):
+                return len(wordsContainer[i]) < len(wordsContainer[j])
+            return i < j
+
+        for i, word in enumerate(wordsContainer):
+            node = root
+            if better(i, node.best_idx):
+                node.best_idx = i
+            for ch in reversed(word):
+                if ch not in node.children:
+                    node.children[ch] = TrieNode()
+                node = node.children[ch]
+                if better(i, node.best_idx):
+                    node.best_idx = i
+        ans = []
+        for word in wordsQuery:
+            node = root
+            for ch in reversed(word):
+                if ch not in node.children:
+                    break
+                node = node.children[ch]
+            ans.append(node.best_idx)
+        return ans
