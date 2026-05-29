@@ -1,0 +1,18 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(D)) complexity by time and O(1) by space.
+
+Fasting day!
+Easy task!
+For once I decided not to bother with strings, but to break numbers down into digits in a human way
+"""
+
+class Solution:
+    def minElement(self, nums: List[int]) -> int:
+        min_elem = math.inf
+        for num in nums:
+            cur_sum = 0
+            while num:
+                cur_sum += num % 10
+                num //= 10
+            min_elem = min(min_elem, cur_sum)
+        return min_elem
