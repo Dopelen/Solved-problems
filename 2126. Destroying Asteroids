@@ -1,0 +1,16 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(1) by space.
+
+It's fairly easy to guess that a greedy algorithm would be appropriate here, with the optimal step being to take the smallest asteroid. 
+Typically, problems solved greedily aren't labeled as medium.
+"""
+
+class Solution:
+    def asteroidsDestroyed(self, mass: int, asteroids: List[int]) -> bool:
+        asteroids.sort()
+        for elem in asteroids:
+            if mass >= elem:
+                mass += elem
+            else:
+                return False
+        return True
