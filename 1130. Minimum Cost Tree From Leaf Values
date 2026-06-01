@@ -1,0 +1,21 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I don't know what kind of day it is, or what the problem is, but I couldn't quite wrap my head around it.
+It has perfectly clear solutions using dynamic programming, greedy variations, and monotonic stacking, but for some reason I couldn't come up with any of them.
+"""
+
+# https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/solutions/478708/rz-summary-of-all-the-solutions-i-have-l-q8xk/
+class Solution:
+    def mctFromLeafValues(self, arr: List[int]) -> int:
+        stack = [float('inf')]
+        res = 0
+        for num in arr:
+            while stack and stack[-1] <= num:
+                cur = stack.pop()
+                if stack:
+                    res += cur * min(stack[-1], num)
+            stack.append(num)
+        while len(stack) > 2:
+            res += stack.pop() * stack[-1]
+        return res
