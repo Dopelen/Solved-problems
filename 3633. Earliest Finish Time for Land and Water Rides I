@@ -1,0 +1,89 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+It was a fun task that I really wanted to optimize, but unfortunately, I still ended up solving it by brute force.
+"""
+
+# brute force solution
+class Solution:
+    def earliestFinishTime(self, landStartTime, landDuration, waterStartTime, waterDuration):
+        ans = math.inf
+        for ls, ld in zip(landStartTime, landDuration):
+            finish_land = ls + ld
+            for ws, wd in zip(waterStartTime, waterDuration):
+                ans = min(ans, max(finish_land, ws) + wd)
+        for ws, wd in zip(waterStartTime, waterDuration):
+            finish_water = ws + wd
+            for ls, ld in zip(landStartTime, landDuration):
+                ans = min(ans, max(finish_water, ls) + ld)
+        return ans
+
+
+
+# optimized one (log(n))
+class RideHelper:
+    def __init__(self, starts, durations):
+        rides = sorted(zip(starts, durations))
+        
+        self.starts = [s for s, _ in rides]
+        n = len(rides)
+
+        self.pref_min_duration = [0] * n
+        self.suff_min_finish = [0] * n
+
+        self.pref_min_duration[0] = rides[0][1]
+
+        for i in range(1, n):
+            self.pref_min_duration[i] = min(
+                self.pref_min_duration[i - 1],
+                rides[i][1]
+            )
+
+        self.suff_min_finish[-1] = rides[-1][0] + rides[-1][1]
+
+        for i in range(n - 2, -1, -1):
+            self.suff_min_finish[i] = min(
+                self.suff_min_finish[i + 1],
+                rides[i][0] + rides[i][1]
+            )
+
+    def best_finish(self, t):
+        idx = bisect_right(self.starts, t) - 1
+
+        ans = inf
+
+        if idx >= 0:
+            ans = min(
+                ans,
+                t + self.pref_min_duration[idx]
+            )
+
+        if idx + 1 < len(self.starts):
+            ans = min(
+                ans,
+                self.suff_min_finish[idx + 1]
+            )
+
+        return ans
+
+
+class Solution:
+    def earliestFinishTime(
+        self,
+        landStartTime,
+        landDuration,
+        waterStartTime,
+        waterDuration
+    ):
+        land = RideHelper(landStartTime, landDuration)
+        water = RideHelper(waterStartTime, waterDuration)
+
+        ans = inf
+
+        for s, d in zip(landStartTime, landDuration):
+            ans = min(ans, water.best_finish(s + d))
+
+        for s, d in zip(waterStartTime, waterDuration):
+            ans = min(ans, land.best_finish(s + d))
+
+        return ans
