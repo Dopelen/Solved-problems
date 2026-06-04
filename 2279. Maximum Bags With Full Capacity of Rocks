@@ -1,0 +1,20 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+The problem is quite simple and can be solved using a greedy algorithm.
+We have a limited number of stones, and the optimal step is to take the most full bag and fill it.
+All that remains is to calculate how full the bags are and sort them.
+"""
+
+class Solution:
+    def maximumBags(self, capacity: List[int], rocks: List[int], additionalRocks: int) -> int:
+        empty_space = [c - r for c,r in zip(capacity, rocks)]
+        empty_space.sort()
+        new_full = 0
+        for space in empty_space:
+            if additionalRocks >= space:
+                additionalRocks -= space
+                new_full += 1
+            else:
+                break
+        return new_full
