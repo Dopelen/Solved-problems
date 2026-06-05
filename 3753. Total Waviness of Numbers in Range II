@@ -1,0 +1,44 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(d * 10 ** 2) complexity by time and O(d * 10 ** 2) by space.
+
+A clear problem with a very unclear solution. 
+Simply use two three-dimensional arrays for memoization storage...
+Even with the explanation, I could barely understand what was going on here, the level of complexity was beyond my current capabilities.
+"""
+
+# https://leetcode.com/problems/total-waviness-of-numbers-in-range-ii/solutions/8312082/total-waviness-of-numbers-in-range-ii-by-y2j6/?envType=daily-question&envId=2026-06-05
+class Solution:
+    def totalWaviness(self, num1: int, num2: int) -> int:
+
+        def solve(num: int) -> int:
+            if num < 100:
+                return 0
+            s = str(num)
+            n = len(s)
+            memo_cnt = [[[-1] * 10 for _ in range(10)] for _ in range(16)]
+            memo_sum = [[[-1] * 10 for _ in range(10)] for _ in range(16)]
+
+            from functools import lru_cache
+
+            @lru_cache(None)
+            def dfs(pos: int, prev: int, curr: int, isLimit: bool, isLeading: bool):
+                if pos == n:
+                    return 1, 0
+                cnt = 0
+                waviness = 0
+                up = int(s[pos]) if isLimit else 9
+                for digit in range(up + 1):
+                    newLeading = isLeading and (digit == 0)
+                    newPrev = curr
+                    newCurr = -1 if newLeading else digit
+                    subCnt, subSum = dfs(pos + 1, newPrev, newCurr, isLimit and (digit == up), newLeading)
+                    if not newLeading and prev >= 0 and curr >= 0:
+                        if (prev < curr and curr > digit) or (prev > curr and curr < digit):
+                            waviness += subCnt
+                    cnt += subCnt
+                    waviness += subSum
+                return cnt, waviness
+            _, totalSum = dfs(0, -1, -1, True, True)
+            return totalSum
+
+        return solve(num2) - solve(num1 - 1)
