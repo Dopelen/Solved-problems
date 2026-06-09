@@ -1,0 +1,11 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I almost started messing around with piles and pointers, but then it dawned on me...
+
+P.S: Looks like some five-dimensional dynamic programming is coming my way soon.
+"""
+
+class Solution:
+    def maxTotalValue(self, nums: List[int], k: int) -> int:
+        return (max(nums) - min(nums)) * k
