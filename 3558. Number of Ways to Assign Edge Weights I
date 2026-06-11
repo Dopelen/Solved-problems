@@ -1,0 +1,51 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+I liked the problem; 
+it doesn't have complex structures, but it has clear transitions between the steps of solving. 
+First, we search for any path to the maximum depth, and then we simply need to 
+find all combinations of the digits 1 and 2 
+along the path from the root to the leaf that would give us an odd sum (which is simply 2 to the power of that length).
+
+That is, traversing the tree here is essentially searching for the length with which we will solve the combinatorial problem
+"""
+
+
+# After refactoring
+class Solution:
+    def assignEdgeWeights(self, edges: List[List[int]]) -> int:
+        MOD = 10 ** 9 + 7
+        adj = defaultdict(list)
+        for u, v in edges:
+            adj[u].append(v)
+            adj[v].append(u)
+        depth = 0
+        queue = deque([(1, 0, -1)])
+        while queue:
+            node, depth, parent = queue.popleft()
+            for nxt in adj[node]:
+                if nxt != parent:
+                    queue.append((nxt, depth + 1, node))
+        return pow(2, depth - 1, MOD)
+
+
+# Initial Solution
+class Solution:
+    def assignEdgeWeights(self, edges: List[List[int]]) -> int:
+        adj_list = defaultdict(list)
+        max_depth = 0
+        MOD = 10 ** 9 + 7
+        processed = set()
+        for u, v in edges:
+            adj_list[u].append(v)
+            adj_list[v].append(u)
+        queue = deque([(0, 1)])
+        while queue:
+            depth, node_value = queue.popleft()
+            processed.add(node_value)
+            for node in adj_list[node_value]:
+                if node not in processed:
+                    queue.append((depth + 1, node))
+            max_depth = max(max_depth, depth)
+
+        return 2 ** (max_depth - 1) % MOD
