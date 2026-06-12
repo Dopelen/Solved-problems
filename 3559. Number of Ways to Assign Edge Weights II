@@ -1,0 +1,108 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O((n + q) * log(n)) complexity by time and O((n + q) * log(n)) by space.
+
+A more complex version of yesterday's problem, also quite clear, but more challenging.
+I wrote the solution assuming the values ​​are on the same branch, but that's obviously not enough.
+We can calculate the answer combinatorially, as in the first problem, if we know the distance between the nodes, and the main problem here is finding that distance.
+What comes to mind is finding the distance to the common ancestor of these two nodes and adding them together.
+
+I wrote an algorithm for finding a common ancestor, but I didn't optimize it, so I crashed with TLE on the last cases.
+
+And I found an optimization technique! 
+Binary lifting! 
+Same common ancestor, but storing all parents at power-of-two distances from the current node!
+This speeds up the common ancestor lift from O(n) to O(log(n))!
+"""
+
+# After optimization
+class Solution:
+    def assignEdgeWeights(self, edges, queries):
+        MOD = 10 ** 9 + 7
+        n = len(edges) + 1
+        LOG = n.bit_length()
+        adj_list = defaultdict(list)
+        for u, v in edges:
+            adj_list[u].append(v)
+            adj_list[v].append(u)
+        depth = [0] * (n + 1)
+        up = [[0] * LOG for _ in range(n + 1)]
+        queue = deque([(1, 0)])
+        while queue:
+            node, parent = queue.popleft()
+            up[node][0] = parent
+            for j in range(1, LOG):
+                up[node][j] = up[up[node][j - 1]][j - 1]
+            for nxt in adj_list[node]:
+                if nxt != parent:
+                    depth[nxt] = depth[node] + 1
+                    queue.append((nxt, node))
+
+        def lca(u, v):
+            if depth[u] < depth[v]:
+                u, v = v, u
+            diff = depth[u] - depth[v]
+            for j in range(LOG):
+                if diff & (1 << j):
+                    u = up[u][j]
+            if u == v:
+                return u
+            for j in range(LOG - 1, -1, -1):
+                if up[u][j] != up[v][j]:
+                    u = up[u][j]
+                    v = up[v][j]
+            return up[u][0]
+
+        pow2 = [1] * n
+        for i in range(1, n):
+            pow2[i] = (pow2[i - 1] * 2) % MOD
+        answer = []
+
+        for u, v in queries:
+            ancestor = lca(u, v)
+            distance = (depth[u] + depth[v] - 2 * depth[ancestor])
+            answer.append(pow2[distance - 1] if distance != 0 else 0)
+
+        return answer
+
+
+# Initial TLE solution
+class Solution:
+    def assignEdgeWeights(self, edges: List[List[int]], queries: List[List[int]]) -> List[int]:
+        MOD = 10 ** 9 + 7
+        adj_list = defaultdict(list)
+
+        for u, v in edges:
+            adj_list[u].append(v)
+            adj_list[v].append(u)
+
+        queue = deque([(0, 1, None)])
+        value_to_depth = {}
+        child_to_parent = {}
+
+        while queue:
+            depth, cur_node, parent = queue.popleft()
+            value_to_depth[cur_node] = depth
+            child_to_parent[cur_node] = parent
+            for adjacent_node in adj_list[cur_node]:
+                if adjacent_node not in value_to_depth:
+                    queue.append((depth + 1, adjacent_node, cur_node))
+
+        def find_path(n_1, n_2):
+            initial_n_1_depth = cur_n_1_depth = value_to_depth[n_1]
+            initial_n_2_depth = cur_n_2_depth = value_to_depth[n_2]
+            min_depth = min(initial_n_1_depth, initial_n_2_depth)
+
+            for i in range(cur_n_1_depth - min_depth):
+                n_1 = child_to_parent[n_1]
+
+            for j in range(cur_n_2_depth - min_depth):
+                n_2 = child_to_parent[n_2]
+
+            while n_1 != n_2:
+                n_1 = child_to_parent[n_1]
+                n_2 = child_to_parent[n_2]
+
+            distance = (initial_n_1_depth - value_to_depth[n_1]) + (initial_n_2_depth - value_to_depth[n_1])
+            return (2 ** (distance - 1) % MOD) if (distance != 0) else 0
+
+        return [find_path(node_1, node_2) for node_1, node_2 in queries]
