@@ -1,0 +1,40 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I couldn't figure out how to approach this problem, and I'm not sure I did it right, but I'm very pleased that I came up with this transformation. 
+I simply represented the tree as an undirected graph and walked through it layer by layer from target.
+I found this to be the most understandable idea without changing the tree's structure.
+
+It also turned out to be an unconventional solution, so I'm doubly pleased.
+"""
+
+class Solution:
+    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
+        
+        graph = defaultdict(list)
+
+        def construct_graph(r):
+            if r.left:
+                graph[r.val].append(r.left.val)
+                graph[r.left.val].append(r.val)
+                construct_graph(r.left)
+            if r.right:
+                graph[r.val].append(r.right.val)
+                graph[r.right.val].append(r.val)
+                construct_graph(r.right)
+
+        construct_graph(root)
+        level = [target.val]
+        visited = {target.val}
+        for _ in range(k):
+            new_level = []
+            while level:
+                node = level.pop()
+                for neighbor in graph[node]:
+                    if neighbor in visited:
+                        continue
+                    else:
+                        new_level.append(neighbor)
+                visited.add(node)
+            level = new_level
+        return level
