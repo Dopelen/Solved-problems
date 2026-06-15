@@ -1,0 +1,21 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+It feels like half the problems involving linked lists are problems involving fast and slow pointers.
+I remember how initially unintuitive it was, but now they're solvable. The only problem is the edge cases.
+"""
+
+class Solution:
+    def deleteMiddle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head.next:
+            return
+        
+        slow = head
+        fast = head.next
+
+        while fast.next and fast.next.next:
+            fast = fast.next.next
+            slow = slow.next
+        slow.next = slow.next.next
+        
+        return head
