@@ -1,0 +1,22 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2 ** n) complexity by time and O(2 ** n) by space.
+
+Just simulate the process. 
+It looks more like a easy task than an medium one.
+Apparently tomorrow will be the same, but with stricter restrictions.
+"""
+
+class Solution:
+    def processStr(self, s: str) -> str:
+        cur_str = []
+        for symbol in s:
+            if symbol == "#":
+                cur_str += cur_str
+            elif symbol == "*":
+                if len(cur_str):
+                    cur_str.pop()
+            elif symbol == "%":
+                cur_str = cur_str[::-1]
+            else:
+                cur_str.append(symbol)
+        return "".join(cur_str)
