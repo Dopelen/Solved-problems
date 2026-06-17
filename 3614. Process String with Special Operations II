@@ -1,0 +1,67 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+I thought the main issue would be access and operation speed, so I optimized this aspect using a bidirectional queue. 
+But at that point, test cases started experiencing memory issues, and I needed to optimize the memory somehow.
+
+The correct solution is to process the length without actually constructing the string, because a string can easily reach a length of 2 ** 100000.
+We go from end to beginning, constantly recalculating which index in the previous state of the string corresponds to index k in the current state.
+"""
+
+# Unfortunately, I couldn't figure it out myself.
+# Correct Solution (https://leetcode.com/problems/process-string-with-special-operations-ii/solutions/8314393/process-string-with-special-operations-i-8fzn/?envType=daily-question&envId=2026-06-17)
+class Solution:
+    def processStr(self, s: str, k: int) -> str:
+        length = 0
+
+        for c in s:
+            if c == "*":
+                length = max(0, length - 1)
+            elif c == "#":
+                length *= 2
+            elif c != "%":
+                length += 1
+
+        if k >= length:
+            return "."
+
+        for c in reversed(s):
+            if c == "*":
+                length += 1
+
+            elif c == "#":
+                length //= 2
+                if k >= length:
+                    k -= length
+
+            elif c == "%":
+                k = length - 1 - k
+
+            else:
+                length -= 1
+                if k == length:
+                    return c
+
+# MLE Solution
+class Solution:
+    def processStr(self, s: str, k: int) -> str:
+        cur_str = deque([])
+        reverse = False
+        for symbol in s:
+            if symbol == "#":
+                cur_str += cur_str
+            elif symbol == "*":
+                if len(cur_str):
+                    if reverse:
+                        cur_str.popleft()
+                    else:
+                        cur_str.pop()
+            elif symbol == "%":
+                reverse = not reverse
+            else:
+                if reverse:
+                    cur_str.appendleft(symbol)
+                else:
+                    cur_str.append(symbol)
+
+        return "." if len(cur_str) <= k else "".join(cur_str)[-k - 1] if reverse else "".join(cur_str)[k]
