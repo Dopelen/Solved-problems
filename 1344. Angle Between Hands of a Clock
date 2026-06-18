@@ -1,0 +1,14 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+Overall, it's a clear task. 
+I found the movement in degrees per minute for each of the clock hands and calculated it to get an acute angle between them.
+"""
+
+class Solution:
+    def angleClock(self, hour: int, minutes: int) -> float:
+        min_to_degree = 360 / 60
+        hours_to_degree = 360 / (60 * 12)
+        min_pos = min_to_degree * minutes
+        hours_pos = hours_to_degree * (hour * 60 + minutes)
+        return min(abs(hours_pos - min_pos), 360 - max(min_pos, hours_pos) + min(min_pos, hours_pos))
