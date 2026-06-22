@@ -1,0 +1,41 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+One of the first problems that made me think about it when I was taking Yandex courses. Now it's quickly solved by remembering!
+"""
+
+# O(n) Solution with diff arr
+class Solution:
+    def corpFlightBookings(self, bookings: List[List[int]], n: int) -> List[int]:
+        answer = [0] * n
+        diff = [0] * (n + 1)
+        for start, end, val in bookings:
+            diff[start - 1] += val
+            diff[end] -= val
+        reserve = 0
+        for idx in range(n):
+            reserve += diff[idx]
+            answer[idx] = reserve
+        return answer
+
+
+# Initial O(n * log(n)) solution with sorting
+# but we can solve it without sort!
+class Solution:
+    def corpFlightBookings(self, bookings: List[List[int]], n: int) -> List[int]:
+        answer = [0] * n
+        operations = []
+        for start, end, val in bookings:
+            operations.extend([(start, val, 0), (end, val, 1)])
+        operations.sort(key=lambda x: (x[0], x[2]))
+        operations = operations[::-1]
+        reserve = 0
+        for idx in range(1, n + 1):
+            while operations and operations[-1][0] == idx and operations[-1][2] == 0:
+                reserve += operations[-1][1]
+                operations.pop()
+            answer[idx  - 1] = reserve
+            while operations and operations[-1][0] == idx and operations[-1][2] == 1:
+                reserve -= operations[-1][1]
+                operations.pop()
+        return answer
