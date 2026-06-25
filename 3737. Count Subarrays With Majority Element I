@@ -1,0 +1,16 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(1) by space.
+
+Given such low constraints, it can be solved using brute force. However, it is worth considering optimization, since things will get harder tomorrow!
+"""
+
+class Solution:
+    def countMajoritySubarrays(self, nums: List[int], target: int) -> int:
+        answer = 0
+        for i in range(len(nums)):
+            target_count = 0
+            for j in range(i, len(nums)):
+                target_count += nums[j] == target
+                if target_count > (j - i + 1) // 2:
+                  answer += 1
+        return answer
