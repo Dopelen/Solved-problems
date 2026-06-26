@@ -1,0 +1,27 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A significantly more complex version of yesterday's problem. 
+It’s difficult—though feasible—to come up with the idea involving prefix sums, but figuring out how to compress the intervals is a much tougher challenge!
+The trick lies in finding, for each current prefix, the number of preceding prefixes that are smaller than it.
+"""
+
+# https://leetcode.com/problems/count-subarrays-with-majority-element-ii/editorial/?envType=daily-question&envId=2026-06-26
+class Solution:
+    def countMajoritySubarrays(self, nums: List[int], target: int) -> int:
+        size = len(nums)
+        pre = [0] * (size * 2 + 1)
+        pre[size] = 1
+        cnt = size
+        ans = presum = 0
+        for i in range(size):
+            if nums[i] == target:
+                presum += pre[cnt]
+                cnt += 1
+                pre[cnt] += 1
+            else:
+                cnt -= 1
+                presum -= pre[cnt]
+                pre[cnt] += 1
+            ans += presum
+        return ans
