@@ -1,0 +1,37 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n * log(n)) by space.
+
+While the problem's structure is straightforward, the edge cases are rather tricky.
+We know exactly which values ​​must be in the sequence, which clearly points to using a hash map; 
+the sequence is increasing, suggesting a greedy approach where we sort the values ​​to process them from smallest to largest. 
+
+We just need to handle the cases involving multiple "1"s and sequences of even length, and the problem is solved.
+
+Overall, it is understandable, though it has a few nuances.
+"""
+
+class Solution:
+    def maximumLength(self, nums: List[int]) -> int:
+        freq = Counter(nums)
+        sorted_nums = sorted(freq.keys())
+        max_length = 1
+        visited = set()
+
+        if 1 in freq:
+            max_length = freq[1] - (freq[1] % 2 == 0)
+            visited.add(1)
+
+        for num in sorted_nums:
+            if num in visited:
+                continue
+            cur_length = 0
+            while num in freq:
+                visited.add(num)
+                if freq[num] == 1:
+                    cur_length += 1
+                    break
+                num *= num
+                cur_length += 2
+            max_length = max(max_length, cur_length - (cur_length % 2 == 0))
+
+        return max_length
