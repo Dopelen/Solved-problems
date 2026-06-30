@@ -1,0 +1,31 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(n) by space.
+
+A pleasant and simple problem.
+I solved it iteratively, but it can also be constructed more quickly.
+"""
+
+# Optimized
+class Solution:
+    def getSmallestString(self, n: int, k: int) -> str:
+        left = k - n
+        tail = left // 25
+        rem = left % 25
+        if rem == 0:
+            return "a" * (n - tail) + "z" * tail
+        return ("a" * (n - tail - 1) + chr(ord("a") + rem) + "z" * tail)
+
+
+# Initial solution
+class Solution:
+    def getSmallestString(self, n: int, k: int) -> str:
+        base = [1] * n
+        cur_sum = n
+        for idx in range(-1, -n-1, -1):
+            if cur_sum == k:
+                break
+            dif = min(25, k - cur_sum)
+            cur_sum += dif
+            base[idx] += dif
+        return "".join([chr(elem + 96) for elem in base])
+
