@@ -1,0 +1,71 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2 * log(n)) complexity by time and O(n ** 2) by space.
+
+I don't like problems like this. It's clear how to solve them, but coding them up is an absolute pain.
+First, we perform a traversal starting from each cell containing a thief to calculate the minimum safe distance for every neighbor, updating this value for each cell. 
+Then, we use binary search to determine the maximum value that still allows for a path to be plotted between the points. 
+It’s cumbersome, slow, and involves a lot of code!
+"""
+
+class Solution:
+    dir = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+    side = 0
+
+    def maximumSafenessFactor(self, grid: List[List[int]]) -> int:
+        self.side = len(grid)
+        thieves_queue = deque()
+        for r in range(self.side):
+            for c in range(self.side):
+                if grid[r][c] == 1:
+                    thieves_queue.append((r, c))
+                    grid[r][c] = 0
+                else:
+                    grid[r][c] = -1
+
+        while thieves_queue:
+            size = len(thieves_queue)
+            while size > 0:
+                curr = thieves_queue.popleft()
+                for d in self.dir:
+                    dy, dx = curr[0] + d[0], curr[1] + d[1]
+                    val = grid[curr[0]][curr[1]]
+                    if self.isValidCell(dy, dx) and grid[dy][dx] == -1:
+                        grid[dy][dx] = val + 1
+                        thieves_queue.append((dy, dx))
+                size -= 1
+
+        start, end, res = 0, 0, -1
+        for r in range(self.side):
+            for c in range(self.side):
+                end = max(end, grid[r][c])
+
+        while start <= end:
+            mid = start + (end - start) // 2
+            if self.isValidSafeness(grid, mid):
+                res = mid
+                start = mid + 1
+            else:
+                end = mid - 1
+
+        return res
+
+    def isValidCell(self, i, j) -> bool:
+        return 0 <= i < self.side and 0 <= j < self.side
+
+    def isValidSafeness(self, grid, min_safeness) -> bool:
+        if grid[0][0] < min_safeness or grid[self.side - 1][self.side - 1] < min_safeness:
+            return False
+        traversal_queue = deque([(0, 0)])
+        visited = [[False] * self.side for _ in range(self.side)]
+        visited[0][0] = True
+        while traversal_queue:
+            curr = traversal_queue.popleft()
+            if curr[0] == self.side - 1 and curr[1] == self.side - 1:
+                return True
+            for d in self.dir:
+                di, dj = curr[0] + d[0], curr[1] + d[1]
+                if self.isValidCell(di, dj) and not visited[di][dj] and grid[di][dj] >= min_safeness:
+                    visited[di][dj] = True
+                    traversal_queue.append((di, dj))
+
+        return False
