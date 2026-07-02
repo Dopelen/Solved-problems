@@ -1,0 +1,62 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+My approach wasn't exactly optimal. 
+I thought using a heap-based traversal (Dijkstra's) would be a good idea, but it turns out a Breadth-First Search actually yields better results. 
+One cool thing I learned from this problem is that since the cost of a move is either 0 or 1, we can use 0-1 BFS instead of a heap: 
+we insert the node at the front of the queue if the neighboring cell is safe and at the back if it's dangerous—this reduces the complexity from logarithmic to linear!
+"""
+
+# 0-1 BFS O(n * m)
+class Solution:
+    def findSafeWalk(self, grid, health):
+        rows, cols = len(grid), len(grid[0])
+        health -= grid[0][0]
+        if health <= 0:
+            return False
+        best = [[-1] * cols for _ in range(rows)]
+        best[0][0] = health
+        q = deque([(health, 0, 0)])
+        dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        while q:
+            cur_h, y, x = q.popleft()
+            if y == rows - 1 and x == cols - 1:
+                return True
+            if cur_h < best[y][x]:
+                continue
+            for dy, dx in dirs:
+                ny, nx = y + dy, x + dx
+                if not (0 <= ny < rows and 0 <= nx < cols):
+                    continue
+                new_h = cur_h - grid[ny][nx]
+                if (new_h <= 0) or (new_h <= best[ny][nx]):
+                    continue
+                best[ny][nx] = new_h
+                if grid[ny][nx] == 0:
+                    q.appendleft((new_h, ny, nx))
+                else:
+                    q.append((new_h, ny, nx))
+        return False
+
+
+# Initial Solution O(m * n * log(m * n)) 
+class Solution:
+    def findSafeWalk(self, grid: List[List[int]], health: int) -> bool:
+        dir = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        rows, cols = len(grid), len(grid[0])
+        max_health_grid = [[-math.inf for _ in range(cols)] for _ in range(rows)]
+        heap = []
+        heappush(heap, (-health, 0, 0))
+        while heap:
+            cur_h, y, x = heappop(heap)
+            cur_h += grid[y][x]
+            if (y == rows - 1) and (x == cols - 1) and (cur_h < 0):
+                return True
+            if (max_health_grid[y][x] >= -cur_h) or (cur_h == 0):
+                continue
+            max_health_grid[y][x] = -cur_h
+            for dy, dx in dir:
+                ny, nx = y + dy, x + dx
+                if (0 <= ny < rows) and (0 <= nx < cols):
+                    heappush(heap, (cur_h, ny, nx))
+        return False
