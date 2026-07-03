@@ -1,0 +1,89 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(m + n) * log(m) complexity by time and O(n * m) by space.
+
+Those nasty test cases where there can be multiple paths from one node to the *same* other node... 
+Anyway, my solution ended up hitting a TLE, even though it was otherwise correct; I just should have used a binary search approach.
+"""
+
+# https://leetcode.com/problems/network-recovery-pathways/editorial/?envType=daily-question&envId=2026-07-03&__cf_chl_f_tk=TOa8rm633hGBDhXbxN.H1mhnXGJ.JgsCdOmaRGRh960-1783085019-1.0.1.1-65GvXCixr9DeoX2LS_YHFncqUQsjA6ic1pjBrbJcjOk
+# Correct solution O(m + n) * log(m)
+class Solution:
+    def findMaxPathScore(self, edges: List[List[int]], online: List[bool], k: int) -> int:
+        size = len(online)
+        indegree = [0] * size
+        graph = [[] for _ in range(size)]
+        weights = set()
+        for u, v, w in edges:
+            graph[u].append((v, w))
+            indegree[v] += 1
+            weights.add(w)
+        q = deque(i for i in range(size) if indegree[i] == 0)
+        topo = []
+        while q:
+            u = q.popleft()
+            topo.append(u)
+            for v, _ in graph[u]:
+                indegree[v] -= 1
+                if indegree[v] == 0:
+                    q.append(v)
+        weights = sorted(weights)
+        
+        def check(limit):
+            dp = [math.inf] * size
+            dp[0] = 0
+            for u in topo:
+                if dp[u] == math.inf:
+                    continue
+                for v, w in graph[u]:
+                    if w < limit:
+                        continue
+                    if v != size - 1 and not online[v]:
+                        continue
+                    dp[v] = min(dp[v], dp[u] + w)
+            return dp[-1] <= k
+
+        left, right = 0, len(weights) - 1
+        ans = -1
+        while left <= right:
+            mid = (left + right) // 2
+            if check(weights[mid]):
+                ans = weights[mid]
+                left = mid + 1
+            else:
+                right = mid - 1
+        return ans
+
+
+# Initial TLE Solution O(m * n)
+class Solution:
+    def findMaxPathScore(self, edges: List[List[int]], online: List[bool], k: int) -> int:
+        adj_list = defaultdict(dict)
+        max_min_edge_for_node = [math.inf] * len(online)
+        min_path_cost_for_node = [math.inf] * len(online)
+        for u, v, cost in edges:
+            if cost <= k and online[v]:
+                if v in adj_list[u]:
+                    adj_list[u][v].append(cost)
+                else:
+                    adj_list[u][v] = [cost]
+        min_edge_heap = []
+        heappush(min_edge_heap, (math.inf, 0, 0))
+
+        while min_edge_heap:
+            min_edge, path_cost, node = heappop(min_edge_heap)
+            if (((min_edge != math.inf) and (max_min_edge_for_node[node] != math.inf) and (min_edge <= max_min_edge_for_node[node])) and (path_cost >= min_path_cost_for_node[node])) or ((min_edge != math.inf) and (max_min_edge_for_node[-1] != math.inf) and (min_edge <= max_min_edge_for_node[-1])) or ((max_min_edge_for_node[node] == min_edge) and (min_path_cost_for_node == path_cost)):
+                continue
+            if ((max_min_edge_for_node[node] <= min_edge) and (min_path_cost_for_node[node] >= path_cost)) or ((max_min_edge_for_node[node] == math.inf) and (min_path_cost_for_node[node] == math.inf)):
+                max_min_edge_for_node[node] = min_edge
+                min_path_cost_for_node[node] = path_cost
+            if node == len(online) - 1:
+                max_min_edge_for_node[len(online) - 1] = max(max_min_edge_for_node[len(online) - 1], min_edge)
+
+            for neighbor, cost_list in adj_list[node].items():
+                for c in cost_list:
+                    new_cost = path_cost + c
+                    if new_cost > k:
+                        continue
+                    heappush(min_edge_heap, (min(min_edge, c), new_cost, neighbor))
+
+        return max_min_edge_for_node[-1] if max_min_edge_for_node[-1] != math.inf else -1
