@@ -1,0 +1,49 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n + e) complexity by time and O(n + e) by space.
+
+To rephrase the problem: it is extremely simple—find the shortest path in a connected graph starting at node 1.
+All that remained was to write the code. I chose an iterative BFS approach.
+I had to tinker a bit to correctly track visited nodes, but in the end, it didn't take much effort.
+"""
+
+# dict(dict) version (fastest)
+class Solution:
+    def minScore(self, n: int, roads: List[List[int]]) -> int:
+        adj_list = defaultdict(dict)
+        for u, v, dist in roads:
+            adj_list[u][v] = dist
+            adj_list[v][u] = dist
+        visited = set()
+        cur_min = math.inf
+        level, next_level = {1}, set()
+        while level:
+            node = level.pop()
+            for neighbor in adj_list[node]:
+                cur_min = min(cur_min, adj_list[node][neighbor])
+                if neighbor not in visited and neighbor not in level:
+                    next_level.add(neighbor)
+            visited.add(node)
+            if not level:
+                level = next_level
+                next_level = set()
+        return cur_min
+
+
+# dict(list) + queue version
+class Solution:
+    def minScore(self, n: int, roads: List[List[int]]) -> int:
+        graph = defaultdict(list)
+        for u, v, d in roads:
+            graph[u].append((v, d))
+            graph[v].append((u, d))
+        ans = math.inf
+        visited = {1}
+        q = deque([1])
+        while q:
+            node = q.popleft()
+            for nei, dist in graph[node]:
+                ans = min(ans, dist)
+                if nei not in visited:
+                    visited.add(nei)
+                    q.append(nei)
+        return ans
