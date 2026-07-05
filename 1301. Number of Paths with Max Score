@@ -1,0 +1,31 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n ** 2) by space.
+
+It is entirely to be expected that a brute-force approach won't work given the constraints. 
+You need to consider optimization.
+It can be elegantly solved using dynamic programming, where we calculate the best score for neighboring cells and their frequency.
+"""
+
+class Solution:
+    def pathsWithMaxScore(self, board: List[str]) -> List[int]:
+        size = len(board)
+        dp = [[[-1, 0]] * size for _ in range(size)]
+        dp[size - 1][size - 1] = [0, 1]
+
+        def update(x, y, u, v):
+            if u >= size or v >= size or dp[u][v][0] == -1:
+                return
+            if dp[u][v][0] > dp[x][y][0]:
+                dp[x][y] = dp[u][v][:]
+            elif dp[u][v][0] == dp[x][y][0]:
+                dp[x][y][1] += dp[u][v][1]
+
+        for i in range(size - 1, -1, -1):
+            for j in range(size - 1, -1, -1):
+                if not (i == size - 1 and j == size - 1) and board[i][j] != "X":
+                    update(i, j, i + 1, j)
+                    update(i, j, i, j + 1)
+                    update(i, j, i + 1, j + 1)
+                    if dp[i][j][0] != -1:
+                        dp[i][j][0] += (0 if board[i][j] == "E" else ord(board[i][j]) - 48)
+        return ([dp[0][0][0], dp[0][0][1] % (10**9 + 7)] if dp[0][0][0] != -1 else [0, 0])
