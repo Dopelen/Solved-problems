@@ -1,0 +1,34 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n * log(n)) by space.
+
+This is a straightforward interval problem. 
+We sort the intervals to process them starting from an edge and reverse the array so we can remove elements from the end in constant time. 
+Then, we apply a greedy approach: if an interval fits within our current boundaries, we remove it; 
+otherwise, we treat it as the next reference interval against which to measure the others.
+"""
+
+
+# after refactoring (somehow slower than previous one)
+class Solution:
+    def removeCoveredIntervals(self, intervals: List[List[int]]) -> int:
+        intervals.sort(key=lambda x: (x[0], -x[1]))
+        ans = 0
+        max_end = -1
+        for _, end in intervals:
+            if end > max_end:
+                ans += 1
+                max_end = end
+        return ans
+
+
+# initial pop solution
+class Solution:
+    def removeCoveredIntervals(self, intervals: List[List[int]]) -> int:
+        size = len(intervals)
+        intervals.sort(reverse=True, key=lambda x: (x[0],-x[1]))
+        while intervals:
+            pivot_start, pivot_end = intervals.pop()
+            while intervals and (pivot_start <= intervals[-1][0] and pivot_end >= intervals[-1][1]):
+                intervals.pop()
+                size -= 1
+        return size
