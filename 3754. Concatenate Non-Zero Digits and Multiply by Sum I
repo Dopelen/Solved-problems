@@ -1,0 +1,22 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(k) complexity by time and O(k) by space.
+
+An easy task! It’s an absolute joy!
+You could solve it using strings, but I chose to use division.
+We work backwards, breaking the number down by its digits. 
+If the digit is 0, nothing happens; 
+if there’s a remainder when dividing by 10, that means we’ve found a new digit.
+"""
+
+class Solution:
+    def sumAndMultiply(self, n: int) -> int:
+        x = x_sum = 0
+        grade = 1
+        while n:
+            reminder = (n % 10)
+            x += reminder * grade
+            n //= 10
+            if reminder:
+                x_sum += reminder
+                grade *= 10
+        return x_sum * x
