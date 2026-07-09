@@ -1,0 +1,23 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n * log(n)) by space.
+
+I sketched out the solution concept in ten minutes, but then endured two hours of pure misery.
+I kept getting mixed up between values ​​and indices because there are the nodes themselves, the distances between them, and an array of node components sorted by distance—
+plus, the pairs aren't given to us sorted, so I had to sort those too, and eventually, I just got hopelessly confused.
+
+In the end, I just rewrote the whole thing. 
+You just need to verify that both vertices belong to the same component, and that’s it.
+"""
+
+class Solution:
+    def pathExistenceQueries(self, n: int, nums: List[int], maxDiff: int, queries: List[List[int]]) -> List[bool]:
+        start_idx_components = [0]
+        for i, (a, b) in enumerate(pairwise(nums)):
+            if b - a > maxDiff:
+                start_idx_components.append(i + 1)
+        answer = []
+        for u, v in queries:
+            comp_u = bisect_right(start_idx_components, u) - 1
+            comp_v = bisect_right(start_idx_components, v) - 1
+            answer.append(comp_u == comp_v)
+        return answer
