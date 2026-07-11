@@ -1,0 +1,13 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+It is most advantageous to split the number into n-1 and 1 to minimize the cost, which will equal n-1. 
+We then repeat the process with the remaining part, yielding 5, 4, 3...; 
+the cost decreases in step with the number itself, and the total cost simply becomes the sum of an arithmetic progression.
+It is so pleasant to look back on the school mathematics.
+"""
+
+class Solution:
+    def minCost(self, n: int) -> int:
+        return int((n - 1) / 2 * n)
+        
