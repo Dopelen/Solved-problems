@@ -1,0 +1,22 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(m * log(log(m))) complexity by time and O(m * log(log(m))) by space.
+
+Every six months, I look up the Sieve of Eratosthenes to solve a prime number problem — only to forget the exact code again within those six months.
+"""
+
+class Solution:
+    def sumOfPrimesInRange(self, n: int) -> int:
+        reversed_n = int(str(n)[::-1])
+        min_val, max_val = min(n, reversed_n), max(n, reversed_n)
+
+        def prime_sum_in_range(min_v, max_val):
+            is_prime_list = [True] * (max_val + 1)
+            is_prime_list[0] = is_prime_list[1] = False
+            for start in range(2, int(max_val ** 0.5) + 1):
+                if is_prime_list[start]:
+                    for multiple in range(start * start, max_val + 1, start):
+                        is_prime_list[multiple] = False
+
+            return sum([num for num, prime in enumerate(is_prime_list) if prime and num >= min_val and num <= max_val])
+
+        return prime_sum_in_range(min_val, max_val)
