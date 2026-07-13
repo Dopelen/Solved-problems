@@ -1,0 +1,26 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+I liked the problem. It’s clear and easy to code, yet there are ten different ways to solve it—using strings, numbers, or a sliding window.
+"""
+
+class Solution:
+    def sequentialDigits(self, low: int, high: int) -> List[int]:
+        answer = []
+        low_digits, high_digits = len(str(low)), len(str(high))
+        digits = ['1','2','3','4','5','6','7','8','9']
+
+        def construct_answer(number_size):
+            start_idx = 0
+            while start_idx <= 9 - number_size:
+                sequential = ""
+                for i in range(start_idx, start_idx + number_size):
+                    sequential += digits[i]
+                if int(sequential) >= low and int(sequential) <= high:
+                    answer.append(int(sequential))
+                start_idx += 1
+
+        for grade in range(low_digits, high_digits + 1):
+            construct_answer(grade)
+
+        return answer
