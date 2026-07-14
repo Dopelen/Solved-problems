@@ -1,0 +1,31 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m ** 2 * log(m)) complexity by time and  O(n * m ** 2 * log(m)) by space.
+
+Dynamic programming—something I couldn't quite master.
+For some reason, I find combinatorics problems difficult.
+"""
+
+# https://leetcode.com/problems/find-the-number-of-subsequences-with-equal-gcd/solutions/8388305/find-the-number-of-subsequences-with-equ-41l9/?envType=daily-question&envId=2026-07-14
+class Solution:
+    def subsequencePairCount(self, nums: list[int]) -> int:
+        MOD = 1000000007
+        m = max(nums)
+        dp = [[0] * (m + 1) for _ in range(m + 1)]
+        dp[0][0] = 1
+        for num in nums:
+            ndp = [[0] * (m + 1) for _ in range(m + 1)]
+            for j in range(m + 1):
+                divisor1 = math.gcd(j, num)
+                for k in range(m + 1):
+                    val = dp[j][k]
+                    if val == 0:
+                        continue
+                    divisor2 = math.gcd(k, num)
+                    ndp[j][k] = (ndp[j][k] + val) % MOD
+                    ndp[divisor1][k] = (ndp[divisor1][k] + val) % MOD
+                    ndp[j][divisor2] = (ndp[j][divisor2] + val) % MOD
+            dp = ndp
+        ans = 0
+        for j in range(1, m + 1):
+            ans = (ans + dp[j][j]) % MOD
+        return ans
