@@ -1,0 +1,22 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and  O(1) by space.
+
+A simple and pleasant problem.
+Admittedly, I wrote the code before thinking it through—which isn't exactly ideal.
+One could calculate all values ​​of N from zero up to the limit of 1000 and compute the sums for the even and odd cases; 
+however, since neither the numbers themselves nor their sums change, we can precompute prefix sums. 
+This eliminates the need to perform calculations for every N. 
+Furthermore, observing the nature of the odd and even sequences reveals that they are monotonically increasing; 
+consequently, we can calculate the required value in constant time using the arithmetic progression formula.
+
+BUT! 
+The sum of the first n odd numbers is n², and the sum of the first n even numbers is n(n + 1), so we need to compute gcd(n², n(n + 1)).
+Factor out the common n: gcd(n², n(n + 1)) = n × gcd(n, n + 1).
+Since two consecutive integers are always coprime (gcd(n, n + 1) = 1), the answer is n.
+"""
+
+class Solution:
+    def gcdOfOddEvenSums(self, n: int) -> int:
+        odd = int((1 + (2 * n - 1)) / 2 * n)
+        even = int((2 + (2 * n)) / 2 * n)
+        return math.gcd(odd, even)
