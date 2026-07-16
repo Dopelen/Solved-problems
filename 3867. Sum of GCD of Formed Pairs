@@ -1,0 +1,20 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and  O(n * log(n)) by space.
+
+The task isn't difficult; you can get the answer simply by simulating the conditions. 
+If you import a module instead of implementing the Sieve of Eratosthenes yourself, the complexity drops to a easy level.
+"""
+
+class Solution:
+    def gcdSum(self, nums: list[int]) -> int:
+        size = len(nums)
+        cur_max = 0
+        prefixGcd = [0] * size
+        for i in range(size):
+            cur_max = max(nums[i], cur_max)
+            prefixGcd[i] = math.gcd(nums[i], cur_max)
+        prefixGcd.sort()
+        gcd_sum = 0
+        for idx in range(size // 2):
+            gcd_sum += math.gcd(prefixGcd[idx], prefixGcd[-idx - 1])
+        return gcd_sum
