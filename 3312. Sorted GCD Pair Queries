@@ -1,0 +1,33 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(m * log(m)) complexity by time and  O(m) by space.
+
+A more complex version of yesterday's problem. 
+It’s a classic issue: we need to count all the pairs, but we don't have the time to process every single one.
+Although the solution itself isn't particularly difficult, I got stuck calculating the specific frequencies.
+
+The main trick is to count how many numbers have a factor of at least n, and then subtract from the total count of factors those that have a factor greater than n?
+"""
+
+# https://leetcode.com/problems/sorted-gcd-pair-queries/solutions/8388302/sorted-gcd-pair-queries-by-leetcode-1bwo/?envType=daily-question&envId=2026-07-17
+class Solution:
+    def gcdValues(self, nums: List[int], queries: List[int]) -> List[int]:
+        max_val = max(nums)
+        count = [0] * (max_val + 1)
+        for num in nums:
+            count[num] += 1
+        for i in range(1, max_val + 1):
+            for j in range(i * 2, max_val + 1, i):
+                count[i] += count[j]
+        for i in range(1, max_val + 1):
+            count[i] = count[i] * (count[i] - 1) // 2
+        for i in range(max_val, 0, -1):
+            for j in range(i * 2, max_val + 1, i):
+                count[i] -= count[j]
+        for i in range(1, max_val + 1):
+            count[i] += count[i - 1]
+        ans = []
+        for q in queries:
+            q += 1
+            pos = bisect_left(count, q)
+            ans.append(pos)
+        return ans
