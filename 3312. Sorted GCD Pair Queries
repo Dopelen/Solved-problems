@@ -5,7 +5,7 @@ A more complex version of yesterday's problem.
 It’s a classic issue: we need to count all the pairs, but we don't have the time to process every single one.
 Although the solution itself isn't particularly difficult, I got stuck calculating the specific frequencies.
 
-The main trick is to count how many numbers have a factor of at least n, and then subtract from the total count of factors those that have a factor greater than n?
+The main trick is to count how many numbers have a factor of at least n, and then subtract from the total count of factors those that have a factor greater than n
 """
 
 # https://leetcode.com/problems/sorted-gcd-pair-queries/solutions/8388302/sorted-gcd-pair-queries-by-leetcode-1bwo/?envType=daily-question&envId=2026-07-17
