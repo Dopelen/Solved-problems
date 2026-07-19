@@ -1,0 +1,38 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and  O(n) by space.
+
+How many more times am I going to work on the wrong problem—confusing "substring" with "subsequence"? 
+Anyway, I wrote a correct solution for substrings, only to realize I had to redo the whole thing.
+
+I only managed to figure out the correct solution with the help of hints.
+We use a monotonic stack and check at each step: 
+is the current element smaller than the one at the top of the stack? 
+If so, it should replace the previous element in the stack (provided there are still elements left in the sequence); 
+this allows us to greedily form the smallest subsequence. 
+Thus, the problem can be elegantly solved using a stack and frequency counting.
+"""
+
+class Solution:
+    def smallestSubsequence(self, s: str) -> str:
+        visited: list[int] = [0] * 26
+        freq: list[int] = [0] * 26
+
+        for ch in s:
+            freq[ord(ch) - ord("a")] += 1
+        stack: list = []
+
+        for ch in s:
+            idx = ord(ch) - ord("a")
+            if not visited[idx]:
+                while stack and stack[-1] > ch:
+                    top_idx = ord(stack[-1]) - ord("a")
+                    if freq[top_idx] > 0:
+                        visited[top_idx] = 0
+                        stack.pop()
+                    else:
+                        break
+                visited[idx] = 1
+                stack.append(ch)
+            freq[idx] -= 1
+
+        return "".join(stack)
