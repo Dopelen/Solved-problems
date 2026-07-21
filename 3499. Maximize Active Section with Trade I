@@ -1,0 +1,27 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and  O(n) by space.
+
+If you consider the problem statement, it becomes clear that each trade simply flips all the zeros flanking a specific segment of ones; 
+since the ends of the string are already ones, the answer is simply the total number of ones in the string plus the lengths of the two largest contiguous segments of zeros. 
+However, the edge cases are really nasty.
+"""
+
+class Solution:
+    def maxActiveSectionsAfterTrade(self, s: str) -> int:
+        t = "1" + s + "1"
+        total_ones = s.count("1")
+        ans = total_ones
+        prev_zeros = 0
+        i = 0
+        while i < len(t):
+            j = i
+            while j < len(t) and t[j] == t[i]:
+                j += 1
+            length = j - i
+            if t[i] == '0':
+                cur_zeros = length
+                if prev_zeros:
+                    ans = max(ans, total_ones + prev_zeros + cur_zeros)
+                prev_zeros = cur_zeros
+            i = j
+        return ans
