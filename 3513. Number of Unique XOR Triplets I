@@ -1,0 +1,23 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and  O(1) by space.
+
+This was a problem that required some thought and knowledge of XOR, and I’m certainly very pleased to have solved it.
+XOR is both commutative and associative; given a sequence that is monotonically increasing according to the problem statement, 
+I can be certain that bits will appear up to the level of the largest number. 
+By combining the various bits from the values ​​up to that maximum, I can construct any number in the range from 1 to 2^(number of bits).
+"""
+
+# After refactoring
+class Solution:
+    def uniqueXorTriplets(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n <= 2:
+            return n
+        return 1 << n.bit_length()
+
+# Initial Solution
+class Solution:
+    def uniqueXorTriplets(self, nums: List[int]) -> int:
+        max_val = max(nums)
+        grade = len(bin(max_val)) - 2
+        return 2 ** ((grade - 1) if max_val in (1, 2) else grade)
