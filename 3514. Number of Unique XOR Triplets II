@@ -1,0 +1,28 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and  O(n * m) by space.
+
+Since the numbers are no longer sequential and contain gaps, we cannot calculate everything we need using a single formula; 
+this time, we will have to combine triplets. 
+Essentially, we simply gather all the numbers, then all the numbers derived from the XOR of two numbers, and finally those derived from three.
+"""
+
+class Solution:
+    def uniqueXorTriplets(self, nums: List[int]) -> int:
+        max_num = max(nums)
+        max_possible_val = 1
+        while max_possible_val <= max_num:
+            max_possible_val <<= 1
+        one = [False] * max_possible_val
+        two = [False] * max_possible_val
+        three = [False] * max_possible_val
+        for num in nums:
+            one[num] = True
+            for x in range(max_possible_val):
+                if one[x]:
+                    two[x ^ num] = True
+        for num in nums:
+            for x in range(max_possible_val):
+                if two[x]:
+                    three[x ^ num] = True
+        return sum(1 for b in three if b)
+
