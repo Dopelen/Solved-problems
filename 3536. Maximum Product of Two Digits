@@ -1,0 +1,10 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and  O(n) by space.
+
+By some miracle, a Easy one slipped in among the tasks!
+"""
+
+class Solution:
+    def maxProduct(self, n: int) -> int:
+        sorted_digits = sorted(int(digit) for digit in str(n))
+        return sorted_digits[-1] * sorted_digits[-2]
