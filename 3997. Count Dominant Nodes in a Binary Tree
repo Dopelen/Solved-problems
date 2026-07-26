@@ -1,0 +1,23 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and  O(n) by space.
+
+A fairly simple task involving a recursive tree traversal. 
+I feel like a couple of years ago, I definitely would have written it in a messier way than I did today.
+"""
+
+
+class Solution:
+    def countDominantNodes(self, root: TreeNode | None) -> int:
+        dominants = 0
+
+        def check_dominants(r):
+            nonlocal dominants
+            if not r:
+                return 0
+            left = check_dominants(r.left)
+            right = check_dominants(r.right)
+            dominants += (r.val >= left and r.val >= right)
+            return max(left, right, r.val)
+            
+        check_dominants(root)
+        return dominants
