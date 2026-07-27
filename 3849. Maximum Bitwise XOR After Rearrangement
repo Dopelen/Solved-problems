@@ -1,0 +1,23 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and  O(n) by space.
+
+If one knows what XOR is, the problem is not difficult at all; 
+since we can rearrange the elements of the second row however we like, 
+we can simply use a greedy approach to make the leading XOR results equal to 1, and that will yield the correct answer.
+"""
+
+class Solution:
+    def maximumXor(self, s: str, t: str) -> str:
+        ones = t.count("1")
+        zeroes = len(t) - ones
+        result = []
+        for bit in s:
+            if bit == '0' and ones:
+                result.append('1')
+                ones -= 1
+            elif bit == '1' and zeroes:
+                result.append('1')
+                zeroes -= 1
+            else:
+                result.append('0')
+        return "".join(result)
