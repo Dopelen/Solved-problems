@@ -1,0 +1,15 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and  O(n) by space.
+
+The fact that we are given a palindrome to begin with significantly simplifies the task.
+We simply split it into two halves and sort them.
+The complexity is essentially linear, because the sorting depends on the alphabet.
+"""
+
+class Solution:
+    def smallestPalindrome(self, s: str) -> str:
+        odd = len(s) % 2
+        middle_elem = s[len(s) // 2] if odd else ""
+        half_list = sorted([symbol for symbol in s[:len(s)//2]])
+        half_str = "".join(half_list)
+        return half_str + middle_elem + half_str[::-1]
