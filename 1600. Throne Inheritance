@@ -1,0 +1,32 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(calls * members) complexity by time and O(calls * members) by space.
+
+A problem with an extremely confusing problem statement and an extremely clear solution.
+"""
+
+class ThroneInheritance:
+    def __init__(self, kingName: str):
+        self.king = kingName
+        self.children = defaultdict(list)
+        self.dead = set()
+        
+
+    def birth(self, parentName: str, childName: str) -> None:
+        self.children[parentName].append(childName)
+
+
+    def death(self, name: str) -> None:
+        self.dead.add(name)
+        
+
+    def getInheritanceOrder(self) -> List[str]:
+        inheritance = []
+        
+        def dfs(name):
+            if name not in self.dead:
+                inheritance.append(name)
+            for child in self.children[name]:
+                dfs(child)
+
+        dfs(self.king)
+        return inheritance
