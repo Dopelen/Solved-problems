@@ -1,0 +1,29 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(32 * n) complexity by time and O(1) by space.
+
+When you encounter a problem requiring a single pass and constant space—yet it seems like multiple passes should be needed—
+you immediately realize that either sums or bitwise operations are involved.
+
+In this case, it’s the bitwise approach.
+We count the set bits for each number and add them to a global running total of set bits for each bit position. 
+Then, we take the remainder modulo 3; this leaves us with only the bits that appeared exactly once. 
+That gives us the answer.
+"""
+
+class Solution:
+    def singleNumber(self, nums):
+        ans = 0
+
+        for i in range(32):
+            bit_sum = 0
+            for num in nums:
+                if num < 0:
+                    num = num & (2**32-1)
+                bit_sum += (num >> i) & 1
+            bit_sum %= 3
+            ans |= bit_sum << i
+
+        if ans >= 2**31:
+            ans -= 2**32
+
+        return ans
