@@ -1,0 +1,28 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n ** 2) by space.
+
+I initially set out to solve this by simulating every possible scenario, 
+but it was only after writing the solution that I fully grasped the phrase "both players play optimally" which rules out that approach. 
+I need to prove that the first player wins when each player makes the best possible move on their turn; 
+this smells like a dynamic programming problem.
+
+The task turned out to be more difficult than I thought, and I couldn't handle it.
+We use a function that calculates the difference between the first and second players, 
+assuming each makes the optimal move; 
+specifically, if we pick the leftmost element, we subtract the best outcome for the remaining range from the current difference
+since that represents the opponent's turn. 
+The problem statement points toward this solution, but it was not at all obvious to me.
+"""
+
+# https://leetcode.com/problems/predict-the-winner/solutions/8433447/solution-by-la_castille-ia0j/?envType=daily-question&envId=2026-08-01
+class Solution:
+    def predictTheWinner(self, nums: List[int]) -> bool:
+
+        @lru_cache
+        def maxDiff(left: int, right: int) -> int:
+            if left == right:
+                return nums[left]
+            return max(nums[left] - maxDiff(left + 1, right),
+                       nums[right] - maxDiff(left, right - 1))
+
+        return maxDiff(0, len(nums) - 1) >= 0
