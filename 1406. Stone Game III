@@ -1,0 +1,25 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+This is very similar to the problem from the day before yesterday: 
+the key trick is that after my move comes the opponent's move, which means their best result will be subtracted from mine.
+"""
+
+class Solution:
+    def stoneGameIII(self, stoneValue: List[int]) -> str:
+        size = len(stoneValue)
+        dp = [0] * (size + 1)
+
+        for i in range(size - 1, -1, -1):
+            take = 0
+            best = -math.inf
+            for k in range(3):
+                if i + k >= size:
+                    break
+                take += stoneValue[i + k]
+                best = max(best, take - dp[i + k + 1])
+            dp[i] = best
+
+        if dp[0] > 0:
+            return "Alice"
+        return "Bob" if dp[0] < 0 else "Tie"
