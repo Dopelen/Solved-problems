@@ -1,0 +1,15 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Fortunately, they’ve come up with some new, simple tasks, so on some days I don’t have to strain myself too much solving them.
+The restrictions are minimal; you can solve it however you please.
+"""
+
+class Solution:
+    def findMissingElements(self, nums: List[int]) -> List[int]:
+        min_val, max_val = min(nums), max(nums)
+        rng = (max_val - min_val + 1)
+        check = [0] * rng
+        for val in nums:
+            check[val - min_val] = 1
+        return [val + min_val for val in range(rng) if not check[val]]
