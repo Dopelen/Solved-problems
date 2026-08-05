@@ -1,0 +1,56 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The description isn't entirely clear; 
+I initially thought we just needed to exclude methods called by broken methods, 
+but it turned out we need to do this relative to a group of methods — and if even a single element of the group is called from outside, the group shouldn't be removed.
+"""
+
+# optimization
+class Solution:
+    def remainingMethods(self, n: int, k: int, invocations: List[List[int]]) -> List[int]:
+        parent_to_children: list = [[] for _ in range(n)]
+        for parent, child in invocations:
+            parent_to_children[parent].append(child)
+        suspicious: list[bool] = [False] * n
+        suspicious[k] = True
+
+        queue = deque([k])
+        while queue:
+            node = queue.popleft()
+            for ch in parent_to_children[node]:
+                if not suspicious[ch]:
+                    suspicious[ch] = True
+                    queue.append(ch)
+
+        for u, v in invocations:
+            if not suspicious[u] and suspicious[v]:
+                return list(range(n))
+            
+        return [num for num in range(n) if not suspicious[num]]
+
+
+# initial one
+class Solution:
+    def remainingMethods(self, n: int, k: int, invocations: List[List[int]]) -> List[int]:
+        parent_to_children: defaultdict = defaultdict(list)
+        child_to_parent: defaultdict = defaultdict(list)
+        for parent, child in invocations:
+            child_to_parent[child].append(parent)
+            parent_to_children[parent].append(child)
+        suspicious: set = set()
+
+        def find_suspicious(node: int) -> None:
+            if node in suspicious:
+                return
+            suspicious.add(node)
+            for ch in parent_to_children[node]:
+                find_suspicious(ch)
+
+        find_suspicious(k)
+        
+        for sus in suspicious:
+            for parent in child_to_parent[sus]:
+                if parent not in suspicious:
+                    return [num for num in range(n)]
+        return [num for num in range(n) if num not in suspicious]
