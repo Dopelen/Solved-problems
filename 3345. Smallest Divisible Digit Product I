@@ -1,0 +1,11 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The limits are very low; one can easily iterate through all the options.
+"""
+
+class Solution:
+    def smallestNumber(self, n: int, t: int) -> int:
+        for i in range(n, n + 10):
+            if not (math.prod(int(digit) for digit in str(i)) % t):
+                return i
