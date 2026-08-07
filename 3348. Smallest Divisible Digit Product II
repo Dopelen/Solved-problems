@@ -1,0 +1,86 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(t)) complexity by time and O(n * log(t)) by space.
+
+The problem has an acceptance rate of 0.1%, so I am not surprised that I am not among the one-tenth of a percent who managed to solve it.
+
+Let's start with the observation that we only need the prime factors 2, 3, 5, and 7, because the others can be broken down (4 = 2 × 2, 6 = 2 × 3, 8 = 2 × 2 × 2, 9 = 3 × 3).
+The set of factors that make up our target number is always unique.
+If all the prime factors of our target number are contained within the prime factors of the original number, 
+we can say for certain that the original number is divisible by the target number without a remainder.
+Now, if we combine all the factors to form the number itself, we can compare it with the original number; 
+if it is smaller, we can append "1" to the left — this increases the number of factors and the value of the number itself, but does not change their product.
+"""
+
+# https://leetcode.com/problems/smallest-divisible-digit-product-ii/editorial/?envType=daily-question&envId=2026-08-07
+FACT = {1:(0,0,0,0), 2:(1,0,0,0), 3:(0,1,0,0), 4:(2,0,0,0), 5:(0,0,1,0),
+        6:(1,1,0,0), 7:(0,0,0,1), 8:(3,0,0,0), 9:(0,2,0,0)}
+
+def need(x, y, z, w):
+    k = z + w + (x + 2) // 3 + (y + 1) // 2
+    if x % 3 == 1 and y % 2 == 1:
+        k -= 1
+    return k
+
+def build(x, y, z, w):
+    c = [0] * 10
+    c[5] = z
+    c[7] = w
+    if y % 2 == 1:
+        if x % 3 == 1:
+            c[6] += 1; x -= 1; y -= 1
+        elif x % 3 == 2:
+            c[2] += 1; c[6] += 1; x -= 2; y -= 1
+        else:
+            c[3] += 1; y -= 1
+    elif x % 3 == 1:
+        c[2] += 1; x -= 1
+    elif x % 3 == 2:
+        c[4] += 1; x -= 2
+    c[8] += x // 3
+    c[9] += y // 2
+    return "".join(str(d) * c[d] for d in range(2, 10))
+
+class Solution:
+    def smallestNumber(self, num: str, t: int) -> str:
+        X = Y = Z = W = 0
+        while t % 2 == 0: t //= 2; X += 1
+        while t % 3 == 0: t //= 3; Y += 1
+        while t % 5 == 0: t //= 5; Z += 1
+        while t % 7 == 0: t //= 7; W += 1
+        if t != 1:
+            return "-1"
+
+        n = len(num)
+        px = [0]*(n+1); py = [0]*(n+1); pz = [0]*(n+1); pw = [0]*(n+1)
+        px[0], py[0], pz[0], pw[0] = X, Y, Z, W
+
+        first_zero = n
+        for i, ch in enumerate(num):
+            d = ord(ch) - 48
+            if d == 0:
+                first_zero = i
+                break
+            e2, e3, e5, e7 = FACT[d]
+            px[i+1] = px[i] - e2 if px[i] > e2 else 0
+            py[i+1] = py[i] - e3 if py[i] > e3 else 0
+            pz[i+1] = pz[i] - e5 if pz[i] > e5 else 0
+            pw[i+1] = pw[i] - e7 if pw[i] > e7 else 0
+
+        if first_zero == n and px[n] == py[n] == pz[n] == pw[n] == 0:
+            return num
+
+        for i in range(min(first_zero, n - 1), -1, -1):
+            L = n - 1 - i
+            for d in range(ord(num[i]) - 48 + 1, 10):
+                e2, e3, e5, e7 = FACT[d]
+                rx = px[i] - e2 if px[i] > e2 else 0
+                ry = py[i] - e3 if py[i] > e3 else 0
+                rz = pz[i] - e5 if pz[i] > e5 else 0
+                rw = pw[i] - e7 if pw[i] > e7 else 0
+                if need(rx, ry, rz, rw) <= L:
+                    core = build(rx, ry, rz, rw)
+                    return num[:i] + chr(48+d) + "1"*(L - len(core)) + core
+
+        K = need(X, Y, Z, W)
+        m = max(n + 1, K)
+        return "1" * (m - K) + build(X, Y, Z, W)
