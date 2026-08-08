@@ -1,0 +1,26 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n + m) complexity by time and O(n + m) by space.
+
+It’s a tricky dynamic programming problem with an even trickier problem statement. 
+Not only do you have to figure out what’s required of you and implement the DP, but you also have to work out how to handle that error involving "almost identical" matches.
+"""
+
+class Solution:
+    def validSequence(self, word1: str, word2: str) -> List[int]:
+        size_word_1, size_word_2 = len(word1), len(word2)
+        last = [-1] * size_word_2
+        j = size_word_2 - 1
+        for i in range(size_word_1 - 1, -1, -1):
+            if j >= 0 and word1[i] == word2[j]:
+                last[j] = i
+                j -= 1
+        res = []
+        skip = j = 0
+        for i, c in enumerate(word1):
+            if j == size_word_2:
+                break
+            if c == word2[j] or skip == 0 and (j == size_word_2 - 1 or i < last[j + 1]):
+                skip += c != word2[j]
+                res.append(i)
+                j += 1
+        return res if j == size_word_2 else []
