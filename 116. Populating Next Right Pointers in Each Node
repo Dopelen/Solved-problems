@@ -1,0 +1,47 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) / O(1) by space.
+
+A simple tree problem. 
+I solved it using a queue. 
+If we need a pointer to the right neighbor, we can simply traverse the levels from left to right, 
+then move down to the next level once the current one is finished.
+"""
+
+# cool pointer solution (O(1))
+# We can forgo the queue and simply follow the pointers, because the problem conditions require us to always move to the right!
+class Solution:
+    def connect(self, root):
+        head = root
+        while head:
+            next_head = None
+            tail = None
+            node = head
+            while node:
+                for child in (node.left, node.right):
+                    if child:
+                        if tail:
+                            tail.next = child
+                        else:
+                            next_head = child
+                        tail = child
+                node = node.next
+            head = next_head
+        return root
+
+
+# Initial deque solution (O(n))
+class Solution:
+    def connect(self, root: 'Optional[Node]') -> 'Optional[Node]':
+        level = deque([root])
+        next_level = deque([])
+        while level:
+            cur_node = level.popleft()
+            if cur_node is None:
+                continue
+            next_level.extend([cur_node.left, cur_node.right])
+            if level:
+                cur_node.next = level[0]
+            else:
+                level = next_level
+                next_level = deque([])
+        return root
