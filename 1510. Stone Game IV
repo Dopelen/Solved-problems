@@ -1,0 +1,24 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * sqrt(n)) complexity by time and O(n * sqrt(n)) by space.
+
+I always get stuck when I see the phrase "assume the players play optimally"
+I can't quite wrap my head around the idea of ​​them seeing the final outcome of their moves. 
+However, I treat it simply as a cue to use dynamic programming: work backwards and, at each step, check the options
+- either removing one stone 
+- or removing a number of stones equal to a perfect square. 
+We look for a move that forces the opponent to lose, and if we find one, we mark the current position as a winning one.
+
+Come to think of it, the code turns out to be simple, but the underlying logic is complex.
+"""
+
+class Solution:
+    def winnerSquareGame(self, n: int) -> bool:
+        dp = [False] * (n + 1)
+        for i in range(1, n + 1):
+            k = 1
+            while k * k <= i:
+                if not dp[i - k * k]:
+                    dp[i] = True
+                    break
+                k += 1
+        return dp[n]
