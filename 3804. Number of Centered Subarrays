@@ -1,0 +1,19 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+The constraints are small, so I solved it using a simple brute-force approach; 
+I have a feeling there might be a way to use prefixes and suffixes, but nothing good immediately came to mind.
+"""
+
+class Solution:
+    def centeredSubarrays(self, nums: List[int]) -> int:
+        size = len(nums)
+        centered_subarrays = 0
+        for i in range(size):
+            visited = set()
+            cur_sum = 0
+            for j in range(i, size):
+                cur_sum += nums[j]
+                visited.add(nums[j])
+                centered_subarrays += cur_sum in visited
+        return centered_subarrays
