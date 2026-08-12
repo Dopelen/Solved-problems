@@ -1,0 +1,58 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+It seemed like a good idea to solve this problem using a heap with lazy deletion of outdated frequencies. 
+And it worked! 
+Admittedly, it took longer than I would have liked - thinking is a real struggle for me today.
+
+The concept: we need the maximum value within a range (which immediately suggests using a heap); 
+the only remaining issue is how to remove elements from the heap as we shift the left boundary. 
+I solved this by comparing the element at the top of the heap with the current valid frequency, using an auxiliary dictionary to track the latter.
+"""
+
+# Opimal one (in general you can do without heap, because the right element can only break its own past frequency)
+class Solution:
+    def maxSubarrayLength(self, nums: List[int], k: int) -> int:
+        size: int = len(nums)
+        left: int = 0
+        longest: int = 0
+        subarray_freq: defaultdict = defaultdict(int)
+
+        for right in range(size):
+            subarray_freq[nums[right]] += 1
+            while subarray_freq[nums[right]] > k:
+                subarray_freq[nums[left]] -= 1
+                left += 1
+            longest = max(longest, right - left + 1)
+
+        return longest
+
+
+# Heap solution
+class Solution:
+    def maxSubarrayLength(self, nums: List[int], k: int) -> int:
+        size: int = len(nums)
+        left: int = 0
+        right: int = -1
+        longest: int = 0
+        subarray_freq: defaultdict = defaultdict(int)
+        biggest_freq: heapq = []
+
+        while (right + 1) < size:
+            right += 1
+            cur_element: int = nums[right]
+            subarray_freq[cur_element] += 1
+            cur_freq: int = subarray_freq[cur_element]
+            heappush(biggest_freq, (-cur_freq, cur_element))
+            if -biggest_freq[0][0] <= k:
+                longest = max(longest, right - left + 1)
+            else:
+                while (biggest_freq and (-biggest_freq[0][0] > k)):
+                    if nums[left] == biggest_freq[0][1]:
+                        heappop(biggest_freq)
+                    subarray_freq[nums[left]] -= 1
+                    left += 1
+                while (biggest_freq and (-biggest_freq[0][0] != subarray_freq[biggest_freq[0][1]])):
+                    heappop(biggest_freq)
+
+        return longest
