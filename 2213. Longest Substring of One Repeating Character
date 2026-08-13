@@ -1,0 +1,74 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+We need to quickly modify elements while maintaining the longest possible contiguous sequences. 
+A specialized data structure is essential here - specifically, a segment tree, though I’m not very familiar with implementing one.
+
+Alternatively, we could use a `SortedList`, which handles everything we need without requiring us to write the tree structure from scratch.
+If we set that particular challenge aside, all that remains is to carefully manage the intervals, 
+checking whether a segment needs to be split or a new one added whenever a character changes.
+"""
+
+# https://leetcode.com/problems/longest-substring-of-one-repeating-character/solutions/8451789/longest-substring-of-one-repeating-chara-piyf/?envType=daily-question&envId=2026-08-13
+class Solution:
+    def longestRepeating(
+        self, s: str, queryCharacters: str, queryIndices: List[int]) -> List[int]:
+        size = len(s)
+        s = list(s)
+        segments = SortedList()
+        segments_lens = SortedList()
+
+        i = 0
+        while i < size:
+            j = i
+            while j < size and s[j] == s[i]:
+                j += 1
+            segments.add((i, j - 1))
+            segments_lens.add(j - i)
+            i = j
+
+        k = len(queryIndices)
+        answer = []
+
+        for q in range(k):
+            position = queryIndices[q]
+            character = queryCharacters[q]
+
+            if s[position] != character:
+                idx = segments.bisect_right((position, size)) - 1
+                L, R = segments[idx]
+                segments.pop(idx)
+                segments_lens.remove(R - L + 1)
+
+                if L <= position - 1:
+                    segments.add((L, position - 1))
+                    segments_lens.add(position - L)
+                if position + 1 <= R:
+                    segments.add((position + 1, R))
+                    segments_lens.add(R - position)
+
+                newL, newR = position, position
+
+                if position + 1 < size and s[position + 1] == character:
+                    idx2 = segments.bisect_left((position + 1, -1))
+                    if idx2 < len(segments) and segments[idx2][0] == position + 1:
+                        rightL, rightR = segments[idx2]
+                        segments_lens.remove(rightR - rightL + 1)
+                        newR = rightR
+                        segments.pop(idx2)
+
+                if position > 0 and s[position - 1] == character:
+                    idx3 = segments.bisect_right((position - 1, size)) - 1
+                    if idx3 >= 0 and segments[idx3][1] == position - 1:
+                        leftL, leftR = segments[idx3]
+                        segments_lens.remove(leftR - leftL + 1)
+                        newL = leftL
+                        segments.pop(idx3)
+
+                segments.add((newL, newR))
+                segments_lens.add(newR - newL + 1)
+                s[position] = character
+
+            answer.append(segments_lens[-1])
+
+        return answer
