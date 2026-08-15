@@ -1,0 +1,12 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+For some reason, the idea crossed my mind that I could solve this using two pointers. 
+Fortunately, I quickly reconsidered and managed to find the right solution.
+"""
+
+class Solution:
+    def longestSubsequence(self, nums: List[int]) -> int:
+        total_xor: int = reduce(xor, nums)
+        size: int = len(nums)
+        return size if total_xor != 0 else size - 1 if size != nums.count(0) else 0
