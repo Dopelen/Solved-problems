@@ -1,0 +1,88 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2 * log(n)) complexity by time and O(n ** 2) by space.
+
+We simply reduce the array each time by splitting it; 
+the main issue is that identical current sums could lead to different final totals due to subsequent splits. 
+Therefore, we need dynamic programming to calculate the maximum number of points obtainable by splitting the array at a given position. 
+We can calculate the sums using prefix sums.
+(It's still too complicated for me)
+
+"""
+
+# Correct solution (not mine: https://leetcode.com/problems/stone-game-v/?envType=daily-question&envId=2026-08-17 )
+class Solution:
+    def stoneGameV(self, stoneValue: List[int]) -> int:
+        size = len(stoneValue)
+        if size == 1:
+            return 0
+        pref = [0] * (size + 1)
+        for i, v in enumerate(stoneValue):
+            pref[i + 1] = pref[i] + v
+        def rng(i, j):
+            return pref[j + 1] - pref[i]
+        dp = [[0] * size for _ in range(size)]
+        maxL = [[0] * size for _ in range(size)]
+        maxR = [[0] * size for _ in range(size)]
+        for i in range(size):
+            maxL[i][i] = maxR[i][i] = stoneValue[i]
+
+        for length in range(2, size + 1):
+            for i in range(size - length + 1):
+                j = i + length - 1
+                total = rng(i, j)
+
+                lo, hi, b = i, j - 1, j
+                while lo <= hi:
+                    mid = (lo + hi) // 2
+                    if 2 * rng(i, mid) >= total:
+                        b = mid
+                        hi = mid - 1
+                    else:
+                        lo = mid + 1
+
+                if b == j:
+                    best = maxL[i][j - 1]
+                else:
+                    best = maxL[i][b - 1] if b > i else 0
+                    if 2 * rng(i, b) == total:
+                        best = max(best, maxL[i][b])
+                    best = max(best, maxR[b + 1][j])
+
+                dp[i][j] = best
+                maxL[i][j] = max(maxL[i][j - 1], dp[i][j] + total)
+                maxR[i][j] = max(maxR[i + 1][j], dp[i][j] + total)
+
+        return dp[0][size - 1]
+
+
+
+#Initial TLE
+class Solution:
+    def stoneGameV(self, stoneValue: List[int]) -> int:
+        size = len(stoneValue)
+        pref = [0] * (size + 1)
+        for i, v in enumerate(stoneValue):
+            pref[i + 1] = pref[i] + v
+
+        dp = [[0] * size for _ in range(size)]
+
+        for length in range(2, size + 1):
+            for i in range(size - length + 1):
+                j = i + length - 1
+                total = pref[j + 1] - pref[i]
+                best = 0
+                left = 0
+                for k in range(i, j):
+                    left += stoneValue[k]
+                    right = total - left
+                    if left < right:
+                        cand = left + dp[i][k]
+                    elif left > right:
+                        cand = right + dp[k + 1][j]
+                    else:
+                        cand = left + max(dp[i][k], dp[k + 1][j])
+                    if cand > best:
+                        best = cand
+                dp[i][j] = best
+
+        return dp[0][size - 1]
