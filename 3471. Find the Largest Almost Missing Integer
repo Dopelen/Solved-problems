@@ -1,0 +1,25 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The problem is straightforward, but I wanted to solve it elegantly rather than just using brute force.
+
+Given the nature of intervals, the only two numbers contained within a single interval are its first and last elements 
+- excluding cases where the entire list constitutes the interval or where the interval length is 1.
+In the end, I simply handled all those cases.
+"""
+
+class Solution:
+    def largestInteger(self, nums: List[int], k: int) -> int:
+        if k == len(nums):
+            return max(nums)
+        elif k != 1:
+            left = nums[0] if nums.count(nums[0]) == 1 else -1
+            right = nums[-1] if nums.count(nums[-1]) == 1 else -1
+            return max(left, right) if k < len(nums) else total_max
+        else:
+            count = Counter(nums)
+            cur_max = -1
+            for k, v in count.items():
+                if v == 1:
+                    cur_max = max(cur_max, k)
+            return cur_max
