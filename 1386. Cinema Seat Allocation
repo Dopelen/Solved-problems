@@ -1,0 +1,49 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(m) / O(m * log(m)) complexity by time and O(m) by space.
+
+The input size is massive, necessitating an optimization: we only need to process the rows that have constraints.
+To do this, I calculate the maximum capacity and then subtract from it whenever a booked seat prevents our family from sitting together.
+"""
+
+
+# After refactoring (O(m)) bitmask
+class Solution:
+    def maxNumberOfFamilies(self, n: int, reservedSeats: List[List[int]]) -> int:
+        LEFT, MIDDLE, RIGHT = 0b00001111, 0b00111100, 0b11110000
+        rows = defaultdict(int)
+        for row, seat in reservedSeats:
+            if 2 <= seat <= 9:
+                rows[row] |= 1 << (seat - 2)
+        total = n * 2
+        for mask in rows.values():
+            left = not mask & LEFT
+            right = not mask & RIGHT
+            if left and right:
+                continue
+            total -= 1 if left or right or not mask & MIDDLE else 2
+        return total
+
+
+# Initial solution (sorting + iteration)
+class Solution:
+    def maxNumberOfFamilies(self, n: int, reservedSeats: List[List[int]]) -> int:
+        reservedSeats.sort(key=lambda x: x[0])
+        final_score = n * 2
+        idx = 0
+        size = len(reservedSeats)
+        while idx < size:
+            cur_row = reservedSeats[idx][0]
+            reserved = []
+            while idx < size and reservedSeats[idx][0] == cur_row:
+                reserved.append(reservedSeats[idx][1])
+                idx += 1
+            block_first = block_second = block_third = True
+            for seat in reserved:
+                if seat in (2,3,4,5):
+                    block_first = False
+                if seat in (4,5,6,7):
+                    block_second = False
+                if seat in (6,7,8,9):
+                    block_third = False
+            final_score -= 0 if all([block_first, block_second, block_third]) else 1 if any([block_first, block_second, block_third]) else 2
+        return final_score
