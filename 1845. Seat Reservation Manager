@@ -1,0 +1,22 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+It’s a fairly simple task; we just use a heap.
+In general, if you were designing a proper system, you would certainly maintain a list of reserved seats; however...
+if we stick strictly to the requirements, we can do without it and simply return the number to the heap whenever a release request comes in.
+"""
+
+class SeatManager:
+
+    def __init__(self, n: int):
+        self.free_seats: List[int] = [num for num in range(1, n + 1)]
+        heapify(self.free_seats)
+        
+
+    def reserve(self) -> int:
+        reserved_seat: int = heappop(self.free_seats)
+        return reserved_seat
+
+
+    def unreserve(self, seatNumber: int) -> None:
+        heappush(self.free_seats, seatNumber)
