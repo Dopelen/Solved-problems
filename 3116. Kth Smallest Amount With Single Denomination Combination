@@ -1,0 +1,81 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(2 ** n * log(min(coins) * k))) complexity by time and O(2 ** n * log(min(coins) * k)) by space.
+
+It’s tricky and hard.
+
+The first thing that comes to mind is that the k-th element cannot possibly be greater than the smallest coin denomination multiplied by k.
+
+The second point is that if we have numbers where one divides the other, we can discard the larger one, 
+because the smaller one will ultimately generate all the necessary values. 
+Take 5 and 10, for example: any result obtained by multiplying by 10 can also be achieved by multiplying by 5.
+
+No simulation approach will work for 10⁹.
+
+You need to find the range of achievable values, then count how many coins of each denomination fall within that range, 
+and finally eliminate overlaps for all the denominations present.
+"""
+
+# correct one with hints
+
+class Solution:
+    def findKthSmallest(self, coins: List[int], k: int) -> int:
+        coins.sort()
+        base = []
+        for c in coins:
+            if not any(c % b == 0 for b in base):
+                base.append(c)
+        hi = base[0] * k
+
+        terms = []
+        for c in base:
+            fresh = [(c, 1)]
+            for l, s in terms:
+                nl = lcm(l, c)
+                if nl <= hi:
+                    fresh.append((nl, -s))
+            terms += fresh
+
+        merged = {}
+        for l, s in terms:
+            merged[l] = merged.get(l, 0) + s
+        terms = [(l, s) for l, s in merged.items() if s]
+
+        lo = 1
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if sum(s * (mid // l) for l, s in terms) >= k:
+                hi = mid
+            else:
+                lo = mid + 1
+        return lo
+
+
+
+# naive solution MLE
+class Solution:
+    def findKthSmallest(self, coins: List[int], k: int) -> int:
+        deleted = set()
+        for i in range(len(coins)):
+            for j in range(i + 1, len(coins)):
+                small, big = min(coins[i], coins[j]), max(coins[i], coins[j])
+                if big % small == 0:
+                    deleted.add(big)
+        coins = [coin for coin in coins if coin not in deleted]
+        coins.sort()
+
+        values = [coins[0] * i for i in range(1, k + 1)]
+        processed = set(values)
+        for idx in range(1, len(coins)):
+            val = coins[idx]
+            for mult in range(1, k):
+                next_val = val * mult
+                if next_val >= values[-1]:
+                    break
+                if next_val in processed:
+                    continue
+                else:
+                    bisect.insort_left(values, next_val)
+                    processed.add(next_val)
+                    processed.discard(values[-1])
+                    values.pop()
+        return values[-1]
