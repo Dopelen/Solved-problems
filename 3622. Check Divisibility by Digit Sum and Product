@@ -1,0 +1,29 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+It’s a simple one today! I’m just doing what I’m asked.
+"""
+
+# without list
+class Solution:
+    def checkDivisibility(self, n: int) -> bool:
+        s, m = 0, 1
+        processed_n = n
+        while processed_n:
+            digit = processed_n % 10
+            processed_n //= 10
+            s += digit
+            m *= digit
+        return not n % (s + m)
+
+
+# with list
+class Solution:
+    def checkDivisibility(self, n: int) -> bool:
+        digits = []
+        processed_n = n
+        while processed_n:
+            digits.append(processed_n % 10)
+            processed_n //= 10
+        return not n % (sum(digits) + functools.reduce(operator.mul, digits))
+
