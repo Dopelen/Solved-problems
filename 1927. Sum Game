@@ -1,0 +1,24 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+After reading the problem, I realized I could solve it, but at a high cost. 
+It feels like there’s an elegant solution out there - a thought that constantly distracts me from actually writing *any* solution at all.
+
+We are interested in the sum and the count of "?" marks.
+Alice always aims to increase the larger side, while Bob tries to decrease it. 
+Once there is no more room left, the opponent simply tries to slow down the growth of the opposing side. 
+If the sides end up equal, Alice loses.
+It is also worth adding that if Alice makes the last move, she has definitely won.
+
+BUT TURNING THIS INTO ELEGANT CODE took me over an hour.
+"""
+
+class Solution:
+    def sumGame(self, num: str) -> bool:
+        half = len(num) // 2
+        left, right = num[:half], num[half:]
+        sum_dif = (sum(int(d) for d in left if d != '?') - sum(int(d) for d in right if d != '?'))
+        q_dif = left.count('?') - right.count('?')
+        if q_dif % 2:
+            return True
+        return sum_dif != -9 * (q_dif // 2)
