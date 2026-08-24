@@ -1,0 +1,17 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I'm starting to hate Alice and Bob...
+With the hints, you can write the DP solution even if you don't fully grasp the concept. 
+This is exactly the kind of problem for me.
+"""
+
+class Solution:
+    def stoneGameVIII(self, stones: List[int]) -> int:
+        size = len(stones)
+        prefix_sum = list(accumulate(stones))
+        max_dif = [0] * size
+        max_dif[size - 1] = prefix_sum[size - 1]
+        for i in range(size - 2, 0, -1):
+            max_dif[i] = max(max_dif[i + 1], prefix_sum[i] - max_dif[i + 1])
+        return max_dif[1]
