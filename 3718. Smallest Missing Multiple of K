@@ -1,0 +1,12 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Fortunately, I came across a simple problem.
+"""
+
+class Solution:
+    def missingMultiple(self, nums: List[int], k: int) -> int:
+        nums = set(nums)
+        for i in range(1, 1000):
+            if (i not in nums) and (not (i % k)):
+                return i
