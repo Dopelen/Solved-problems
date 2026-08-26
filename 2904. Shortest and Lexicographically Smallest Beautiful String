@@ -1,0 +1,25 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+The constraints are very small; 
+I solved it using two pointers and sorting.
+"""
+
+class Solution:
+    def shortestBeautifulSubstring(self, s: str, k: int) -> str:
+        size: int = len(s)
+        left = counter_1 = 0
+        answer = check = "1" * 101
+
+        for right in range(size):
+            counter_1 += s[right] == '1'
+            if counter_1 == k:
+                match: str = s[left:right + 1].lstrip('0')
+                if len(match) < len(answer):
+                    answer = match
+                elif len(match) == len(answer):
+                    answer = min(answer, match)
+                while (left < right) and (counter_1 == k):
+                    counter_1 -= s[left] == '1'
+                    left += 1
+        return answer if answer != check else ''
