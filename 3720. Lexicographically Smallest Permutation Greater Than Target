@@ -1,0 +1,29 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * k) complexity by time and O(n * k) by space.
+
+It’s a real brain-teaser of a problem. 
+It’s that classic scenario where you’re asked to satisfy a condition across two dimensions: 
+on the one hand, the value needs to be *greater*, 
+yet at the same time, it has to be the *minimum* possible value that meets that requirement...
+I grasped the concept behind the solution, but actually programming it turned out to be far more difficult.
+"""
+
+class Solution:
+    def lexGreaterPermutation(self, s: str, target: str) -> str:
+        size = len(s)
+        counter_s = Counter(s)
+        prefix_len = 0
+        while prefix_len < size and counter_s[target[prefix_len]] > 0:
+            counter_s[target[prefix_len]] -= 1
+            prefix_len += 1
+        for i in range(prefix_len, -1, -1):
+            if i < prefix_len:
+                counter_s[target[i]] += 1
+            if i == size:
+                continue
+            bigger = next((c for c in string.ascii_lowercase if c > target[i] and counter_s[c]), None)
+            if bigger:
+                counter_s[bigger] -= 1
+                rest = "".join(c * counter_s[c] for c in string.ascii_lowercase)
+                return target[:i] + bigger + rest
+        return ""
