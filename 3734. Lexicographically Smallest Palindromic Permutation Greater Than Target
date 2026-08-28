@@ -1,0 +1,51 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+A more complex version of yesterday's problem. 
+Finding the "next smallest" value involves the same function; the difference lies simply in the specific properties of the palindrome. 
+We work with the first half and construct the second half as a mirror image.
+"""
+
+class Solution:
+    def lexPalindromicPermutation(self, s: str, target: str) -> str:
+        size = len(s)
+        count = Counter(s)
+        odd = [c for c in count if count[c] % 2]
+        if len(odd) > size % 2:
+            return ""
+        mid = odd[0] if odd else ""
+        half = Counter({c: k // 2 for c, k in count.items() if k >= 2})
+        half_size = size // 2
+        head = target[:half_size]
+
+        def build(first_half):
+            return first_half + mid + first_half[::-1]
+
+        if Counter(head) == half:
+            cand = build(head)
+            if cand > target:
+                return cand
+
+        next_elem = self.smallest_greater(half, head)
+        return build(next_elem) if next_elem else ""
+
+    def smallest_greater(self, avail: Counter, t: str) -> str:
+        cnt = avail.copy()
+        m = len(t)
+
+        prefix_len = 0
+        while prefix_len < m and cnt[t[prefix_len]] > 0:
+            cnt[t[prefix_len]] -= 1
+            prefix_len += 1
+
+        for i in range(prefix_len, -1, -1):
+            if i < prefix_len:
+                cnt[t[i]] += 1
+            if i == m:
+                continue
+            bigger = next((c for c in ascii_lowercase if c > t[i] and cnt[c]), None)
+            if bigger:
+                cnt[bigger] -= 1
+                rest = "".join(c * cnt[c] for c in ascii_lowercase)
+                return t[:i] + bigger + rest
+        return ""
