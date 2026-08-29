@@ -1,0 +1,23 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+
+A not-too-complex tree traversal problem, but one that requires a bit of mental anguish to write elegantly.
+"""
+
+class Solution:
+    def longestZigZag(self, root: Optional[TreeNode]) -> int:
+        self.length = 0
+
+        def dfs(node, left, steps):
+            if node:
+                self.length = max(self.length, steps)
+                if left:
+                    dfs(node.left, False, steps + 1)
+                    dfs(node.right, True, 1)
+                else:
+                    dfs(node.left, False, 1)
+                    dfs(node.right, True, steps + 1)
+
+        dfs(root, True, 0)
+        return self.length
