@@ -1,0 +1,34 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+In this problem, we quickly encounter a couple of invariants: 
+we essentially have to choose between removing both the minimum and the maximum from one end at once, 
+or removing a small amount from each end. By comparing these three values, we arrive at the answer.
+"""
+
+# initial one
+class Solution:
+    def minimumDeletions(self, nums: List[int]) -> int:
+        size = len(nums)
+        minimum = maximum = nums[0]
+        minimum_idx = maximum_idx = 0
+        for i, e in enumerate(nums):
+            if e < minimum:
+                minimum = e
+                minimum_idx = i
+            elif e > maximum:
+                maximum = e
+                maximum_idx = i
+        if minimum_idx > maximum_idx:
+            minimum_idx, maximum_idx = maximum_idx, minimum_idx
+        return min(minimum_idx + 1 + (size - maximum_idx),  maximum_idx + 1, size - minimum_idx)
+
+
+# short one
+class Solution:
+    def minimumDeletions(self, nums: List[int]) -> int:
+        size = len(nums)
+        minimum_idx = nums.index(min(nums))
+        maximum_idx = nums.index(max(nums))
+        l, r = min(minimum_idx, maximum_idx), max(minimum_idx, maximum_idx)
+        return min(r + 1, size - l, l + 1 + size - r)
