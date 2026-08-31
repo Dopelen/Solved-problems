@@ -1,0 +1,13 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n * log(n)) by space.
+
+A quick warm-up with sorting algorithms.
+"""
+
+class Solution:
+    def arrangeWords(self, text: str) -> str:
+        new_str = text.split()
+        new_str[0] = new_str[0].lower()
+        new_str.sort(key= len)
+        new_str[0] = new_str[0].capitalize()
+        return " ".join(new_str)
