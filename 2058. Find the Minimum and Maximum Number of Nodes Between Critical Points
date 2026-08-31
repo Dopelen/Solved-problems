@@ -8,6 +8,30 @@ But the task itself is understandable.
 Find the first occurrence of a critical point and track subsequent ones.
 """
 
+# 2026 solution
+"""Linked lists don't scare me anymore; besides, there's nothing to memorize here—it can be solved in linear time."""
+class Solution:
+    def nodesBetweenCriticalPoints(self, head: Optional[ListNode]) -> List[int]:
+        idx = 1
+        first_crit = prev_crit_idx = None
+        prev_val = head.val
+        min_dist = math.inf
+        head = head.next
+
+        while head.next:
+            if (prev_val < head.val and head.next.val < head.val) or (prev_val > head.val and head.next.val > head.val):
+                if not first_crit:
+                    first_crit = idx
+                else:
+                    min_dist = min(min_dist, idx - prev_crit_idx)
+                prev_crit_idx = idx
+            prev_val = head.val
+            idx += 1
+            head = head.next
+        return [-1, -1] if (min_dist == math.inf) else [min_dist, prev_crit_idx - first_crit]
+
+
+# 2024 solution 
 class Solution:
     def nodesBetweenCriticalPoints(self, head: Optional[ListNode]) -> List[int]:
         local_max = local_min = from_first = from_prev =  math.inf
