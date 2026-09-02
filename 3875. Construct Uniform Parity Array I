@@ -1,0 +1,12 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+An amusing little problem.
+If they are all even, you can easily make them all even; 
+if they are odd, you can do the same; 
+if there is a mix of even and odd, you can always make them all even or all odd.
+"""
+
+class Solution:
+    def uniformArray(self, nums1: list[int]) -> bool:
+        return True
