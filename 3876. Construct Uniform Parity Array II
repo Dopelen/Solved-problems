@@ -1,0 +1,44 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I overcomplicated the solution a bit.
+
+The base cases are the same. We can transform any homogeneous array - if all elements are even or all are odd, we simply leave it as is.
+
+The complications arise next.
+If the array is not homogeneous, we can turn an even number into an odd one only if there is an odd number smaller than it. 
+Thus, the problem boils down to finding the smallest even number and checking whether it is greater than any odd number present.
+"""
+
+# To put it briefly
+class Solution:
+    def uniformArray(self, nums1: list[int]) -> bool:
+        minimum_value = nums1[0]
+        hasOdd = False
+        for value in nums1:
+            if value < minimum_value:
+                minimum_value = value
+            if value & 1:
+                hasOdd = True
+        if minimum_value & 1:
+            return True
+        return not hasOdd
+
+
+# Initial idea
+class Solution:
+    def uniformArray(self, nums1: list[int]) -> bool:
+        size = len(nums1)
+        odd_counter = sum(1 for elem in nums1 if (elem % 2 == 0))
+        even_counter = sum(1 for elem in nums1 if (elem % 2))
+        if (odd_counter == size) or (even_counter == size):
+            return True
+
+        smallest_odd = smallest_even = math.inf
+        for elem in nums1:
+            if (elem % 2) and (elem < smallest_odd):
+                smallest_odd = elem
+            elif not (elem % 2) and (elem < smallest_even):
+                smallest_even = elem
+
+        return smallest_even > smallest_odd
