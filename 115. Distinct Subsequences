@@ -1,0 +1,20 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n) by space.
+
+A concise problem. 
+We cannot solve it by brute force, but we can use dynamic programming to store the number of ways to form a suffix, and then use that information to calculate the answer.
+"""
+
+class Solution:
+    def numDistinct(self, s: str, t: str) -> int:
+        size_s, size_t = len(s), len(t)
+        if size_t > size_s:
+            return 0
+        dp = [1] + [0] * size_t
+        for idx, character in enumerate(s):
+            hi = min(size_t, idx + 1)
+            lo = max(1, size_t - (size_s - idx))
+            for j in range(hi, lo - 1, -1):
+                if character == t[j - 1]:
+                    dp[j] += dp[j - 1]
+        return dp[size_t]
