@@ -1,0 +1,26 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+This is another beautiful and elegant problem, where the main challenge lies in the thinking process.
+
+dp[k] is the number of distinct subsequences of the first k characters, including the empty one. 
+Thus, dp[0] = 1 (only the empty subsequence), and the final answer is dp[n] - 1.
+
+Suppose we add the character x = S[k-1]. 
+All subsequences of S[:k] fall into two families:
+— those that do not use the new x: these are exactly all the subsequences of S[:k-1], numbering dp[k-1];
+— those obtained by appending x to the end also numbering dp[k-1].
+This suggests dp[k] = 2 * dp[k-1], but they overlap, and the intersection must be subtracted.
+"""
+
+class Solution(object):
+    def distinctSubseqII(self, S):
+        dp = [1]
+        last = {}
+        for i, x in enumerate(S):
+            dp.append(dp[-1] * 2)
+            if x in last:
+                dp[-1] -= dp[last[x]]
+            last[x] = i
+
+        return (dp[-1] - 1) % (10**9 + 7)
