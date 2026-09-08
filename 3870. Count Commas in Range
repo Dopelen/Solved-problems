@@ -1,0 +1,9 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+All numbers greater than 1000 will include a comma, so in any case, the number needs to be returned minus 1000.
+"""
+
+class Solution:
+    def countCommas(self, n: int) -> int:
+        return n - 1000 + 1 if n >= 1000 else 0
