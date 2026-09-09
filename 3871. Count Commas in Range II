@@ -1,0 +1,19 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(log(n)) by space.
+
+It took a lot of effort to code this elegantly—without manually writing out every power of 10 up to the 15th.
+The key clever trick is that, for each multiplier, we add numbers to the count again.
+In other words, we don't say, "these numbers have one decimal place, and those have two." 
+Instead, we say: each number is counted as many times as the number of thresholds it has crossed. 
+Double-counting here isn't an error; 
+it’s the whole point - it is precisely how we count the decimal places.
+"""
+
+class Solution:
+    def countCommas(self, n: int) -> int:
+        total = 0
+        threshold = 1000
+        while threshold <= n:
+            total += n - threshold + 1
+            threshold *= 1000
+        return total
