@@ -1,0 +1,24 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The key trick is that the sorted list is converted into a tree through a series of divisions: 
+we simply take the middle of the list - which becomes the node - and recursively continue dividing the lists in this way.
+"""
+
+class Solution:
+    def sortedListToBST(self, head: Optional[ListNode]) -> Optional[TreeNode]:
+        vals = []
+        while head:
+            vals.append(head.val)
+            head = head.next
+
+        def build(lo, hi):
+            if lo >= hi:
+                return None
+            mid = (lo + hi) // 2
+            node = TreeNode(vals[mid])
+            node.left = build(lo, mid)
+            node.right = build(mid + 1, hi)
+            return node
+
+        return build(0, len(vals))
