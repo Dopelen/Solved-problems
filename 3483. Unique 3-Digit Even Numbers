@@ -1,0 +1,42 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+I decided to use a brute-force approach by iterating through the digits, 
+but one could also consider whether it is possible to form each of the 450 even numbers between 100 and 999 and sum them up.
+"""
+
+# check numbers
+
+class Solution:
+    def totalNumbers(self, digits: List[int]) -> int:
+        cnt = Counter(digits)
+        res = 0
+        for num in range(100, 1000, 2):
+            need = Counter((num // 100, num // 10 % 10, num % 10))
+            if all(cnt[d] >= k for d, k in need.items()):
+                res += 1
+        return res
+
+
+
+# iterating through the digits
+
+class Solution:
+    def totalNumbers(self, digits: List[int]) -> int:
+        cnt = [0] * 10
+        for d in digits:
+            cnt[d] += 1
+
+        res = 0
+        for a in range(1, 10):
+            if not cnt[a]: continue
+            cnt[a] -= 1
+            for b in range(10):
+                if not cnt[b]: continue
+                cnt[b] -= 1
+                for c in range(0, 10, 2):
+                    if cnt[c]:
+                        res += 1
+                cnt[b] += 1
+            cnt[a] += 1
+        return res
