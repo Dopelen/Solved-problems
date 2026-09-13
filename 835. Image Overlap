@@ -1,0 +1,23 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 4) complexity by time and O(n ** 2) by space.
+
+I solved it by iterating through all possible shifts, but later I saw a more elegant solution in the answers: 
+you take every '1' from the first image and every '1' from the second, 
+and determine how much the first one needs to be shifted so that that specific '1' aligns perfectly with that specific '1' from the second image. 
+You record this shift vector. Then, you simply identify which vector appears most frequently in your list—that’s your answer.
+"""
+
+class Solution:
+    def largestOverlap(self, img1: List[List[int]], img2: List[List[int]]) -> int:
+        side = len(img1)
+        matrix_1 = [(i, j) for i in range(side) for j in range(side) if img1[i][j] == 1]
+        matrix_2 = [(i, j) for i in range(side) for j in range(side) if img2[i][j] == 1]
+        cnt = [[0] * (2 * side) for _ in range(2 * side)]
+        best = 0
+        for ax, ay in matrix_1:
+            for bx, by in matrix_2:
+                dx = bx - ax + side
+                dy = by - ay + side
+                cnt[dx][dy] += 1
+                best = max(best, cnt[dx][dy])
+        return best
