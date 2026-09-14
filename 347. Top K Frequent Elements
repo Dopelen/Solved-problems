@@ -1,0 +1,29 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+The task itself isn't difficult. 
+The only thing is, I want to write it elegantly and concisely, without unnecessary data structures.
+I implemented it using a simple frequency sort.
+Though it could also be done using a heap of size k.
+"""
+
+# Initial O(n * log(m))
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        return [num for num, freq in sorted(Counter(nums).items(), reverse = True, key=lambda x: x[1])[:k]]
+
+
+
+# But you can do it in O(n)
+# And that’s very clever. We collect the frequencies into a list and simply iterate over it from the end.
+class Solution:
+    def topKFrequent(self, nums, k):
+        buckets = [[] for _ in range(len(nums) + 1)]
+        for num, freq in Counter(nums).items():
+            buckets[freq].append(num)
+        out = []
+        for freq in range(len(nums), 0, -1):
+            for num in buckets[freq]:
+                out.append(num)
+                if len(out) == k:
+                    return out
