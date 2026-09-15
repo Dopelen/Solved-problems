@@ -1,0 +1,36 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * k) complexity by time and O(1) by space.
+
+The hints suggested using dynamic programming, but I opted for a greedy approach!
+The key was realizing that we are only interested in palindromes of length k or k+1; 
+if a palindrome is longer than k+1, we can trim its ends to obtain a more optimal palindrome.
+"""
+
+class Solution:
+    def maxPalindromes(self, s: str, k: int) -> int:
+
+
+        def check(left: int, right: int) -> bool:
+            while left < right:
+                if s[left] != s[right]:
+                    return False
+                left += 1
+                right -= 1
+            return True
+
+        size = len(s)
+        answer = start = 0
+
+        for ending_pos in range(k - 1, size):
+            starting_pos = ending_pos - k + 1
+            if starting_pos >= start and check(starting_pos, ending_pos):
+                answer += 1
+                start = ending_pos + 1
+                continue
+
+            starting_pos = ending_pos - k
+            if starting_pos >= start and check(starting_pos, ending_pos):
+                answer += 1
+                start = ending_pos + 1
+
+        return answer
