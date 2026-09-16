@@ -1,0 +1,12 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(k + log(m)) complexity by time and O(1) by space.
+
+The problem can certainly be reduced to a combinatorial one, but I wasn't able to do that myself.
+It can also be solved using dynamic programming, but I couldn't manage to implement it correctly within an hour either, 
+so today I'm using other people's solutions.
+"""
+
+# https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/solutions/8508452/number-of-sets-of-k-non-overlapping-line-njts/?envType=daily-question&envId=2026-09-16
+class Solution:
+    def numberOfSets(self, n: int, k: int) -> int:
+        return math.comb(n + k - 1, k * 2) % (10**9 + 7)
