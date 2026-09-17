@@ -1,0 +1,72 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I'm glad I managed to solve it.
+First, I identified all the intervals that make up the target. 
+Then, I calculated an array indicating the "optimal target to the right of the current one," 
+and finally, for each interval, I computed—in constant time—the sum of the current interval and the shortest one.
+
+After that, I refactored the code, condensing everything into a single loop instead of three.
+"""
+
+# After refactoring
+class Solution:
+    def minSumOfLengths(self, arr: List[int], target: int) -> int:
+        size: int = len(arr)
+        best: List[int | float] = [math.inf] * (size + 1)
+        answer: int | float = math.inf
+        cur_sum = left = 0
+
+        for right, value in enumerate(arr):
+            cur_sum += value
+            while cur_sum > target:
+                cur_sum -= arr[left]
+                left += 1
+
+            best[right + 1] = best[right]
+            if cur_sum == target:
+                length = right - left + 1
+                answer = min(answer, length + best[left])
+                best[right + 1] = min(best[right], length)
+
+        return answer if answer < math.inf else -1
+
+
+# Initial Solutin
+class Solution:
+    def minSumOfLengths(self, arr: List[int], target: int) -> int:
+        size = len(arr)
+        cur_sum = left = right = 0
+        target_subseq = []
+
+        while right < size:
+            cur_sum += arr[right]
+            if cur_sum == target:
+                target_subseq.append((left, right))
+            while left <= right and cur_sum >= target:
+                cur_sum -= arr[left]
+                left += 1
+                if cur_sum == target:
+                    target_subseq.append((left, right))
+            right += 1
+
+        if not target_subseq:
+            return -1
+
+        smallest_subseq = [math.inf] * size
+        cur_target_idx = len(target_subseq) - 1
+        cur_min = math.inf
+
+        for i in range(size - 1, -1, -1):
+            if i == target_subseq[cur_target_idx][0]:
+                cur_min = min(cur_min, target_subseq[cur_target_idx][1] - target_subseq[cur_target_idx][0] + 1)
+                cur_target_idx -= 1
+            smallest_subseq[i] = cur_min
+
+        total_min = math.inf
+        for start, end in target_subseq:
+            cur_len = end - start + 1
+            if end + 1 < size and smallest_subseq[end + 1] != math.inf:
+                total_min = min(total_min, cur_len + smallest_subseq[end + 1])
+
+        return total_min if total_min != math.inf else -1
