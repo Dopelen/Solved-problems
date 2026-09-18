@@ -1,0 +1,42 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n) by space.
+
+The task itself is clear:
+You need to gather the start and end points of the ranges for all the letters and then form all possible segments. 
+But figuring out the optimal way to do this is the biggest challenge.
+It’s doable with some hints, but the sorting part really stumped me; 
+I eventually checked the solutions and saw it was handled via a separate class rule (pretty cool)—I should try doing it that way sometime, too.
+"""
+
+class Solution:
+    def maxNumOfSubstrings(self, s: str) -> list[str]:
+        ranges: dict = {}
+        for idx, elem in enumerate(s):
+            if elem not in ranges:
+                ranges[elem] = [idx, idx]
+            else:
+                ranges[elem][-1] = idx
+
+        all_substrings = []
+        for symbol, (start, end) in ranges.items():
+            cur_idx = start
+            while cur_idx <= end:
+                char_idx = s[cur_idx]
+                if start <= ranges[char_idx][0] and ranges[char_idx][1] <= end:
+                    pass
+                else:
+                    start = min(start, ranges[char_idx][0])
+                    end = max(end, ranges[char_idx][1])
+                    cur_idx = start
+                cur_idx += 1
+            all_substrings.append([start, end])
+
+        all_substrings.sort(key=lambda seg: (seg[1], -seg[0]))
+        result = []
+        last_end = -1
+        for start, end in all_substrings:
+            if start > last_end:
+                result.append(s[start:end + 1])
+                last_end = end
+
+        return result
