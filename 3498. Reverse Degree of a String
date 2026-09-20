@@ -1,0 +1,11 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Today, a simple warm-up puzzle.
+
+Although I struggled a bit while figuring out how to expand the alphabet into a single line...
+"""
+
+class Solution:
+    def reverseDegree(self, s: str) -> int:
+        return sum(idx * (97 + 26 - ord(symbol)) for idx, symbol in enumerate(s, start=1))
