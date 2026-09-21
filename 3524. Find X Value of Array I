@@ -1,0 +1,28 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * k) complexity by time and O(k) by space.
+
+With the hints, the task is quite straightforward. 
+For each index, we calculate the remainder of the division by k and add the product of the remaining remainders and the current value.
+However, justifying why this actually answers the problem is not so simple.
+
+i is the right boundary.
+Add a single-element subarray: +1 to the bucket for nums[i] % k.
+Update all existing buckets according to the rule r -> r * nums[i] mod k.
+Add cur_dp to result. This accounts for all subarrays ending exactly at i.
+"""
+
+class Solution:
+    def resultArray(self, nums: List[int], k: int) -> List[int]:
+        size = len(nums)
+        result = [0] * k
+        dp = [0] * k
+
+        for i in range(size):
+            cur_dp = [0] * k
+            cur_dp[nums[i] % k] += 1
+            for r in range(k):
+                cur_dp[(r * nums[i]) % k] += dp[r]
+            dp = cur_dp
+            for r in range(k):
+                result[r] += dp[r]
+        return result
