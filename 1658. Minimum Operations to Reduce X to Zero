@@ -1,0 +1,24 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+This is a rather beautiful and challenging problem.
+We need to use reverse logic: 
+try to find the largest substring such that the remaining elements sum to X. 
+The problem then transforms into finding the largest substring with a sum of (total sum – X).
+"""
+
+class Solution:
+    def minOperations(self, nums: list[int], x: int) -> int:
+        target = sum(nums) - x
+        if target < 0:
+            return -1
+        left = current = 0
+        max_sub = -1
+        for right, num in enumerate(nums):
+            current += num
+            while current > target:
+                current -= nums[left]
+                left += 1
+            if current == target:
+                max_sub = max(max_sub, right - left + 1)
+        return len(nums) - max_sub if max_sub != -1 else -1
