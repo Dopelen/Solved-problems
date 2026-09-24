@@ -1,0 +1,16 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * k) complexity by time and O(1) by space.
+
+You could do it more concisely - converting the number directly to a string and then splitting it into digits—but I think this way is clearer.
+"""
+
+class Solution:
+    def smallestIndex(self, nums: List[int]) -> int:
+        for idx, num in enumerate(nums):
+            sum_of_digits = 0
+            while num:
+                sum_of_digits += num % 10
+                num //= 10
+            if sum_of_digits == idx:
+                return idx
+        return -1
