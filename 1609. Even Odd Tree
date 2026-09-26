@@ -1,0 +1,21 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The task isn't very difficult, but I initially solved it with a lot of redundancy because I was trying to use a pairwise method. 
+It actually works better without it, though, and nothing breaks on levels with a single value.
+"""
+
+class Solution:
+    def isEvenOddTree(self, root: TreeNode | None) -> bool:
+        level, even = [root], True
+        while level:
+            prev, next_level = None, []
+            for node in level:
+                if node.val % 2 != even:
+                    return False
+                if prev is not None and (node.val <= prev if even else node.val >= prev):
+                    return False
+                prev = node.val
+                next_level += (kid for kid in (node.left, node.right) if kid)
+            level, even = next_level, not even
+        return True
