@@ -1,0 +1,28 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+On one hand, I have a solid grasp of how to program matrices; 
+on the other, the code tends to be quite cumbersome, involving traversals in all directions or treating the matrix like a graph.
+"""
+
+class Solution:
+    def closedIsland(self, grid: list[list[int]]) -> int:
+        d = ((0, -1), (1, 0), (0, 1), (-1, 0))
+        visited = set()
+        closed_count = 0
+        rows, cols = len(grid), len(grid[0])
+
+        def check_island(y, x):
+            visited.add((y, x))
+            closed = (0 < x < cols - 1) and (0 < y < rows - 1)
+            for dy, dx in d:
+                ny, nx = y + dy, x + dx
+                if (0 <= ny < rows) and (0 <= nx < cols) and (grid[ny][nx] == 0) and ((ny, nx) not in visited):
+                    closed &= check_island(ny, nx)
+            return closed
+
+        for r in range(rows):
+            for c in range(cols):
+                if (grid[r][c] == 0) and ((r, c) not in visited):
+                    closed_count += check_island(r, c)
+        return closed_count
