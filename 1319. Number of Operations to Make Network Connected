@@ -1,0 +1,32 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n + m) complexity by time and O(n + m) by space.
+
+At first, I thought about using a set-union approach, but I realized that was overkill for a medium-level problem and there was a simpler way.
+So, I simply counted the number of clusters - that gives the number of wires needed to connect them.
+"""
+
+class Solution:
+    def makeConnected(self, n: int, connections: list[list[int]]) -> int:
+        if len(connections) < n - 1:
+            return -1
+
+        adj = [[] for _ in range(n)]
+        for f, t in connections:
+            adj[f].append(t)
+            adj[t].append(f)
+
+        visited = [False] * n
+        clusters = 0
+        for i in range(n):
+            if visited[i]:
+                continue
+            clusters += 1
+            visited[i] = True
+            stack = [i]
+            while stack:
+                for nxt in adj[stack.pop()]:
+                    if not visited[nxt]:
+                        visited[nxt] = True
+                        stack.append(nxt)
+
+        return clusters - 1
