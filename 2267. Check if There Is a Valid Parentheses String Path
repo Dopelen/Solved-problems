@@ -1,0 +1,61 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+There is an elegant approach using a bitmask to track valid paths, alongside the classic dynamic programming method. 
+In either case, we need a path where the net balance of opening and closing parentheses is zero; 
+the only difference lies in how we store the set of reachable balances for each cell - whether as a set or as a single integer. 
+Since we need to increment or decrement all reachable balances by 1, 
+we can achieve this either by iterating through them or by simply shifting our bitmask! 
+Each balance corresponds to an index where the bit is set to 1.
+"""
+
+# OPTIMAL solution
+class Solution:
+    def hasValidPath(self, grid: list[list[str]]) -> bool:
+        rows = len(grid)
+        cols = len(grid[0])
+        path_len = rows + cols - 1
+        if path_len % 2 == 1 or grid[0][0] != "(" or grid[rows - 1][cols - 1] != ")":
+            return False
+        dp = [[0] * cols for _ in range(rows)]
+        dp[0][0] = 1 << 1
+
+        for r in range(rows):
+            for c in range(cols):
+                change = 1 if grid[r][c] == "(" else -1
+                if r > 0:
+                    if change == 1:
+                        dp[r][c] |= dp[r - 1][c] << 1
+                    else:
+                        dp[r][c] |= dp[r - 1][c] >> 1
+                if c > 0:
+                    if change == 1:
+                        dp[r][c] |= dp[r][c - 1] << 1
+                    else:
+                        dp[r][c] |= dp[r][c - 1] >> 1
+
+        return bool(dp[rows - 1][cols - 1] & 1)
+
+
+# DP without bitmask
+class Solution:
+    def hasValidPath(self, grid):
+        rows, cols = len(grid), len(grid[0])
+        if (rows + cols - 1) % 2 == 1 or grid[0][0] != "(" or grid[-1][-1] != ")":
+            return False
+
+        dp = [[set() for _ in range(cols)] for _ in range(rows)]
+        dp[0][0] = {1}
+
+        for r in range(rows):
+            for c in range(cols):
+                change = 1 if grid[r][c] == "(" else -1
+                for pr, pc in ((r - 1, c), (r, c - 1)):
+                    if pr < 0 or pc < 0:
+                        continue
+                    for b in dp[pr][pc]:
+                        nb = b + change
+                        if nb >= 0:
+                            dp[r][c].add(nb)
+
+        return 0 in dp[rows - 1][cols - 1]
