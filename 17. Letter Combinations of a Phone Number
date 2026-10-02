@@ -1,0 +1,23 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O((4 ** n) * n) complexity by time and O((4 ** n) * n) by space.
+
+It seems this isn't the first time I've encountered problems like this. They can be solved using simple backtracking.
+"""
+
+class Solution:
+    def letterCombinations(self, digits: str) -> list[str]:
+        d: dict = {"2": "abc", "3": "def", "4": "ghi", "5": "jkl", "6": "mno", "7": "pqrs", "8": "tuv", "9": "wxyz"}
+        size = len(digits)
+        answer: list[str] = []
+
+        def construct_str(c, idx):
+            for symbol in d[digits[idx]]:
+                c.append(symbol)
+                if len(c) < size:
+                    construct_str(c, idx + 1)
+                else:
+                    answer.append("".join(c))
+                c.pop()
+
+        construct_str([], 0)
+        return answer
