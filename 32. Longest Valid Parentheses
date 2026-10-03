@@ -1,0 +1,26 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+All in all, the task is manageable. 
+We can simply use a stack to track the sequence: we pop an index when a closing bracket appears and push one when an opening bracket appears.
+The moment we pop an element from the stack marks the completion of a valid sequence. 
+We can calculate the difference between the current index and the top of the stack 
+(where we store only opening bracket indices) 
+to find the length of the longest valid sequence. 
+This works because any previously valid segments have already been popped, and new indices are calculated relative to the remaining ones.
+"""
+
+class Solution:
+    def longestValidParentheses(self, s: str) -> int:
+        res = 0
+        st = [-1]
+        for i, c in enumerate(s):
+            if c == '(':
+                st.append(i)
+            else:
+                st.pop()
+                if not st:
+                    st.append(i)
+                else:
+                    res = max(res, i - st[-1])
+        return res
