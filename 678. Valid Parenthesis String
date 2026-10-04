@@ -1,0 +1,28 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+This problem is quite annoying due to the sheer number of ways to solve it. 
+I spent half an hour bouncing between stack-based and two-pointer approaches and got thoroughly confused. 
+Then I checked the hints, and it turned out the intended solution was dynamic programming.
+"""
+
+class Solution:
+    def checkValidString(self, s: str) -> bool:
+        open_brackets = []
+        asterisks = []
+        for idx, symbol in enumerate(s):
+            if symbol == "(":
+                open_brackets.append(idx)
+            elif symbol == "*":
+                asterisks.append(idx)
+            else:
+                if open_brackets:
+                    open_brackets.pop()
+                elif asterisks:
+                    asterisks.pop()
+                else:
+                    return False
+        while open_brackets and asterisks:
+            if open_brackets.pop() > asterisks.pop():
+                return False
+        return not open_brackets
