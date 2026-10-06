@@ -1,0 +1,9 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The problem definitely qualifies as easy.
+"""
+
+class Solution:
+    def countDigitOccurrences(self, nums: list[int], digit: int) -> int:        
+        return sum(str(number).count(str(digit)) for number in nums)
