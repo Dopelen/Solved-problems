@@ -1,0 +1,68 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O((2 ** n) * n) complexity by time and O((2 ** n) * n) by space.
+
+This problem is beyond my capabilities. 
+A simple brute-force approach won't pass due to complexity constraints (2^n), 
+and I’m not capable of coming up with a more sophisticated solution within an hour.
+
+The correct approach is backtracking with constraints. 
+First, perform a single pass to count how many opening and closing parentheses violate the balance; 
+this represents the minimum number of removals required. 
+Then, generate solutions recursively: at each step, either remove the current element or keep it and proceed. 
+Removals are permitted only until the limit is exhausted, ensuring that exactly the minimum number of characters is removed. 
+A closing parenthesis may be kept only if there is a corresponding unmatched opening parenthesis; 
+this prunes invalid branches immediately, without needing to process the string to the very end. 
+If the removal limit reaches zero by the end of the string, the expression is valid and is added to the result set; 
+a set is used because different removal sequences can yield identical strings.
+"""
+
+https://leetcode.com/problems/remove-invalid-parentheses/editorial/?envType=daily-question&envId=2026-10-07
+class Solution:
+    def removeInvalidParentheses(self, s):
+        left = 0
+        right = 0
+        for char in s:
+            if char == '(':
+                left += 1
+            elif char == ')':
+                right = right + 1 if left == 0 else right
+                left = left - 1 if left > 0 else left
+
+        result = {}
+
+
+        def recurse(s, index, left_count, right_count, left_rem, right_rem, expr):
+            if index == len(s):
+                if left_rem == 0 and right_rem == 0:
+                    ans = "".join(expr)
+                    result[ans] = 1
+            else:
+                if (s[index] == '(' and left_rem > 0) or (s[index] == ')' and right_rem > 0):
+                    recurse(s, index + 1,
+                            left_count,
+                            right_count,
+                            left_rem - (s[index] == '('),
+                            right_rem - (s[index] == ')'), expr)
+                expr.append(s[index])
+                if s[index] != '(' and s[index] != ')':
+                    recurse(s, index + 1,
+                            left_count,
+                            right_count,
+                            left_rem,
+                            right_rem, expr)
+                elif s[index] == '(':
+                    recurse(s, index + 1,
+                            left_count + 1,
+                            right_count,
+                            left_rem,
+                            right_rem, expr)
+                elif s[index] == ')' and left_count > right_count:
+                    recurse(s, index + 1,
+                            left_count,
+                            right_count + 1,
+                            left_rem,
+                            right_rem, expr)
+                expr.pop()
+
+        recurse(s, 0, 0, 0, left, right, [])
+        return list(result.keys())
