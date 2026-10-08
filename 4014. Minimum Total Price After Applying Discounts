@@ -1,0 +1,18 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n * log(n)) by space.
+
+This is a fairly simple task. 
+We sort both arrays and greedily apply the discount to the most expensive items. 
+There are no tricky edge cases, so no extra rounding logic is required; 
+while you could use indices instead of `pop` if you dislike removing elements from the list, 
+I am assuming that popping from the end of the list operates in constant time.
+"""
+
+class Solution:
+    def minPrice(self, prices: list[int], discounts: list[int]) -> float:
+        prices.sort()
+        discounts.sort()
+        total_sum = 0
+        while prices and discounts:
+            total_sum += prices.pop() * (100 - discounts.pop()) / 100
+        return total_sum + sum(prices)
