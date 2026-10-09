@@ -1,0 +1,56 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The task itself isn't very complex; like most bracket-related problems, it can be solved using a stack in linear time. 
+The only issue lies in the branching logic of the if-else statements.
+Initially, I calculated the number of missing parentheses for all scenarios by skipping ahead one character, which turned out to be cumbersome. 
+However, one can simply count the number of closing parentheses required at the current moment; 
+this eliminates the need to skip ahead and significantly reduces the amount of code.
+"""
+
+# After refactoring
+class Solution:
+    def minInsertions(self, s: str) -> int:
+        result: int = 0
+        need: int = 0
+        for symbol in s:
+            if symbol == '(':
+                if need % 2:
+                    result += 1
+                    need -= 1
+                need += 2
+            else:
+                need -= 1
+                if need < 0:
+                    result += 1
+                    need = 1
+        return result + need
+
+
+# Initial Solution
+class Solution:
+    def minInsertions(self, s: str) -> int:
+        size: int = len(s)
+        answer: int = 0
+        opened: int = 0
+        idx: int = 0
+        while idx < size:
+            if s[idx] == '(':
+                opened += 1
+            else:
+                if (idx + 1 >= size):
+                    answer += (1 if opened else 2)
+                    opened -= (1 if opened else 0)
+                elif s[idx + 1] == '(':
+                    if not opened:
+                        answer += 1
+                    answer += 1
+                    opened -= (1 if opened else 0)
+                else:
+                    if not opened:
+                        answer += 1
+                    else:
+                        opened -= 1
+                    idx += 1
+            idx += 1
+        return answer + opened * 2
