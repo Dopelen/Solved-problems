@@ -1,0 +1,39 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n * log(n)) by space.
+
+The problem is more complex than it appears.
+
+The first challenge lies in the mathematical logic.
+Since we are calculating the square of the difference, reducing a value by 1 results in the change x^2 - (x - 1)^2 = 2x - 1. 
+Here, we must recognize that the difference grows linearly with x; 
+therefore, it is always advantageous to greedily select the largest difference and reduce it to the next value.
+
+The second issue is that even after calculating the differences and leveling out the list, 
+we might run out of budget; 
+we then need to calculate how the square of the difference decreases over a specific range.
+
+And I didn't manage to figure out the second part.
+"""
+
+# https://leetcode.com/problems/minimum-sum-of-squared-difference/?envType=daily-question&envId=2026-10-10
+class Solution:
+    def minSumSquareDiff(self, nums1: List[int], nums2: List[int], k1: int, k2: int) -> int:
+        k_total: int = k1 + k2
+        difference: List[int] = [abs(a - b) for a, b in zip(nums1, nums2)]
+        if sum(difference) <= k_total:
+            return 0
+        difference.sort(reverse=True)
+        difference.append(0)
+        size = len(nums1)
+
+        for i in range(1, size + 1):
+            cost = (difference[i - 1] - difference[i]) * i
+            if cost > k_total:
+                # We divide the remaining budget by i elements.
+                q, r = divmod(k_total, i)
+                # for how many was the reduction insufficient
+                hi = difference[i - 1] - q
+                return (hi * hi * (i - r) + (hi - 1) * (hi - 1) * r + sum(x * x for x in difference[i:size]))
+            k_total -= cost
+        return 0
+
