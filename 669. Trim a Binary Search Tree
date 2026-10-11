@@ -1,0 +1,19 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It’s a fairly straightforward task if you give it a little thought.
+You could write a helper function to avoid passing those range boundaries around everywhere - leaving them in the shared scope instead - or you could simply use the original function.
+"""
+
+class Solution:
+    def trimBST(self, root: TreeNode | None, low: int, high: int) -> TreeNode | None:
+        if not root:
+            return None
+        if root.val < low:
+            root = self.trimBST(root.right, low, high)
+        elif root.val > high:
+            root = self.trimBST(root.left, low, high)
+        else:
+            root.left = self.trimBST(root.left, low, high)
+            root.right = self.trimBST(root.right, low, high)
+        return root
