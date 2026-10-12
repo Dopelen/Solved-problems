@@ -1,0 +1,26 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+This is a very good problem.
+The optimal strategy is to make our large elements even larger.
+As a result of the operations, the bits "flow" into other numbers but do not disappear. 
+We can simply count the bits at each position and greedily form new numbers from them.
+"""
+
+class Solution:
+    def maxSum(self, nums: List[int], k: int) -> int:
+        MOD = 10 ** 9 + 7
+        bits = [0] * 31
+        result = 0
+        for num in nums:
+            for i in range(31):
+                bits[i] += num >> i & 1
+
+        for _ in range(k):
+            current = 0
+            for i in range(31):
+                if bits[i]:
+                    bits[i] -= 1
+                    current |= 1 << i
+            result = (result + current * current) % MOD
+        return result
