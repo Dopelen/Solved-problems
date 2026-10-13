@@ -1,0 +1,23 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+This is a fairly straightforward task. 
+Since we are dealing with squares, negative numbers do not affect the solution. 
+We square all the values, sort them, and then greedily construct the answer using a two-pointer approach. 
+Alternatively, one could skip the pointers and simply calculate the sum of the first half of the array and subtract the sum of the second half from it.
+"""
+
+class Solution:
+    def maxAlternatingSum(self, nums: List[int]) -> int:
+        alternating_sum: int = 0
+        nums: List[int] = [num ** 2 for num in nums]
+        left: int = 0
+        right: int = len(nums) - 1
+        nums.sort()
+        while left < right:
+            alternating_sum += nums[right]
+            alternating_sum -= nums[left]
+            left += 1
+            right -= 1
+        alternating_sum += nums[right] if left == right else 0
+        return alternating_sum
