@@ -1,0 +1,40 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+I really struggled to wrap my head around writing the backtracking for this problem,
+and I'm frustrated—things are just going really slowly today.
+
+Then it turned out I could have just solved it using a greedy approach instead.
+"""
+
+# sad optimal solution
+class Solution:
+    def maxSumOfSquares(self, num: int, sum: int) -> str:
+        if sum > 9 * num:
+            return ""
+        nines, rest = divmod(sum, 9)
+        head = "9" * nines + (str(rest) if rest else "")
+        return head + "0" * (num - len(head))
+
+
+# recursion initial solution
+class Solution:
+    def maxSumOfSquares(self, num: int, sum: int) -> str:
+        digits: list[str] = []
+
+        def construct(idx: int, left: int) -> bool:
+            if idx == num:
+                return left == 0
+            rest = num - idx - 1
+            for d in range(9, -1, -1):
+                if d > left:
+                    continue
+                if left - d > 9 * rest:
+                    continue
+                digits.append(str(d))
+                if construct(idx + 1, left - d):
+                    return True
+                digits.pop()
+            return False
+
+        return "".join(digits) if construct(0, sum) else ""
