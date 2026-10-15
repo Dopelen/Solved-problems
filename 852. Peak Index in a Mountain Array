@@ -1,0 +1,17 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(log(n)) complexity by time and O(log(n)) by space.
+
+They’re asking for a binary search implementation for an unusually sorted array - not too difficult.
+"""
+
+class Solution:
+    def peakIndexInMountainArray(self, arr: list[int]) -> int:
+        low, high = 0, len(arr)
+        while low < high:
+            mid = (low + high) // 2
+            if (arr[mid] > arr[mid - 1]) and (arr[mid] > arr[mid + 1]):
+                return mid
+            elif arr[mid] < arr[mid + 1]:
+                low = mid
+            else:
+                high = mid
