@@ -1,0 +1,38 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n) + n * log(m)) complexity by time and O(n) by space.
+
+I initially just wanted to count the permutations, but then I realized the problem was trickier my approach would fall apart because of the duplicate numbers.
+"""
+
+class Solution:
+    def minSwaps(self, nums: List[int]) -> int:
+        size = len(nums)
+        sums = [0] * size
+
+        for i, v in enumerate(nums):
+            s = 0
+            while v > 0:
+                s += v % 10
+                v //= 10
+            sums[i] = s
+
+        indices = list(range(size))
+        indices.sort(key=lambda i: (sums[i], nums[i]))
+
+        targets = [0] * size
+
+        for pos, idx in enumerate(indices):
+            targets[idx] = pos
+
+        visited = [False] * size
+        cycles = 0
+
+        for i in range(size):
+            if not visited[i]:
+                cycles += 1
+                j = i
+                while not visited[j]:
+                    visited[j] = True
+                    j = targets[j]
+
+        return size - cycles
