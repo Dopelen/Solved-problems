@@ -1,0 +1,26 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n ** 2) by space.
+
+The explanation on LeetCode spans 5 pages, the code takes up 15 lines, yet I’m still stuck on the problem statement itself.
+
+The answer emerges from these observations:
+1. The root is always at the beginning.
+2. Since it’s a binary search tree, all smaller elements go into the left subtree, and all larger elements into the right.
+3. We must preserve the relative order within each group, but we are free to change the order in which they are inserted.
+4. At each level, we calculate the number of combinations based on the current size of the tree and pass the result back up.
+"""
+
+# https://leetcode.com/problems/number-of-ways-to-reorder-array-to-get-same-bst/editorial/?envType=daily-question&envId=2026-10-18
+class Solution:
+    def numOfWays(self, nums: List[int]) -> int:
+        mod = 10 ** 9 + 7
+
+        def dfs(nums):
+            size = len(nums)
+            if size < 3:
+                return 1
+            left_nodes = [a for a in nums if a < nums[0]]
+            right_nodes = [a for a in nums if a > nums[0]]
+            return dfs(left_nodes) * dfs(right_nodes) * math.comb(size - 1, len(left_nodes)) % mod
+
+        return (dfs(nums) - 1) % mod
