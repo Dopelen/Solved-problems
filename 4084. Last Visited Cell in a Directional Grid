@@ -1,0 +1,18 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+Simple matrix traversal.
+"""
+
+class Solution:
+    def lastVisitedCell(self, grid: list[list[str]]) -> list[int]:
+        d = {"R": (0, 1), "L": (0, -1), "U": (-1, 0), "D": (1, 0)}
+        rows, cols = len(grid), len(grid[0])
+        r = c = 0
+        last = [0, 0]
+        while 0 <= r < rows and 0 <= c < cols and grid[r][c]:
+            last = [r, c]
+            dr, dc = d[grid[r][c]]
+            grid[r][c] = ""
+            r, c = r + dr, c + dc
+        return last
