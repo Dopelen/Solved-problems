@@ -1,0 +1,44 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The task is straightforward, but I spent about 30 minutes refactoring and writing out the specific test case I needed
+talking everything through out loud the whole time 
+and even then, I made quite a few mistakes; 
+fortunately, there are plenty of test cases in the comments.
+"""
+
+# without sorting
+class Solution:
+    def minOperations(self, s: str) -> int:
+        first = s[0]
+        last = s[-1]
+        if len(s) == 2 and first > last:
+            return -1
+        for ch1, ch2 in pairwise(s):
+            if ch1 > ch2:
+                break
+        else:
+            return 0
+
+        min_ord = min(s[1:-1])
+        max_ord = max(s[1:-1])
+
+        if first <= min(last, min_ord) or last >= max(first, max_ord):
+            return 1
+        elif last >= min_ord or first <= max_ord:
+            return 2
+        return 3
+
+
+# with sorting
+class Solution:
+    def minOperations(self, s: str) -> int:
+        if list(s) == sorted(s):
+            return 0
+        if len(s) == 2:
+            return -1
+        if s[0] == min(s) or s[-1] == max(s):
+            return 1
+        if min(s[:-1]) > min(s) and max(s[1:]) < max(s):
+            return 3
+        return 2
