@@ -1,0 +1,26 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I gave it a lot of thought, but I only managed to solve it with some hints from Claude. 
+The key insight is to view our path as a closed loop; 
+in this model, our operations either shift the starting point (the index from which we begin counting) or change the direction in which we count. 
+Essentially, none of our operations can alter the structure of the loop itself. 
+The problem then boils down to finding a specific starting point from which we can traverse the entire array 
+and end up with a sorted sequence - while also determining the minimum number of steps required to reach that point.
+
+Then we look for 0 and determine whether it is possible to traverse the array starting from it in sorted order.
+After that, we calculate the minimum number of rotation and shift operations required to achieve this, in order to find the overall minimum.
+"""
+
+class Solution:
+    def minOperations(self, nums: List[int]) -> int:
+        size = len(nums)
+        start = nums.index(0)
+        best = -1
+        if all(nums[(start + j) % size] == j for j in range(size)):
+            best = min(start, size - start + 2)
+        if all(nums[(start - j) % size] == j for j in range(size)):
+            p = (size - 1 - start) % size
+            c = min(p, size - p) + 1
+            best = c if best < 0 else min(best, c)
+        return best
