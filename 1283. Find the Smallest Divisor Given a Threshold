@@ -1,0 +1,16 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n * log(n)) by space.
+
+Just had to write a binary search (which I struggled with again, because I didn't notice that I’d forgotten a parenthesis).
+"""
+
+class Solution:
+    def smallestDivisor(self, nums: list[int], threshold: int) -> int:
+        low, high = 1, max(nums)
+        while low < high:
+            mid = (low + high) // 2
+            if sum(math.ceil(elem / mid) for elem in nums) <= threshold:
+                high = mid
+            else:
+                low = mid + 1
+        return low
