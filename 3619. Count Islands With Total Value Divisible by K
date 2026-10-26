@@ -1,0 +1,32 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+If you know how to traverse matrices, it’s nothing complicated. 
+Overall, it’s the same type of problem as 1254 or 695 - essentially just traversing components of a matrix with an additional condition.
+
+Usually, only two questions remain: 
+whether to maintain a separate array for visited cells or modify the matrix itself, and 
+whether to include the check inside the recursive function or perform it before calling the function.
+"""
+
+class Solution:
+    def countIslands(self, grid: List[List[int]], k: int) -> int:
+        rows, cols = len(grid), len(grid[0])
+        answer = 0
+        direct = {(0, 1), (1, 0), (0, -1), (-1, 0)}
+
+        def calculate_value(y, x):
+            cur_value = grid[y][x]
+            grid[y][x] = 0
+            for dy, dx in direct:
+                ny, nx = y + dy, x + dx
+                if (0 <= ny < rows) and (0 <= nx < cols) and (grid[ny][nx] != 0):
+                    cur_value += calculate_value(ny, nx)
+            return cur_value
+
+        for row in range(rows):
+            for col in range(cols):
+                if grid[row][col] != 0:
+                    answer += not (calculate_value(row, col) % k)
+
+        return answer
