@@ -1,0 +1,32 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(e * k * log(n * k)) complexity by time and O(e * k * log(n * k)) by space.
+
+It’s nice when you know how to solve a problem, 
+but it’s not so nice when there are cycles...
+I wrote a solution quite quickly, but then got stuck while debugging. 
+The trick is to always pick the "cheapest" nodes, while also adding a new path option whenever you reach a node with a shorter "tail" of identical consecutive letters. 
+This way, you don’t lose track of different potential paths that could lead you to the answer.
+"""
+
+class Solution:
+    def shortestPath(self, n: int, edges: List[List[int]], labels: str, k: int) -> int:
+        adj_list = defaultdict(list)
+        best_score_for_node = {(0, 1): 0}
+        for u, v, w in edges:
+            adj_list[u].append((v, w))
+        heap = [(0, 0, 1)]
+        while heap:
+            cur_score, node, count = heappop(heap)
+            if node == n - 1:
+                return cur_score
+            if cur_score > best_score_for_node.get((node, count), math.inf):
+                continue
+            for dest, weight in adj_list[node]:
+                next_count = count + 1 if labels[node] == labels[dest] else 1
+                if next_count > k:
+                    continue
+                next_score = cur_score + weight
+                if next_score < best_score_for_node.get((dest, next_count), math.inf):
+                    best_score_for_node[(dest, next_count)] = next_score
+                    heappush(heap, (next_score, dest, next_count))
+        return -1
