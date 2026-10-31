@@ -1,0 +1,52 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * m) complexity by time and O(n * m) by space.
+
+I really had to rack my brain to map out the transitions, but after half an hour of struggling, everything fell into place.
+
+We only care about two rows - the previous one and the current one which helps us optimize memory usage. 
+For each cell, we simply record all possible transitions based on whether or not there are mirrors in the adjacent cells 
+(given the specific conditions, we only need to consider two neighboring cells).
+"""
+
+# After refactoring
+class Solution:
+    def uniquePaths(self, grid: List[List[int]]) -> int:
+        MOD = 10 ** 9 + 7
+        down = [0] * len(grid[0])
+        total = 1
+
+        for r, row in enumerate(grid):
+            right = 1 if r == 0 else 0
+            for c, g in enumerate(row):
+                above, left = down[c], right
+                total = (above + left) % MOD
+                down[c], right = (left, above) if g else (total, total)
+
+        return total
+
+# Initial solution
+class Solution:
+    def uniquePaths(self, grid: List[List[int]]) -> int:
+        MOD = 10 ** 9 + 7
+        rows, cols = len(grid), len(grid[0])
+        previous = [[0,1]]
+        for i in range(1, cols):
+            if grid[0][i]:
+                previous.append([0, previous[-1][1]])
+                previous.extend([0, 0] for _ in range(len(grid[0]) - i - 1))
+                break
+            previous.append([0, previous[-1][1]])
+
+        for r in range(1, rows):
+            current = []
+            for c in range(cols):
+                if not current:
+                    from_left = 0
+                    from_above = 0 if grid[r - 1][c] else sum(previous[c])
+                else:
+                    from_left = current[-1][0] if grid[r][c - 1] else sum(current[-1])
+                    from_above = previous[c][1] if grid[r - 1][c] else sum(previous[c])
+                current.append([from_above % MOD, from_left % MOD])
+            previous = current
+
+        return sum(current[-1]) % MOD
