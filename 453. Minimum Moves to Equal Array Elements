@@ -1,0 +1,15 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+The solution itself is elementary. 
+But the logic behind deriving it is quite involved!
+If I increase all elements except for one, they all go up while their relative differences remain the same
+but the one that wasn't increased effectively decreases (relative to the others).
+This allows us to reframe the problem as reducing all values ​​down to the minimum. 
+Each move reduces the gap by one.
+"""
+
+class Solution:
+    def minMoves(self, nums: list[int]) -> int:
+        m = min(nums)
+        return sum(elem - m for elem in nums)
