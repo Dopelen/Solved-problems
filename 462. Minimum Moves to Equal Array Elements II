@@ -1,0 +1,17 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n) by space.
+
+As with the previous problem, the key insight lies in understanding why this simple code yields the correct answer.
+Regardless of the target value we choose to transform our array elements toward, 
+the total number of steps required - summing the distances from the leftmost and rightmost elements (in a sorted array) - remains constant. 
+If we decrease the target value, the number of steps required from the right side increases, and vice versa. 
+Consequently, the problem reduces to finding the median of all the elements.
+
+There is a solution that goes beyond the standard approach (O(n)) - by finding a certain statistic - but I’m wary of it.
+"""
+
+class Solution:
+    def minMoves2(self, nums: list[int]) -> int:
+        nums.sort()
+        med = nums[len(nums) // 2] 
+        return sum(abs(elem - med) for elem in nums)
