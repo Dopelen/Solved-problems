@@ -1,0 +1,10 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+There’s a sense that this task should have come first, rather than last, within this topic.
+"""
+
+class Solution:
+    def minMoves(self, nums: List[int]) -> int:
+        max_val = max(nums)
+        return sum(max_val - elem for elem in nums)
