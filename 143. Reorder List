@@ -1,0 +1,30 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(1) by space.
+
+We continue to struggle with linked lists.
+First, we find the middle of the list using two pointers.
+Then, we reverse the second half and reassign the pointers.
+The last element ends up being the first element that followed the midpoint. 
+It’s a real mind-bender.
+"""
+
+class Solution:
+    def reorderList(self, head: ListNode | None) -> None:
+        if not head or not head.next:
+            return
+        slow, fast = head, head.next
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+        second, slow.next = slow.next, None
+        prev = None
+        while second:
+            second.next, prev, second = prev, second, second.next
+
+        first = head
+        while prev:
+            n1, n2 = first.next, prev.next
+            first.next = prev
+            prev.next = n1
+            first, prev = n1, n2
