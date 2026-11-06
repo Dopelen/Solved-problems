@@ -1,0 +1,43 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n * log(n)) by space.
+
+I gave it some thought before bed and again earlier today; 
+the core concept took about 25–30 minutes to work out. 
+After that, I spent a solid hour and a half just trying to nail down all the edge cases—things like 
+"should this be inclusive or exclusive?" or "is this a timestamp or a time index?"
+
+In the end, I cracked it, and I’m really pleased with myself.
+
+The tricky part was implementing an optimization to avoid redundant recalculations for overlapping intervals. 
+Essentially, I use a dictionary to track occurrences - the size of which represents the number of active servers within a given interval. 
+Then, after each check, I remove the logs that fall out on the left and add the new ones appearing on the right. 
+By leveraging an initial sort based on indices, I’m able to construct the final answer.
+
+It’s a tricky problem that definitely requires some careful thought, but what I really like is that, in the end, it can be solved using fundamental techniques.
+"""
+
+class Solution:
+    def countServers(self, n: int, logs: List[List[int]], x: int, queries: List[int]) -> List[int]:
+        answer = [None] * len(queries)
+        logs.sort(key = lambda x: x[1])
+        queries = sorted([(elem, idx) for idx, elem in enumerate(queries)], key= lambda x: x[0])
+        left = right = 0
+        servers_freq = defaultdict(int)
+
+        for time_check, idx in queries:
+
+            while left < len(logs) and logs[left][1] + x < time_check:
+                if logs[left][0] in servers_freq:
+                    servers_freq[logs[left][0]] -= 1
+                    if servers_freq[logs[left][0]] == 0:
+                        del servers_freq[logs[left][0]]
+                left += 1
+
+            while right < len(logs) and logs[right][1] <= time_check:
+                if logs[right][1] + x >= time_check:
+                    servers_freq[logs[right][0]] += 1
+                right += 1
+
+            answer[idx] = n - len(servers_freq)
+
+        return answer
