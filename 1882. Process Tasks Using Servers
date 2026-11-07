@@ -1,0 +1,69 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n * log(n)) by space.
+
+I used an approach involving three data structures: 
+- a task queue, 
+- a heap for available servers, 
+- a heap for busy servers. 
+
+Every second, I update the status of the servers - moving those that have become free into the "available" pool - and then assign a server to a task. 
+I encapsulated the task-processing logic into separate functions, which makes it easier to handle any tasks remaining in the pool once the time limit has expired.
+"""
+
+# Initial solution
+class Solution:
+    def assignTasks(self, servers: list[int], tasks: list[int]) -> list[int]:
+        size_tasks = len(tasks)
+        answer = [0] * size_tasks
+        servers_free = [(weight, idx) for idx, weight in enumerate(servers)]
+        servers_busy = []
+        task_queue = deque()
+        heapify(servers_free)
+
+        def realise_task(time):
+            while servers_busy and (servers_busy[0][0] <= time):
+                _, weight_busy, id_busy = heappop(servers_busy)
+                heappush(servers_free, (weight_busy, id_busy))
+
+        def process_task(time):
+            while servers_free and task_queue:
+                weight_free, id_free = heappop(servers_free)
+                time_to_process, id_answer = task_queue.popleft()
+                answer[id_answer] = id_free
+                heappush(servers_busy, (time + time_to_process, weight_free, id_free))
+
+        for sec in range(size_tasks):
+            realise_task(sec)
+            task_queue.append((tasks[sec], sec))
+            process_task(sec)
+
+        while task_queue:
+            next_time = servers_busy[0][0]
+            realise_task(next_time)
+            process_task(next_time)
+
+        return answer
+
+
+# Optimized one (without task queue)
+class Solution:
+    def assignTasks(self, servers: list[int], tasks: list[int]) -> list[int]:
+        free = [(weight, idx) for idx, weight in enumerate(servers)]
+        heapify(free)
+        busy: list[tuple[int, int, int]] = []
+        answer = []
+        now = 0
+
+        for sec, duration in enumerate(tasks):
+            now = max(now, sec)
+            if not free:
+                now = max(now, busy[0][0])
+            while busy and busy[0][0] <= now:
+                _, weight, idx = heappop(busy)
+                heappush(free, (weight, idx))
+
+            weight, idx = heappop(free)
+            answer.append(idx)
+            heappush(busy, (now + duration, weight, idx))
+
+        return answer
