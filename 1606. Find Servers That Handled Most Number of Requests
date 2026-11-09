@@ -1,0 +1,61 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n * log(n)) by space.
+
+Even with a built-in sorted set, I still managed to hit a TLE (Time Limit Exceeded). 
+For some reason, I assumed Python would optimize the access to the maximum value during the final check...
+a notion likely influenced by some recent reading on how computations can be optimized at compile time.
+
+In any case, if you’re already familiar with the established solutions, the problem is of medium difficulty; 
+but if you have to come up with them yourself, it’s extremely challenging.
+
+It can be reformulated as follows:
+"Write a 'sorted set' class."
+"""
+
+# Initial solution
+class Solution:
+    def busiestServers(self, k: int, arrival: list[int], load: list[int]) -> list[int]:
+        task_counter = {i: 0 for i in range(k)}
+        servers_free = SortedSet(_ for _ in range(k))
+        busy_servers = []
+
+        for idx, (arrival_time, process_time) in enumerate(zip(arrival, load)):
+            while busy_servers and busy_servers[0][0] <= arrival_time:
+                _, free_server_idx = heappop(busy_servers)
+                servers_free.add(free_server_idx)
+            if len(busy_servers) == k:
+                continue
+            process_server_idx = idx % k
+            last_available_idx = servers_free.bisect_left(process_server_idx)
+            appointed_server_idx = last_available_idx if last_available_idx != len(servers_free) else 0
+            task_counter[servers_free[appointed_server_idx]] += 1
+            heappush(busy_servers, (arrival_time + process_time, servers_free.pop(appointed_server_idx)))
+
+        max_freq = max(task_counter.values())
+        return [k for k, v in task_counter.items() if v == max_freq]
+
+
+# better solutiopn (founded with LLM)
+# A more elegant and faster solution that doesn’t involve a sorted set at all.
+# Since the movement is linear and returns to the beginning, we can create a loop by assigning "virtual IDs" to our servers. 
+# And because the range is [i, i + k] we can ensure that we always select the minimum value by representing this storage structure as a heap. 
+# A very clever and brilliant solution! Too bad it’s not mine.
+
+class Solution:
+    def busiestServers(self, k: int, arrival: list[int], load: list[int]) -> list[int]:
+        cnt = [0] * k
+        free = list(range(k))
+        busy = []
+
+        for i, (t, d) in enumerate(zip(arrival, load)):
+            while busy and busy[0][0] <= t:
+                _, s = heappop(busy)
+                heappush(free, i + (s - i) % k)
+            if not free:
+                continue
+            s = heappop(free) % k
+            cnt[s] += 1
+            heappush(busy, (t + d, s))
+
+        best = max(cnt)
+        return [j for j, v in enumerate(cnt) if v == best]
