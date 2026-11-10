@@ -1,0 +1,29 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+Four years into my dynamic programming course, I think I’m finally starting to grasp some of the intuition behind how to structure a problem
+not entirely confidently yet, but much better than before.
+"""
+
+# initial solution
+class Solution:
+    def climbStairs(self, n: int, costs: List[int]) -> int:
+        dp = [math.inf] * (n + 1)
+        dp[0] = 0
+        for i, c in enumerate(costs):
+            for step in range(1,4):
+                ni = i + step
+                if ni > n:
+                    break
+                dp[ni] = min(dp[ni], dp[i] + costs[ni - 1] + (ni - i) ** 2)
+
+        return dp[-1]
+
+
+# with memo
+class Solution:
+    def climbStairs(self, n: int, costs: List[int]) -> int:
+        a = b = c = 0
+        for i in range(n):
+            a, b, c = b, c, min(a + 9, b + 4, c + 1) + costs[i]
+        return c
