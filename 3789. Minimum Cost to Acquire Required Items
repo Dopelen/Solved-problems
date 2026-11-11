@@ -1,0 +1,20 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+For the most part, I kept looking for a catch, because the success rate for such a simple problem was surprisingly low.
+It’s enough to consider three possible scenarios and take the minimum of them.
+The only part that isn’t entirely intuitive is how to map the price associated with an upper bound to that bound itself - but even that isn’t difficult..
+"""
+
+class Solution:
+    def minimumCost(self, cost1: int, cost2: int, costBoth: int, need1: int, need2: int) -> int:
+        scenario_1 = cost1 * need1 + cost2 * need2
+
+        low = need1 if need1 <= need2 else need2
+        high = need1 if need1 >= need2 else need2
+        scenario_2 = costBoth * high
+
+        high_cost = cost1 if high == need1 else cost2
+        scenario_3 = costBoth * low + (high - low) * high_cost
+
+        return min(scenario_1, scenario_2, scenario_3)
