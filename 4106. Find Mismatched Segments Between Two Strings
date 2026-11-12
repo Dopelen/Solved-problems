@@ -1,0 +1,22 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+It’s not a particularly difficult task, and there are a dozen ways to solve it.
+Essentially, you just iterate through the arrays and track the mismatches using whatever method you find convenient.
+"""
+
+class Solution:
+    def findMismatchedSegments(self, s1: str, s2: str) -> list[list[str]]:
+        answer = []
+        idx = 0
+        size = len(s1)
+
+        while idx != size:
+            if s1[idx] == s2[idx]:
+                idx += 1
+                continue
+            start = idx
+            while idx < size and s1[idx] != s2[idx]:
+                idx += 1
+            answer.append(["".join(s1[start:idx]), "".join(s2[start:idx])])
+        return answer
