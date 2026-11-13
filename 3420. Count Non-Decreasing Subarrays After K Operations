@@ -1,0 +1,41 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2) complexity by time and O(n * log(n)) by space.
+
+I gave it some serious thought, but I got stuck on optimizing the left shift—that took up all the time.
+It’s a shame
+I was practically one step away from the solution.
+"""
+
+# https://leetcode.com/problems/count-non-decreasing-subarrays-after-k-operations/solutions/8606799/count-non-decreasing-subarrays-after-k-o-6laj/?envType=daily-question&envId=2026-11-13
+class Solution:
+    def countNonDecreasingSubarrays(self, nums: List[int], k: int) -> int:
+        size = len(nums)
+        answer = 0
+        operations = 0
+        q = []
+        cnt = [[] for _ in range(size)]
+        pos = [size] * size
+        st = []
+
+        left = 0
+        for right in range(size):
+            while st and nums[right] >= nums[st[-1]]:
+                pos[st[-1]] = right
+                st.pop()
+            if st:
+                cnt[st[-1]].append(right)
+            st.append(right)
+
+            heapq.heappush(q, (-nums[right], right))
+            operations += max(0, -q[0][0] - nums[right])
+            while operations > k:
+                for i in cnt[left]:
+                    operations -= (nums[left] - nums[i]) * (min(pos[i], right + 1) - i)
+                left += 1
+
+            while q and q[0][1] < left:
+                heapq.heappop(q)
+
+            answer += right - left + 1
+
+        return answer
