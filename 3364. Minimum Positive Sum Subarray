@@ -1,0 +1,26 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * (r - l)) complexity by time and O(r - l) by space.
+
+This wasn't exactly a simple or easy task; 
+I tried my best to minimize the number of calculations. 
+In the end, the complexity isn't quadratic, but linear with a constant factor of (r - l). 
+I’ve never been comfortable working with pointers, which is why I even made a small mistake while setting them up and trying to narrow the upper bound of the calculations.
+"""
+
+class Solution:
+    def minimumSumSubarray(self, nums: List[int], l: int, r: int) -> int:
+        size = len(nums)
+        prefix_sum = [sum(nums[0:l])]
+        delta = r - l
+        for i in range(delta):
+            prefix_sum.append(prefix_sum[-1] + nums[l + i])
+        min_sum = min((pref for pref in prefix_sum if pref > 0), default= math.inf)
+
+        for idx in range(l, size):
+            for sub in range(delta + 1):
+                if idx + sub < size:
+                    prefix_sum[sub] = prefix_sum[sub] - nums[idx - l] + nums[idx + sub]
+                    if prefix_sum[sub] > 0:
+                        min_sum = min(min_sum, prefix_sum[sub])
+
+        return min_sum if min_sum != math.inf else -1
