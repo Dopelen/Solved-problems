@@ -1,0 +1,39 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+I didn’t really understand what was being asked of me, but I saw in the comments that people were suggesting the use of semaphores. 
+So, I went to look up how to implement that.
+It’s a rather convoluted concept from the "ancient" days of technology - back before AI was even a thing. 
+I even remember having to memorize this for one of my very first courses.
+Essentially, you put threads to sleep until it’s their turn to run.
+"""
+
+from threading import Semaphore
+class ZeroEvenOdd:
+    def __init__(self, n):
+        self.n = n + 1
+        self.semOdd  = Semaphore(0)
+        self.semEven = Semaphore(0)
+        self.semZero = Semaphore(1)
+
+    def zero(self, printNumber):
+        for i in range(1,self.n):
+            self.semZero.acquire()
+            printNumber(0)
+            if i&1:
+                self.semOdd.release()
+            else:
+                self.semEven.release()
+            
+    def even(self, printNumber):
+        for i in range(2,self.n,2):
+            self.semEven.acquire()
+            printNumber(i)
+            self.semZero.release()
+    
+    def odd(self, printNumber):
+        for i in range(1,self.n,2):
+            self.semOdd.acquire()
+            printNumber(i)
+            self.semZero.release()
+
