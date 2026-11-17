@@ -1,0 +1,45 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 3 * d) complexity by time and O(n ** 3 * log(n)) by space.
+
+This is a large, multi-layered problem. 
+Dynamic programming immediately comes to mind, though it’s not entirely clear to me how to structure it here.
+
+The goal is to calculate the cost of modifying each segment and then simply determine the optimal partitioning.
+To calculate the cost, we need to consider all valid segments and determine the expense of transforming each one into a palindrome.
+
+It’s a manageable task, but a very painstaking one; I didn’t have enough time to solve it.
+"""
+
+# https://leetcode.com/problems/minimum-changes-to-make-k-semi-palindromes/editorial/?envType=daily-question&envId=2026-11-17
+def segmentCost(s: str, l: int, m: int, factors: list) -> int:
+    best = m
+    for d in factors[m]:
+        groups = m // d
+        changes = 0
+        for offset in range(d):
+            for t in range(groups // 2):
+                if (s[l + offset + t * d] != s[l + offset + (groups - 1 - t) * d]):
+                    changes += 1
+        best = min(best, changes)
+    return best
+
+class Solution:
+    def minimumChanges(self, s: str, k: int) -> int:
+        size = len(s)
+        factors = [[] for _ in range(size + 1)]
+        for d in range(1, size // 2 + 1):
+            for m in range(d * 2, size + 1, d):
+                factors[m].append(d)
+        cost = [[0] * size for _ in range(size)]
+        for l in range(size - 1):
+            for r in range(l + 1, size):
+                cost[l][r] = segmentCost(s, l, r - l + 1, factors)
+
+        @cache
+        def solve(seg: int, start: int) -> int:
+            if seg == 1:
+                return cost[start][size - 1]
+            limit = (size - 1 - 2 * (seg - 1))
+            return min(cost[start][e] + solve(seg - 1, e + 1) for e in range(start + 1, limit + 1))
+
+        return solve(k, 0)
