@@ -1,0 +1,21 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n + k * log(n)) complexity by time and O(n + k * log(n)) by space.
+
+A fairly simple task.
+Create a max-heap by simply multiplying the numbers by -1; 
+extract the largest number, 
+divide it, 
+and put it back into the heap.
+Alternatively, you could skip the heap and just count the occurrences using a dictionary - that would also work and might even be faster.
+"""
+
+class Solution:
+    def minStoneSum(self, piles: list[int], k: int) -> int:
+        heap = [-elem for elem in piles]
+        heapify(heap)
+        while k:
+            cur_elem = heappop(heap)
+            cur_elem //= 2
+            heappush(heap, cur_elem)
+            k -= 1
+        return sum(-elem for elem in heap)
