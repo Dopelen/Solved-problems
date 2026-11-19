@@ -1,0 +1,16 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n * log(n)) by space.
+
+I liked this problem. 
+It just requires sitting down and thinking it through. 
+Initially, I tried a greedy approach to adjust the distances, but that doesn't work in every case. 
+Fortunately, there are only two possible actions, so we can easily examine all the options.
+It is always advantageous to transform one number into any other; this results in a distance of 0. 
+Essentially, we have two operations that allow us to remove two numbers from the overall list.
+In this scenario, we can greedily select the ones that contribute the most to the total score.
+"""
+
+class Solution:
+    def minimizeSum(self, nums: List[int]) -> int:
+        nums.sort()
+        return min(nums[-1] - nums[2], nums[-2] - nums[1], nums[-3] - nums[0])
