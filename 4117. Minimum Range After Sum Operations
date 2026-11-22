@@ -1,0 +1,13 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+This is a good problem for thinking things through and playing around with numbers.
+Since we replace the two smallest numbers with a new one, their sum is always greater than what we had before (which gives us a better range); 
+however, the middle number always remains part of subsequent operations, so we can never surpass it.
+"""
+
+class Solution:
+    def minRange(self, a: int, b: int, c: int) -> int:
+        low, high = min(a, b, c), max(a, b, c)
+        mid = a + b + c - low - high
+        return min(high - low, mid)
