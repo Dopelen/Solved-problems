@@ -1,0 +1,52 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n) complexity by time and O(n) by space.
+
+A nice problem. 
+I immediately saw how to solve it
+I must have encountered something similar before. 
+
+We use two pointers and track the number of unique characters using the size of a frequency dictionary. 
+As soon as a character is no longer unique, we shift the left boundary until it becomes unique again.
+"""
+
+# Cool refactored solution with jump to previous index
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        last_seen = {}
+        answer = left = 0
+
+        for right, symbol in enumerate(s):
+            if last_seen.get(symbol, -1) >= left:
+                left = last_seen[symbol] + 1
+            last_seen[symbol] = right
+            answer = max(answer, right - left + 1)
+
+        return answer
+
+
+# Initial solution with iteration
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        size = len(s)
+        left = right = 0
+        answer = 0
+        current_length = defaultdict(int)
+
+        def shift_left(idx):
+            current_length[s[idx]] -= 1
+            if current_length[s[idx]] == 0:
+                del current_length[s[idx]]
+            idx += 1
+            return idx
+
+        while right != size:
+            new_symbol = s[right]
+            if new_symbol in current_length:
+                while s[left] != new_symbol:
+                    left = shift_left(left)
+                left = shift_left(left)
+            current_length[new_symbol] += 1
+            answer = max(answer, len(current_length))
+            right += 1
+
+        return answer
