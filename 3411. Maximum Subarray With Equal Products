@@ -1,0 +1,38 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 3 * log(m)) complexity by time and O(n ** 2 * log(m)) by space.
+
+A very complex task that falls into the "easy" category.
+If you know all the optimal libraries and don’t waste time writing your own - there’s a whole host of things you could optimize here, 
+such as shifting the left boundary or recalculating values. 
+And yet, you still can’t shake the feeling that there’s a purely mathematical solution.
+"""
+
+# My version
+class Solution:
+    def maxLength(self, nums: List[int]) -> int:
+        size = len(nums)
+        longest = 0
+        for left in range(size):
+            for right in range(left + 1, size + 1):
+                if math.prod(nums[left:right]) == math.gcd(*nums[left:right]) * math.lcm(*nums[left:right]):
+                    longest = max(longest, right - left)
+        return longest
+
+
+# Leetcode versions:
+class Solution:
+    def maxLength(self, nums: List[int]) -> int:
+        res = 2
+        prod_val = 1
+        n = len(nums)
+        start, end = 0, 0
+
+        while end < n:
+            while gcd(prod_val, nums[end]) > 1:
+                prod_val //= nums[start]
+                start += 1
+            prod_val *= nums[end]
+            res = max(res, end - start + 1)
+            end += 1
+
+        return res
