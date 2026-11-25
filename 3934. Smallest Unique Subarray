@@ -1,0 +1,48 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n * log(n)) complexity by time and O(n * log(n)) by space.
+
+This complex problem builds upon two other challenging problems. 
+The hints suggest using a "rolling hash" (I’m not familiar with that concept). 
+All in all, I wasn’t too surprised that I couldn’t solve it.
+
+However, the solution itself is quite straightforward. 
+If we take a subarray of length k and find that it is unique, 
+then it follows that any subarray derived from it must also be unique.
+The next step is simply to learn about and implement a rolling hash, 
+which will allow for faster verification of whether a subarray is unique...
+
+It turned out to be a very beautiful concept.
+"""
+
+# https://leetcode.com/problems/smallest-unique-subarray/editorial/?envType=daily-question&envId=2026-11-25
+class Solution:
+    def smallestUniqueSubarray(self, nums):
+        MOD = 1000000007
+        BASE = 911382323
+
+        size = len(nums)
+        list_to_int = [0] * (size + 1)
+        powers = [0] * (size + 1)
+        powers[0] = 1
+
+        for i in range(size):
+            list_to_int[i + 1] = (list_to_int[i] * BASE + nums[i]) % MOD
+            powers[i + 1] = powers[i] * BASE % MOD
+
+        def check(length):
+            cnt = {}
+            for l in range(size - length + 1):
+                r = l + length
+                key = (list_to_int[r] - list_to_int[l] * powers[length] % MOD) % MOD
+                cnt[key] = cnt.get(key, 0) + 1
+            return 1 in cnt.values()
+
+        lo, hi = 1, size
+        while lo < hi:
+            mid = lo + (hi - lo) // 2
+            if check(mid):
+                hi = mid
+            else:
+                lo = mid + 1
+
+        return lo
