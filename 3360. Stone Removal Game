@@ -1,0 +1,32 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(1) complexity by time and O(1) by space.
+
+Given these constraints, one could solve the problem iteratively; 
+however, a closer look reveals that we are dealing with a decreasing arithmetic progression with a fixed step.
+It is possible to calculate at which step the target number will be reached, allowing us to provide an answer even for large input values.
+"""
+
+
+# Itearative
+class Solution:
+    def canAliceWin(self, n: int) -> bool:
+        alice_win = False
+        step = 10
+        while n >= step:
+            n -= step
+            step -= 1
+            alice_win = not alice_win
+        return alice_win
+
+
+# O(1)
+class Solution:
+    def canAliceWin(self, n: int) -> bool:
+        d = 441 - 8 * n     # root of a quadratic equation
+        if d < 0:
+            return False
+        c = isqrt(d)
+        if c * c < d:
+            c += 1
+        k = (21 - c) // 2
+        return k % 2 == 1
