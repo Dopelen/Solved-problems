@@ -1,0 +1,18 @@
+"""You can see the description of the task using the code specified in the title on leetcode.
+This program has O(n ** 2 * b) complexity by time and O(m * log(m) * n * b) by space.
+
+This seems like a manageable dynamic programming problem. 
+The construction, however, is a bit unconventional- it required some time to sit and think it through. 
+The first price is unique because it includes bonuses, while the second price is fixed for all subsequent cases.
+"""
+
+class Solution:
+    def maximumSaleItems(self, items: List[List[int]], budget: int) -> int:
+        f = [0] * (budget + 1)
+        mn = min(price for _, price in items)
+        for factor, price in items:
+            cnt = sum(1 for other_factor, _ in items if other_factor % factor == 0)
+            for j in range(budget, price - 1, -1):
+                if f[j - price] + cnt > f[j]:
+                    f[j] = f[j - price] + cnt
+        return max(f[j] + (budget - j) // mn for j in range(budget + 1))
